@@ -1,0 +1,3 @@
+C:/Users/danya/OneDrive/Документы/GitHub/encryption-mashine-lab/ARMEditor/cmake-build-debug/CMakeFiles/ARMEditor.dir
+C:/Users/danya/OneDrive/Документы/GitHub/encryption-mashine-lab/ARMEditor/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/danya/OneDrive/Документы/GitHub/encryption-mashine-lab/ARMEditor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
