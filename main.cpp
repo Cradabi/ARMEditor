@@ -8,13 +8,15 @@ using namespace std;
 
 class Line { // пока что на вход подаются только начальные и конечные координаты
 public:
-    Line(tuple<int, int> start_cord, tuple<int, int> end_cord, tuple<int, int, int> line_color) {
-        this->line_color = line_color;
-        change_center_cords_and_k_b(start_cord, end_cord);
+    Line(tuple<int, int> start_cord, tuple<int, int> end_cord) {
+        tuple<int, int, int> col(0, 0, 0);
+        this->line_color = col;
+        this->change_center_cords_and_k_b(start_cord, end_cord);
     }
 
     void change_center_cords_and_k_b(tuple<int, int> cords_start,
                                      tuple<int, int> cords_end) { //меняет координаты начала, конца, центра линии и находит k и b из формулы y = kx + b
+        cout << "in";
         this->start_cords = cords_start;
         this->end_cords = cords_end;
         int x_cord = 0;
@@ -41,7 +43,7 @@ public:
     bool is_mous_in_line(
             tuple<int, int> mouse_cords) { //возвращает true, если поступаемые координаты лежат на прямой, и false в обратном случае.
         if (get<0>(this->start_cords) == get<0>(this->end_cords)) { // проверка если прямая вертикальная
-            if (abs(get<0>(this->start_cords) - get<0>(mouse_cords)) <= ceil(((double)(this->line_width))/2)) {
+            if (abs(get<0>(this->start_cords) - get<0>(mouse_cords)) <= ceil(((double) (this->line_width)) / 2)) {
                 if (get<1>(this->start_cords) <= get<1>(this->end_cords)) {
                     if (get<1>(mouse_cords) <= get<1>(this->end_cords) &&
                         get<1>(mouse_cords) >= get<1>(this->start_cords)) {
@@ -124,8 +126,7 @@ public:
     tuple<int, int> get_center_cords() {  //возвращает приватный кортеж center_cords
         return this->center_cords;
     }
-
-
+    
     string text = "";
     string help_line = "";
     string font_name = "";
@@ -150,14 +151,15 @@ private:
 
 class Rectangle { // пока что на вход подаются только начальные и конечные координаты
 public:
-    Rectangle(tuple<int, int> start_cord, tuple<int, int> end_cord, tuple<int, int, int> line_color,
-              tuple<int, int, int> filling_color) {
-        this->line_color = line_color;
-        this->filling_color = filling_color;
+    Rectangle(tuple<int, int> start_cord, tuple<int, int> end_cord) {
+        tuple<int, int, int> fil_col(255, 255, 255);
+        tuple<int, int, int> line_col(0, 0, 0);
+        this->line_color = line_col;
+        this->filling_color = fil_col;
         this->k = 0;
         this->width = abs(get<0>(this->start_cords) - get<0>(this->end_cords));
         this->height = abs(get<1>(this->start_cords) - get<1>(this->end_cords));
-        change_center_cords(start_cord, end_cord);
+        this->change_center_cords(start_cord, end_cord);
     }
 
     void change_center_cords(tuple<int, int> cords_start,
@@ -167,11 +169,20 @@ public:
 
         int x_cord = 0;
         int y_cord = 0;
-        x_cord = abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2;
-        y_cord = abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2;
+        if (get<0>(this->start_cords) >= get<0>(this->end_cords)) {
+            x_cord = get<0>(this->start_cords) - (abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2);
+        } else {
+            x_cord = get<0>(this->start_cords) + (abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2);
+        }
+        if (get<1>(this->start_cords) >= get<1>(this->end_cords)) {
+            y_cord = get<1>(this->start_cords) - (abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2);
+        } else {
+            y_cord = get<1>(this->start_cords) + (abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2);
+        }
         get<0>(this->center_cords) = x_cord;
         get<1>(this->center_cords) = y_cord; //конец замены координат центра
-
+        this->width = abs(get<0>(this->start_cords) - get<0>(this->end_cords)); //Начало изменения длины ширины
+        this->height = abs(get<1>(this->start_cords) - get<1>(this->end_cords));
     }
 
     bool is_mous_in_line( //не готово
@@ -252,16 +263,89 @@ private:
 
 };
 
+class Text {
+public:
+    Text(tuple<int, int> cords_start,
+         tuple<int, int> cords_end) {
+        tuple<int, int, int> fn_col(0, 0, 0);
+        tuple<int, int, int> fil_col(255, 255, 255);
+        this->font_color = fn_col;
+        this->filling_color = fil_col;
+        this->change_center_cords(cords_start, cords_end);
+    }
+
+    void change_center_cords(tuple<int, int> cords_start,
+                             tuple<int, int> cords_end) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+        this->start_cords = cords_start;
+        this->end_cords = cords_end;
+
+        int x_cord = 0;
+        int y_cord = 0;
+        if (get<0>(this->start_cords) >= get<0>(this->end_cords)) {
+            x_cord = get<0>(this->start_cords) - (abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2);
+        } else {
+            x_cord = get<0>(this->start_cords) + (abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2);
+        }
+        if (get<1>(this->start_cords) >= get<1>(this->end_cords)) {
+            y_cord = get<1>(this->start_cords) - (abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2);
+        } else {
+            y_cord = get<1>(this->start_cords) + (abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2);
+        }
+        get<0>(this->center_cords) = x_cord;
+        get<1>(this->center_cords) = y_cord; //конец замены координат центра
+        this->width = abs(get<0>(this->start_cords) - get<0>(this->end_cords)); //Начало изменения длины ширины
+        this->height = abs(get<1>(this->start_cords) - get<1>(this->end_cords));
+    }
+
+    bool is_mous_in_line(tuple<int, int> mouse_cords) { //надо сделать
+        cout << 1;
+    }
+
+    int get_width() { //возвращает длину
+        return this->width;
+    }
+
+    int get_height() { // возвращает шрину
+        return this->height;
+    }
+
+    tuple<int, int> get_center_cords() {  //возвращает приватный кортеж center_cords
+        return this->center_cords;
+    }
+
+
+    tuple<int, int> start_cords;
+    tuple<int, int> end_cords;
+    tuple<int, int, int> font_color;
+    tuple<int, int, int> filling_color;
+    bool show_filling = false;
+    bool show_help = false;
+    bool bold_text = false; //Жирный текст
+    bool italic_text = false; //Наклонный текст
+    bool underlined_text = false; //Подчеркнутый текст
+    bool crossed_text = false; //Зачеркнутый текст
+    string help = "";
+    string font_name = "Tahoma";
+    string alhor = "ahLeft"; //горизонтальное выравнивание
+    string alvert = "avTop"; //Вертикальное выравнивание
+    string style_frame = "fsNull"; //Стиль рамки
+    int size_font = 18;
+private:
+    int width = 0;
+    int height = 0;
+    tuple<int, int> center_cords;
+};
+
 
 int main() {
     tuple<int, int> start_cords(4, 2);
     tuple<int, int> end_cords(6, 40);
     tuple<int, int, int> line_color(0, 0, 0);
     tuple<int, int> mouse_cords(6, 21);
-    Line l1(start_cords, end_cords, line_color);
+    Line l1(start_cords, end_cords);
     tuple<int, int> start_rec(4, 2);
     tuple<int, int> end_rec(180, 442);
-    Rectangle r1(start_rec, end_rec, line_color, line_color);
+    Rectangle r1(start_rec, end_rec);
     cout << l1.is_mous_in_line(mouse_cords) << endl;
     cout << get<0>(l1.get_center_cords()) << endl << get<1>(l1.get_center_cords()) << endl << l1.get_k() << endl
          << l1.get_b() << endl;
