@@ -19,8 +19,16 @@ public:
         this->end_cords = cords_end;
         int x_cord = 0;
         int y_cord = 0;
-        x_cord = abs(get<0>(this->start_cords) - get<0>(this->end_cords))/2;
-        y_cord = abs(get<1>(this->start_cords) - get<1>(this->end_cords))/2;
+        if (get<0>(this->start_cords) < get<0>(this->end_cords)) {
+            x_cord = get<0>(this->start_cords) + (abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2);
+        } else {
+            x_cord = get<0>(this->start_cords) - (abs(get<0>(this->start_cords) - get<0>(this->end_cords)) / 2);
+        }
+        if (get<1>(this->start_cords) < get<1>(this->end_cords)) {
+            y_cord = get<1>(this->start_cords) + (abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2);
+        } else {
+            y_cord = get<1>(this->start_cords) - (abs(get<1>(this->start_cords) - get<1>(this->end_cords)) / 2);
+        }
         get<0>(this->center_cords) = x_cord;
         get<1>(this->center_cords) = y_cord; //конец замены координат центра
         // начинаем замену k и b
@@ -32,47 +40,78 @@ public:
 
     bool is_mous_in_line(
             tuple<int, int> mouse_cords) { //возвращает true, если поступаемые координаты лежат на прямой, и false в обратном случае.
-        int cord_y_in_point = floor(
-                (this->k) * get<0>(mouse_cords) + this->b); //находит координату y на линии в точке x
-        if (abs(cord_y_in_point - get<1>(mouse_cords)) <=
-            ((this->line_width) * 2)) { //проверка, что координаты мыши сходятся с координатами точкина прямой
-            if (get<0>(this->start_cords) >= get<0>(this->end_cords) &&
-                get<1>(this->start_cords) >=
-                get<1>(this->end_cords)) {   // четыре проверки для разных расположений начальной и конечной точек на то что координаты мыши находятся внутри отрезка
-                if (get<0>(mouse_cords) > get<0>(this->start_cords) || get<0>(mouse_cords) < get<0>(this->end_cords) ||
-                    get<1>(mouse_cords) > get<1>(this->start_cords) || get<1>(mouse_cords) < get<1>(this->end_cords)) {
-                    return false;
+        if (get<0>(this->start_cords) == get<0>(this->end_cords)) { // проверка если прямая вертикальная
+            if (abs(get<0>(this->start_cords) - get<0>(mouse_cords)) <= ceil(((double)(this->line_width))/2)) {
+                if (get<1>(this->start_cords) <= get<1>(this->end_cords)) {
+                    if (get<1>(mouse_cords) <= get<1>(this->end_cords) &&
+                        get<1>(mouse_cords) >= get<1>(this->start_cords)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
-                    return true;
-                }
-            } else if (get<0>(this->start_cords) >= get<0>(this->end_cords) &&
-                       get<1>(this->start_cords) <= get<1>(this->end_cords)) {
-                if (get<0>(mouse_cords) > get<0>(this->start_cords) || get<0>(mouse_cords) < get<0>(this->end_cords) ||
-                    get<1>(mouse_cords) < get<1>(this->start_cords) || get<1>(mouse_cords) > get<1>(this->end_cords)) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else if (get<0>(this->start_cords) <= get<0>(this->end_cords) &&
-                       get<1>(this->start_cords) >= get<1>(this->end_cords)) {
-                if (get<0>(mouse_cords) < get<0>(this->start_cords) || get<0>(mouse_cords) > get<0>(this->end_cords) ||
-                    get<1>(mouse_cords) > get<1>(this->start_cords) || get<1>(mouse_cords) < get<1>(this->end_cords)) {
-                    return false;
-                } else {
-                    return true;
+                    if (get<1>(mouse_cords) >= get<1>(this->end_cords) &&
+                        get<1>(mouse_cords) <= get<1>(this->start_cords)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             } else {
-                if (get<0>(mouse_cords) < get<0>(this->start_cords) || get<0>(mouse_cords) > get<0>(this->end_cords) ||
-                    get<1>(mouse_cords) < get<1>(this->start_cords) || get<1>(mouse_cords) > get<1>(this->end_cords)) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return false;
             }
-        } else {
-            return false;
+        } else { // проверка, если прямая не вертикальная
+            int cord_y_in_point = floor(
+                    (this->k) * get<0>(mouse_cords) + this->b); //находит координату y на линии в точке x
+            if (abs(cord_y_in_point - get<1>(mouse_cords)) <=
+                ((this->line_width))) { //проверка, что координаты мыши сходятся с координатами точкина прямой
+                if (get<0>(this->start_cords) >= get<0>(this->end_cords) &&
+                    get<1>(this->start_cords) >=
+                    get<1>(this->end_cords)) {   // четыре проверки для разных расположений начальной и конечной точек на то что координаты мыши находятся внутри отрезка
+                    if (get<0>(mouse_cords) > get<0>(this->start_cords) ||
+                        get<0>(mouse_cords) < get<0>(this->end_cords) ||
+                        get<1>(mouse_cords) > get<1>(this->start_cords) ||
+                        get<1>(mouse_cords) < get<1>(this->end_cords)) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else if (get<0>(this->start_cords) >= get<0>(this->end_cords) &&
+                           get<1>(this->start_cords) <= get<1>(this->end_cords)) {
+                    if (get<0>(mouse_cords) > get<0>(this->start_cords) ||
+                        get<0>(mouse_cords) < get<0>(this->end_cords) ||
+                        get<1>(mouse_cords) < get<1>(this->start_cords) ||
+                        get<1>(mouse_cords) > get<1>(this->end_cords)) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else if (get<0>(this->start_cords) <= get<0>(this->end_cords) &&
+                           get<1>(this->start_cords) >= get<1>(this->end_cords)) {
+                    if (get<0>(mouse_cords) < get<0>(this->start_cords) ||
+                        get<0>(mouse_cords) > get<0>(this->end_cords) ||
+                        get<1>(mouse_cords) > get<1>(this->start_cords) ||
+                        get<1>(mouse_cords) < get<1>(this->end_cords)) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    if (get<0>(mouse_cords) < get<0>(this->start_cords) ||
+                        get<0>(mouse_cords) > get<0>(this->end_cords) ||
+                        get<1>(mouse_cords) < get<1>(this->start_cords) ||
+                        get<1>(mouse_cords) > get<1>(this->end_cords)) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            } else {
+                return false;
+            }
         }
     }
+
 
     double get_k() { //возвращает приватную переменную k
         return this->k;
@@ -122,7 +161,7 @@ public:
     }
 
     void change_center_cords(tuple<int, int> cords_start,
-                                     tuple<int, int> cords_end) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+                             tuple<int, int> cords_end) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
         this->start_cords = cords_start;
         this->end_cords = cords_end;
 
@@ -216,14 +255,16 @@ private:
 
 int main() {
     tuple<int, int> start_cords(4, 2);
-    tuple<int, int> end_cords(180, 442);
+    tuple<int, int> end_cords(6, 40);
     tuple<int, int, int> line_color(0, 0, 0);
-    tuple<int, int> mouse_cords(4, 2);
+    tuple<int, int> mouse_cords(6, 21);
     Line l1(start_cords, end_cords, line_color);
     tuple<int, int> start_rec(4, 2);
     tuple<int, int> end_rec(180, 442);
     Rectangle r1(start_rec, end_rec, line_color, line_color);
-    cout << get<0>(r1.get_center_cords()) << endl << get<1>(r1.get_center_cords());
+    cout << l1.is_mous_in_line(mouse_cords) << endl;
+    cout << get<0>(l1.get_center_cords()) << endl << get<1>(l1.get_center_cords()) << endl << l1.get_k() << endl
+         << l1.get_b() << endl;
     return 0;
 }
 
