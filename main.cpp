@@ -38,6 +38,64 @@ public:
         this->line_color = lin_col;
     }
 
+    void set_text(string text){
+        this->text = text;
+    }
+
+    void set_help_text(string help){
+        this->help_text = help;
+    }
+
+    void set_font_name(string fn_name){
+        this->font_name = fn_name;
+    }
+
+    void set_font_size(int fn_size){
+        this->font_size = fn_size;
+    }
+
+    void set_font_color(vector<int> fn_col){
+        this->font_color = fn_col;
+    }
+
+    void set_italic_font(bool italic) {
+        this->italic_font = italic;
+    }
+
+    void set_bold_font(bool bold) {
+        this->bold_font = bold;
+    }
+
+    void set_underlined_font(bool underlined) {
+        this->underlined_font = underlined;
+    }
+
+    void set_crossed_font(bool crossed) {
+        this->crossed_font = crossed;
+    }
+
+    void set_font(string font_name, int font_size) {
+        this->font_name = font_name;
+        this->font_size = font_size;
+    }
+
+    void set_font(string font_name, int font_size, vector<int> font_color) {
+        this->font_name = font_name;
+        this->font_size = font_size;
+        this->font_color = font_color;
+    }
+
+    void set_font(string font_name, int font_size, vector<int> font_color, bool bold_font, bool italic_font,
+                  bool underlined_font, bool crossed_font) {
+        this->font_name = font_name;
+        this->font_size = font_size;
+        this->font_color = font_color;
+        this->bold_font = bold_font;
+        this->italic_font = italic_font;
+        this->underlined_font = underlined_font;
+        this->crossed_font = crossed_font;
+    }
+
     vector<int> get_line_color() { //выводит вектор цветов линии rgb
         return this->line_color;
     }
@@ -45,6 +103,14 @@ public:
 
     string get_type_object() {
         return this->type_object;
+    }
+
+    string get_text(){
+        return this->text;
+    }
+
+    string get_help_text(){
+        return this->help_text;
     }
 
     int get_st_x() { //выводит координату x начала линии
@@ -71,11 +137,40 @@ public:
         return this->center_y;
     }
 
+    int get_font_size() {
+        return this->font_size;
+    }
+
+    string get_font_name(){
+        return this->font_name;
+    }
+
+    bool get_bold_font() {
+        return this->bold_font;
+    }
+
+    bool get_italic_font() {
+        return this->italic_font;
+    }
+
+    bool get_crossed_font() {
+        return this->crossed_font;
+    }
+
+    bool get_underlined_font() {
+        return this->underlined_font;
+    }
+
+
+    vector<int> get_font_color() {
+        return this->font_color;
+    }
+
     void show_help() {
         this->bool_show_help = true;
     }
 
-    void show_line() {
+    void show() {
         this->bool_show = true;
     }
 
@@ -83,7 +178,7 @@ public:
         this->bool_show_help = false;
     }
 
-    void hide_line() {
+    void hide() {
         this->bool_show = false;
     }
 
@@ -101,7 +196,7 @@ private:
                                       "psDash1", "psDash2"}; //список названий стилей линий
     string type_object = "Линия";
     string text = ""; //текст на линии
-    string help_line = ""; //подсказка к линии
+    string help_text = ""; //подсказка к линии
     string font_name = ""; //имя шрифта
     int start_x = 0;
     int start_y = 0;
@@ -116,6 +211,7 @@ private:
     int start_style_arrow = 0; //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
     int end_style_arrow = 0; //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
     vector<int> line_color = {0, 0, 0};
+    vector<int> font_color = {0, 0, 0};
 };
 
 
@@ -140,12 +236,20 @@ public:
         this->angle = angl;
     }
 
+    void set_line_width(int width){
+        this->line_width = width;
+    }
+
     void set_line_color(vector<int> ln_col) {
         this->line_color = ln_col;
     }
 
     void set_filling_color(vector<int> fil_col) {
         this->filling_color = fil_col;
+    }
+
+    void set_help_text(string help){
+        this->help_text = help;
     }
 
     void set_style_frame(int st_frame) {
@@ -172,6 +276,10 @@ public:
 
     int get_style_frame() {
         return this->style_frame;
+    }
+
+    int get_line_width(){
+        return this->line_width;
     }
 
     int get_style_line() {
@@ -218,7 +326,7 @@ public:
         return this->filling_color;
     }
 
-    void show_rect() {
+    void show() {
         this->bool_show = true;
     }
 
@@ -230,7 +338,7 @@ public:
         this->bool_show_filling = true;
     }
 
-    void hide_rect() {
+    void hide() {
         this->bool_show = false;
     }
 
@@ -258,7 +366,7 @@ private:
     vector<string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                                       "psDash1", "psDash2"}; //список названий стилей линий
     string type_object = "Прямоугольник";
-    string help_line = ""; //текст подсказки
+    string help_text = ""; //текст подсказки
     int style_frame = 0; // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
     int style_gradient_filling = 0; //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
     int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
@@ -374,7 +482,7 @@ public:
         return this->filling_color;
     }
 
-    void show_ellipse() {
+    void show() {
         this->bool_show = true;
     }
 
@@ -386,7 +494,7 @@ public:
         this->bool_show_filling = true;
     }
 
-    void hide_ellipse() {
+    void hide() {
         this->bool_show = false;
     }
 
@@ -463,9 +571,10 @@ private:
 };
 
 
-class Transition_point { //класс точки перехода
+class TransitionPoint { //класс точки перехода
 public:
-    Transition_point(int number, int x, int y, int width,
+    TransitionPoint(){}
+    TransitionPoint(int number, int x, int y, int width,
                      int height) { // получает номер точки перехода, координаты, ширина, высота
         this->number_of_transition_point = number;
         change_center_cords(x, y, width, height);
@@ -536,7 +645,7 @@ public:
         return this->filling_color;
     }
 
-    void show_rect() {
+    void show() {
         this->bool_show = true;
     }
 
@@ -548,11 +657,11 @@ public:
         this->bool_show_filling = true;
     }
 
-    void hide_rect() {
+    void hide() {
         this->bool_show = false;
     }
 
-    void gide_help() {
+    void hide_help() {
         this->bool_show_help = false;
     }
 
@@ -561,14 +670,13 @@ public:
     }
 
 
-private:
+protected:
     bool bool_show_help = false; // показывать подсказку
     bool bool_show = true; //показывать прямоугольник
     bool bool_show_filling = false; //показывать заливку
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
-    string type_object = "Кнопка перехода";
+    string type_object = "Точка перехода";
     string help_text = ""; //текст подсказки
-    int number_of_transition_point = 0; // номер точки перехода
     int x = 0;
     int y = 0;
     int width = 0;
@@ -576,26 +684,20 @@ private:
     int center_x = 0;
     int center_y = 0;
 
+private:
+    int number_of_transition_point = 0; // номер точки перехода
 };
 
 
-class Transition_button { //класс кнопка перехода
+class TransitionButton : TransitionPoint{ //класс кнопка перехода
 public:
-    Transition_button(int number, int x, int y, int width, int height) {
+    TransitionButton(int number, int x, int y, int width, int height) : TransitionPoint() {
         this->number_of_transition_button = number;
+        this->type_object = "Точка перехода";
+        int number_transition_point = 0; //служебная переменная
         change_center_cords(x, y, width, height);
     }
 
-    void
-    change_center_cords(int x, int y, int width,
-                        int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
-        this->x = x;
-        this->y = y;
-        this->width = width;
-        this->height = height;
-        this->center_x = this->x + floor(this->width / 2);
-        this->center_y = this->y + floor(this->height / 2);
-    }
 
     void set_angle(int angl) {
         this->angle = angl;
@@ -644,10 +746,6 @@ public:
         this->auto_size_text = auto_size;
     }
 
-    void set_help_text(string text) {
-        this->help_text = text;
-    }
-
     void set_text(string text) {
         this->text = text;
     }
@@ -687,43 +785,11 @@ public:
         this->font_color = fn_col;
     }
 
-    void set_filling_color(vector<int> fil_col) {
-        this->filling_color = fil_col;
-    }
-
-
-    string get_type_object() {
-        return this->type_object;
-    }
-
 
     int get_angle() {
         return this->angle;
     }
 
-    int get_x() {
-        return this->x;
-    }
-
-    int get_y() {
-        return this->y;
-    }
-
-    int get_width() {
-        return this->width;
-    }
-
-    int get_height() {
-        return this->height;
-    }
-
-    int get_center_x() {
-        return this->center_x;
-    }
-
-    int get_center_y() {
-        return this->center_y;
-    }
 
     int get_font_size() {
         return this->font_size;
@@ -753,9 +819,6 @@ public:
         return this->auto_size_text;
     }
 
-    string get_help_text() {
-        return this->help_text;
-    }
 
     string get_text() {
         return this->text;
@@ -769,9 +832,6 @@ public:
         return this->font_color;
     }
 
-    vector<int> get_filling_color() {
-        return this->filling_color;
-    }
 
     string get_hAlignment() {
         return this->hAlignment_list[this->hAlignment];
@@ -785,63 +845,28 @@ public:
         return {this->hAlignment, this->vAlignment};
     }
 
-    void show_button() {
-        this->bool_show = true;
-    }
-
-    void show_help() {
-        this->bool_show_help = true;
-    }
-
-    void show_filling() {
-        this->bool_show_filling = true;
-    }
-
-    void hide_button() {
-        this->bool_show = false;
-    }
-
-    void hide_help() {
-        this->bool_show_help = false;
-    }
-
-    void hide_filling() {
-        this->bool_show_filling = false;
-    }
 
 
 private:
-    bool bool_show_help = false; // показывать подсказку
-    bool bool_show = true; //показывать кнопку
-    bool bool_show_filling = false; //показывать заливку
     bool bold_font = false; //флаг жирности шрифта
     bool italic_font = false; //флаг наклонности шрифта
     bool underlined_font = false; //флаг подчеркнутости шрифта
     bool crossed_font = false; //флаг зачеркнутости шрифта
     bool auto_size_text = false; //авторазмер текста
     vector<int> font_color = {0, 0, 0}; //цвет шрифта
-    vector<int> filling_color = {255, 255, 255}; //цвет заливки
     vector<string> hAlignment_list = {"ahLeft", "ahRight", "ahCenter"};
     vector<string> vAlignment_list = {"avTop", "avBottom", "avCenter"};
-    string help_text = ""; //текст подсказки
     string text = ""; //текст кнопки
     string font_name = "Arial";
-    string type_object = "Кнопка перехода";
     int hAlignment = 2;
     int vAlignment = 2;
     int font_size = 14;
     int number_of_transition_button = 0;
     int angle = 0;
-    int x = 0;
-    int y = 0;
-    int width = 0;
-    int height = 0;
-    int center_x = 0;
-    int center_y = 0;
 
 };
 
-class CrookedLine { //класс кривой
+class CrookedLine { //класс кривой линии
 public:
     CrookedLine() {}
 
@@ -953,7 +978,7 @@ public:
         return this->filling_color;
     }
 
-    void show_polygon() {
+    void show() {
         this->bool_show = true;
     }
 
@@ -965,7 +990,7 @@ public:
         this->bool_show_filling = true;
     }
 
-    void hide_polygon() {
+    void hide() {
         this->bool_show = false;
     }
 
