@@ -76,7 +76,7 @@ public:
     }
 
     void show_line() {
-        this->bool_show_line = true;
+        this->bool_show = true;
     }
 
     void hide_help() {
@@ -84,14 +84,14 @@ public:
     }
 
     void hide_line() {
-        this->bool_show_line = false;
+        this->bool_show = false;
     }
 
     string text = ""; //текст на линии
     string help_line = ""; //подсказка к линии
     string font_name = ""; //имя шрифта
     bool bool_show_help = false; //флаг показывания подсказки
-    bool bool_show_line = true; //флаг показывания линии
+    bool bool_show = true; //флаг показывания линии
     bool bold_font = false; //флаг жирности шрифта
     bool italic_font = false; //флаг наклонности шрифта
     bool underlined_font = false; //флаг подчеркнутости шрифта
@@ -218,7 +218,7 @@ public:
     }
 
     void show_rect() {
-        this->bool_show_rect = true;
+        this->bool_show = true;
     }
 
     void show_help() {
@@ -230,7 +230,7 @@ public:
     }
 
     void hide_rect() {
-        this->bool_show_rect = false;
+        this->bool_show = false;
     }
 
     void hide_help() {
@@ -244,7 +244,7 @@ public:
 
     string help_line = ""; //текст подсказки
     bool bool_show_help = false; // показывать подсказку
-    bool bool_show_rect = true; //показывать прямоугольник
+    bool bool_show = true; //показывать прямоугольник
     bool bool_show_filling = false; //показывать заливку
     int style_frame = 0; // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
     int style_gradient_filling = 0; //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
@@ -358,7 +358,7 @@ public:
     }
 
     void show_ellipse() {
-        this->bool_show_ellipse = true;
+        this->bool_show = true;
     }
 
     void show_help() {
@@ -370,7 +370,7 @@ public:
     }
 
     void hide_ellipse() {
-        this->bool_show_ellipse = false;
+        this->bool_show = false;
     }
 
     void hide_help() {
@@ -384,7 +384,7 @@ public:
 
     string help_line = ""; //текст подсказки
     bool bool_show_help = false; // показывать подсказку
-    bool bool_show_ellipse = true; //показывать эллипс
+    bool bool_show = true; //показывать эллипс
     bool bool_show_filling = false; //показывать заливку
     int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
     int line_width = 2;
@@ -497,7 +497,7 @@ public:
     }
 
     void show_rect() {
-        this->bool_show_transition_point = true;
+        this->bool_show = true;
     }
 
     void show_help() {
@@ -509,7 +509,7 @@ public:
     }
 
     void hide_rect() {
-        this->bool_show_transition_point = false;
+        this->bool_show = false;
     }
 
     void gide_help() {
@@ -523,7 +523,7 @@ public:
 
     string help_line = ""; //текст подсказки
     bool bool_show_help = false; // показывать подсказку
-    bool bool_show_transition_point = true; //показывать прямоугольник
+    bool bool_show = true; //показывать прямоугольник
     bool bool_show_filling = false; //показывать заливку
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
 
@@ -613,7 +613,7 @@ public:
     }
 
     void show_button() {
-        this->bool_show_button = true;
+        this->bool_show = true;
     }
 
     void show_help() {
@@ -625,7 +625,7 @@ public:
     }
 
     void hide_button() {
-        this->bool_show_button = false;
+        this->bool_show = false;
     }
 
     void hide_help() {
@@ -641,7 +641,7 @@ public:
     string text = ""; //текст кнопки
     string font_name = "Arial";
     bool bool_show_help = false; // показывать подсказку
-    bool bool_show_button = true; //показывать кнопку
+    bool bool_show = true; //показывать кнопку
     bool bool_show_filling = false; //показывать заливку
     bool bold_font = false; //флаг жирности шрифта
     bool italic_font = false; //флаг наклонности шрифта
@@ -669,12 +669,178 @@ private:
 
 };
 
+class CrookedLine { //класс кривой
+public:
+    CrookedLine() {}
+
+    CrookedLine(vector<vector<int>> points_vector) {
+        change_center_cords(points_vector);
+    }
+
+    void
+    change_center_cords(
+            vector<vector<int>> points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
+        int max_x = 0;
+        int max_y = 0;
+        int min_x = points_vector[0][0];
+        int min_y = points_vector[0][1];
+        for (auto i: points_vector) {
+            if (i[0] < min_x) {
+                min_x = i[0];
+            }
+            if (i[0] > max_x) {
+                max_x = i[0];
+            }
+            if (i[1] < min_y) {
+                min_y = i[1];
+            }
+            if (i[1] > max_x) {
+                max_y = i[1];
+            }
+        }
+        this->x = min_x;
+        this->y = min_y;
+        this->width = max_x - min_x;
+        this->height = max_y - min_y;
+        this->center_x = this->x + floor(this->width / 2);
+        this->center_y = this->y + floor(this->height / 2);
+    }
+
+    void set_angle(int angl) {
+        this->angle = angl;
+    }
+
+    void set_line_color(vector<int> ln_col) {
+        this->line_color = ln_col;
+    }
+
+    void set_filling_color(vector<int> fil_col) {
+        this->filling_color = fil_col;
+    }
+
+
+    void set_style_line(int st_line) {
+        if (st_line >= 0 && st_line < this->style_line_list.size()) {
+            this->style_line = st_line;
+        }
+    }
+
+    string get_type_object() {
+        return this->type_object;
+    }
+
+    int get_style_line() {
+        return this->style_line;
+    }
+
+    int get_angle() {
+        return this->angle;
+    }
+
+    int get_x() {
+        return this->x;
+    }
+
+    int get_y() {
+        return this->y;
+    }
+
+    int get_width() {
+        return this->width;
+    }
+
+    int get_height() {
+        return this->height;
+    }
+
+    int get_center_x() {
+        return this->center_x;
+    }
+
+    int get_center_y() {
+        return this->center_y;
+    }
+
+    vector<int> get_line_color() {
+        return this->line_color;
+    }
+
+    vector<int> get_filling_color() {
+        return this->filling_color;
+    }
+
+    void show_polygon() {
+        this->bool_show = true;
+    }
+
+    void show_help() {
+        this->bool_show_help = true;
+    }
+
+    void show_filling() {
+        this->bool_show_filling = true;
+    }
+
+    void hide_polygon() {
+        this->bool_show = false;
+    }
+
+    void hide_help() {
+        this->bool_show_help = false;
+    }
+
+    void hide_filling() {
+        this->bool_show_filling = false;
+    }
+
+
+    string help_line = ""; //текст подсказки
+    bool bool_show_help = false; // показывать подсказку
+    bool bool_show = true; //показывать прямоугольник
+    bool bool_show_filling = false; //показывать заливку
+    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+    int line_width = 2;
+    vector<int> line_color = {0, 0, 0}; //цвет линии
+    vector<int> filling_color = {255, 255, 255}; //цвет заливки
+    vector<string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
+                                      "psDash1", "psDash2"}; //список названий стилей линий
+
+protected:
+    string type_object = "Кривая линия";
+    int angle = 0;
+    int x = 0;
+    int y = 0;
+    int width = 0;
+    int height = 0;
+    int center_x = 0;
+    int center_y = 0;
+
+};
+
+class Polygon : public CrookedLine { //класс многоугольника
+public:
+    Polygon(vector<vector<int>> points_vector, bool end_polygon = false) : CrookedLine() {
+        this->type_object = "Полигон";
+        this->end_polygone = end_polygon;
+        change_center_cords(points_vector);
+    }
+
+    bool get_end_polygon() {
+        return this->end_polygone;
+    }
+
+    void set_end_polygon(bool end_pol) {
+        this->end_polygone = end_pol;
+    }
+
+private:
+    bool end_polygone;
+};
+
 
 int main() {
-    Arc arc(1, 2, 4, 5, 0, 45);
-    cout << arc.get_type_object() << endl << arc.get_x() << " " << arc.get_y() << endl << arc.get_width() << " "
-         << arc.get_height() << endl << arc.get_center_x() << " " << arc.get_center_y() << endl << arc.get_start_angle()
-         << " " << arc.get_end_angle();
+    Polygon pol({{1, 2}, {2, 3}, {5, 0}}, true);
+    cout << pol.get_x() << " " << pol.get_y() << endl << pol.get_width() << " " << pol.get_height() << endl << pol.get_end_polygon() << endl << pol.get_type_object();
     return 0;
 }
 
