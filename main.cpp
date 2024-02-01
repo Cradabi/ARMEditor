@@ -87,33 +87,34 @@ public:
         this->bool_show = false;
     }
 
-    string text = ""; //текст на линии
-    string help_line = ""; //подсказка к линии
-    string font_name = ""; //имя шрифта
+
+private:
     bool bool_show_help = false; //флаг показывания подсказки
     bool bool_show = true; //флаг показывания линии
     bool bold_font = false; //флаг жирности шрифта
     bool italic_font = false; //флаг наклонности шрифта
     bool underlined_font = false; //флаг подчеркнутости шрифта
     bool crossed_font = false; //флаг зачеркнутости шрифта
-    int font_size = 14; //размер шрифта
-    int number_of_text = 0; //количество текстовых вставок
-    int style_line = 1; //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-    int line_width = 2;
-    int start_style_arrow = 0; //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
-    int end_style_arrow = 0; //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
     vector<string> style_arrow_list = {"esNone", "esRoundArrow", "esSharpArrow", "esDot",
                                        "esRightArrow"}; //список названий типов стрелок
     vector<string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                                       "psDash1", "psDash2"}; //список названий стилей линий
-private:
     string type_object = "Линия";
+    string text = ""; //текст на линии
+    string help_line = ""; //подсказка к линии
+    string font_name = ""; //имя шрифта
     int start_x = 0;
     int start_y = 0;
     int end_x = 0;
     int end_y = 0;
     int center_x = 0;
     int center_y = 0;
+    int font_size = 14; //размер шрифта
+    int number_of_text = 0; //количество текстовых вставок
+    int style_line = 1; //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+    int line_width = 2;
+    int start_style_arrow = 0; //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
+    int end_style_arrow = 0; //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
     vector<int> line_color = {0, 0, 0};
 };
 
@@ -242,14 +243,10 @@ public:
     }
 
 
-    string help_line = ""; //текст подсказки
+private:
     bool bool_show_help = false; // показывать подсказку
     bool bool_show = true; //показывать прямоугольник
     bool bool_show_filling = false; //показывать заливку
-    int style_frame = 0; // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
-    int style_gradient_filling = 0; //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
-    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-    int line_width = 2;
     vector<int> line_color = {0, 0, 0}; //цвет линии
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
     vector<string> style_frame_list = {"fsNull", "fsButtonDown", "fsButtonUp", "fsBagetDown", "fsBagetUp",
@@ -260,9 +257,12 @@ public:
                                           "stTBTrapezoid"}; //список названий стилей градиентных заливок
     vector<string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                                       "psDash1", "psDash2"}; //список названий стилей линий
-
-private:
     string type_object = "Прямоугольник";
+    string help_line = ""; //текст подсказки
+    int style_frame = 0; // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
+    int style_gradient_filling = 0; //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
+    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+    int line_width = 2;
     int angle = 0;
     int x = 0;
     int y = 0;
@@ -297,6 +297,14 @@ public:
         this->angle = angl;
     }
 
+    void set_line_width(int line_width) {
+        this->line_width = line_width;
+    }
+
+    void set_help_text(string text) {
+        this->help_text = text;
+    }
+
     void set_line_color(vector<int> ln_col) {
         this->line_color = ln_col;
     }
@@ -316,8 +324,16 @@ public:
         return this->type_object;
     }
 
+    string get_help_text() {
+        return this->help_text;
+    }
+
     int get_style_line() {
         return this->style_line;
+    }
+
+    int get_line_width() {
+        return this->line_width;
     }
 
 
@@ -348,6 +364,7 @@ public:
     int get_center_y() {
         return this->center_y;
     }
+
 
     vector<int> get_line_color() {
         return this->line_color;
@@ -382,19 +399,18 @@ public:
     }
 
 
-    string help_line = ""; //текст подсказки
+protected:
     bool bool_show_help = false; // показывать подсказку
     bool bool_show = true; //показывать эллипс
     bool bool_show_filling = false; //показывать заливку
-    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-    int line_width = 2;
     vector<int> line_color = {0, 0, 0}; //цвет линии
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
     vector<string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                                       "psDash1", "psDash2"}; //список названий стилей линий
-
-protected:
     string type_object = "Эллипс";
+    string help_text = ""; //текст подсказки
+    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+    int line_width = 2;
     int angle = 0;
     int x = 0;
     int y = 0;
@@ -415,6 +431,11 @@ public:
         change_center_cords(x, y, width, height);
     }
 
+    void set_arc_angles(int start_angle, int end_angle) {
+        this->start_angle = start_angle;
+        this->end_angle = end_angle;
+    }
+
     void set_start_angle(int st_angle) {
         this->start_angle = st_angle;
     }
@@ -429,6 +450,10 @@ public:
 
     int get_end_angle() {
         return this->end_angle;
+    }
+
+    vector<int> get_arc_angles() {
+        return {this->start_angle, this->end_angle};
     }
 
 private:
@@ -462,10 +487,25 @@ public:
         this->filling_color = fil_col;
     }
 
+    void set_help_text(string help_text) {
+        this->help_text = help_text;
+    }
+
+    void set_number(int num) {
+        this->number_of_transition_point = num;
+    }
+
     string get_type_object() {
         return this->type_object;
     }
 
+    string get_help_text() {
+        return this->help_text;
+    }
+
+    int get_number() {
+        return this->number_of_transition_point;
+    }
 
     int get_x() {
         return this->x;
@@ -521,14 +561,13 @@ public:
     }
 
 
-    string help_line = ""; //текст подсказки
+private:
     bool bool_show_help = false; // показывать подсказку
     bool bool_show = true; //показывать прямоугольник
     bool bool_show_filling = false; //показывать заливку
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
-
-private:
     string type_object = "Кнопка перехода";
+    string help_text = ""; //текст подсказки
     int number_of_transition_point = 0; // номер точки перехода
     int x = 0;
     int y = 0;
@@ -562,7 +601,89 @@ public:
         this->angle = angl;
     }
 
-    void set_line_color(vector<int> fn_col) {
+    void set_italic_font(bool italic) {
+        this->italic_font = italic;
+    }
+
+    void set_bold_font(bool bold) {
+        this->bold_font = bold;
+    }
+
+    void set_underlined_font(bool underlined) {
+        this->underlined_font = underlined;
+    }
+
+    void set_crossed_font(bool crossed) {
+        this->crossed_font = crossed;
+    }
+
+    void set_font(string font_name, int font_size) {
+        this->font_name = font_name;
+        this->font_size = font_size;
+    }
+
+    void set_font(string font_name, int font_size, vector<int> font_color) {
+        this->font_name = font_name;
+        this->font_size = font_size;
+        this->font_color = font_color;
+    }
+
+    void set_font(string font_name, int font_size, vector<int> font_color, bool bold_font, bool italic_font,
+                  bool underlined_font, bool crossed_font) {
+        this->font_name = font_name;
+        this->font_size = font_size;
+        this->font_color = font_color;
+        this->bold_font = bold_font;
+        this->italic_font = italic_font;
+        this->underlined_font = underlined_font;
+        this->crossed_font = crossed_font;
+    }
+
+
+    void set_auto_size_text(bool auto_size) {
+        this->auto_size_text = auto_size;
+    }
+
+    void set_help_text(string text) {
+        this->help_text = text;
+    }
+
+    void set_text(string text) {
+        this->text = text;
+    }
+
+    void set_font_name(string font_name) {
+        this->font_name = font_name;
+    }
+
+    void set_font_size(int font_size) {
+        this->font_size = font_size;
+    }
+
+    void set_hAlignment(int hAlignment) {
+        if (hAlignment >= 0 && hAlignment <= 3) {
+            this->hAlignment = hAlignment;
+        }
+    }
+
+    void set_vAlignment(int vAlignment) {
+        if (vAlignment >= 0 && vAlignment <= 3) {
+            this->vAlignment = vAlignment;
+        }
+    }
+
+    void set_Alignment(vector<int> al) {
+        if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
+            this->hAlignment = al[0];
+            this->vAlignment = al[1];
+        }
+    }
+
+    void set_nuber(int num) {
+        this->number_of_transition_button = num;
+    }
+
+    void set_font_color(vector<int> fn_col) {
         this->font_color = fn_col;
     }
 
@@ -604,12 +725,64 @@ public:
         return this->center_y;
     }
 
+    int get_font_size() {
+        return this->font_size;
+    }
+
+    int get_number() {
+        return this->number_of_transition_button;
+    }
+
+    bool get_bold_font() {
+        return this->bold_font;
+    }
+
+    bool get_italic_font() {
+        return this->italic_font;
+    }
+
+    bool get_crossed_font() {
+        return this->crossed_font;
+    }
+
+    bool get_underlined_font() {
+        return this->underlined_font;
+    }
+
+    bool get_auto_size_text() {
+        return this->auto_size_text;
+    }
+
+    string get_help_text() {
+        return this->help_text;
+    }
+
+    string get_text() {
+        return this->text;
+    }
+
+    string get_font_name() {
+        return this->font_name;
+    }
+
     vector<int> get_font_color() {
         return this->font_color;
     }
 
     vector<int> get_filling_color() {
         return this->filling_color;
+    }
+
+    string get_hAlignment() {
+        return this->hAlignment_list[this->hAlignment];
+    }
+
+    string get_vAlignment() {
+        return this->vAlignment_list[this->vAlignment];
+    }
+
+    vector<int> get_alignment() {
+        return {this->hAlignment, this->vAlignment};
     }
 
     void show_button() {
@@ -637,9 +810,7 @@ public:
     }
 
 
-    string help_line = ""; //текст подсказки
-    string text = ""; //текст кнопки
-    string font_name = "Arial";
+private:
     bool bool_show_help = false; // показывать подсказку
     bool bool_show = true; //показывать кнопку
     bool bool_show_filling = false; //показывать заливку
@@ -648,16 +819,17 @@ public:
     bool underlined_font = false; //флаг подчеркнутости шрифта
     bool crossed_font = false; //флаг зачеркнутости шрифта
     bool auto_size_text = false; //авторазмер текста
-    int hAlignment = 2;
-    int vAlignment = 2;
-    int font_size = 14;
     vector<int> font_color = {0, 0, 0}; //цвет шрифта
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
     vector<string> hAlignment_list = {"ahLeft", "ahRight", "ahCenter"};
     vector<string> vAlignment_list = {"avTop", "avBottom", "avCenter"};
-
-private:
+    string help_text = ""; //текст подсказки
+    string text = ""; //текст кнопки
+    string font_name = "Arial";
     string type_object = "Кнопка перехода";
+    int hAlignment = 2;
+    int vAlignment = 2;
+    int font_size = 14;
     int number_of_transition_button = 0;
     int angle = 0;
     int x = 0;
@@ -718,6 +890,10 @@ public:
         this->filling_color = fil_col;
     }
 
+    void set_help_text(string text) {
+        this->help_text = text;
+    }
+
 
     void set_style_line(int st_line) {
         if (st_line >= 0 && st_line < this->style_line_list.size()) {
@@ -761,6 +937,14 @@ public:
         return this->center_y;
     }
 
+    string get_help_text() {
+        return this->help_text;
+    }
+
+    int get_line_width() {
+        return this->line_width;
+    }
+
     vector<int> get_line_color() {
         return this->line_color;
     }
@@ -794,19 +978,19 @@ public:
     }
 
 
-    string help_line = ""; //текст подсказки
+protected:
+
     bool bool_show_help = false; // показывать подсказку
     bool bool_show = true; //показывать прямоугольник
     bool bool_show_filling = false; //показывать заливку
-    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-    int line_width = 2;
     vector<int> line_color = {0, 0, 0}; //цвет линии
     vector<int> filling_color = {255, 255, 255}; //цвет заливки
     vector<string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                                       "psDash1", "psDash2"}; //список названий стилей линий
-
-protected:
     string type_object = "Кривая линия";
+    string help_text = ""; //текст подсказки
+    int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+    int line_width = 2;
     int angle = 0;
     int x = 0;
     int y = 0;
@@ -839,8 +1023,11 @@ private:
 
 
 int main() {
-    Polygon pol({{1, 2}, {2, 3}, {5, 0}}, true);
-    cout << pol.get_x() << " " << pol.get_y() << endl << pol.get_width() << " " << pol.get_height() << endl << pol.get_end_polygon() << endl << pol.get_type_object();
+    Polygon pol({{1, 2},
+                 {2, 3},
+                 {5, 0}}, true);
+    cout << pol.get_x() << " " << pol.get_y() << endl << pol.get_width() << " " << pol.get_height() << endl
+         << pol.get_end_polygon() << endl << pol.get_type_object();
     return 0;
 }
 
