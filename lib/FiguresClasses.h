@@ -52,17 +52,17 @@ namespace FiguresClasses {
                                  int end_y);
 
         //меняет вектор цвета линии
-        void set_line_color(const std::vector<int>& lin_col);
+        void set_line_color(const std::vector<int> &lin_col);
 
-        void set_text(const std::string& text);
+        void set_text(const std::string &text);
 
-        void set_help_text(const std::string& help);
+        void set_help_text(const std::string &help);
 
-        void set_font_name(const std::string& fn_name);
+        void set_font_name(const std::string &fn_name);
 
         void set_font_size(int fn_size);
 
-        void set_font_color(const std::vector<int>& fn_col);
+        void set_font_color(const std::vector<int> &fn_col);
 
         void set_italic_font(bool italic);
 
@@ -72,12 +72,12 @@ namespace FiguresClasses {
 
         void set_crossed_font(bool crossed);
 
-        void set_font(const std::string& font_name, int font_size);
+        void set_font(const std::string &font_name, int font_size);
 
-        void set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color);
+        void set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color);
 
         void
-        set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+        set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
                  bool italic_font,
                  bool underlined_font, bool crossed_font);
 
@@ -178,11 +178,11 @@ namespace FiguresClasses {
 
         void set_line_width(int width);
 
-        void set_line_color(const std::vector<int>& ln_col);
+        void set_line_color(const std::vector<int> &ln_col);
 
-        void set_filling_color(const std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int> &fil_col);
 
-        void set_help_text(const std::string& help);
+        void set_help_text(const std::string &help);
 
         void set_style_frame(int st_frame);
 
@@ -269,11 +269,11 @@ namespace FiguresClasses {
 
         void set_line_width(int line_width);
 
-        void set_help_text(const std::string& text);
+        void set_help_text(const std::string &text);
 
-        void set_line_color(const std::vector<int>& ln_col);
+        void set_line_color(const std::vector<int> &ln_col);
 
-        void set_filling_color(const std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int> &fil_col);
 
 
         void set_style_line(int st_line);
@@ -342,6 +342,109 @@ namespace FiguresClasses {
 
     };
 
+    class CrookedLine {                             //класс кривой линии
+    protected:
+
+        bool bool_show_help = false;                // показывать подсказку
+        bool bool_show = true;                      //показывать прямоугольник
+
+        bool bool_show_filling = false;                         //показывать заливку
+        std::vector<int> line_color = {0, 0, 0};                //цвет линии
+        std::vector<int> filling_color = {255, 255, 255};       //цвет заливки
+
+        std::vector<std::vector<int>> points;
+
+        std::vector<std::string> style_line_list =
+                {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
+                 "psDash1", "psDash2"};         //список названий стилей линий
+
+        std::string type_object = "Кривая линия";
+        std::string help_text = "";             //текст подсказки
+        int style_line = 1;                     //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+
+        int line_width = 2;
+        int angle = 0;
+        int x = 0;
+        int y = 0;
+        int width = 0;
+        int height = 0;
+        int center_x = 0;
+        int center_y = 0;
+
+    public:
+        CrookedLine();
+
+        CrookedLine(const std::vector<std::vector<int>> &points_vector);
+
+        void
+        change_center_cords(
+                const std::vector<std::vector<int>> &points_vector);
+
+        void set_angle(int angl);
+
+        void set_line_color(const std::vector<int> &ln_col);
+
+        void set_filling_color(const std::vector<int> &fil_col);
+
+        void set_help_text(const std::string &text);
+
+
+        void set_style_line(int st_line);
+
+        std::string get_type_object();
+
+        int get_style_line();
+
+        int get_angle();
+
+        int get_x();
+
+        int get_y();
+
+        int get_width();
+
+        int get_height();
+
+        int get_center_x();
+
+        int get_center_y();
+
+        std::string get_help_text();
+
+        int get_line_width();
+
+        std::vector<int> get_line_color();
+
+        std::vector<int> get_filling_color();
+
+        void show();
+
+        void show_help();
+
+        void show_filling();
+
+        void hide();
+
+        void hide_help();
+
+        void hide_filling();
+
+    };
+
+    class Polygon : public CrookedLine { //класс многоугольника
+    private:
+        bool end_polygone;
+
+    public:
+        Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon);
+
+        bool get_end_polygon();
+
+        void set_end_polygon(bool end_pol);
+
+
+    };
+
 
     class TransitionPoint { //класс точки перехода
     private:
@@ -374,9 +477,9 @@ namespace FiguresClasses {
                             int height);
 
 
-        void set_filling_color(const std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int> &fil_col);
 
-        void set_help_text(const std::string& help_text);
+        void set_help_text(const std::string &help_text);
 
         void set_number(int num);
 
@@ -452,21 +555,21 @@ namespace FiguresClasses {
 
         void set_crossed_font(bool crossed);
 
-        void set_font(const std::string& font_name, int font_size);
+        void set_font(const std::string &font_name, int font_size);
 
-        void set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color);
+        void set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color);
 
         void
-        set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+        set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
                  bool italic_font,
                  bool underlined_font, bool crossed_font);
 
 
         void set_auto_size_text(bool auto_size);
 
-        void set_text(const std::string& text);
+        void set_text(const std::string &text);
 
-        void set_font_name(const std::string& font_name);
+        void set_font_name(const std::string &font_name);
 
         void set_font_size(int font_size);
 
@@ -474,11 +577,11 @@ namespace FiguresClasses {
 
         void set_vAlignment(int vAlignment);
 
-        void set_Alignment(const std::vector<int>& al);
+        void set_Alignment(const std::vector<int> &al);
 
-        void set_nuber(int num);
+        void set_number(int num);
 
-        void set_font_color(const std::vector<int>& fn_col);
+        void set_font_color(const std::vector<int> &fn_col);
 
 
         int get_angle();
@@ -510,31 +613,38 @@ namespace FiguresClasses {
 
         std::string get_vAlignment();
 
-        std::vector<int> get_alignment();
+        std::vector<std::string> get_alignment();
 
     };
 
-    class CrookedLine {                             //класс кривой линии
-    protected:
 
-        bool bool_show_help = false;                // показывать подсказку
-        bool bool_show = true;                      //показывать прямоугольник
+    class Text {
+    private:
+        bool bold_font = false;                     //флаг жирности шрифта
+        bool italic_font = false;                   //флаг наклонности шрифта
+        bool underlined_font = false;               //флаг подчеркнутости шрифта
+        bool crossed_font = false;                  //флаг зачеркнутости шрифта
+        bool auto_size_text = false;                //авторазмер текста
+        std::vector<int> font_color = {0, 0, 0};    //цвет шрифта
+        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
 
-        bool bool_show_filling = false;                         //показывать заливку
-        std::vector<int> line_color = {0, 0, 0};                //цвет линии
-        std::vector<int> filling_color = {255, 255, 255};       //цвет заливки
+        std::vector<std::string> hAlignment_list = {"ahLeft", "ahRight", "ahCenter"};
+        std::vector<std::string> vAlignment_list = {"avTop", "avBottom", "avCenter"};
+        std::vector<std::string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4",
+                                                    "psDot5",
+                                                    "psDot6",
+                                                    "psDash1", "psDash2"}; //список названий стилей линий
 
-        std::vector<std::vector<int>> points;
 
-        std::vector<std::string> style_line_list =
-                {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
-                 "psDash1", "psDash2"};         //список названий стилей линий
+        std::string text = "";                      //текст кнопки
+        std::string font_name = "Arial";
+        std::string type_object = "Текст";
+        std::string help_text = "";                 //текст подсказки
 
-        std::string type_object = "Кривая линия";
-        std::string help_text = "";             //текст подсказки
-        int style_line = 1;                     //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-
-        int line_width = 2;
+        int hAlignment = 2;
+        int vAlignment = 2;
+        int font_size = 14;
+        int style_line = 1;  //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
         int angle = 0;
         int x = 0;
         int y = 0;
@@ -543,31 +653,31 @@ namespace FiguresClasses {
         int center_x = 0;
         int center_y = 0;
 
-    public:
-        CrookedLine();
+        bool bool_show_help = false;        // показывать подсказку
+        bool bool_show = true;              //показывать прямоугольник
+        bool bool_show_filling = false;     //показывать заливку
 
-        CrookedLine(const std::vector<std::vector<int>>& points_vector);
+
+
+
+
+
+
+    public:
+        Text(int x, int y, int width, int height);
 
         void
-        change_center_cords(
-                const std::vector<std::vector<int>>& points_vector);
-
-        void set_angle(int angl);
-
-        void set_line_color(const std::vector<int>& ln_col);
-
-        void set_filling_color(const std::vector<int>& fil_col);
-
-        void set_help_text(const std::string& text);
+        change_center_cords(int x, int y, int width,
+                            int height);
 
 
-        void set_style_line(int st_line);
+        void set_filling_color(const std::vector<int> &fil_col);
+
+        void set_help_text(const std::string &help_text);
 
         std::string get_type_object();
 
-        int get_style_line();
-
-        int get_angle();
+        std::string get_help_text();
 
         int get_x();
 
@@ -581,13 +691,77 @@ namespace FiguresClasses {
 
         int get_center_y();
 
-        std::string get_help_text();
-
-        int get_line_width();
-
-        std::vector<int> get_line_color();
 
         std::vector<int> get_filling_color();
+
+        void set_angle(int angl);
+
+        void set_italic_font(bool italic);
+
+        void set_bold_font(bool bold);
+
+        void set_underlined_font(bool underlined);
+
+        void set_crossed_font(bool crossed);
+
+        void set_font(const std::string &font_name, int font_size);
+
+        void set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color);
+
+        void
+        set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
+                 bool italic_font,
+                 bool underlined_font, bool crossed_font);
+
+
+        void set_auto_size_text(bool auto_size);
+
+        void set_text(const std::string &text);
+
+        void set_font_name(const std::string &font_name);
+
+        void set_font_size(int font_size);
+
+        void set_hAlignment(int hAlignment);
+
+        void set_vAlignment(int vAlignment);
+
+        void set_Alignment(const std::vector<int> &al);
+
+        void set_nuber(int num);
+
+        void set_font_color(const std::vector<int> &fn_col);
+
+
+        int get_angle();
+
+
+        int get_font_size();
+
+
+        bool get_bold_font();
+
+        bool get_italic_font();
+
+        bool get_crossed_font();
+
+        bool get_underlined_font();
+
+        bool get_auto_size_text();
+
+
+        std::string get_text();
+
+        std::string get_font_name();
+
+        std::vector<int> get_font_color();
+
+
+        std::string get_hAlignment();
+
+        std::string get_vAlignment();
+
+        std::vector<std::string> get_alignment();
 
         void show();
 
@@ -600,21 +774,6 @@ namespace FiguresClasses {
         void hide_help();
 
         void hide_filling();
-
-    };
-
-    class Polygon : public CrookedLine { //класс многоугольника
-    private:
-        bool end_polygone;
-
-    public:
-        Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon);
-
-        bool get_end_polygon();
-
-        void set_end_polygon(bool end_pol);
-
-
     };
 
 }
