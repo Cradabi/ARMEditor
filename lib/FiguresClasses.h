@@ -168,138 +168,66 @@ namespace FiguresClasses {
         int center_y = 0;
 
     public:
-        Rectangle(int x, int y, int width, int height) {
-            change_center_cords(x, y, width, height);
-        }
+        Rectangle(int x, int y, int width, int height);
 
         //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
-        void change_center_cords(int x, int y, int width, int height) {
-            this->x = x;
-            this->y = y;
-            this->width = width;
-            this->height = height;
-            this->center_x = this->x + floor(this->width / 2);
-            this->center_y = this->y + floor(this->height / 2);
-        }
+        void change_center_cords(int x, int y, int width, int height);
 
-        void set_angle(int angl) {
-            this->angle = angl;
-        }
+        void set_angle(int angl);
 
-        void set_line_width(int width) {
-            this->line_width = width;
-        }
+        void set_line_width(int width);
 
-        void set_line_color(std::vector<int> ln_col) {
-            this->line_color = ln_col;
-        }
+        void set_line_color(std::vector<int>& ln_col);
 
-        void set_filling_color(std::vector<int> fil_col) {
-            this->filling_color = fil_col;
-        }
+        void set_filling_color(std::vector<int>& fil_col);
 
-        void set_help_text(std::string help) {
-            this->help_text = help;
-        }
+        void set_help_text(std::string& help);
 
-        void set_style_frame(int st_frame) {
-            if (st_frame >= 0 && st_frame < this->style_frame_list.size()) {
-                this->style_frame = st_frame;
-            }
-        }
+        void set_style_frame(int st_frame);
 
-        void set_style_gradient_filling(int st_gradient) {
-            if (st_gradient >= 0 && st_gradient < this->style_gradient_list.size()) {
-                this->style_gradient_filling = st_gradient;
-            }
-        }
+        void set_style_gradient_filling(int st_gradient);
 
-        void set_style_line(int st_line) {
-            if (st_line >= 0 && st_line < this->style_line_list.size()) {
-                this->style_line = st_line;
-            }
-        }
+        void set_style_line(int st_line);
 
-        std::string get_type_object() {
-            return this->type_object;
-        }
+        std::string get_type_object();
 
-        int get_style_frame() {
-            return this->style_frame;
-        }
+        int get_style_frame();
 
-        int get_line_width() {
-            return this->line_width;
-        }
+        int get_line_width();
 
-        int get_style_line() {
-            return this->style_line;
-        }
+        int get_style_line();
 
-        int get_style_gradient_filling() {
-            return this->style_gradient_filling;
-        }
+        int get_style_gradient_filling();
 
-        int get_angle() {
-            return this->angle;
-        }
+        int get_angle();
 
-        int get_x() {
-            return this->x;
-        }
+        int get_x();
 
-        int get_y() {
-            return this->y;
-        }
+        int get_y();
 
-        int get_width() {
-            return this->width;
-        }
+        int get_width();
 
-        int get_height() {
-            return this->height;
-        }
+        int get_height();
 
-        int get_center_x() {
-            return this->center_x;
-        }
+        int get_center_x();
 
-        int get_center_y() {
-            return this->center_y;
-        }
+        int get_center_y();
 
-        std::vector<int> get_line_color() {
-            return this->line_color;
-        }
+        std::vector<int> get_line_color();
 
-        std::vector<int> get_filling_color() {
-            return this->filling_color;
-        }
+        std::vector<int> get_filling_color();
 
-        void show() {
-            this->bool_show = true;
-        }
+        void show();
 
-        void show_help() {
-            this->bool_show_help = true;
-        }
+        void show_help();
 
-        void show_filling() {
-            this->bool_show_filling = true;
-        }
+        void show_filling();
 
-        void hide() {
-            this->bool_show = false;
-        }
+        void hide();
 
-        void hide_help() {
-            this->bool_show_help = false;
-        }
+        void hide_help();
 
-        void hide_filling() {
-            this->bool_show_filling = false;
-        }
-
+        void hide_filling();
     };
 
 
@@ -328,126 +256,65 @@ namespace FiguresClasses {
 
 
     public:
-        Ellipse() {}
+        Ellipse();
 
-        Ellipse(int x, int y, int width, int height) {
-            change_center_cords(x, y, width, height);
-        }
+        Ellipse(int x, int y, int width, int height);
 
         void
         change_center_cords(int x, int y, int width,
-                            int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
-            this->x = x;
-            this->y = y;
-            this->width = width;
-            this->height = height;
-            this->center_x = this->x + floor(this->width / 2);
-            this->center_y = this->y + floor(this->height / 2);
-        }
+                            int height);
 
-        void set_angle(int angl) {
-            this->angle = angl;
-        }
+        void set_angle(int angl);
 
-        void set_line_width(int line_width) {
-            this->line_width = line_width;
-        }
+        void set_line_width(int line_width);
 
-        void set_help_text(std::string text) {
-            this->help_text = text;
-        }
+        void set_help_text(std::string& text);
 
-        void set_line_color(std::vector<int> ln_col) {
-            this->line_color = ln_col;
-        }
+        void set_line_color(std::vector<int>& ln_col);
 
-        void set_filling_color(std::vector<int> fil_col) {
-            this->filling_color = fil_col;
-        }
+        void set_filling_color(std::vector<int>& fil_col);
 
 
-        void set_style_line(int st_line) {
-            if (st_line >= 0 && st_line < this->style_line_list.size()) {
-                this->style_line = st_line;
-            }
-        }
+        void set_style_line(int st_line);
 
-        std::string get_type_object() {
-            return this->type_object;
-        }
+        std::string get_type_object();
 
-        std::string get_help_text() {
-            return this->help_text;
-        }
+        std::string get_help_text();
 
-        int get_style_line() {
-            return this->style_line;
-        }
+        int get_style_line();
 
-        int get_line_width() {
-            return this->line_width;
-        }
+        int get_line_width();
 
 
-        int get_angle() {
-            return this->angle;
-        }
+        int get_angle();
 
-        int get_x() {
-            return this->x;
-        }
+        int get_x();
 
-        int get_y() {
-            return this->y;
-        }
+        int get_y();
 
-        int get_width() {
-            return this->width;
-        }
+        int get_width();
 
-        int get_height() {
-            return this->height;
-        }
+        int get_height();
 
-        int get_center_x() {
-            return this->center_x;
-        }
+        int get_center_x();
 
-        int get_center_y() {
-            return this->center_y;
-        }
+        int get_center_y();
 
-        std::vector<int> get_line_color() {
-            return this->line_color;
-        }
+        std::vector<int> get_line_color();
 
-        std::vector<int> get_filling_color() {
-            return this->filling_color;
-        }
+        std::vector<int> get_filling_color();
 
-        void show() {
-            this->bool_show = true;
-        }
+        void show();
 
-        void show_help() {
-            this->bool_show_help = true;
-        }
+        void show_help();
 
-        void show_filling() {
-            this->bool_show_filling = true;
-        }
+        void show_filling();
 
-        void hide() {
-            this->bool_show = false;
-        }
+        void hide();
 
-        void hide_help() {
-            this->bool_show_help = false;
-        }
+        void hide_help();
 
-        void hide_filling() {
-            this->bool_show_filling = false;
-        }
+        void hide_filling();
 
 
     };
@@ -458,37 +325,19 @@ namespace FiguresClasses {
         int end_angle = 0;
 
     public:
-        Arc(int x, int y, int width, int height, int st_angle, int end_angle) : Ellipse() {
-            this->type_object = "Дуга";
-            this->start_angle = st_angle;
-            this->end_angle = end_angle;
-            change_center_cords(x, y, width, height);
-        }
+        Arc(int x, int y, int width, int height, int st_angle, int end_angle);
 
-        void set_arc_angles(int start_angle, int end_angle) {
-            this->start_angle = start_angle;
-            this->end_angle = end_angle;
-        }
+        void set_arc_angles(int start_angle, int end_angle);
 
-        void set_start_angle(int st_angle) {
-            this->start_angle = st_angle;
-        }
+        void set_start_angle(int st_angle);
 
-        void set_end_angle(int end_angle) {
-            this->end_angle = end_angle;
-        }
+        void set_end_angle(int end_angle);
 
-        int get_start_angle() {
-            return this->start_angle;
-        }
+        int get_start_angle();
 
-        int get_end_angle() {
-            return this->end_angle;
-        }
+        int get_end_angle();
 
-        std::vector<int> get_arc_angles() {
-            return {this->start_angle, this->end_angle};
-        }
+        std::vector<int> get_arc_angles();
 
     };
 
@@ -514,102 +363,54 @@ namespace FiguresClasses {
         int center_y = 0;
 
     public:
-        TransitionPoint() {}
+        TransitionPoint();
 
         TransitionPoint(int number, int x, int y, int width,
-                        int height) { // получает номер точки перехода, координаты, ширина, высота
-            this->number_of_transition_point = number;
-            change_center_cords(x, y, width, height);
-        }
+                        int height);
 
         void
         change_center_cords(int x, int y, int width,
-                            int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
-            this->x = x;
-            this->y = y;
-            this->width = width;
-            this->height = height;
-            this->center_x = this->x + floor(this->width / 2);
-            this->center_y = this->y + floor(this->height / 2);
-        }
+                            int height);
 
 
-        void set_filling_color(std::vector<int> fil_col) {
-            this->filling_color = fil_col;
-        }
+        void set_filling_color(std::vector<int>& fil_col);
 
-        void set_help_text(std::string help_text) {
-            this->help_text = help_text;
-        }
+        void set_help_text(std::string& help_text);
 
-        void set_number(int num) {
-            this->number_of_transition_point = num;
-        }
+        void set_number(int num);
 
-        std::string get_type_object() {
-            return this->type_object;
-        }
+        std::string get_type_object();
 
-        std::string get_help_text() {
-            return this->help_text;
-        }
+        std::string get_help_text();
 
-        int get_number() {
-            return this->number_of_transition_point;
-        }
+        int get_number();
 
-        int get_x() {
-            return this->x;
-        }
+        int get_x();
 
-        int get_y() {
-            return this->y;
-        }
+        int get_y();
 
-        int get_width() {
-            return this->width;
-        }
+        int get_width();
 
-        int get_height() {
-            return this->height;
-        }
+        int get_height();
 
-        int get_center_x() {
-            return this->center_x;
-        }
+        int get_center_x();
 
-        int get_center_y() {
-            return this->center_y;
-        }
+        int get_center_y();
 
 
-        std::vector<int> get_filling_color() {
-            return this->filling_color;
-        }
+        std::vector<int> get_filling_color();
 
-        void show() {
-            this->bool_show = true;
-        }
+        void show();
 
-        void show_help() {
-            this->bool_show_help = true;
-        }
+        void show_help();
 
-        void show_filling() {
-            this->bool_show_filling = true;
-        }
+        void show_filling();
 
-        void hide() {
-            this->bool_show = false;
-        }
+        void hide();
 
-        void hide_help() {
-            this->bool_show_help = false;
-        }
+        void hide_help();
 
-        void hide_filling() {
-            this->bool_show_filling = false;
-        }
+        void hide_filling();
 
     };
 
@@ -637,160 +438,77 @@ namespace FiguresClasses {
 
 
     public:
-        TransitionButton(int number, int x, int y, int width, int height) : TransitionPoint() {
-            this->number_of_transition_button = number;
-            this->type_object = "Точка перехода";
-            int number_transition_point = 0; //служебная переменная
-            change_center_cords(x, y, width, height);
-        }
+        TransitionButton(int number, int x, int y, int width, int height);
 
 
-        void set_angle(int angl) {
-            this->angle = angl;
-        }
+        void set_angle(int angl);
 
-        void set_italic_font(bool italic) {
-            this->italic_font = italic;
-        }
+        void set_italic_font(bool italic);
 
-        void set_bold_font(bool bold) {
-            this->bold_font = bold;
-        }
+        void set_bold_font(bool bold);
 
-        void set_underlined_font(bool underlined) {
-            this->underlined_font = underlined;
-        }
+        void set_underlined_font(bool underlined);
 
-        void set_crossed_font(bool crossed) {
-            this->crossed_font = crossed;
-        }
+        void set_crossed_font(bool crossed);
 
-        void set_font(std::string font_name, int font_size) {
-            this->font_name = font_name;
-            this->font_size = font_size;
-        }
+        void set_font(std::string& font_name, int font_size);
 
-        void set_font(std::string font_name, int font_size, std::vector<int> font_color) {
-            this->font_name = font_name;
-            this->font_size = font_size;
-            this->font_color = font_color;
-        }
+        void set_font(std::string& font_name, int font_size, std::vector<int>& font_color);
 
         void
-        set_font(std::string font_name, int font_size, std::vector<int> font_color, bool bold_font, bool italic_font,
-                 bool underlined_font, bool crossed_font) {
-            this->font_name = font_name;
-            this->font_size = font_size;
-            this->font_color = font_color;
-            this->bold_font = bold_font;
-            this->italic_font = italic_font;
-            this->underlined_font = underlined_font;
-            this->crossed_font = crossed_font;
-        }
+        set_font(std::string& font_name, int font_size, std::vector<int>& font_color, bool bold_font, bool italic_font,
+                 bool underlined_font, bool crossed_font);
 
 
-        void set_auto_size_text(bool auto_size) {
-            this->auto_size_text = auto_size;
-        }
+        void set_auto_size_text(bool auto_size);
 
-        void set_text(std::string text) {
-            this->text = text;
-        }
+        void set_text(std::string& text);
 
-        void set_font_name(std::string font_name) {
-            this->font_name = font_name;
-        }
+        void set_font_name(std::string& font_name);
 
-        void set_font_size(int font_size) {
-            this->font_size = font_size;
-        }
+        void set_font_size(int font_size);
 
-        void set_hAlignment(int hAlignment) {
-            if (hAlignment >= 0 && hAlignment <= 3) {
-                this->hAlignment = hAlignment;
-            }
-        }
+        void set_hAlignment(int hAlignment);
 
-        void set_vAlignment(int vAlignment) {
-            if (vAlignment >= 0 && vAlignment <= 3) {
-                this->vAlignment = vAlignment;
-            }
-        }
+        void set_vAlignment(int vAlignment);
 
-        void set_Alignment(std::vector<int> al) {
-            if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
-                this->hAlignment = al[0];
-                this->vAlignment = al[1];
-            }
-        }
+        void set_Alignment(std::vector<int>& al);
 
-        void set_nuber(int num) {
-            this->number_of_transition_button = num;
-        }
+        void set_nuber(int num);
 
-        void set_font_color(std::vector<int> fn_col) {
-            this->font_color = fn_col;
-        }
+        void set_font_color(std::vector<int>& fn_col);
 
 
-        int get_angle() {
-            return this->angle;
-        }
+        int get_angle();
 
 
-        int get_font_size() {
-            return this->font_size;
-        }
+        int get_font_size();
 
-        int get_number() {
-            return this->number_of_transition_button;
-        }
+        int get_number();
 
-        bool get_bold_font() {
-            return this->bold_font;
-        }
+        bool get_bold_font();
 
-        bool get_italic_font() {
-            return this->italic_font;
-        }
+        bool get_italic_font();
 
-        bool get_crossed_font() {
-            return this->crossed_font;
-        }
+        bool get_crossed_font();
 
-        bool get_underlined_font() {
-            return this->underlined_font;
-        }
+        bool get_underlined_font();
 
-        bool get_auto_size_text() {
-            return this->auto_size_text;
-        }
+        bool get_auto_size_text();
 
 
-        std::string get_text() {
-            return this->text;
-        }
+        std::string get_text();
 
-        std::string get_font_name() {
-            return this->font_name;
-        }
+        std::string get_font_name();
 
-        std::vector<int> get_font_color() {
-            return this->font_color;
-        }
+        std::vector<int> get_font_color();
 
 
-        std::string get_hAlignment() {
-            return this->hAlignment_list[this->hAlignment];
-        }
+        std::string get_hAlignment();
 
-        std::string get_vAlignment() {
-            return this->vAlignment_list[this->vAlignment];
-        }
+        std::string get_vAlignment();
 
-        std::vector<int> get_alignment() {
-            return {this->hAlignment, this->vAlignment};
-        }
+        std::vector<int> get_alignment();
 
     };
 
@@ -803,6 +521,8 @@ namespace FiguresClasses {
         bool bool_show_filling = false;                         //показывать заливку
         std::vector<int> line_color = {0, 0, 0};                //цвет линии
         std::vector<int> filling_color = {255, 255, 255};       //цвет заливки
+
+        std::vector<std::vector <int>> points;
 
         std::vector<std::string> style_line_list =
                 {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
@@ -822,139 +542,62 @@ namespace FiguresClasses {
         int center_y = 0;
 
     public:
-        CrookedLine() {}
+        CrookedLine();
 
-        CrookedLine(std::vector<std::vector<int>> points_vector) {
-            change_center_cords(points_vector);
-        }
+        CrookedLine(std::vector<std::vector<int>> points_vector);
 
         void
         change_center_cords(
-                std::vector<std::vector<int>> points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
-            int max_x = 0;
-            int max_y = 0;
-            int min_x = points_vector[0][0];
-            int min_y = points_vector[0][1];
-            for (auto i: points_vector) {
-                if (i[0] < min_x) {
-                    min_x = i[0];
-                }
-                if (i[0] > max_x) {
-                    max_x = i[0];
-                }
-                if (i[1] < min_y) {
-                    min_y = i[1];
-                }
-                if (i[1] > max_x) {
-                    max_y = i[1];
-                }
-            }
-            this->x = min_x;
-            this->y = min_y;
-            this->width = max_x - min_x;
-            this->height = max_y - min_y;
-            this->center_x = this->x + floor(this->width / 2);
-            this->center_y = this->y + floor(this->height / 2);
-        }
+                std::vector<std::vector<int>> points_vector);
 
-        void set_angle(int angl) {
-            this->angle = angl;
-        }
+        void set_angle(int angl);
 
-        void set_line_color(std::vector<int> ln_col) {
-            this->line_color = ln_col;
-        }
+        void set_line_color(std::vector<int>& ln_col);
 
-        void set_filling_color(std::vector<int> fil_col) {
-            this->filling_color = fil_col;
-        }
+        void set_filling_color(std::vector<int>& fil_col);
 
-        void set_help_text(std::string text) {
-            this->help_text = text;
-        }
+        void set_help_text(std::string& text);
 
 
-        void set_style_line(int st_line) {
-            if (st_line >= 0 && st_line < this->style_line_list.size()) {
-                this->style_line = st_line;
-            }
-        }
+        void set_style_line(int st_line);
 
-        std::string get_type_object() {
-            return this->type_object;
-        }
+        std::string get_type_object();
 
-        int get_style_line() {
-            return this->style_line;
-        }
+        int get_style_line();
 
-        int get_angle() {
-            return this->angle;
-        }
+        int get_angle();
 
-        int get_x() {
-            return this->x;
-        }
+        int get_x();
 
-        int get_y() {
-            return this->y;
-        }
+        int get_y();
 
-        int get_width() {
-            return this->width;
-        }
+        int get_width();
 
-        int get_height() {
-            return this->height;
-        }
+        int get_height();
 
-        int get_center_x() {
-            return this->center_x;
-        }
+        int get_center_x();
 
-        int get_center_y() {
-            return this->center_y;
-        }
+        int get_center_y();
 
-        std::string get_help_text() {
-            return this->help_text;
-        }
+        std::string get_help_text();
 
-        int get_line_width() {
-            return this->line_width;
-        }
+        int get_line_width();
 
-        std::vector<int> get_line_color() {
-            return this->line_color;
-        }
+        std::vector<int> get_line_color();
 
-        std::vector<int> get_filling_color() {
-            return this->filling_color;
-        }
+        std::vector<int> get_filling_color();
 
-        void show() {
-            this->bool_show = true;
-        }
+        void show();
 
-        void show_help() {
-            this->bool_show_help = true;
-        }
+        void show_help();
 
-        void show_filling() {
-            this->bool_show_filling = true;
-        }
+        void show_filling();
 
-        void hide() {
-            this->bool_show = false;
-        }
+        void hide();
 
-        void hide_help() {
-            this->bool_show_help = false;
-        }
+        void hide_help();
 
-        void hide_filling() {
-            this->bool_show_filling = false;
-        }
+        void hide_filling();
 
     };
 
@@ -963,19 +606,11 @@ namespace FiguresClasses {
         bool end_polygone;
 
     public:
-        Polygon(std::vector<std::vector<int>> points_vector, bool end_polygon = false) : CrookedLine() {
-            this->type_object = "Полигон";
-            this->end_polygone = end_polygon;
-            change_center_cords(points_vector);
-        }
+        Polygon(std::vector<std::vector<int>> points_vector, bool end_polygon);
 
-        bool get_end_polygon() {
-            return this->end_polygone;
-        }
+        bool get_end_polygon();
 
-        void set_end_polygon(bool end_pol) {
-            this->end_polygone = end_pol;
-        }
+        void set_end_polygon(bool end_pol);
 
 
     };
