@@ -1,12 +1,10 @@
 #include <iostream>
 
-#include "..//lib//FiguresClasses.h"
+#include "..//lib//FiguresClasses.cpp"
 
 int main() {
 
-    FiguresClasses::Polygon pol({{1, 2},
-                 {2, 3},
-                 {5, 0}}, true);
+    FiguresClasses::Polygon pol({{1, 2}, {2, 3}, {5, 0}}, true);
 
     std::cout << pol.get_x() << " " << pol.get_y() << '\n'
               << pol.get_width() << " " << pol.get_height() << '\n'

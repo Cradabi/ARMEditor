@@ -52,17 +52,17 @@ namespace FiguresClasses {
                                  int end_y);
 
         //меняет вектор цвета линии
-        void set_line_color(std::vector<int>& lin_col);
+        void set_line_color(const std::vector<int>& lin_col);
 
-        void set_text(std::string& text);
+        void set_text(const std::string& text);
 
-        void set_help_text(std::string& help);
+        void set_help_text(const std::string& help);
 
-        void set_font_name(std::string& fn_name);
+        void set_font_name(const std::string& fn_name);
 
         void set_font_size(int fn_size);
 
-        void set_font_color(std::vector<int>& fn_col);
+        void set_font_color(const std::vector<int>& fn_col);
 
         void set_italic_font(bool italic);
 
@@ -72,12 +72,13 @@ namespace FiguresClasses {
 
         void set_crossed_font(bool crossed);
 
-        void set_font(std::string& font_name, int font_size);
+        void set_font(const std::string& font_name, int font_size);
 
-        void set_font(std::string& font_name, int font_size, std::vector<int>& font_color);
+        void set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color);
 
         void
-        set_font(std::string& font_name, int font_size, std::vector<int>& font_color, bool bold_font, bool italic_font,
+        set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+                 bool italic_font,
                  bool underlined_font, bool crossed_font);
 
         //выводит вектор цветов линии rgb
@@ -177,11 +178,11 @@ namespace FiguresClasses {
 
         void set_line_width(int width);
 
-        void set_line_color(std::vector<int>& ln_col);
+        void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int>& fil_col);
 
-        void set_help_text(std::string& help);
+        void set_help_text(const std::string& help);
 
         void set_style_frame(int st_frame);
 
@@ -268,11 +269,11 @@ namespace FiguresClasses {
 
         void set_line_width(int line_width);
 
-        void set_help_text(std::string& text);
+        void set_help_text(const std::string& text);
 
-        void set_line_color(std::vector<int>& ln_col);
+        void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int>& fil_col);
 
 
         void set_style_line(int st_line);
@@ -373,9 +374,9 @@ namespace FiguresClasses {
                             int height);
 
 
-        void set_filling_color(std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int>& fil_col);
 
-        void set_help_text(std::string& help_text);
+        void set_help_text(const std::string& help_text);
 
         void set_number(int num);
 
@@ -451,20 +452,21 @@ namespace FiguresClasses {
 
         void set_crossed_font(bool crossed);
 
-        void set_font(std::string& font_name, int font_size);
+        void set_font(const std::string& font_name, int font_size);
 
-        void set_font(std::string& font_name, int font_size, std::vector<int>& font_color);
+        void set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color);
 
         void
-        set_font(std::string& font_name, int font_size, std::vector<int>& font_color, bool bold_font, bool italic_font,
+        set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+                 bool italic_font,
                  bool underlined_font, bool crossed_font);
 
 
         void set_auto_size_text(bool auto_size);
 
-        void set_text(std::string& text);
+        void set_text(const std::string& text);
 
-        void set_font_name(std::string& font_name);
+        void set_font_name(const std::string& font_name);
 
         void set_font_size(int font_size);
 
@@ -472,11 +474,11 @@ namespace FiguresClasses {
 
         void set_vAlignment(int vAlignment);
 
-        void set_Alignment(std::vector<int>& al);
+        void set_Alignment(const std::vector<int>& al);
 
         void set_nuber(int num);
 
-        void set_font_color(std::vector<int>& fn_col);
+        void set_font_color(const std::vector<int>& fn_col);
 
 
         int get_angle();
@@ -522,7 +524,7 @@ namespace FiguresClasses {
         std::vector<int> line_color = {0, 0, 0};                //цвет линии
         std::vector<int> filling_color = {255, 255, 255};       //цвет заливки
 
-        std::vector<std::vector <int>> points;
+        std::vector<std::vector<int>> points;
 
         std::vector<std::string> style_line_list =
                 {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
@@ -544,19 +546,19 @@ namespace FiguresClasses {
     public:
         CrookedLine();
 
-        CrookedLine(std::vector<std::vector<int>> points_vector);
+        CrookedLine(const std::vector<std::vector<int>>& points_vector);
 
         void
         change_center_cords(
-                std::vector<std::vector<int>> points_vector);
+                const std::vector<std::vector<int>>& points_vector);
 
         void set_angle(int angl);
 
-        void set_line_color(std::vector<int>& ln_col);
+        void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(std::vector<int>& fil_col);
+        void set_filling_color(const std::vector<int>& fil_col);
 
-        void set_help_text(std::string& text);
+        void set_help_text(const std::string& text);
 
 
         void set_style_line(int st_line);
@@ -606,7 +608,7 @@ namespace FiguresClasses {
         bool end_polygone;
 
     public:
-        Polygon(std::vector<std::vector<int>> points_vector, bool end_polygon);
+        Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon);
 
         bool get_end_polygon();
 

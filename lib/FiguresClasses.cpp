@@ -34,19 +34,19 @@ void Line::change_center_cords(int st_x, int st_y, int end_x,
 }
 
 //меняет вектор цвета линии
-void Line::set_line_color(std::vector<int>& lin_col) {
+void Line::set_line_color(const std::vector<int>& lin_col) {
     this->line_color = lin_col;
 }
 
-void Line::set_text(std::string& text) {
+void Line::set_text(const std::string& text) {
     this->text = text;
 }
 
-void Line::set_help_text(std::string& help) {
+void Line::set_help_text(const std::string& help) {
     this->help_text = help;
 }
 
-void Line::set_font_name(std::string& fn_name) {
+void Line::set_font_name(const std::string& fn_name) {
     this->font_name = fn_name;
 }
 
@@ -54,7 +54,7 @@ void Line::set_font_size(int fn_size) {
     this->font_size = fn_size;
 }
 
-void Line::set_font_color(std::vector<int>& fn_col) {
+void Line::set_font_color(const std::vector<int>& fn_col) {
     this->font_color = fn_col;
 }
 
@@ -74,19 +74,20 @@ void Line::set_crossed_font(bool crossed) {
     this->crossed_font = crossed;
 }
 
-void Line::set_font(std::string& font_name, int font_size) {
+void Line::set_font(const std::string& font_name, int font_size) {
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void Line::set_font(std::string& font_name, int font_size, std::vector<int>& font_color) {
+void Line::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color) {
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-Line::set_font(std::string& font_name, int font_size, std::vector<int>& font_color, bool bold_font, bool italic_font,
+Line::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+               bool italic_font,
                bool underlined_font, bool crossed_font) {
     this->font_name = font_name;
     this->font_size = font_size;
@@ -205,15 +206,15 @@ void Rectangle::set_line_width(int width) {
     this->line_width = width;
 }
 
-void Rectangle::set_line_color(std::vector<int>& ln_col) {
+void Rectangle::set_line_color(const std::vector<int>& ln_col) {
     this->line_color = ln_col;
 }
 
-void Rectangle::set_filling_color(std::vector<int>& fil_col) {
+void Rectangle::set_filling_color(const std::vector<int>& fil_col) {
     this->filling_color = fil_col;
 }
 
-void Rectangle::set_help_text(std::string& help) {
+void Rectangle::set_help_text(const std::string& help) {
     this->help_text = help;
 }
 
@@ -323,7 +324,7 @@ Ellipse::Ellipse(int x, int y, int width, int height) {
 
 void
 Ellipse::change_center_cords(int x, int y, int width,
-                    int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+                             int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
     this->x = x;
     this->y = y;
     this->width = width;
@@ -340,15 +341,15 @@ void Ellipse::set_line_width(int line_width) {
     this->line_width = line_width;
 }
 
-void Ellipse::set_help_text(std::string& text) {
+void Ellipse::set_help_text(const std::string& text) {
     this->help_text = text;
 }
 
-void Ellipse::set_line_color(std::vector<int>& ln_col) {
+void Ellipse::set_line_color(const std::vector<int>& ln_col) {
     this->line_color = ln_col;
 }
 
-void Ellipse::set_filling_color(std::vector<int>& fil_col) {
+void Ellipse::set_filling_color(const std::vector<int>& fil_col) {
     this->filling_color = fil_col;
 }
 
@@ -436,7 +437,7 @@ void Ellipse::hide_filling() {
     this->bool_show_filling = false;
 }
 
-Arc::Arc(int x, int y, int width, int height, int st_angle, int end_angle) : Ellipse::Ellipse(){
+Arc::Arc(int x, int y, int width, int height, int st_angle, int end_angle) : Ellipse::Ellipse() {
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
@@ -471,14 +472,14 @@ std::vector<int> Arc::get_arc_angles() {
 TransitionPoint::TransitionPoint() {}
 
 TransitionPoint::TransitionPoint(int number, int x, int y, int width,
-                int height) { // получает номер точки перехода, координаты, ширина, высота
+                                 int height) { // получает номер точки перехода, координаты, ширина, высота
     this->number_of_transition_point = number;
     change_center_cords(x, y, width, height);
 }
 
 void
 TransitionPoint::change_center_cords(int x, int y, int width,
-                    int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+                                     int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
     this->x = x;
     this->y = y;
     this->width = width;
@@ -488,11 +489,11 @@ TransitionPoint::change_center_cords(int x, int y, int width,
 }
 
 
-void TransitionPoint::set_filling_color(std::vector<int>& fil_col) {
+void TransitionPoint::set_filling_color(const std::vector<int>& fil_col) {
     this->filling_color = fil_col;
 }
 
-void TransitionPoint::set_help_text(std::string& help_text) {
+void TransitionPoint::set_help_text(const std::string& help_text) {
     this->help_text = help_text;
 }
 
@@ -565,7 +566,8 @@ void TransitionPoint::hide_filling() {
     this->bool_show_filling = false;
 }
 
-TransitionButton::TransitionButton(int number, int x, int y, int width, int height) : TransitionPoint::TransitionPoint(){
+TransitionButton::TransitionButton(int number, int x, int y, int width, int height)
+        : TransitionPoint::TransitionPoint() {
     this->number_of_transition_button = number;
     this->type_object = "Точка перехода";
     int number_transition_point = 0; //служебная переменная
@@ -593,20 +595,21 @@ void TransitionButton::set_crossed_font(bool crossed) {
     this->crossed_font = crossed;
 }
 
-void TransitionButton::set_font(std::string& font_name, int font_size) {
+void TransitionButton::set_font(const std::string& font_name, int font_size) {
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void TransitionButton::set_font(std::string& font_name, int font_size, std::vector<int>& font_color) {
+void TransitionButton::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color) {
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-TransitionButton::set_font(std::string& font_name, int font_size, std::vector<int>& font_color, bool bold_font, bool italic_font,
-         bool underlined_font, bool crossed_font) {
+TransitionButton::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color,
+                           bool bold_font, bool italic_font,
+                           bool underlined_font, bool crossed_font) {
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
@@ -621,11 +624,11 @@ void TransitionButton::set_auto_size_text(bool auto_size) {
     this->auto_size_text = auto_size;
 }
 
-void TransitionButton::set_text(std::string& text) {
+void TransitionButton::set_text(const std::string& text) {
     this->text = text;
 }
 
-void TransitionButton::set_font_name(std::string& font_name) {
+void TransitionButton::set_font_name(const std::string& font_name) {
     this->font_name = font_name;
 }
 
@@ -645,7 +648,7 @@ void TransitionButton::set_vAlignment(int vAlignment) {
     }
 }
 
-void TransitionButton::set_Alignment(std::vector<int>& al) {
+void TransitionButton::set_Alignment(const std::vector<int>& al) {
     if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
         this->hAlignment = al[0];
         this->vAlignment = al[1];
@@ -656,7 +659,7 @@ void TransitionButton::set_nuber(int num) {
     this->number_of_transition_button = num;
 }
 
-void TransitionButton::set_font_color(std::vector<int>& fn_col) {
+void TransitionButton::set_font_color(const std::vector<int>& fn_col) {
     this->font_color = fn_col;
 }
 
@@ -722,13 +725,13 @@ std::vector<int> TransitionButton::get_alignment() {
 
 CrookedLine::CrookedLine() {}
 
-CrookedLine::CrookedLine(std::vector<std::vector<int>> points_vector) {
-change_center_cords(points_vector);
+CrookedLine::CrookedLine(const std::vector<std::vector<int>>& points_vector) {
+    change_center_cords(points_vector);
 }
 
 void
 CrookedLine::change_center_cords(
-        std::vector<std::vector<int>> points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
+        const std::vector<std::vector<int>>& points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
     this->points = points_vector;
     int max_x = 0;
     int max_y = 0;
@@ -760,15 +763,15 @@ void CrookedLine::set_angle(int angl) {
     this->angle = angl;
 }
 
-void CrookedLine::set_line_color(std::vector<int>& ln_col) {
+void CrookedLine::set_line_color(const std::vector<int>& ln_col) {
     this->line_color = ln_col;
 }
 
-void CrookedLine::set_filling_color(std::vector<int>& fil_col) {
+void CrookedLine::set_filling_color(const std::vector<int>& fil_col) {
     this->filling_color = fil_col;
 }
 
-void CrookedLine::set_help_text(std::string& text) {
+void CrookedLine::set_help_text(const std::string& text) {
     this->help_text = text;
 }
 
@@ -855,7 +858,7 @@ void CrookedLine::hide_filling() {
     this->bool_show_filling = false;
 }
 
-Polygon::Polygon(std::vector<std::vector<int>> points_vector, bool end_polygon) : CrookedLine::CrookedLine() {
+Polygon::Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon) : CrookedLine::CrookedLine() {
     this->type_object = "Полигон";
     this->end_polygone = end_polygon;
     change_center_cords(points_vector);
