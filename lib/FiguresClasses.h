@@ -47,6 +47,21 @@ namespace FiguresClasses {
     public:
         Line(int st_x, int st_y, int end_x, int end_y);
 
+        Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+             bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
+             int end_style_arrow, const std::vector<int> &line_color);
+
+        Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+             bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
+             int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
+             int font_size, const std::vector<int> &font_color);
+
+        Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+             bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
+             int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
+             int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
+             bool crossed_font);
+
         //меняет координаты начала, конца, центра линии
         void change_center_cords(int st_x, int st_y, int end_x,
                                  int end_y);
@@ -171,6 +186,13 @@ namespace FiguresClasses {
     public:
         Rectangle(int x, int y, int width, int height);
 
+        Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+
+        Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
+                  int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling);
+
         //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
         void change_center_cords(int x, int y, int width, int height);
 
@@ -261,6 +283,13 @@ namespace FiguresClasses {
 
         Ellipse(int x, int y, int width, int height);
 
+        Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+
+        Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
+                const std::vector<int> &filling_color, bool bool_show_filling);
+
         void
         change_center_cords(int x, int y, int width,
                             int height);
@@ -326,7 +355,14 @@ namespace FiguresClasses {
         int end_angle = 0;
 
     public:
-        Arc(int x, int y, int width, int height, int st_angle, int end_angle);
+        Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle);
+
+        Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
+            const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+
+        Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
+            const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
+            const std::vector<int> &filling_color, bool bool_show_filling);
 
         void set_arc_angles(int start_angle, int end_angle);
 
@@ -347,8 +383,8 @@ namespace FiguresClasses {
 
         bool bool_show_help = false;                // показывать подсказку
         bool bool_show = true;                      //показывать прямоугольник
+        bool bool_show_filling = false;             //показывать заливку
 
-        bool bool_show_filling = false;                         //показывать заливку
         std::vector<int> line_color = {0, 0, 0};                //цвет линии
         std::vector<int> filling_color = {255, 255, 255};       //цвет заливки
 
@@ -375,6 +411,10 @@ namespace FiguresClasses {
         CrookedLine();
 
         CrookedLine(const std::vector<std::vector<int>> &points_vector);
+
+        CrookedLine(const std::vector<std::vector<int>> &points_vector, int angle, int line_width, int style_line,
+                    const std::string &help_text, const std::vector<int> &line_color,
+                    const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
         void
         change_center_cords(
@@ -438,6 +478,11 @@ namespace FiguresClasses {
     public:
         Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon);
 
+        Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int angle, int line_width,
+                int style_line,
+                const std::string &help_text, const std::vector<int> &line_color,
+                const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+
         bool get_end_polygon();
 
         void set_end_polygon(bool end_pol);
@@ -472,6 +517,10 @@ namespace FiguresClasses {
         TransitionPoint(int number, int x, int y, int width,
                         int height);
 
+        TransitionPoint(int number, int x, int y, int width,
+                        int height, const std::vector<int> &filling_color, const std::string &help_text, bool bool_show,
+                        bool bool_show_filling);
+
         void
         change_center_cords(int x, int y, int width,
                             int height);
@@ -481,13 +530,13 @@ namespace FiguresClasses {
 
         void set_help_text(const std::string &help_text);
 
-        void set_number(int num);
+        void set_point_number(int num);
 
         std::string get_type_object();
 
         std::string get_help_text();
 
-        int get_number();
+        int get_point_number();
 
         int get_x();
 
@@ -544,6 +593,18 @@ namespace FiguresClasses {
     public:
         TransitionButton(int number, int x, int y, int width, int height);
 
+        TransitionButton(int number, int x, int y, int width, int height, int angle,
+                         const std::vector<int> &filling_color,
+                         const std::string &help_text, bool bool_show,
+                         bool bool_show_filling);
+
+        TransitionButton(int number, int x, int y, int width, int height, int angle,
+                         const std::vector<int> &filling_color,
+                         const std::string &help_text, bool bool_show,
+                         bool bool_show_filling, const std::string &text, const std::string &font_name, int font_size,
+                         const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                         bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
 
         void set_angle(int angl);
 
@@ -579,7 +640,7 @@ namespace FiguresClasses {
 
         void set_Alignment(const std::vector<int> &al);
 
-        void set_number(int num);
+        void set_button_number(int num);
 
         void set_font_color(const std::vector<int> &fn_col);
 
@@ -589,7 +650,7 @@ namespace FiguresClasses {
 
         int get_font_size();
 
-        int get_number();
+        int get_button_number();
 
         bool get_bold_font();
 
@@ -666,6 +727,15 @@ namespace FiguresClasses {
     public:
         Text(int x, int y, int width, int height);
 
+        Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+
+        Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+             const std::string &font_name, int font_size,
+             const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+             bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
         void
         change_center_cords(int x, int y, int width,
                             int height);
@@ -674,25 +744,6 @@ namespace FiguresClasses {
         void set_filling_color(const std::vector<int> &fil_col);
 
         void set_help_text(const std::string &help_text);
-
-        std::string get_type_object();
-
-        std::string get_help_text();
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
-
-
-        std::vector<int> get_filling_color();
 
         void set_angle(int angl);
 
@@ -728,10 +779,29 @@ namespace FiguresClasses {
 
         void set_Alignment(const std::vector<int> &al);
 
-        void set_nuber(int num);
-
         void set_font_color(const std::vector<int> &fn_col);
 
+        void set_style_line(int style_line);
+
+        std::string get_type_object();
+
+        std::string get_help_text();
+
+        int get_x();
+
+        int get_y();
+
+        int get_width();
+
+        int get_height();
+
+        int get_center_x();
+
+        int get_center_y();
+
+        int get_style_line();
+
+        std::vector<int> get_filling_color();
 
         int get_angle();
 

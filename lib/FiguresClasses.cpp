@@ -6,6 +6,64 @@ Line::Line(int st_x, int st_y, int end_x, int end_y) {
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+           bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
+           int end_style_arrow, const std::vector<int> &line_color) {
+    this->text = text;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->style_line = style_line;
+    this->number_of_text = number_of_text;
+    this->line_width = line_width;
+    this->start_style_arrow = start_style_arrow;
+    this->end_style_arrow = end_style_arrow;
+    this->line_color = line_color;
+    change_center_cords(st_x, st_y, end_x, end_y);
+}
+
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+           bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
+           int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
+           int font_size, const std::vector<int> &font_color) {
+    this->text = text;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->style_line = style_line;
+    this->number_of_text = number_of_text;
+    this->line_width = line_width;
+    this->start_style_arrow = start_style_arrow;
+    this->end_style_arrow = end_style_arrow;
+    this->line_color = line_color;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    change_center_cords(st_x, st_y, end_x, end_y);
+}
+
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+           bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
+           int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
+           int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
+           bool crossed_font) {
+    this->text = text;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->style_line = style_line;
+    this->number_of_text = number_of_text;
+    this->line_width = line_width;
+    this->start_style_arrow = start_style_arrow;
+    this->end_style_arrow = end_style_arrow;
+    this->line_color = line_color;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    this->bold_font = bold_font;
+    this->italic_font = italic_font;
+    this->underlined_font = underlined_font;
+    this->crossed_font = crossed_font;
+    change_center_cords(st_x, st_y, end_x, end_y);
+}
+
 //меняет координаты начала, конца, центра линии
 void Line::change_center_cords(int st_x, int st_y, int end_x,
                                int end_y) {
@@ -188,6 +246,33 @@ Rectangle::Rectangle(int x, int y, int width, int height) {
     change_center_cords(x, y, width, height);
 }
 
+Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show) {
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    change_center_cords(x, y, width, height);
+}
+
+Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
+                     int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling) {
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->style_frame = style_frame;
+    this->style_gradient_filling = style_gradient_filling;
+    this->filling_color = filling_color;
+    this->bool_show_filling = bool_show_filling;
+    change_center_cords(x, y, width, height);
+}
+
 //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
 void Rectangle::change_center_cords(int x, int y, int width, int height) {
     this->x = x;
@@ -322,6 +407,31 @@ Ellipse::Ellipse(int x, int y, int width, int height) {
     change_center_cords(x, y, width, height);
 }
 
+Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show) {
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    change_center_cords(x, y, width, height);
+}
+
+Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
+                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
+                 const std::vector<int> &filling_color, bool bool_show_filling) {
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->filling_color = filling_color;
+    this->bool_show_filling = bool_show_filling;
+    change_center_cords(x, y, width, height);
+}
+
 void
 Ellipse::change_center_cords(int x, int y, int width,
                              int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
@@ -437,10 +547,42 @@ void Ellipse::hide_filling() {
     this->bool_show_filling = false;
 }
 
-Arc::Arc(int x, int y, int width, int height, int st_angle, int end_angle) : Ellipse::Ellipse() {
+Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle) : Ellipse::Ellipse() {
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
+    this->angle = angle;
+    change_center_cords(x, y, width, height);
+}
+
+Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
+         const std::vector<int> &line_color, const std::string &help_text, bool bool_show) : Ellipse::Ellipse() {
+    this->type_object = "Дуга";
+    this->start_angle = st_angle;
+    this->end_angle = end_angle;
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    change_center_cords(x, y, width, height);
+}
+
+Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
+         const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
+         const std::vector<int> &filling_color, bool bool_show_filling) : Ellipse::Ellipse() {
+    this->type_object = "Дуга";
+    this->start_angle = st_angle;
+    this->end_angle = end_angle;
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->filling_color = filling_color;
+    this->bool_show_filling = bool_show_filling;
     change_center_cords(x, y, width, height);
 }
 
@@ -472,6 +614,20 @@ std::vector<int> Arc::get_arc_angles() {
 CrookedLine::CrookedLine() {}
 
 CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector) {
+    change_center_cords(points_vector);
+}
+
+CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector, int angle, int line_width, int style_line,
+                         const std::string &help_text, const std::vector<int> &line_color,
+                         const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->help_text = help_text;
+    this->line_color = line_color;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
     change_center_cords(points_vector);
 }
 
@@ -610,6 +766,23 @@ Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_po
     change_center_cords(points_vector);
 }
 
+Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int angle, int line_width,
+                 int style_line, const std::string &help_text, const std::vector<int> &line_color,
+                 const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling)
+        : CrookedLine::CrookedLine() {
+    this->type_object = "Полигон";
+    this->end_polygone = end_polygon;
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->help_text = help_text;
+    this->line_color = line_color;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    change_center_cords(points_vector);
+}
+
 bool Polygon::get_end_polygon() {
     return this->end_polygone;
 }
@@ -623,6 +796,18 @@ TransitionPoint::TransitionPoint() {}
 TransitionPoint::TransitionPoint(int number, int x, int y, int width,
                                  int height) { // получает номер точки перехода, координаты, ширина, высота
     this->number_of_transition_point = number;
+    change_center_cords(x, y, width, height);
+}
+
+TransitionPoint::TransitionPoint(int number, int x, int y, int width,
+                                 int height, const std::vector<int> &filling_color, const std::string &help_text,
+                                 bool bool_show,
+                                 bool bool_show_filling) {
+    this->number_of_transition_point = number;
+    this->filling_color = filling_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
     change_center_cords(x, y, width, height);
 }
 
@@ -646,7 +831,7 @@ void TransitionPoint::set_help_text(const std::string &help_text) {
     this->help_text = help_text;
 }
 
-void TransitionPoint::set_number(int num) {
+void TransitionPoint::set_point_number(int num) {
     this->number_of_transition_point = num;
 }
 
@@ -658,7 +843,7 @@ std::string TransitionPoint::get_help_text() {
     return this->help_text;
 }
 
-int TransitionPoint::get_number() {
+int TransitionPoint::get_point_number() {
     return this->number_of_transition_point;
 }
 
@@ -720,6 +905,52 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
     this->number_of_transition_button = number;
     this->type_object = "Точка перехода";
     int number_transition_point = 0; //служебная переменная
+    change_center_cords(x, y, width, height);
+}
+
+TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle,
+                                   const std::vector<int> &filling_color,
+                                   const std::string &help_text, bool bool_show,
+                                   bool bool_show_filling)
+        : TransitionPoint::TransitionPoint() {
+    this->number_of_transition_button = number;
+    this->type_object = "Точка перехода";
+    int number_transition_point = 0; //служебная переменная
+    this->angle = angle;
+    this->filling_color = filling_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    change_center_cords(x, y, width, height);
+}
+
+TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle,
+                                   const std::vector<int> &filling_color,
+                                   const std::string &help_text, bool bool_show,
+                                   bool bool_show_filling, const std::string &text, const std::string &font_name,
+                                   int font_size,
+                                   const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                                   bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
+        : TransitionPoint::TransitionPoint() {
+    this->number_of_transition_button = number;
+    this->type_object = "Точка перехода";
+    int number_transition_point = 0; //служебная переменная
+    this->angle = angle;
+    this->filling_color = filling_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    this->text = text;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    this->hAlignment = hAlignment;
+    this->vAlignment = vAlignment;
+    this->bold_font = bold_font;
+    this->italic_font = italic_font;
+    this->underlined_font = underlined_font;
+    this->crossed_font = crossed_font;
+    this->auto_size_text = auto_size_text;
     change_center_cords(x, y, width, height);
 }
 
@@ -804,7 +1035,7 @@ void TransitionButton::set_Alignment(const std::vector<int> &al) {
     }
 }
 
-void TransitionButton::set_number(int num) {
+void TransitionButton::set_button_number(int num) {
     this->number_of_transition_button = num;
 }
 
@@ -822,7 +1053,7 @@ int TransitionButton::get_font_size() {
     return this->font_size;
 }
 
-int TransitionButton::get_number() {
+int TransitionButton::get_button_number() {
     return this->number_of_transition_button;
 }
 
@@ -874,6 +1105,43 @@ std::vector<std::string> TransitionButton::get_alignment() {
 
 
 Text::Text(int x, int y, int width, int height) {
+    Text::change_center_cords(x, y, width, height);
+}
+
+Text::Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    Text::change_center_cords(x, y, width, height);
+}
+
+Text::Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+           const std::string &font_name, int font_size,
+           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    this->hAlignment = hAlignment;
+    this->vAlignment = vAlignment;
+    this->bold_font = bold_font;
+    this->italic_font = italic_font;
+    this->underlined_font = underlined_font;
+    this->crossed_font = crossed_font;
+    this->auto_size_text = auto_size_text;
     Text::change_center_cords(x, y, width, height);
 }
 
@@ -981,6 +1249,12 @@ void Text::set_font_color(const std::vector<int> &fn_col) {
     this->font_color = fn_col;
 }
 
+void Text::set_style_line(int style_line) {
+    if (style_line >= 0 && style_line <= 9) {
+        this->style_line = style_line;
+    }
+}
+
 std::string Text::get_type_object() {
     return this->type_object;
 }
@@ -1011,6 +1285,10 @@ int Text::get_center_x() {
 
 int Text::get_center_y() {
     return this->center_y;
+}
+
+int Text::get_style_line() {
+    return this->style_line;
 }
 
 
