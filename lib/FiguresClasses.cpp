@@ -2,6 +2,7 @@
 
 using namespace FiguresClasses;
 
+//конструкторы класса линии получающие различные вводные
 Line::Line(int st_x, int st_y, int end_x, int end_y) {
     change_center_cords(st_x, st_y, end_x, end_y);
 }
@@ -91,7 +92,7 @@ void Line::change_center_cords(int st_x, int st_y, int end_x,
     this->center_y = y_cord;
 }
 
-//меняет вектор цвета линии
+//далее идут функции меняющие одноименные переменные класса линии
 void Line::set_line_color(const std::vector<int> &lin_col) {
     this->line_color = lin_col;
 }
@@ -156,10 +157,10 @@ Line::set_font(const std::string &font_name, int font_size, const std::vector<in
     this->crossed_font = crossed_font;
 }
 
-std::vector<int> Line::get_line_color() { //выводит вектор цветов линии rgb
+//далее идут функции по выводу одноименных переменных класса линии
+std::vector<int> Line::get_line_color() {
     return this->line_color;
 }
-
 
 std::string Line::get_type_object() {
     return this->type_object;
@@ -226,6 +227,7 @@ std::vector<int> Line::get_font_color() {
     return this->font_color;
 }
 
+//далее идут функции меняющие настройки показывания различных элементов
 void Line::show_help() {
     this->bool_show_help = true;
 }
@@ -242,6 +244,7 @@ void Line::hide() {
     this->bool_show = false;
 }
 
+//конструкторы класса прямоугольника получающие различные вводные
 Rectangle::Rectangle(int x, int y, int width, int height) {
     change_center_cords(x, y, width, height);
 }
@@ -283,6 +286,7 @@ void Rectangle::change_center_cords(int x, int y, int width, int height) {
     this->center_y = this->y + floor(this->height / 2);
 }
 
+//далее идут функции меняющие одноименные переменные класса прямоугольника
 void Rectangle::set_angle(int angl) {
     this->angle = angl;
 }
@@ -321,6 +325,7 @@ void Rectangle::set_style_line(int st_line) {
     }
 }
 
+//далее идут функции по выводу одноименных переменных класса прямоугольника
 std::string Rectangle::get_type_object() {
     return this->type_object;
 }
@@ -377,6 +382,7 @@ std::vector<int> Rectangle::get_filling_color() {
     return this->filling_color;
 }
 
+//далее идут функции меняющие настройки показывания различных элементов
 void Rectangle::show() {
     this->bool_show = true;
 }
@@ -401,6 +407,7 @@ void Rectangle::hide_filling() {
     this->bool_show_filling = false;
 }
 
+//конструкторы класса эллипса получающие различные вводные
 Ellipse::Ellipse() {}
 
 Ellipse::Ellipse(int x, int y, int width, int height) {
@@ -443,6 +450,7 @@ Ellipse::change_center_cords(int x, int y, int width,
     this->center_y = this->y + floor(this->height / 2);
 }
 
+//далее идут функции меняющие одноименные переменные класса эллипса
 void Ellipse::set_angle(int angl) {
     this->angle = angl;
 }
@@ -470,6 +478,7 @@ void Ellipse::set_style_line(int st_line) {
     }
 }
 
+//далее идут функции по выводу одноименных переменных класса эллипса
 std::string Ellipse::get_type_object() {
     return this->type_object;
 }
@@ -523,6 +532,7 @@ std::vector<int> Ellipse::get_filling_color() {
     return this->filling_color;
 }
 
+//далее идут функции меняющие настройки показывания различных элементов
 void Ellipse::show() {
     this->bool_show = true;
 }
@@ -547,6 +557,7 @@ void Ellipse::hide_filling() {
     this->bool_show_filling = false;
 }
 
+//конструкторы класса дуги получающие различные вводные
 Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle) : Ellipse::Ellipse() {
     this->type_object = "Дуга";
     this->start_angle = st_angle;
@@ -586,6 +597,7 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
     change_center_cords(x, y, width, height);
 }
 
+//далее идут функции меняющие одноименные переменные класса дуги
 void Arc::set_arc_angles(int start_angle, int end_angle) {
     this->start_angle = start_angle;
     this->end_angle = end_angle;
@@ -599,6 +611,7 @@ void Arc::set_end_angle(int end_angle) {
     this->end_angle = end_angle;
 }
 
+//далее идут функции по выводу одноименных переменных класса дуги
 int Arc::get_start_angle() {
     return this->start_angle;
 }
@@ -611,6 +624,7 @@ std::vector<int> Arc::get_arc_angles() {
     return {this->start_angle, this->end_angle};
 }
 
+//конструкторы класса кривой линии получающие различные вводные
 CrookedLine::CrookedLine() {}
 
 CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector) {
@@ -661,6 +675,7 @@ CrookedLine::change_center_cords(
     this->center_y = this->y + floor(this->height / 2);
 }
 
+//далее идут функции меняющие одноименные переменные класса кривой линии
 void CrookedLine::set_angle(int angl) {
     this->angle = angl;
 }
@@ -677,13 +692,13 @@ void CrookedLine::set_help_text(const std::string &text) {
     this->help_text = text;
 }
 
-
 void CrookedLine::set_style_line(int st_line) {
     if (st_line >= 0 && st_line < this->style_line_list.size()) {
         this->style_line = st_line;
     }
 }
 
+//далее идут функции по выводу одноименных переменных класса кривой линии
 std::string CrookedLine::get_type_object() {
     return this->type_object;
 }
@@ -736,6 +751,7 @@ std::vector<int> CrookedLine::get_filling_color() {
     return this->filling_color;
 }
 
+//далее идут функции меняющие настройки показывания различных элементов
 void CrookedLine::show() {
     this->bool_show = true;
 }
@@ -760,6 +776,7 @@ void CrookedLine::hide_filling() {
     this->bool_show_filling = false;
 }
 
+//конструкторы класса многоугольника получающие различные вводные
 Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon) : CrookedLine::CrookedLine() {
     this->type_object = "Полигон";
     this->end_polygone = end_polygon;
@@ -822,7 +839,7 @@ TransitionPoint::change_center_cords(int x, int y, int width,
     this->center_y = this->y + floor(this->height / 2);
 }
 
-
+//далее идут функции меняющие одноименные переменные класса точки перехода
 void TransitionPoint::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
@@ -835,6 +852,7 @@ void TransitionPoint::set_point_number(int num) {
     this->number_of_transition_point = num;
 }
 
+//далее идут функции по выводу одноименных переменных класса кнопки перехода
 std::string TransitionPoint::get_type_object() {
     return this->type_object;
 }
@@ -876,6 +894,7 @@ std::vector<int> TransitionPoint::get_filling_color() {
     return this->filling_color;
 }
 
+//далее идут функции меняющие настройки показывания различных элементов
 void TransitionPoint::show() {
     this->bool_show = true;
 }
@@ -900,6 +919,7 @@ void TransitionPoint::hide_filling() {
     this->bool_show_filling = false;
 }
 
+//конструкторы класса кнопки перехода получающие различные вводные
 TransitionButton::TransitionButton(int number, int x, int y, int width, int height)
         : TransitionPoint::TransitionPoint() {
     this->number_of_transition_button = number;
@@ -954,7 +974,7 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
     change_center_cords(x, y, width, height);
 }
 
-
+//далее идут функции меняющие одноименные переменные класса кнопки перехода
 void TransitionButton::set_angle(int angl) {
     this->angle = angl;
 }
@@ -999,7 +1019,6 @@ TransitionButton::set_font(const std::string &font_name, int font_size, const st
     this->crossed_font = crossed_font;
 }
 
-
 void TransitionButton::set_auto_size_text(bool auto_size) {
     this->auto_size_text = auto_size;
 }
@@ -1043,11 +1062,10 @@ void TransitionButton::set_font_color(const std::vector<int> &fn_col) {
     this->font_color = fn_col;
 }
 
-
+//далее идут функции по выводу одноименных переменных класса кнопки перехода
 int TransitionButton::get_angle() {
     return this->angle;
 }
-
 
 int TransitionButton::get_font_size() {
     return this->font_size;
@@ -1077,7 +1095,6 @@ bool TransitionButton::get_auto_size_text() {
     return this->auto_size_text;
 }
 
-
 std::string TransitionButton::get_text() {
     return this->text;
 }
@@ -1089,7 +1106,6 @@ std::string TransitionButton::get_font_name() {
 std::vector<int> TransitionButton::get_font_color() {
     return this->font_color;
 }
-
 
 std::string TransitionButton::get_hAlignment() {
     return this->hAlignment_list[this->hAlignment];
@@ -1103,7 +1119,7 @@ std::vector<std::string> TransitionButton::get_alignment() {
     return {this->hAlignment_list[this->hAlignment], this->vAlignment_list[this->vAlignment]};
 }
 
-
+//конструкторы класса текста получающие различные вводные
 Text::Text(int x, int y, int width, int height) {
     Text::change_center_cords(x, y, width, height);
 }
@@ -1156,7 +1172,7 @@ Text::change_center_cords(int x, int y, int width,
     this->center_y = this->y + floor(this->height / 2);
 }
 
-
+//далее идут функции меняющие одноименные переменные класса текста
 void Text::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
@@ -1209,7 +1225,6 @@ Text::set_font(const std::string &font_name, int font_size, const std::vector<in
     this->crossed_font = crossed_font;
 }
 
-
 void Text::set_auto_size_text(bool auto_size) {
     this->auto_size_text = auto_size;
 }
@@ -1255,6 +1270,7 @@ void Text::set_style_line(int style_line) {
     }
 }
 
+//далее идут функции по выводу одноименных переменных класса текста
 std::string Text::get_type_object() {
     return this->type_object;
 }
@@ -1291,7 +1307,6 @@ int Text::get_style_line() {
     return this->style_line;
 }
 
-
 std::vector<int> Text::get_filling_color() {
     return this->filling_color;
 }
@@ -1326,7 +1341,6 @@ bool Text::get_auto_size_text() {
     return this->auto_size_text;
 }
 
-
 std::string Text::get_text() {
     return this->text;
 }
@@ -1338,7 +1352,6 @@ std::string Text::get_font_name() {
 std::vector<int> Text::get_font_color() {
     return this->font_color;
 }
-
 
 std::string Text::get_hAlignment() {
     return this->hAlignment_list[this->hAlignment];
@@ -1352,6 +1365,7 @@ std::vector<std::string> Text::get_alignment() {
     return {this->hAlignment_list[this->hAlignment], this->vAlignment_list[this->vAlignment]};
 }
 
+//далее идут функции меняющие настройки показывания различных элементов
 void Text::show() {
     this->bool_show = true;
 }
