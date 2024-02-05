@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-namespace FiguresClasses {
+namespace FiguresClasses{
 
     class Line { // класс линии
     private:
@@ -72,6 +72,12 @@ namespace FiguresClasses {
 
         void set_text(const std::string &text);
 
+        void set_line_width(int width);
+
+        void set_start_style_arrow(int st_arrow);
+
+        void set_end_style_arrow(int end_arrow);
+
         void set_help_text(const std::string &help);
 
         void set_font_name(const std::string &fn_name);
@@ -106,6 +112,8 @@ namespace FiguresClasses {
 
         std::string get_help_text();
 
+        int get_line_width();
+
         //выводит координату x начала линии
         int get_st_x();
 
@@ -125,6 +133,10 @@ namespace FiguresClasses {
         int get_center_cord_y();
 
         int get_font_size();
+
+        int get_start_style_arrow();
+
+        int get_end_style_arrow();
 
         std::string get_font_name();
 
@@ -146,6 +158,10 @@ namespace FiguresClasses {
         void hide_help();
 
         void hide();
+
+        bool get_show_help();
+
+        bool get_show();
 
     };
 
@@ -177,7 +193,7 @@ namespace FiguresClasses {
         int style_line = 1;                                 //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 2;                                 //ширина линии
-        int angle = 0;                                      //угол наклона
+        int angle = 45;                                      //угол наклона
         int x = 0;                                          //коодината x
         int y = 0;                                          //координата y
         int width = 0;                                      //ширина
@@ -257,6 +273,12 @@ namespace FiguresClasses {
         void hide_help();
 
         void hide_filling();
+
+        bool get_show();
+
+        bool get_show_help();
+
+        bool get_show_filling();
     };
 
 
@@ -354,6 +376,11 @@ namespace FiguresClasses {
 
         void hide_filling();
 
+        bool get_show();
+
+        bool get_show_help();
+
+        bool get_show_filling();
 
     };
 
@@ -482,6 +509,12 @@ namespace FiguresClasses {
 
         void hide_filling();
 
+        bool get_show();
+
+        bool get_show_help();
+
+        bool get_show_filling();
+
     };
 
     class Polygon : public CrookedLine { //класс многоугольника
@@ -579,6 +612,12 @@ namespace FiguresClasses {
         void hide_help();
 
         void hide_filling();
+
+        bool get_show();
+
+        bool get_show_help();
+
+        bool get_show_filling();
 
     };
 
@@ -851,8 +890,14 @@ namespace FiguresClasses {
         void hide_help();
 
         void hide_filling();
-    };
 
+        bool get_show();
+
+        bool get_show_help();
+
+        bool get_show_filling();
+    };
 }
+
 
 
