@@ -1,3 +1,0 @@
-/home/astra/Документы/GitHub/ARMEditor/cmake-build-debug/CMakeFiles/ARMEditor.dir
-/home/astra/Документы/GitHub/ARMEditor/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/astra/Документы/GitHub/ARMEditor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
