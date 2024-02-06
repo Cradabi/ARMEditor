@@ -453,7 +453,8 @@ bool Rectangle::get_show_filling() {
 //конструкторы класса эллипса получающие различные вводные
 Ellipse::Ellipse() {}
 
-Ellipse::Ellipse(int x, int y, int width, int height) {
+Ellipse::Ellipse(int x, int y, int width, int height, int angle) {
+    this->angle = angle;
     change_center_cords(x, y, width, height);
 }
 

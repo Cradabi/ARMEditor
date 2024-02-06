@@ -310,7 +310,7 @@ namespace FiguresClasses{
         //конструкторы класса эллипса получающие различные вводные
         Ellipse();
 
-        Ellipse(int x, int y, int width, int height);
+        Ellipse(int x, int y, int width, int height, int angle);
 
         Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
