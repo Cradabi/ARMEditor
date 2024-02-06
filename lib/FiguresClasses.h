@@ -36,7 +36,7 @@ namespace FiguresClasses{
         int number_of_text = 0;                  //количество текстовых вставок
         int style_line = 1;                      //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
-        int line_width = 2;                      //ширина линнии
+        int line_width = 24;                      //ширина линнии
 
         int start_style_arrow = 0;               //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
         int end_style_arrow = 0;                 //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
@@ -138,6 +138,8 @@ namespace FiguresClasses{
 
         int get_end_style_arrow();
 
+        int get_style_line();
+
         std::string get_font_name();
 
         bool get_bold_font();
@@ -192,7 +194,7 @@ namespace FiguresClasses{
         int style_gradient_filling = 0;                     //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
         int style_line = 1;                                 //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
-        int line_width = 2;                                 //ширина линии
+        int line_width = 24;                                 //ширина линии
         int angle = 45;                                      //угол наклона
         int x = 0;                                          //коодината x
         int y = 0;                                          //координата y
@@ -296,7 +298,7 @@ namespace FiguresClasses{
         std::string type_object = "Эллипс";                                //тип объекта
         std::string help_text = "";                                        //текст подсказки
         int style_line = 1;                                                //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-        int line_width = 2;                                                //ширина линии
+        int line_width = 24;                                                //ширина линии
         int angle = 0;                                                     //угол наклона
         int x = 0;                                                         //координата x
         int y = 0;                                                         //координата y
@@ -435,7 +437,7 @@ namespace FiguresClasses{
         std::string help_text = "";                             //текст подсказки
         int style_line = 1;                                     //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
-        int line_width = 2;                                     //ширина линии
+        int line_width = 24;                                     //ширина линии
         int angle = 0;                                          //угол наклона
         int x = 0;                                              //координата x
         int y = 0;                                              //координата y
@@ -495,6 +497,8 @@ namespace FiguresClasses{
         std::vector<int> get_line_color();
 
         std::vector<int> get_filling_color();
+
+        std::vector<std::vector<int>> get_points();
 
         //далее идут функции меняющие настройки показывания различных элементов
         void show();

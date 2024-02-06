@@ -197,6 +197,10 @@ int Line::get_end_style_arrow(){
     return this->end_style_arrow;
 }
 
+int Line::get_style_line(){
+    return this->style_line;
+}
+
 int Line::get_st_x() { //выводит координату x начала линии
     return this->start_x;
 }
@@ -805,6 +809,10 @@ std::vector<int> CrookedLine::get_line_color() {
 
 std::vector<int> CrookedLine::get_filling_color() {
     return this->filling_color;
+}
+
+std::vector<std::vector<int>> CrookedLine::get_points(){
+    return this->points;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
