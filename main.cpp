@@ -55,6 +55,10 @@ class MyWidget : public QWidget
         painter.drawPoint(pol.get_st_x(), pol.get_st_y());
         painter.drawPoint(pol.get_end_x(), pol.get_end_y());
         //начинаем отрисовку прямоугольника
+        painter.save();
+        painter.translate(rect.get_center_x(), rect.get_center_y());
+        painter.rotate(rect.get_angle());
+
         if (rect.get_show()){
             if (rect.get_show_filling()){
                 QColor filling_color = {rect.get_filling_color()[0], rect.get_filling_color()[1], rect.get_filling_color()[2]};
@@ -76,13 +80,14 @@ class MyWidget : public QWidget
             }else if (rect.get_style_line() == 6){
                 painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
             }
-            painter.drawRect(QRect(rect.get_x(), rect.get_y(), rect.get_width(), rect.get_height()));
+            painter.drawRect(QRect((-1)*(rect.get_width()/2), (-1)*(rect.get_height()/2), rect.get_width(), rect.get_height()));
             color_rect = {255, 0, 0};
             painter.setPen(QPen(color_rect, 2, Qt::SolidLine, Qt::FlatCap));
-            painter.drawPoint(rect.get_x(), rect.get_y());
-            painter.drawPoint(rect.get_x() + rect.get_width(), rect.get_y());
-            painter.drawPoint(rect.get_x(), rect.get_y() + rect.get_height());
-            painter.drawPoint(rect.get_x() + rect.get_width(), rect.get_y() + rect.get_height());
+            painter.drawPoint((-1)*(rect.get_width()/2), (-1)*(rect.get_height()/2));
+            painter.drawPoint((-1)*(rect.get_width()/2), rect.get_height()/2);
+            painter.drawPoint(rect.get_width()/2, (-1)*(rect.get_height()/2));
+            painter.drawPoint(rect.get_width()/2, rect.get_height()/2);
+            painter.restore();
         }
         //начинаем отрисовку эллипса
         if (el.get_show()){
