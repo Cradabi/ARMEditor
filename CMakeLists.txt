@@ -4,4 +4,4 @@ project(ARMEditor)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(ARMEditor
-        main.cpp)
+        simple_reader.cpp)

@@ -1,16 +1,19 @@
-#include <fstream>
 #include <iostream>
+#include <fstream>
 #include <cinttypes>
 #include <vector>
 #include <locale>
 #include <codecvt>
 #include <algorithm>
+#include <windows.h>
 
 int main() {
 
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
     std::ifstream file;
 
-    file.open(L"Мультищитовая3.схема", std::ios_base::binary);
+    file.open(L"Новая схема.схема", std::ios_base::binary);
 
     if (!file) {
         std::cout << "File wasn't open\n";
@@ -34,25 +37,59 @@ int main() {
     std::string check_name{""};
 
     int position = 0;
+    uint8_t counter = 0;
 
-    while (file.get(byte)) {
+    while (file.get(byte) and !file.eof()) {
         if (isalnum(byte)) {
             check_name += byte;
+
+            SetConsoleTextAttribute(hConsole, 12);
+            std::cout << byte;
+
         } else if (check_name != "") {
             for (int i = 0; i < 9; ++i) {
                 if (check_name == section_names[i] and names_positions[i + 1] == -1) {
                     if (check_name == "ARM")
+                    {
                         names_positions[i + 1] = position - 2;
+                        std::cout << ' ';
+                    }
                     else
+                    {
                         names_positions[i + 1] = position - 3;
+                        std::cout << ' ';
+                    }
                     break;
                 }
             }
+
             check_name = "";
+
+        } else {
+            SetConsoleTextAttribute(hConsole, 15);
+
+            int tmp = static_cast<int>(byte);
+            if (tmp < 0)
+                std::cout << ' ' << tmp << ' ';
+            else
+                std::cout << tmp;
+        }
+
+        ++counter;
+        if (counter == 32) {
+            std::cout << '\n';
+            counter = 0;
         }
 
         ++position;
     }
+
+    // file.clear();
+    // file.seekg(0, std::ios_base::beg);
+
+    std::cout << '\n' << '\n';
+
+    file.close();
 
     names_positions[10] = position;
 
