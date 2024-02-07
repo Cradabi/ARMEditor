@@ -195,7 +195,7 @@ namespace FiguresClasses{
         int style_line = 1;                                 //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 24;                                 //ширина линии
-        int angle = 45;                                      //угол наклона
+        int angle = 0;                                      //угол наклона
         int x = 0;                                          //коодината x
         int y = 0;                                          //координата y
         int width = 0;                                      //ширина

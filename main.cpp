@@ -14,6 +14,15 @@ class MyWidget : public QWidget
         FiguresClasses::Arc arc(500, 650, 300, 200, 0, 0, 45);
         QPainter painter;
         painter.begin(this);
+        //начинаем отрисовку сетки
+        QColor color_set = {200, 200, 200};
+        painter.setPen(QPen(color_set, 1, Qt::DashLine, Qt::RoundCap));
+        for (int i = 0; i < 1400; i+=10){
+            painter.drawLine(i, 0, i, 900);
+        }
+        for (int i = 0; i < 900; i+=10){
+            painter.drawLine(0, i, 1400, i);
+        }
         //начинаем отрисовку линий
         QColor color_line = {pol.get_line_color()[0], pol.get_line_color()[1], pol.get_line_color()[2]};
         if (pol.get_style_line() == 0){
@@ -66,9 +75,9 @@ class MyWidget : public QWidget
             }
             QColor color_rect = {rect.get_line_color()[0], rect.get_line_color()[1], rect.get_line_color()[2]};
             if (rect.get_style_line() == 0){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::MiterJoin));
+                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
             }else if (rect.get_style_line() == 1){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin));
+                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             }else if (rect.get_style_line() == 2){
                 painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
             }else if (rect.get_style_line() == 3){
@@ -87,9 +96,12 @@ class MyWidget : public QWidget
             painter.drawPoint((-1)*(rect.get_width()/2), rect.get_height()/2);
             painter.drawPoint(rect.get_width()/2, (-1)*(rect.get_height()/2));
             painter.drawPoint(rect.get_width()/2, rect.get_height()/2);
-            painter.restore();
         }
+        painter.restore();
         //начинаем отрисовку эллипса
+        painter.save();
+        painter.translate(el.get_center_x(), el.get_center_y());
+        painter.rotate(el.get_angle());
         if (el.get_show()){
             if (el.get_show_filling()){
                 QColor filling_color = {el.get_filling_color()[0], el.get_filling_color()[1], el.get_filling_color()[2]};
@@ -111,14 +123,18 @@ class MyWidget : public QWidget
             }else if (el.get_style_line() == 6){
                 painter.setPen(QPen(color_el, el.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
             }
-            painter.drawEllipse(QRect(el.get_x(), el.get_y(), el.get_width(), el.get_height()));
+            painter.drawEllipse(QRect((-1)*(el.get_width()/2), (-1)*(el.get_height()/2), el.get_width(), el.get_height()));
             color_el = {255, 0, 0};
             painter.setPen(QPen(color_el, 2, Qt::SolidLine, Qt::FlatCap));
-            painter.drawPoint(el.get_x(), el.get_y() + el.get_height() / 2);
-            painter.drawPoint(el.get_x() + el.get_width(), el.get_y() + el.get_height() / 2);
-            painter.drawPoint(el.get_x() + el.get_width() / 2, el.get_y());
-            painter.drawPoint(el.get_x() + el.get_width() / 2, el.get_y() + el.get_height());
+            painter.drawPoint((-1)*(el.get_width()/2), 0);
+            painter.drawPoint(el.get_width()/2, 0);
+            painter.drawPoint(0, (-1)*(el.get_height()/2));
+            painter.drawPoint(0, el.get_height()/2);
         }
+        painter.restore();
+        painter.save();
+        painter.translate(arc.get_center_x(), arc.get_center_y());
+        painter.rotate(arc.get_angle());
         //начинаем отрисовку дуги
         if (arc.get_show()){
             if (arc.get_show_filling()){
@@ -141,15 +157,16 @@ class MyWidget : public QWidget
             }else if (arc.get_style_line() == 6){
                 painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::CustomDashLine, Qt::RoundCap));
             }
-            painter.drawArc(QRect(arc.get_x(), arc.get_y(), arc.get_width(), arc.get_height()), ((360 - arc.get_start_angle())%360) * (-16), ((360 - arc.get_end_angle())%360) * (-16));
+            painter.drawArc(QRect((-1)*(el.get_width()/2), (-1)*(el.get_height()/2), el.get_width(), el.get_height()), ((360 - arc.get_start_angle())%360)*(-16), ((360 - arc.get_end_angle())%360)*(-16));
             color_arc = {255, 0, 0};
             painter.setPen(QPen(color_arc, 2, Qt::SolidLine, Qt::FlatCap));
-            painter.drawPoint(arc.get_x(), arc.get_y() + arc.get_height() / 2);
-            painter.drawPoint(arc.get_x() + arc.get_width(), arc.get_y() + arc.get_height() / 2);
-            painter.drawPoint(arc.get_x() + arc.get_width() / 2, arc.get_y());
-            painter.drawPoint(arc.get_x() + arc.get_width() / 2, arc.get_y() + arc.get_height());
-        painter.end();
+            painter.drawPoint((-1)*(el.get_width()/2), 0);
+            painter.drawPoint(el.get_width()/2, 0);
+            painter.drawPoint(0, (-1)*(el.get_height()/2));
+            painter.drawPoint(0, el.get_height()/2);
         }
+        painter.restore();
+        painter.end();
     }
 };
 
