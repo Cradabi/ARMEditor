@@ -6,6 +6,7 @@
 #include <codecvt>
 #include <algorithm>
 #include <windows.h>
+#include <bitset>
 
 int main() {
 
@@ -39,6 +40,8 @@ int main() {
     int position = 0;
     uint8_t counter = 0;
 
+    std::bitset<8> print_binary;
+
     while (file.get(byte) and !file.eof()) {
         if (isalnum(byte)) {
             check_name += byte;
@@ -49,13 +52,10 @@ int main() {
         } else if (check_name != "") {
             for (int i = 0; i < 9; ++i) {
                 if (check_name == section_names[i] and names_positions[i + 1] == -1) {
-                    if (check_name == "ARM")
-                    {
+                    if (check_name == "ARM") {
                         names_positions[i + 1] = position - 2;
                         std::cout << ' ';
-                    }
-                    else
-                    {
+                    } else {
                         names_positions[i + 1] = position - 3;
                         std::cout << ' ';
                     }
@@ -68,18 +68,17 @@ int main() {
         } else {
             SetConsoleTextAttribute(hConsole, 15);
 
-            int tmp = static_cast<int>(byte);
-            if (tmp < 0)
-                std::cout << ' ' << tmp << ' ';
-            else
-                std::cout << tmp;
+            print_binary = byte;
+            std::cout << print_binary;
+
         }
 
         ++counter;
         if (counter == 32) {
             std::cout << '\n';
             counter = 0;
-        }
+        } else
+            std::cout << ' ';
 
         ++position;
     }
