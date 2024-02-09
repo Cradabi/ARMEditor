@@ -4,4 +4,4 @@ project(ARMEditor)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(ARMEditor
-        simple_parser.cpp)
+        simple_parser.cpp, SchemeFileParser.h)
