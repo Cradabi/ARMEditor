@@ -523,7 +523,7 @@ namespace FiguresClasses{
 
     class Polygon : public CrookedLine { //класс многоугольника
     private:
-        bool end_polygone;               //замыкание полигона
+        bool end_polygone = true;               //замыкание полигона
 
     public:
         //конструкторы класса многоугольника получающие различные вводные
