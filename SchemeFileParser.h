@@ -73,6 +73,8 @@ private:
     }
 
     void EnterSection() {
+        WriteLog("SECTION OPENED ", 2);
+
         SectionNode new_section;
 
         if (buffer != nullptr) {
@@ -96,20 +98,35 @@ private:
         SchemeFile.read(buffer, 4);
 
         char tmp_section_name[5] = "    ";
-        for (int8_t i = 0; i < 4; ++i) {
-            tmp_section_name[i] = buffer[i];
-        }
+        uint32_t tmp_section_id = 0;
+        if (isalnum(buffer[0])) {
 
-        new_section.sect_name = tmp_section_name;
+            for (int8_t i = 0; i < 4; ++i) {
+                tmp_section_name[i] = buffer[i];
+            }
+
+            new_section.sect_name = tmp_section_name;
+            WriteLog("section name: ", 4);
+            WriteLog(new_section.sect_name, 1, &" ");
+
+        } else {
+            for (int8_t i = 3; i >= 0; --i) {
+                tmp_section_id |= static_cast<uint8_t>(buffer[i]);
+
+                if (i != 0)
+                    tmp_section_id <<= 8;
+            }
+
+            new_section.sect_id = tmp_section_id;
+            WriteLog("section id: ", 4);
+            WriteLog(new_section.sect_id, 1, &" ");
+        }
 
         new_section.start_pos = SchemeFile.tellg();
         ++new_section.start_pos;
 
         sections_stack.push(new_section);
 
-        WriteLog("SECTION OPENED ", 2);
-        WriteLog("section name: ", 4);
-        WriteLog(sections_stack.top().sect_name, 1, &"");
         WriteLog("section size: ", 4);
         WriteLog(sections_stack.top().sect_size, 1, &"", true);
     }
@@ -178,9 +195,16 @@ private:
 
     void CloseSection() {
         WriteLog("SECTION CLOSED ", 2);
-        WriteLog("section name: ", 4);
-        WriteLog(sections_stack.top().sect_name, 1, &"", true);
-        sections_stack.pop();
+        if (sections_stack.top().sect_name.empty()) {
+            WriteLog("section id: ", 4);
+            WriteLog(sections_stack.top().sect_id, 1, &"", true);
+            sections_stack.pop();
+        } else {
+            WriteLog("section name: ", 4);
+            WriteLog(sections_stack.top().sect_name, 1, &"", true);
+            sections_stack.pop();
+        }
+
     }
 
 public:
