@@ -73,6 +73,12 @@ private:
     }
 
     void EnterSection() {
+        if (!sections_stack.empty()) {
+            for (int16_t i = 0; i < sections_stack.size(); ++i)
+                WriteLog("- ", 7);
+            WriteLog("INTER ", 2);
+        }
+
         WriteLog("SECTION OPENED ", 2);
 
         SectionNode new_section;
@@ -194,6 +200,12 @@ private:
     }
 
     void CloseSection() {
+        if (!sections_stack.empty() && sections_stack.size() > 1) {
+            for (int16_t i = 1; i < sections_stack.size(); ++i)
+                WriteLog("- ", 7);
+            WriteLog("INTER ", 2);
+        }
+
         WriteLog("SECTION CLOSED ", 2);
         if (sections_stack.top().sect_name.empty()) {
             WriteLog("section id: ", 4);

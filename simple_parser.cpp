@@ -8,7 +8,7 @@
 #include "SchemeFileParser.h"
 
 int main() {
-    
+
     SetConsoleOutputCP(CP_UTF8);
 
     SchemeFileParser NewParser;
