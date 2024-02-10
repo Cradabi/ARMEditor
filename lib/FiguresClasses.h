@@ -738,13 +738,14 @@ namespace FiguresClasses{
 
     class Text {                                                                      //класс текста
     private:
-        bool bold_font = false;                                                       //флаг жирности шрифта
-        bool italic_font = false;                                                     //флаг наклонности шрифта
-        bool underlined_font = false;                                                 //флаг подчеркнутости шрифта
-        bool crossed_font = false;                                                    //флаг зачеркнутости шрифта
-        bool auto_size_text = false;                                                  //авторазмер текста
-        std::vector<int> font_color = {0, 0, 0};                                      //цвет шрифта
-        std::vector<int> filling_color = {255, 255, 255};                             //цвет заливки
+        bool bold_font = true;                                                       //флаг жирности шрифта
+        bool italic_font = true;                                                     //флаг наклонности шрифта
+        bool underlined_font = true;                                                 //флаг подчеркнутости шрифта
+        bool crossed_font = true;                                                    //флаг зачеркнутости шрифта
+        bool auto_size_text = true;                                                  //авторазмер текста
+        std::vector<int> font_color = {0, 0, 0};                                     //цвет шрифта
+        std::vector<int> line_color = {0, 0, 0};
+        std::vector<int> filling_color = {0, 255, 0};                                //цвет заливки
 
         std::vector<std::string> hAlignment_list = {"ahLeft", "ahRight",
                                                     "ahCenter"};                      //список названий горизонтального выравнивания
@@ -760,10 +761,11 @@ namespace FiguresClasses{
         std::string type_object = "Текст";                                            //размер шрифта
         std::string help_text = "";                                                   //текст подсказки
 
-        int hAlignment = 2;                                                           //номер горизонтального выравнивания
-        int vAlignment = 2;                                                           //номер вертикального выравнивания
+        int hAlignment = 1;                                                           //номер горизонтального выравнивания
+        int vAlignment = 1;                                                           //номер вертикального выравнивания
         int font_size = 14;                                                           //размер шрифта
-        int style_line = 1;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+        int style_line = 5;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+        int line_width = 6;
         int angle = 0;                                                                //угол наклона
         int x = 0;                                                                    //координата x
         int y = 0;                                                                    //координата y
@@ -774,11 +776,11 @@ namespace FiguresClasses{
 
         bool bool_show_help = false;                                                  // показывать подсказку
         bool bool_show = true;                                                        //показывать прямоугольник
-        bool bool_show_filling = false;                                               //показывать заливку
+        bool bool_show_filling = true;                                               //показывать заливку
 
     public:
         //конструкторы класса текста получающие различные вводные
-        Text(int x, int y, int width, int height);
+        Text(int x, int y, int width, int height, std::string text);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
              int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
@@ -796,7 +798,11 @@ namespace FiguresClasses{
         //далее идут функции меняющие одноименные переменные класса текста
         void set_filling_color(const std::vector<int> &fil_col);
 
+        void set_line_color(const std::vector<int> &ln_col);
+
         void set_help_text(const std::string &help_text);
+
+        void set_line_width(int ln_width);
 
         void set_angle(int angl);
 
@@ -856,7 +862,11 @@ namespace FiguresClasses{
 
         std::vector<int> get_filling_color();
 
+        std::vector<int> get_line_color();
+
         int get_angle();
+
+        int get_line_width();
 
         int get_font_size();
 
@@ -876,9 +886,9 @@ namespace FiguresClasses{
 
         std::vector<int> get_font_color();
 
-        std::string get_hAlignment();
+        int get_hAlignment();
 
-        std::string get_vAlignment();
+        int get_vAlignment();
 
         std::vector<std::string> get_alignment();
 

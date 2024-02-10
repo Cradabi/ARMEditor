@@ -16,6 +16,8 @@ class MyWidget : public QWidget
         std::vector <std::vector<int>> points1 = {{90, 200}, {95, 150}, {135, 600}, {60, 350}};
         FiguresClasses::Polygon poly(points, false);
         FiguresClasses::CrookedLine crook(points1);
+        std::string txt = "Hello worlddtfvygggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggf";
+        FiguresClasses::Text text(300, 50, 32342134, 432242, txt);
         QPainter painter;
         painter.begin(this);
         //начинаем отрисовку сетки
@@ -256,6 +258,70 @@ class MyWidget : public QWidget
             }
         }
         painter.restore();
+        //начало отрисовки текста
+        painter.save();
+        QFont text_font(text.get_font_name().c_str(), text.get_font_size());
+        text_font.setBold(text.get_bold_font());
+        text_font.setItalic(text.get_italic_font());
+        text_font.setUnderline(text.get_underlined_font());
+        text_font.setStrikeOut(text.get_crossed_font());
+        if(text.get_auto_size_text()){
+            QFontMetrics fm(text_font);
+            int pxwidth = fm.width(text.get_text().c_str());
+            int pxheight = fm.height();
+            text.change_center_cords(text.get_x() - text.get_line_width()/2 - 2, text.get_y() - text.get_line_width()/2 - 2, pxwidth + text.get_line_width() + 5, pxheight + text.get_line_width() + 5);
+        }
+        painter.translate(text.get_center_x(), text.get_center_y());
+        painter.rotate((-1)*text.get_angle());
+        if(text.get_show()){
+            if (text.get_show_filling()){
+                QColor filling_color = {text.get_filling_color()[0], text.get_filling_color()[1], text.get_filling_color()[2]};
+                painter.setPen(filling_color);
+                painter.setBrush(filling_color);
+                QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
+                if (text.get_style_line() == 0){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
+                }else if (text.get_style_line() == 1){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+                }else if (text.get_style_line() == 2){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
+                }else if (text.get_style_line() == 3){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
+                }else if (text.get_style_line() == 4){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
+                }else if (text.get_style_line() == 5){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
+                }else if (text.get_style_line() == 6){
+                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
+                }
+                painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());            }
+            QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
+            QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
+            painter.setPen(font_color);
+            painter.setFont(text_font);
+            if(text.get_hAlignment() == 0 && text.get_vAlignment() == 0){
+                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 1){
+                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 2){
+                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 0){
+                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 1){
+                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 2){
+                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 0){
+                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 1){
+                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, tr(text.get_text().c_str()));
+            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
+                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, tr(text.get_text().c_str()));
+            }
+
+        }
+        painter.restore();
+
         painter.end();
     }
 };

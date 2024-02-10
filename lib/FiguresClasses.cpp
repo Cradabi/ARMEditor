@@ -1208,7 +1208,8 @@ std::vector<std::string> TransitionButton::get_alignment() {
 }
 
 //конструкторы класса текста получающие различные вводные
-Text::Text(int x, int y, int width, int height) {
+Text::Text(int x, int y, int width, int height, std::string text) {
+    this->text = text;
     Text::change_center_cords(x, y, width, height);
 }
 
@@ -1265,8 +1266,16 @@ void Text::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
+void Text::set_line_color(const std::vector<int> &ln_col) {
+    this->line_color = ln_col;
+}
+
 void Text::set_help_text(const std::string &help_text) {
     this->help_text = help_text;
+}
+
+void Text::set_line_width(int ln_width){
+    this->line_width = ln_width;
 }
 
 void Text::set_angle(int angl) {
@@ -1399,10 +1408,17 @@ std::vector<int> Text::get_filling_color() {
     return this->filling_color;
 }
 
+std::vector<int> Text::get_line_color() {
+    return this->line_color;
+}
+
 int Text::get_angle() {
     return this->angle;
 }
 
+int Text::get_line_width(){
+    return this->line_width;
+}
 
 int Text::get_font_size() {
     return this->font_size;
@@ -1441,12 +1457,12 @@ std::vector<int> Text::get_font_color() {
     return this->font_color;
 }
 
-std::string Text::get_hAlignment() {
-    return this->hAlignment_list[this->hAlignment];
+int Text::get_hAlignment() {
+    return this->hAlignment;
 }
 
-std::string Text::get_vAlignment() {
-    return this->vAlignment_list[this->vAlignment];
+int Text::get_vAlignment() {
+    return this->vAlignment;
 }
 
 std::vector<std::string> Text::get_alignment() {
