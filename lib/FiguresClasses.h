@@ -547,7 +547,7 @@ namespace FiguresClasses{
     protected:
         bool bool_show_help = false;                      // показывать подсказку
         bool bool_show = true;                            //показывать прямоугольник
-        bool bool_show_filling = false;                   //показывать заливку
+        bool bool_show_filling = true;                   //показывать заливку
 
         std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
         std::string type_object = "Точка перехода";       //тип объекта
