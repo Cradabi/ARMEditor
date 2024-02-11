@@ -8,20 +8,20 @@
 class MyWidget : public QWidget
 {
     void paintEvent(QPaintEvent *event){
-        FiguresClasses::Line pol(50, 50, 450, 300);
-        FiguresClasses::Rectangle rect(600, 300, 300, 200);
-        FiguresClasses::Ellipse el(50, 450, 300, 200, 0);
-        FiguresClasses::Arc arc(500, 650, 300, 200, 45, 0, 45);
-        std::vector <std::vector<int>> points = {{900, 200}, {950, 150}, {1350, 600}, {600, 350}};
-        std::vector <std::vector<int>> points1 = {{90, 200}, {95, 150}, {135, 600}, {60, 350}};
+        FiguresClasses::Line pol(100, 100, 450, 300);
+        FiguresClasses::Rectangle rect(600, 120, 300, 200);
+        FiguresClasses::Ellipse el(50, 350, 300, 200, 0);
+        FiguresClasses::Arc arc(100, 650, 300, 200, 45, 0, 45);
+        std::vector <std::vector<int>> points = {{1120, 210}, {1150, 120}, {1350, 370}, {1000, 220}};
+        std::vector <std::vector<int>> points1 = {{500, 500}, {550, 550}, {600, 500}, {650, 550}, {700, 500}, {750, 550}, {800, 500}, {850, 550}, {900, 500}, {950, 550}, {1000, 500}, {1050, 550}};
         FiguresClasses::Polygon poly(points, true);
         FiguresClasses::CrookedLine crook(points1);
-        std::string txt = "Hello worlddtfvygggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggf";
+        std::string txt = "Текст";
         FiguresClasses::Text text(300, 50, 1000, 432, txt);
-        std::string path = "/home/astra/ARMEditor/31.jpg";
-        FiguresClasses::Image image(900, 550, 380, 260, path, 45);
-        FiguresClasses::TransitionPoint tr_p(1, 20, 30, 16, 16);
-        FiguresClasses::TransitionButton tr_b(1, 150, 30, 120, 50, 0);
+        std::string path = "/home/astra/ARMEditor/mez2_logo.jpg";
+        FiguresClasses::Image image(800, 700, 450, 140, path, 0);
+        FiguresClasses::TransitionPoint tr_p(1, 20, 50, 16, 16);
+        FiguresClasses::TransitionButton tr_b(1, 80, 30, 120, 50, 0);
         QPainter painter;
         painter.begin(this);
         //начинаем отрисовку сетки
@@ -52,22 +52,22 @@ class MyWidget : public QWidget
         }
         painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
         if(pol.get_start_style_arrow() == 1){
-            std::cout<<0;
+            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }else if(pol.get_start_style_arrow() == 2){
-            std::cout<<0;
+            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }else if(pol.get_start_style_arrow() == 3){
             painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }else if(pol.get_start_style_arrow() == 4){
-            std::cout<<0;
+            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }
         if(pol.get_end_style_arrow() == 1){
-            std::cout<<0;
+            painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }else if(pol.get_end_style_arrow() == 2){
-            std::cout<<0;
+            painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }else if(pol.get_end_style_arrow() == 3){
             painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }else if(pol.get_end_style_arrow() == 4){
-            std::cout<<0;
+            painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
         }
         //начинаем отрисовку прямоугольника
         painter.save();
@@ -245,23 +245,24 @@ class MyWidget : public QWidget
                 QColor filling_color = {text.get_filling_color()[0], text.get_filling_color()[1], text.get_filling_color()[2]};
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
-                QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-                if (text.get_style_line() == 0){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-                }else if (text.get_style_line() == 1){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-                }else if (text.get_style_line() == 2){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-                }else if (text.get_style_line() == 3){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-                }else if (text.get_style_line() == 4){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-                }else if (text.get_style_line() == 5){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-                }else if (text.get_style_line() == 6){
-                    painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-                }
-                painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());            }
+            }
+            QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
+            if (text.get_style_line() == 0){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
+            }else if (text.get_style_line() == 1){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            }else if (text.get_style_line() == 2){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
+            }else if (text.get_style_line() == 3){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
+            }else if (text.get_style_line() == 4){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
+            }else if (text.get_style_line() == 5){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
+            }else if (text.get_style_line() == 6){
+                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
+            }
+            painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
             painter.setPen(font_color);
@@ -330,9 +331,10 @@ class MyWidget : public QWidget
                 QColor filling_color = {tr_b.get_filling_color()[0], tr_b.get_filling_color()[1], tr_b.get_filling_color()[2]};
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
-                QColor color_rect(0, 0, 0);
-                painter.setPen(QPen(color_rect, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-                painter.drawRect(tr_b.get_x() - tr_b.get_center_x(), tr_b.get_y() - tr_b.get_center_y(), tr_b.get_width(), tr_b.get_height());            }
+            }
+            QColor color_rect(0, 0, 0);
+            painter.setPen(QPen(color_rect, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter.drawRect(tr_b.get_x() - tr_b.get_center_x(), tr_b.get_y() - tr_b.get_center_y(), tr_b.get_width(), tr_b.get_height());
             QRect rect = QRect(tr_b.get_x() - tr_b.get_center_x(), tr_b.get_y() - tr_b.get_center_y(), tr_b.get_width(), tr_b.get_height());
             QColor font_color = {tr_b.get_font_color()[0], tr_b.get_font_color()[1], tr_b.get_font_color()[2]};
             painter.setPen(font_color);

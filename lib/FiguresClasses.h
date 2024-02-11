@@ -36,12 +36,12 @@ namespace FiguresClasses{
         int number_of_text = 0;                  //количество текстовых вставок
         int style_line = 1;                      //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
-        int line_width = 24;                      //ширина линнии
+        int line_width = 12;                      //ширина линнии
 
-        int start_style_arrow = 0;               //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
-        int end_style_arrow = 0;                 //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
+        int start_style_arrow = 3;               //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
+        int end_style_arrow = 3;                 //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
 
-        std::vector<int> line_color = {0, 0, 0}; //цвет линии
+        std::vector<int> line_color = {0, 200, 0}; //цвет линии
         std::vector<int> font_color = {0, 0, 0}; //цвет текста
 
     public:
@@ -192,10 +192,10 @@ namespace FiguresClasses{
 
         int style_frame = 0;                                // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
         int style_gradient_filling = 0;                     //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
-        int style_line = 1;                                 //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+        int style_line = 5;                                 //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
-        int line_width = 24;                                 //ширина линии
-        int angle = 0;                                      //угол наклона
+        int line_width = 8;                                 //ширина линии
+        int angle = 60;                                      //угол наклона
         int x = 0;                                          //коодината x
         int y = 0;                                          //координата y
         int width = 0;                                      //ширина
@@ -298,7 +298,7 @@ namespace FiguresClasses{
         std::string type_object = "Эллипс";                                //тип объекта
         std::string help_text = "";                                        //текст подсказки
         int style_line = 1;                                                //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-        int line_width = 24;                                                //ширина линии
+        int line_width = 16;                                                //ширина линии
         int angle = 0;                                                     //угол наклона
         int x = 0;                                                         //координата x
         int y = 0;                                                         //координата y
@@ -422,10 +422,10 @@ namespace FiguresClasses{
 
         bool bool_show_help = false;                            // показывать подсказку
         bool bool_show = true;                                  //показывать прямоугольник
-        bool bool_show_filling = false;                         //показывать заливку
+        bool bool_show_filling = true;                         //показывать заливку
 
         std::vector<int> line_color = {0, 0, 0};                //цвет линии
-        std::vector<int> filling_color = {255, 255, 255};       //цвет заливки
+        std::vector<int> filling_color = {150, 0, 0};       //цвет заливки
 
         std::vector<std::vector<int>> points;                   //вектор координат точек
 
@@ -437,7 +437,7 @@ namespace FiguresClasses{
         std::string help_text = "";                             //текст подсказки
         int style_line = 1;                                     //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
-        int line_width = 24;                                     //ширина линии
+        int line_width = 8;                                     //ширина линии
         int angle = 0;                                          //угол наклона
         int x = 0;                                              //координата x
         int y = 0;                                              //координата y
@@ -741,11 +741,11 @@ namespace FiguresClasses{
         bool bold_font = true;                                                       //флаг жирности шрифта
         bool italic_font = true;                                                     //флаг наклонности шрифта
         bool underlined_font = true;                                                 //флаг подчеркнутости шрифта
-        bool crossed_font = true;                                                    //флаг зачеркнутости шрифта
+        bool crossed_font = false;                                                    //флаг зачеркнутости шрифта
         bool auto_size_text = true;                                                  //авторазмер текста
         std::vector<int> font_color = {0, 0, 0};                                     //цвет шрифта
         std::vector<int> line_color = {0, 0, 0};
-        std::vector<int> filling_color = {0, 255, 0};                                //цвет заливки
+        std::vector<int> filling_color = {255, 255, 255};                                //цвет заливки
 
         std::vector<std::string> hAlignment_list = {"ahLeft", "ahRight",
                                                     "ahCenter"};                      //список названий горизонтального выравнивания
@@ -764,7 +764,7 @@ namespace FiguresClasses{
         int hAlignment = 1;                                                           //номер горизонтального выравнивания
         int vAlignment = 1;                                                           //номер вертикального выравнивания
         int font_size = 14;                                                           //размер шрифта
-        int style_line = 5;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+        int style_line = 1;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
         int line_width = 6;
         int angle = 0;                                                                //угол наклона
         int x = 0;                                                                    //координата x
@@ -776,7 +776,7 @@ namespace FiguresClasses{
 
         bool bool_show_help = false;                                                  // показывать подсказку
         bool bool_show = true;                                                        //показывать прямоугольник
-        bool bool_show_filling = true;                                               //показывать заливку
+        bool bool_show_filling = false;                                               //показывать заливку
 
     public:
         //конструкторы класса текста получающие различные вводные
