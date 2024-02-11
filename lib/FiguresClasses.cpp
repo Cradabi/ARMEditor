@@ -1681,3 +1681,180 @@ bool Image::get_show_help() {
 bool Image::get_show_filling() {
     return bool_show_filling;
 }
+
+//конструкторы класса текста получающие различные вводные
+Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string &text) {
+    this->text = text;
+    Telecontrol::change_center_cords(x, y, width, height);
+}
+
+Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    Telecontrol::change_center_cords(x, y, width, height);
+}
+
+Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+           const std::string &font_name, int font_size,
+           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    this->hAlignment = hAlignment;
+    this->vAlignment = vAlignment;
+    this->bold_font = bold_font;
+    this->italic_font = italic_font;
+    this->underlined_font = underlined_font;
+    this->crossed_font = crossed_font;
+    this->auto_size_text = auto_size_text;
+    Telecontrol::change_center_cords(x, y, width, height);
+}
+
+//далее идут функции меняющие одноименные переменные класса телеуправления
+void Telecontrol::set_condition(int condition){
+	if (0 <= condition <= 1){
+		this->condition = condition;
+	}
+}
+
+//далее идут функции по выводу одноименных переменных класса телеуправления
+int Telecontrol::get_condition(){
+	return this->condition;
+}
+
+int Telecontrol::get_id();{
+	return this->id;
+}
+
+//конструкторы класса текста получающие различные вводные
+Telesignasilation::Telesignasilation(int x, int y, int width, int height, const std::string &text) {
+    this->text = text;
+    Telesignasilation::change_center_cords(x, y, width, height);
+}
+
+Telesignasilation::Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    Telesignasilation::change_center_cords(x, y, width, height);
+}
+
+Telesignasilation::Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+           const std::string &font_name, int font_size,
+           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    this->hAlignment = hAlignment;
+    this->vAlignment = vAlignment;
+    this->bold_font = bold_font;
+    this->italic_font = italic_font;
+    this->underlined_font = underlined_font;
+    this->crossed_font = crossed_font;
+    this->auto_size_text = auto_size_text;
+    Telesignasilation::change_center_cords(x, y, width, height);
+}
+
+//далее идут функции меняющие одноименные переменные класса телеуправления
+void Telesignasilation::set_condition(int condition){
+	if (0 <= condition <= 1){
+		this->condition = condition;
+	}
+}
+
+//далее идут функции по выводу одноименных переменных класса телеуправления
+int Telesignasilation::get_condition(){
+	return this->condition;
+}
+
+int Telesignasilation::get_id();{
+	return this->id;
+}
+
+//конструкторы класса текста получающие различные вводные
+Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string &text) {
+    this->text = text;
+    Telesignasilation::change_center_cords(x, y, width, height);
+}
+
+Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    Telesignasilation::change_center_cords(x, y, width, height);
+}
+
+Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+           const std::string &font_name, int font_size,
+           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+    this->angle = angle;
+    this->text = text;
+    this->help_text = help_text;
+    this->style_line = style_line;
+    this->filling_color = filling_color;
+    this->bool_show = bool_show;
+    this->bool_show_filling = bool_show_filling;
+    this->font_name = font_name;
+    this->font_size = font_size;
+    this->font_color = font_color;
+    this->hAlignment = hAlignment;
+    this->vAlignment = vAlignment;
+    this->bold_font = bold_font;
+    this->italic_font = italic_font;
+    this->underlined_font = underlined_font;
+    this->crossed_font = crossed_font;
+    this->auto_size_text = auto_size_text;
+    Telesignasilation::change_center_cords(x, y, width, height);
+}
+
+//далее идут функции меняющие одноименные переменные класса телеуправления
+void Telemeasure::set_device_type(int device_type){
+	if (0 <= condition <= 6){
+		this->device_type = device_type;
+	}
+}
+
+//далее идут функции по выводу одноименных переменных класса телеуправления
+int Telemeasure::get_device_type(){
+	return this->device_type_list[this->device_type];
+}
+
+int Telesignasilation::get_id();{
+	return this->id;
+}
