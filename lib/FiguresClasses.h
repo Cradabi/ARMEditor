@@ -780,7 +780,7 @@ namespace FiguresClasses{
 
     public:
         //конструкторы класса текста получающие различные вводные
-        Text(int x, int y, int width, int height, std::string text);
+        Text(int x, int y, int width, int height, const std::string &text);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
              int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
@@ -891,6 +891,117 @@ namespace FiguresClasses{
         int get_vAlignment();
 
         std::vector<std::string> get_alignment();
+
+        //далее идут функции меняющие настройки показывания различных элементов
+        void show();
+
+        void show_help();
+
+        void show_filling();
+
+        void hide();
+
+        void hide_help();
+
+        void hide_filling();
+
+        bool get_show();
+
+        bool get_show_help();
+
+        bool get_show_filling();
+    };
+    class Image {   //класс картинки
+    private:
+        bool bool_show_help = false;                        //показывать подсказку
+        bool bool_show = true;                              //показывать прямоугольник
+        bool bool_show_filling = false;                     //показывать заливку
+        bool bool_transparancy = false;
+        std::vector<int> line_color = {0, 0, 0};            //цвет линии
+        std::vector<int> filling_color = {255, 255, 255};   //цвет заливки
+        std::vector<int> transparancy_color = {255, 255, 255};   //цвет заливки
+
+        std::vector<std::string> style_frame_list =         //список названий стилей линий
+                {"fsNull", "fsButtonDown", "fsButtonUp", "fsBagetDown", "fsBagetUp", "fsDoubleDown",
+                 "fsDoubleUp"};
+        std::vector<std::string> style_line_list =          //список названий стилей линий
+                {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
+                 "psDash1", "psDash2"};
+
+        std::string type_object = "Картинка";          //тип объекта
+        std::string help_text = "";                         //текст подсказки
+        std::string image_path = "";
+
+        int style_frame = 0;                                // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
+        int style_line = 1;                                 //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
+
+        int line_width = 1;                                 //ширина линии
+        int angle = 0;                                      //угол наклона
+        int x = 0;                                          //коодината x
+        int y = 0;                                          //координата y
+        int width = 0;                                      //ширина
+        int height = 0;                                     //высота
+        int center_x = 0;                                   //координата x центра
+        int center_y = 0;                                   //координата y центра
+
+    public:
+        //конструкторы класса прямоугольника получающие различные вводные
+        Image(int x, int y, int width, int height, const std::string &im_path, int angle);
+
+        Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
+                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+
+        Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
+                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame, const std::vector<int> &filling_color, bool bool_show_filling);
+
+        //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+        void change_center_cords(int x, int y, int width, int height);
+
+        //далее идут функции меняющие одноименные переменные класса прямоугольника
+        void set_angle(int angl);
+
+        void set_line_width(int width);
+
+        void set_line_color(const std::vector<int> &ln_col);
+
+        void set_filling_color(const std::vector<int> &fil_col);
+
+        void set_help_text(const std::string &help);
+
+        void set_style_frame(int st_frame);
+
+        void set_style_line(int st_line);
+
+        void set_image_path(const std::string &im_path);
+
+        //далее идут функции по выводу одноименных переменных класса прямоугольника
+        std::string get_type_object();
+
+        std::string get_image_path();
+
+        int get_style_frame();
+
+        int get_line_width();
+
+        int get_style_line();
+
+        int get_angle();
+
+        int get_x();
+
+        int get_y();
+
+        int get_width();
+
+        int get_height();
+
+        int get_center_x();
+
+        int get_center_y();
+
+        std::vector<int> get_line_color();
+
+        std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
         void show();

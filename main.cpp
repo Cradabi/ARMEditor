@@ -18,6 +18,8 @@ class MyWidget : public QWidget
         FiguresClasses::CrookedLine crook(points1);
         std::string txt = "Hello worlddtfvygggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggf";
         FiguresClasses::Text text(300, 50, 32342134, 432242, txt);
+        std::string path = "/home/astra/ARMEditor/31.jpg";
+        FiguresClasses::Image image(900, 550, 380, 260, path, 45);
         QPainter painter;
         painter.begin(this);
         //начинаем отрисовку сетки
@@ -321,7 +323,16 @@ class MyWidget : public QWidget
 
         }
         painter.restore();
-
+        painter.save();
+        painter.translate(image.get_center_x(), image.get_center_y());
+        painter.rotate((-1)*image.get_angle());
+        if(image.get_show()){
+            QRect target(image.get_x() - image.get_center_x(), image.get_y() - image.get_center_y(), image.get_width(), image.get_height());
+            QRect source(0, 0, 0, 0);
+            QPixmap pixmap(image.get_image_path().c_str());
+            painter.drawPixmap(target, pixmap, source);
+        }
+        painter.restore();
         painter.end();
     }
 };

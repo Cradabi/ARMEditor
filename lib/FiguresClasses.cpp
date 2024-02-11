@@ -1208,7 +1208,7 @@ std::vector<std::string> TransitionButton::get_alignment() {
 }
 
 //конструкторы класса текста получающие различные вводные
-Text::Text(int x, int y, int width, int height, std::string text) {
+Text::Text(int x, int y, int width, int height, const std::string &text) {
     this->text = text;
     Text::change_center_cords(x, y, width, height);
 }
@@ -1504,4 +1504,179 @@ bool Text::get_show_help() {
 
 bool Text::get_show_filling() {
     return this->bool_show_filling;
+}
+
+//конструкторы класса прямоугольника получающие различные вводные
+Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle) {
+    this->image_path = im_path;
+    this->angle = angle;
+    change_center_cords(x, y, width, height);
+}
+
+Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
+                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show) {
+    this->image_path = im_path;
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    change_center_cords(x, y, width, height);
+}
+
+Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
+                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame, const std::vector<int> &filling_color, bool bool_show_filling) {
+    this->image_path = im_path;
+    this->angle = angle;
+    this->line_width = line_width;
+    this->style_line = style_line;
+    this->line_color = line_color;
+    this->help_text = help_text;
+    this->bool_show = bool_show;
+    this->style_frame = style_frame;
+    this->filling_color = filling_color;
+    this->bool_show_filling = bool_show_filling;
+    change_center_cords(x, y, width, height);
+}
+
+//меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+void Image::change_center_cords(int x, int y, int width, int height) {
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+    this->center_x = this->x + floor(this->width / 2);
+    this->center_y = this->y + floor(this->height / 2);
+}
+
+//далее идут функции меняющие одноименные переменные класса прямоугольника
+void Image::set_angle(int angl) {
+    this->angle = angl;
+}
+
+void Image::set_line_width(int width) {
+    this->line_width = width;
+}
+
+void Image::set_line_color(const std::vector<int> &ln_col) {
+    this->line_color = ln_col;
+}
+
+void Image::set_filling_color(const std::vector<int> &fil_col) {
+    this->filling_color = fil_col;
+}
+
+void Image::set_help_text(const std::string &help) {
+    this->help_text = help;
+}
+
+void Image::set_style_frame(int st_frame) {
+    if (st_frame >= 0 && st_frame < this->style_frame_list.size()) {
+        this->style_frame = st_frame;
+    }
+}
+
+void Image::set_style_line(int st_line) {
+    if (st_line >= 0 && st_line < this->style_line_list.size()) {
+        this->style_line = st_line;
+    }
+}
+
+void Image::set_image_path(const std::string &im_path){
+    this->image_path = im_path;
+}
+
+//далее идут функции по выводу одноименных переменных класса прямоугольника
+std::string Image::get_type_object() {
+    return this->type_object;
+}
+
+std::string Image::get_image_path(){
+    return this->image_path;
+}
+
+int Image::get_style_frame() {
+    return this->style_frame;
+}
+
+int Image::get_line_width() {
+    return this->line_width;
+}
+
+int Image::get_style_line() {
+    return this->style_line;
+}
+
+int Image::get_angle() {
+    return this->angle;
+}
+
+int Image::get_x() {
+    return this->x;
+}
+
+int Image::get_y() {
+    return this->y;
+}
+
+int Image::get_width() {
+    return this->width;
+}
+
+int Image::get_height() {
+    return this->height;
+}
+
+int Image::get_center_x() {
+    return this->center_x;
+}
+
+int Image::get_center_y() {
+    return this->center_y;
+}
+
+std::vector<int> Image::get_line_color() {
+    return this->line_color;
+}
+
+std::vector<int> Image::get_filling_color() {
+    return this->filling_color;
+}
+
+//далее идут функции меняющие настройки показывания различных элементов
+void Image::show() {
+    this->bool_show = true;
+}
+
+void Image::show_help() {
+    this->bool_show_help = true;
+}
+
+void Image::show_filling() {
+    this->bool_show_filling = true;
+}
+
+void Image::hide() {
+    this->bool_show = false;
+}
+
+void Image::hide_help() {
+    this->bool_show_help = false;
+}
+
+void Image::hide_filling() {
+    this->bool_show_filling = false;
+}
+
+bool Image::get_show() {
+    return this->bool_show;
+}
+
+bool Image::get_show_help() {
+    return this->bool_show_help;
+}
+
+bool Image::get_show_filling() {
+    return bool_show_filling;
 }
