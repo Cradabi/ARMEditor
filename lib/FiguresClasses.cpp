@@ -1008,9 +1008,10 @@ bool TransitionPoint::get_show_filling() {
 }
 
 //конструкторы класса кнопки перехода получающие различные вводные
-TransitionButton::TransitionButton(int number, int x, int y, int width, int height)
+TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle)
         : TransitionPoint::TransitionPoint() {
     this->number_of_transition_button = number;
+    this->angle = angle;
     this->type_object = "Точка перехода";
     int number_transition_point = 0; //служебная переменная
     change_center_cords(x, y, width, height);
@@ -1195,12 +1196,12 @@ std::vector<int> TransitionButton::get_font_color() {
     return this->font_color;
 }
 
-std::string TransitionButton::get_hAlignment() {
-    return this->hAlignment_list[this->hAlignment];
+int TransitionButton::get_hAlignment() {
+    return this->hAlignment;
 }
 
-std::string TransitionButton::get_vAlignment() {
-    return this->vAlignment_list[this->vAlignment];
+int TransitionButton::get_vAlignment() {
+    return this->vAlignment;
 }
 
 std::vector<std::string> TransitionButton::get_alignment() {

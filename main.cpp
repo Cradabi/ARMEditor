@@ -17,10 +17,11 @@ class MyWidget : public QWidget
         FiguresClasses::Polygon poly(points, true);
         FiguresClasses::CrookedLine crook(points1);
         std::string txt = "Hello worlddtfvygggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggf";
-        FiguresClasses::Text text(300, 50, 32342134, 432242, txt);
+        FiguresClasses::Text text(300, 50, 1000, 432, txt);
         std::string path = "/home/astra/ARMEditor/31.jpg";
         FiguresClasses::Image image(900, 550, 380, 260, path, 45);
         FiguresClasses::TransitionPoint tr_p(1, 20, 30, 16, 16);
+        FiguresClasses::TransitionButton tr_b(1, 150, 30, 120, 50, 0);
         QPainter painter;
         painter.begin(this);
         //начинаем отрисовку сетки
@@ -309,6 +310,55 @@ class MyWidget : public QWidget
             painter.drawRect(QRect(tr_p.get_x(), tr_p.get_y(), tr_p.get_width(), tr_p.get_height()));
             painter.drawEllipse(QPoint(tr_p.get_center_x(), tr_p.get_center_y()), 3, 3);
         }
+        //начало отображения кнопки перехода
+        painter.save();
+        QFont tr_b_font(tr_b.get_font_name().c_str(), tr_b.get_font_size());
+        tr_b_font.setBold(tr_b.get_bold_font());
+        tr_b_font.setItalic(tr_b.get_italic_font());
+        tr_b_font.setUnderline(tr_b.get_underlined_font());
+        tr_b_font.setStrikeOut(tr_b.get_crossed_font());
+        if(tr_b.get_auto_size_text()){
+            QFontMetrics fm(tr_b_font);
+            int pxwidth = fm.width(tr_b.get_text().c_str());
+            int pxheight = fm.height();
+            tr_b.change_center_cords(tr_b.get_x() - 4, text.get_y() - 4, pxwidth + 7, pxheight + 7);
+        }
+        painter.translate(tr_b.get_center_x(), tr_b.get_center_y());
+        painter.rotate((-1)*tr_b.get_angle());
+        if(tr_b.get_show()){
+            if (tr_b.get_show_filling()){
+                QColor filling_color = {tr_b.get_filling_color()[0], tr_b.get_filling_color()[1], tr_b.get_filling_color()[2]};
+                painter.setPen(filling_color);
+                painter.setBrush(filling_color);
+                QColor color_rect(0, 0, 0);
+                painter.setPen(QPen(color_rect, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+                painter.drawRect(tr_b.get_x() - tr_b.get_center_x(), tr_b.get_y() - tr_b.get_center_y(), tr_b.get_width(), tr_b.get_height());            }
+            QRect rect = QRect(tr_b.get_x() - tr_b.get_center_x(), tr_b.get_y() - tr_b.get_center_y(), tr_b.get_width(), tr_b.get_height());
+            QColor font_color = {tr_b.get_font_color()[0], tr_b.get_font_color()[1], tr_b.get_font_color()[2]};
+            painter.setPen(font_color);
+            painter.setFont(tr_b_font);
+            if(tr_b.get_hAlignment() == 0 && tr_b.get_vAlignment() == 0){
+                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 0 && tr_b.get_vAlignment() == 1){
+                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 0 && tr_b.get_vAlignment() == 2){
+                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 1 && tr_b.get_vAlignment() == 0){
+                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 1 && tr_b.get_vAlignment() == 1){
+                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 1 && tr_b.get_vAlignment() == 2){
+                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 0){
+                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 1){
+                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, tr(tr_b.get_text().c_str()));
+            }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 2){
+                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, tr(tr_b.get_text().c_str()));
+            }
+
+        }
+        painter.restore();
         painter.end();
     }
 };

@@ -549,7 +549,7 @@ namespace FiguresClasses{
         bool bool_show = true;                            //показывать прямоугольник
         bool bool_show_filling = true;                   //показывать заливку
 
-        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
+        std::vector<int> filling_color = {238, 233, 233}; //цвет заливки
         std::string type_object = "Точка перехода";       //тип объекта
         std::string help_text = "";                       //текст подсказки
 
@@ -626,7 +626,7 @@ namespace FiguresClasses{
     };
 
 
-    class TransitionButton : TransitionPoint {      //класс кнопка перехода
+    class TransitionButton : public TransitionPoint {      //класс кнопка перехода
     private:
         bool bold_font = false;                     //флаг жирности шрифта
         bool italic_font = false;                   //флаг наклонности шрифта
@@ -640,19 +640,19 @@ namespace FiguresClasses{
         std::vector<std::string> vAlignment_list = {"avTop", "avBottom",
                                                     "avCenter"}; //список названий вертикального выравнивания
 
-        std::string text = "";                      //текст кнопки
+        std::string text = "-";                      //текст кнопки
         std::string font_name = "Arial";            //название шрифта
 
-        int hAlignment = 2;                         //номер горизонтального выравнивания
-        int vAlignment = 2;                         //номер вертикального выравнивания
-        int font_size = 14;                         //размер шрифта
+        int hAlignment = 1;                         //номер горизонтального выравнивания
+        int vAlignment = 1;                         //номер вертикального выравнивания
+        int font_size = 12;                         //размер шрифта
         int number_of_transition_button = 0;        //номер кнопки
         int angle = 0;                              //угол наклона
 
 
     public:
         //конструкторы класса кнопки перехода получающие различные вводные
-        TransitionButton(int number, int x, int y, int width, int height);
+        TransitionButton(int number, int x, int y, int width, int height, int angle);
 
         TransitionButton(int number, int x, int y, int width, int height, int angle,
                          const std::vector<int> &filling_color,
@@ -727,9 +727,9 @@ namespace FiguresClasses{
 
         std::vector<int> get_font_color();
 
-        std::string get_hAlignment();
+        int get_hAlignment();
 
-        std::string get_vAlignment();
+        int get_vAlignment();
 
         std::vector<std::string> get_alignment();
 
