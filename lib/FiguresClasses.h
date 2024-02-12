@@ -780,6 +780,8 @@ namespace FiguresClasses{
 
     public:
         //конструкторы класса текста получающие различные вводные
+        Text();
+
         Text(int x, int y, int width, int height, const std::string &text);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
@@ -1047,7 +1049,7 @@ namespace FiguresClasses{
 		
 		std::string text = "";                                                        //текст кнопки
         std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Текст";                                            //размер шрифта
+        std::string type_object = "Объект телеуправления";                                            //размер шрифта
         std::string help_text = "";                                                   //текст подсказки
         
         int hAlignment = 3;                                                           //номер горизонтального выравнивания
@@ -1113,7 +1115,7 @@ namespace FiguresClasses{
 		
 		std::string text = "";                                                        //текст кнопки
         std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Текст";                                            //размер шрифта
+        std::string type_object = "Объект телесигнализации";                                            //размер шрифта
         std::string help_text = "";                                                   //текст подсказки
         
         int hAlignment = 3;                                                           //номер горизонтального выравнивания
@@ -1182,7 +1184,7 @@ namespace FiguresClasses{
 		
 		std::string text = "";                                                        //текст кнопки
         std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Текст";                                            //размер шрифта
+        std::string type_object = "Объект телеизмерения";                                            //размер шрифта
         std::string help_text = "";                                                   //текст подсказки
         
         int hAlignment = 3;                                                           //номер горизонтального выравнивания
@@ -1219,7 +1221,7 @@ namespace FiguresClasses{
         void set_device_type(int device_type);
         
         //далее идут функции по выводу одноименных переменных класса телеуправления
-        std:string get_device_type();
+        int get_device_type();
         
         int get_id();
 	};

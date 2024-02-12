@@ -1209,6 +1209,8 @@ std::vector<std::string> TransitionButton::get_alignment() {
 }
 
 //конструкторы класса текста получающие различные вводные
+Text::Text(){}
+
 Text::Text(int x, int y, int width, int height, const std::string &text) {
     this->text = text;
     Text::change_center_cords(x, y, width, height);
@@ -1683,13 +1685,13 @@ bool Image::get_show_filling() {
 }
 
 //конструкторы класса текста получающие различные вводные
-Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string &text) {
+Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string &text) : Text::Text() {
     this->text = text;
     Telecontrol::change_center_cords(x, y, width, height);
 }
 
 Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) : Text::Text(){
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1704,7 +1706,7 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
            int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
            const std::string &font_name, int font_size,
            const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) : Text::Text(){
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1737,18 +1739,18 @@ int Telecontrol::get_condition(){
 	return this->condition;
 }
 
-int Telecontrol::get_id();{
+int Telecontrol::get_id(){
 	return this->id;
 }
 
 //конструкторы класса текста получающие различные вводные
-Telesignasilation::Telesignasilation(int x, int y, int width, int height, const std::string &text) {
+Telesignasilation::Telesignasilation(int x, int y, int width, int height, const std::string &text) : Text::Text(){
     this->text = text;
     Telesignasilation::change_center_cords(x, y, width, height);
 }
 
 Telesignasilation::Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) : Text::Text(){
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1763,7 +1765,7 @@ Telesignasilation::Telesignasilation(int x, int y, int width, int height, int an
            int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
            const std::string &font_name, int font_size,
            const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) : Text::Text(){
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1796,18 +1798,18 @@ int Telesignasilation::get_condition(){
 	return this->condition;
 }
 
-int Telesignasilation::get_id();{
+int Telesignasilation::get_id(){
 	return this->id;
 }
 
 //конструкторы класса текста получающие различные вводные
-Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string &text) {
+Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string &text) : Text::Text(){
     this->text = text;
-    Telesignasilation::change_center_cords(x, y, width, height);
+    Telemeasure::change_center_cords(x, y, width, height);
 }
 
 Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) {
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) : Text::Text(){
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1815,14 +1817,14 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     this->filling_color = filling_color;
     this->bool_show = bool_show;
     this->bool_show_filling = bool_show_filling;
-    Telesignasilation::change_center_cords(x, y, width, height);
+    Telemeasure::change_center_cords(x, y, width, height);
 }
 
 Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
            int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
            const std::string &font_name, int font_size,
            const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) {
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) : Text::Text(){
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1840,21 +1842,19 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     this->underlined_font = underlined_font;
     this->crossed_font = crossed_font;
     this->auto_size_text = auto_size_text;
-    Telesignasilation::change_center_cords(x, y, width, height);
+    Telemeasure::change_center_cords(x, y, width, height);
 }
 
 //далее идут функции меняющие одноименные переменные класса телеуправления
 void Telemeasure::set_device_type(int device_type){
-	if (0 <= condition <= 6){
-		this->device_type = device_type;
-	}
+    this->device_type = device_type;
 }
 
 //далее идут функции по выводу одноименных переменных класса телеуправления
 int Telemeasure::get_device_type(){
-	return this->device_type_list[this->device_type];
+        return this->device_type;
 }
 
-int Telesignasilation::get_id();{
+int Telemeasure::get_id(){
 	return this->id;
 }
