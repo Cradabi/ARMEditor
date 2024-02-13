@@ -1090,7 +1090,7 @@ namespace FiguresClasses{
         
         int get_id();
 	};
-	class Telesignasilation : public Text {
+    class Telesignalisation : public Text {
 	private:
 		int id = 0;                                                                   // идентификатор
 		int condition = 0;                                                            // состояние
@@ -1137,12 +1137,12 @@ namespace FiguresClasses{
 	
 	public:
 		//конструкторы класса прямоугольника получающие различные вводные
-		Telesignasilation(int x, int y, int width, int height, const std::string &text);
+        Telesignalisation(int x, int y, int width, int height, const std::string &text);
 
-        Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+        Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
              int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
-        Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+        Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
              int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
              const std::string &font_name, int font_size,
              const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,

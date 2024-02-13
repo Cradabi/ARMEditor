@@ -1744,12 +1744,12 @@ int Telecontrol::get_id(){
 }
 
 //конструкторы класса текста получающие различные вводные
-Telesignasilation::Telesignasilation(int x, int y, int width, int height, const std::string &text) : Text::Text(){
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, const std::string &text) : Text::Text(){
     this->text = text;
-    Telesignasilation::change_center_cords(x, y, width, height);
+    Telesignalisation::change_center_cords(x, y, width, height);
 }
 
-Telesignasilation::Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
            int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling) : Text::Text(){
     this->angle = angle;
     this->text = text;
@@ -1758,10 +1758,10 @@ Telesignasilation::Telesignasilation(int x, int y, int width, int height, int an
     this->filling_color = filling_color;
     this->bool_show = bool_show;
     this->bool_show_filling = bool_show_filling;
-    Telesignasilation::change_center_cords(x, y, width, height);
+    Telesignalisation::change_center_cords(x, y, width, height);
 }
 
-Telesignasilation::Telesignasilation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
            int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
            const std::string &font_name, int font_size,
            const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
@@ -1783,22 +1783,22 @@ Telesignasilation::Telesignasilation(int x, int y, int width, int height, int an
     this->underlined_font = underlined_font;
     this->crossed_font = crossed_font;
     this->auto_size_text = auto_size_text;
-    Telesignasilation::change_center_cords(x, y, width, height);
+    Telesignalisation::change_center_cords(x, y, width, height);
 }
 
 //далее идут функции меняющие одноименные переменные класса телеуправления
-void Telesignasilation::set_condition(int condition){
+void Telesignalisation::set_condition(int condition){
 	if (0 <= condition <= 1){
 		this->condition = condition;
 	}
 }
 
 //далее идут функции по выводу одноименных переменных класса телеуправления
-int Telesignasilation::get_condition(){
+int Telesignalisation::get_condition(){
 	return this->condition;
 }
 
-int Telesignasilation::get_id(){
+int Telesignalisation::get_id(){
 	return this->id;
 }
 
