@@ -42,4 +42,6 @@ else()
   )
 endif()
 
+add_library(figures)
+
 target_link_libraries(ARM PRIVATE Qt5::Widgets)
