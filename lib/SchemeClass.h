@@ -155,22 +155,9 @@ public:
     }
 
     void draw_line(FiguresClasses::Line &pol, QPainter &painter){
+        std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
         QColor color_line = {pol.get_line_color()[0], pol.get_line_color()[1], pol.get_line_color()[2]};
-        if (pol.get_style_line() == 0){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::NoPen, Qt::RoundCap));
-        }else if (pol.get_style_line() == 1){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::SolidLine, Qt::RoundCap));
-        }else if (pol.get_style_line() == 2){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::DashLine, Qt::RoundCap));
-        }else if (pol.get_style_line() == 3){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::DotLine, Qt::RoundCap));
-        }else if (pol.get_style_line() == 4){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::DashDotLine, Qt::RoundCap));
-        }else if (pol.get_style_line() == 5){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap));
-        }else if (pol.get_style_line() == 6){
-            painter.setPen(QPen(color_line, pol.get_line_width(), Qt::CustomDashLine, Qt::RoundCap));
-        }
+        painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
         painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
         if(pol.get_start_style_arrow() == 1){
             painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
@@ -203,22 +190,9 @@ public:
                 QColor filling_color = {rect.get_filling_color()[0], rect.get_filling_color()[1], rect.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {rect.get_line_color()[0], rect.get_line_color()[1], rect.get_line_color()[2]};
-            if (rect.get_style_line() == 0){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (rect.get_style_line() == 1){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (rect.get_style_line() == 2){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (rect.get_style_line() == 3){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (rect.get_style_line() == 4){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (rect.get_style_line() == 5){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (rect.get_style_line() == 6){
-                painter.setPen(QPen(color_rect, rect.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_rect, rect.get_line_width(), style_vector[rect.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(QRect((-1)*(rect.get_width()/2), (-1)*(rect.get_height()/2), rect.get_width(), rect.get_height()));
         }
         painter.restore();
@@ -231,26 +205,13 @@ public:
         painter.translate(el.get_center_x(), el.get_center_y());
         painter.rotate((-1)*el.get_angle());
         if (el.get_show()){
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
+            QColor color_el = {el.get_line_color()[0], el.get_line_color()[1], el.get_line_color()[2]};
             if (el.get_show_filling()){
                 QColor filling_color = {el.get_filling_color()[0], el.get_filling_color()[1], el.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
-            QColor color_el = {el.get_line_color()[0], el.get_line_color()[1], el.get_line_color()[2]};
-            if (el.get_style_line() == 0){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::MiterJoin));
-            }else if (el.get_style_line() == 1){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin));
-            }else if (el.get_style_line() == 2){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (el.get_style_line() == 3){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (el.get_style_line() == 4){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (el.get_style_line() == 5){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (el.get_style_line() == 6){
-                painter.setPen(QPen(color_el, el.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_el, el.get_line_width(), style_vector[el.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawEllipse(QRect((-1)*(el.get_width()/2), (-1)*(el.get_height()/2), el.get_width(), el.get_height()));
         }
         painter.restore();
@@ -264,21 +225,8 @@ public:
         painter.rotate((-1)*arc.get_angle());
         if (arc.get_show()){
             QColor color_arc = {arc.get_line_color()[0], arc.get_line_color()[1], arc.get_line_color()[2]};
-            if (arc.get_style_line() == 0){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (arc.get_style_line() == 1){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (arc.get_style_line() == 2){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (arc.get_style_line() == 3){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (arc.get_style_line() == 4){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (arc.get_style_line() == 5){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (arc.get_style_line() == 6){
-                painter.setPen(QPen(color_arc, arc.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
+            painter.setPen(QPen(color_arc, arc.get_line_width(), style_vector[arc.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             if (arc.get_show_filling()){
                 QColor filling_color = {arc.get_filling_color()[0], arc.get_filling_color()[1], arc.get_filling_color()[2]};
                 painter.setBrush(filling_color);
@@ -300,22 +248,9 @@ public:
                 QColor filling_color = {poly.get_filling_color()[0], poly.get_filling_color()[1], poly.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_poly = {poly.get_line_color()[0], poly.get_line_color()[1], poly.get_line_color()[2]};
-            if (poly.get_style_line() == 0){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (poly.get_style_line() == 1){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (poly.get_style_line() == 2){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (poly.get_style_line() == 3){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (poly.get_style_line() == 4){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (poly.get_style_line() == 5){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (poly.get_style_line() == 6){
-                painter.setPen(QPen(color_poly, poly.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_poly, poly.get_line_width(), style_vector[poly.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             QPoint qpoints[poly.get_points().size()];
             for (int i = 0; i < poly.get_points().size(); i++){
                 qpoints[i] = QPoint(poly.get_points()[i][0] - poly.get_center_x(), poly.get_points()[i][1] - poly.get_center_y());
@@ -339,22 +274,9 @@ public:
                 QColor filling_color = {crook.get_filling_color()[0], crook.get_filling_color()[1], crook.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_crook = {crook.get_line_color()[0], crook.get_line_color()[1], crook.get_line_color()[2]};
-            if (crook.get_style_line() == 0){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (crook.get_style_line() == 1){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (crook.get_style_line() == 2){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (crook.get_style_line() == 3){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (crook.get_style_line() == 4){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (crook.get_style_line() == 5){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (crook.get_style_line() == 6){
-                painter.setPen(QPen(color_crook, crook.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_crook, crook.get_line_width(), style_vector[crook.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             QPoint qpoints[crook.get_points().size()];
             for (int i = 0; i < crook.get_points().size(); i++){
                 qpoints[i] = QPoint(crook.get_points()[i][0] - crook.get_center_x(), crook.get_points()[i][1] - crook.get_center_y());
@@ -386,22 +308,9 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            if (text.get_style_line() == 0){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 1){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 2){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 3){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 4){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 5){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 6){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
@@ -426,7 +335,6 @@ public:
             }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
                 painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
             }
-
         }
         painter.restore();
     }
@@ -507,7 +415,6 @@ public:
             }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 2){
                 painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, tr_b.get_text().c_str());
             }
-
         }
         painter.restore();
     }
@@ -545,22 +452,9 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            if (text.get_style_line() == 0){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 1){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 2){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 3){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 4){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 5){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 6){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
@@ -585,7 +479,6 @@ public:
             }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
                 painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
             }
-
         }
         painter.restore();
     }
@@ -612,22 +505,9 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            if (text.get_style_line() == 0){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 1){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 2){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 3){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 4){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 5){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 6){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
@@ -652,7 +532,6 @@ public:
             }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
                 painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
             }
-
         }
         painter.restore();
     }
@@ -679,22 +558,9 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
+            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            if (text.get_style_line() == 0){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::NoPen, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 1){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 2){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 3){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 4){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 5){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
-            }else if (text.get_style_line() == 6){
-                painter.setPen(QPen(color_rect, text.get_line_width(), Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin));
-            }
+            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
@@ -719,7 +585,6 @@ public:
             }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
                 painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
             }
-
         }
         painter.restore();
     }
