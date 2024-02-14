@@ -37,6 +37,9 @@ private:
     std::vector <FiguresClasses::Telecontrol> telecontrol_vector;
     std::vector <FiguresClasses::Telemeasure> telemeasure_vector;
     std::vector <FiguresClasses::Telesignalisation> telesignalisation_vector;
+    std::vector <Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
+    std::vector <Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
+    std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
 
 public:
     Scheme(int _width, int _height, const std::string& _name, const std::vector <FiguresClasses::Line>& _line, const std::vector <FiguresClasses::Rectangle>& _rect, const std::vector <FiguresClasses::Ellipse>& _el, const std::vector <FiguresClasses::Arc>& _arc, const std::vector <FiguresClasses::Polygon>& _poly, const std::vector <FiguresClasses::CrookedLine>& _crook, const std::vector <FiguresClasses::Text>& _text, const std::vector <FiguresClasses::Image>& _image, const std::vector <FiguresClasses::TransitionPoint>& _tr_p, const std::vector <FiguresClasses::TransitionButton>& _tr_b, const std::vector <FiguresClasses::Telecontrol>& _telec, const std::vector <FiguresClasses::Telemeasure>& _telem, const std::vector <FiguresClasses::Telesignalisation>& _teles){
@@ -155,9 +158,8 @@ public:
     }
 
     void draw_line(FiguresClasses::Line &pol, QPainter &painter){
-        std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
         QColor color_line = {pol.get_line_color()[0], pol.get_line_color()[1], pol.get_line_color()[2]};
-        painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+        painter.setPen(QPen(color_line, pol.get_line_width(), this->style_vector[pol.get_style_line()], Qt::RoundCap));
         painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
         if(pol.get_start_style_arrow() == 1){
             painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2, pol.get_line_width(), pol.get_line_width());
@@ -190,9 +192,8 @@ public:
                 QColor filling_color = {rect.get_filling_color()[0], rect.get_filling_color()[1], rect.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {rect.get_line_color()[0], rect.get_line_color()[1], rect.get_line_color()[2]};
-            painter.setPen(QPen(color_rect, rect.get_line_width(), style_vector[rect.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_rect, rect.get_line_width(), this->style_vector[rect.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(QRect((-1)*(rect.get_width()/2), (-1)*(rect.get_height()/2), rect.get_width(), rect.get_height()));
         }
         painter.restore();
@@ -205,13 +206,12 @@ public:
         painter.translate(el.get_center_x(), el.get_center_y());
         painter.rotate((-1)*el.get_angle());
         if (el.get_show()){
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_el = {el.get_line_color()[0], el.get_line_color()[1], el.get_line_color()[2]};
             if (el.get_show_filling()){
                 QColor filling_color = {el.get_filling_color()[0], el.get_filling_color()[1], el.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
-            painter.setPen(QPen(color_el, el.get_line_width(), style_vector[el.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_el, el.get_line_width(), this->style_vector[el.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawEllipse(QRect((-1)*(el.get_width()/2), (-1)*(el.get_height()/2), el.get_width(), el.get_height()));
         }
         painter.restore();
@@ -225,8 +225,7 @@ public:
         painter.rotate((-1)*arc.get_angle());
         if (arc.get_show()){
             QColor color_arc = {arc.get_line_color()[0], arc.get_line_color()[1], arc.get_line_color()[2]};
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
-            painter.setPen(QPen(color_arc, arc.get_line_width(), style_vector[arc.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_arc, arc.get_line_width(), this->style_vector[arc.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             if (arc.get_show_filling()){
                 QColor filling_color = {arc.get_filling_color()[0], arc.get_filling_color()[1], arc.get_filling_color()[2]};
                 painter.setBrush(filling_color);
@@ -248,9 +247,8 @@ public:
                 QColor filling_color = {poly.get_filling_color()[0], poly.get_filling_color()[1], poly.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_poly = {poly.get_line_color()[0], poly.get_line_color()[1], poly.get_line_color()[2]};
-            painter.setPen(QPen(color_poly, poly.get_line_width(), style_vector[poly.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_poly, poly.get_line_width(), this->style_vector[poly.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             QPoint qpoints[poly.get_points().size()];
             for (int i = 0; i < poly.get_points().size(); i++){
                 qpoints[i] = QPoint(poly.get_points()[i][0] - poly.get_center_x(), poly.get_points()[i][1] - poly.get_center_y());
@@ -274,9 +272,8 @@ public:
                 QColor filling_color = {crook.get_filling_color()[0], crook.get_filling_color()[1], crook.get_filling_color()[2]};
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_crook = {crook.get_line_color()[0], crook.get_line_color()[1], crook.get_line_color()[2]};
-            painter.setPen(QPen(color_crook, crook.get_line_width(), style_vector[crook.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_crook, crook.get_line_width(), this->style_vector[crook.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             QPoint qpoints[crook.get_points().size()];
             for (int i = 0; i < crook.get_points().size(); i++){
                 qpoints[i] = QPoint(crook.get_points()[i][0] - crook.get_center_x(), crook.get_points()[i][1] - crook.get_center_y());
@@ -308,33 +305,14 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_rect, text.get_line_width(), this->style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
             painter.setPen(font_color);
             painter.setFont(text_font);
-            if(text.get_hAlignment() == 0 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
-            }
+            painter.drawText(rect, this->h_alignment_vector[text.get_hAlignment()]|this->v_alignment_vector[text.get_vAlignment()], text.get_text().c_str());
         }
         painter.restore();
     }
@@ -396,25 +374,7 @@ public:
             QColor font_color = {tr_b.get_font_color()[0], tr_b.get_font_color()[1], tr_b.get_font_color()[2]};
             painter.setPen(font_color);
             painter.setFont(tr_b_font);
-            if(tr_b.get_hAlignment() == 0 && tr_b.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 0 && tr_b.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 0 && tr_b.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 1 && tr_b.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 1 && tr_b.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 1 && tr_b.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, tr_b.get_text().c_str());
-            }else if(tr_b.get_hAlignment() == 2 && tr_b.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, tr_b.get_text().c_str());
-            }
+            painter.drawText(rect, this->h_alignment_vector[tr_b.get_hAlignment()]|this->v_alignment_vector[tr_b.get_vAlignment()], tr_b.get_text().c_str());
         }
         painter.restore();
     }
@@ -452,33 +412,14 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_rect, text.get_line_width(), this->style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
             painter.setPen(font_color);
             painter.setFont(text_font);
-            if(text.get_hAlignment() == 0 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
-            }
+            painter.drawText(rect, this->h_alignment_vector[text.get_hAlignment()]|this->v_alignment_vector[text.get_vAlignment()], text.get_text().c_str());
         }
         painter.restore();
     }
@@ -505,33 +446,14 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_rect, text.get_line_width(), this->style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
             painter.setPen(font_color);
             painter.setFont(text_font);
-            if(text.get_hAlignment() == 0 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
-            }
+            painter.drawText(rect, this->h_alignment_vector[text.get_hAlignment()]|this->v_alignment_vector[text.get_vAlignment()], text.get_text().c_str());
         }
         painter.restore();
     }
@@ -558,33 +480,14 @@ public:
                 painter.setPen(filling_color);
                 painter.setBrush(filling_color);
             }
-            std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
             QColor color_rect = {text.get_line_color()[0], text.get_line_color()[1], text.get_line_color()[2]};
-            painter.setPen(QPen(color_rect, text.get_line_width(), style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(color_rect, text.get_line_width(), this->style_vector[text.get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.drawRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QRect rect = QRect(text.get_x() - text.get_center_x(), text.get_y() - text.get_center_y(), text.get_width(), text.get_height());
             QColor font_color = {text.get_font_color()[0], text.get_font_color()[1], text.get_font_color()[2]};
             painter.setPen(font_color);
             painter.setFont(text_font);
-            if(text.get_hAlignment() == 0 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 0 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignLeft, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignHCenter|Qt::AlignVCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 1 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignHCenter, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 0){
-                painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 1){
-                painter.drawText(rect, Qt::AlignVCenter|Qt::AlignRight, text.get_text().c_str());
-            }else if(text.get_hAlignment() == 2 && text.get_vAlignment() == 2){
-                painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text.get_text().c_str());
-            }
+            painter.drawText(rect, this->h_alignment_vector[text.get_hAlignment()]|this->v_alignment_vector[text.get_vAlignment()], text.get_text().c_str());
         }
         painter.restore();
     }
