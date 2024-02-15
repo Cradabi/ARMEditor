@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QPainter>
-#include <lib/SchemeClass.h>
+#include <lib/SchemeClass.cpp>
 #include "mainwindow.h"
 
 
@@ -36,7 +36,10 @@ class MyWidget : public QWidget
         std::vector<FiguresClasses::Telemeasure> telem_v = {};
         std::vector<FiguresClasses::Telesignalisation> teles_v = {};
         std::string name_sch = "Мультищитовая";
-        Scheme sch(1400, 900, name_sch, line_v, rect_v, el_v, arc_v, poly_v, crook_v, text_v, image_v, tr_p_v, tr_b_v, telec_v, telem_v, teles_v);
+        std::string f_p = "";
+        std::string bd = "";
+        std::string serv = "";
+        Scheme sch(1400, 900, name_sch, f_p, bd, serv, 1, 0, 0, 0, 10, 0, line_v, rect_v, el_v, arc_v, poly_v, crook_v, text_v, image_v, tr_p_v, tr_b_v, telec_v, telem_v, teles_v);
         QPainter painter;
         painter.begin(this);
         sch.draw_scheme(painter);
