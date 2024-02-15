@@ -17,11 +17,16 @@ class MyWidget : public QWidget
         FiguresClasses::Polygon poly(points, true);
         FiguresClasses::CrookedLine crook(points1);
         std::string txt = "Текст";
+        std::string txt2 = "0,0";
+        std::string fn_name = "Arial Narrow";
         FiguresClasses::Text text(300, 50, 1000, 432, txt);
         std::string path = "/home/astra/ARMEditor/mez2_logo.jpg";
+        std::vector <int> telem_color= {0, 0, 0};
+        std::vector <int> telem_font= {0, 255, 0};
         FiguresClasses::Image image(800, 700, 450, 140, path, 0);
         FiguresClasses::TransitionPoint tr_p(1, 20, 50, 16, 16);
         FiguresClasses::TransitionButton tr_b(1, 80, 30, 120, 50, 0);
+        FiguresClasses::Telemeasure tel_m(400, 50, 48, 24, 0, txt2, txt, 0, telem_color, true, true, fn_name, 14, telem_font, 1, 1, false, false, false, false, false);
         std::vector<FiguresClasses::Line> line_v = {pol};
         std::vector<FiguresClasses::Rectangle> rect_v = {rect};
         std::vector<FiguresClasses::Ellipse> el_v = {el};
@@ -40,6 +45,7 @@ class MyWidget : public QWidget
         std::string bd = "";
         std::string serv = "";
         Scheme sch(1400, 900, name_sch, f_p, bd, serv, 1, 0, 0, 0, 10, 0, line_v, rect_v, el_v, arc_v, poly_v, crook_v, text_v, image_v, tr_p_v, tr_b_v, telec_v, telem_v, teles_v);
+        sch.add_object(tel_m);
         QPainter painter;
         painter.begin(this);
         sch.draw_scheme(painter);

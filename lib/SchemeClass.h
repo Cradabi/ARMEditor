@@ -119,4 +119,30 @@ public:
     void draw_telesignalisation(FiguresClasses::Telesignalisation &text, QPainter &painter);
 
     void draw_scheme(QPainter &painter);
+
+    void add_object(FiguresClasses::Line &add_line);
+
+    void add_object(FiguresClasses::Rectangle &add_rect);
+
+    void add_object(FiguresClasses::Ellipse &add_el);
+
+    void add_object(FiguresClasses::Arc &add_arc);
+
+    void add_object(FiguresClasses::Polygon &add_poly);
+
+    void add_object(FiguresClasses::CrookedLine &add_crook);
+
+    void add_object(FiguresClasses::Text &add_text);
+
+    void add_object(FiguresClasses::Image &add_image);
+
+    void add_object(FiguresClasses::TransitionPoint &add_tr_p);
+
+    void add_object(FiguresClasses::TransitionButton &add_tr_b);
+
+    void add_object(FiguresClasses::Telecontrol &add_telec);
+
+    void add_object(FiguresClasses::Telemeasure &add_telem);
+
+    void add_object(FiguresClasses::Telesignalisation &add_teles);
 };

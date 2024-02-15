@@ -737,7 +737,7 @@ namespace FiguresClasses{
 
 
     class Text {                                                                      //класс текста
-    private:
+    protected:
         bool bold_font = true;                                                       //флаг жирности шрифта
         bool italic_font = true;                                                     //флаг наклонности шрифта
         bool underlined_font = true;                                                 //флаг подчеркнутости шрифта
@@ -1028,46 +1028,6 @@ namespace FiguresClasses{
 	private:
 		int id = 0;                                                                   // идентификатор
 		int condition = 0;                                                            // состояние
-		
-		bool bold_font = false;                                                       //флаг жирности шрифта
-        bool italic_font = false;                                                     //флаг наклонности шрифта
-        bool underlined_font = false;                                                 //флаг подчеркнутости шрифта
-        bool crossed_font = false;                                                    //флаг зачеркнутости шрифта
-        bool auto_size_text = true;                                                  //авторазмер текста
-        std::vector<int> font_color = {0, 0, 0};                                     //цвет шрифта
-        std::vector<int> line_color = {0, 0, 0};
-        std::vector<int> filling_color = {255, 198, 226};                                //цвет заливки
-
-        std::vector<std::string> hAlignment_list = {"ahLeft", "ahRight",
-                                                    "ahCenter"};                      //список названий горизонтального выравнивания
-        std::vector<std::string> vAlignment_list = {"avTop", "avBottom",
-                                                    "avCenter"};                      //список названий вертикального выравнивания
-        std::vector<std::string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4",
-                                                    "psDot5",
-                                                    "psDot6",
-                                                    "psDash1", "psDash2"};            //список названий стилей линий
-		
-		std::string text = "";                                                        //текст кнопки
-        std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Объект телеуправления";                                            //размер шрифта
-        std::string help_text = "";                                                   //текст подсказки
-        
-        int hAlignment = 3;                                                           //номер горизонтального выравнивания
-        int vAlignment = 3;                                                           //номер вертикального выравнивания
-        int font_size = 10;                                                           //размер шрифта
-        int style_line = 0;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-        int line_width = 1;                                                           //толщина линии
-        int angle = 0;                                                                //угол наклона
-        int x = 0;                                                                    //координата x
-        int y = 0;                                                                    //координата y
-        int width = 0;                                                                //ширина
-        int height = 0;                                                               //высота
-        int center_x = 0;                                                             //координата x центра
-        int center_y = 0;                                                             //координата y центра
-
-        bool bool_show_help = false;                                                  // показывать подсказку
-        bool bool_show = true;                                                        //показывать прямоугольник
-        bool bool_show_filling = false;                                               //показывать заливку
 	
 	public:
 		//конструкторы класса прямоугольника получающие различные вводные
@@ -1095,46 +1055,6 @@ namespace FiguresClasses{
 		int id = 0;                                                                   // идентификатор
 		int condition = 0;                                                            // состояние
 		
-		bool bold_font = false;                                                       //флаг жирности шрифта
-        bool italic_font = false;                                                     //флаг наклонности шрифта
-        bool underlined_font = false;                                                 //флаг подчеркнутости шрифта
-        bool crossed_font = false;                                                    //флаг зачеркнутости шрифта
-        bool auto_size_text = true;                                                  //авторазмер текста
-        std::vector<int> font_color = {0, 0, 0};                                     //цвет шрифта
-        std::vector<int> line_color = {0, 0, 0};
-        std::vector<int> filling_color = {215, 255, 215};                            //цвет заливки
-
-        std::vector<std::string> hAlignment_list = {"ahLeft", "ahRight",
-                                                    "ahCenter"};                      //список названий горизонтального выравнивания
-        std::vector<std::string> vAlignment_list = {"avTop", "avBottom",
-                                                    "avCenter"};                      //список названий вертикального выравнивания
-        std::vector<std::string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4",
-                                                    "psDot5",
-                                                    "psDot6",
-                                                    "psDash1", "psDash2"};            //список названий стилей линий
-		
-		std::string text = "";                                                        //текст кнопки
-        std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Объект телесигнализации";                                            //размер шрифта
-        std::string help_text = "";                                                   //текст подсказки
-        
-        int hAlignment = 3;                                                           //номер горизонтального выравнивания
-        int vAlignment = 3;                                                           //номер вертикального выравнивания
-        int font_size = 8;                                                            //размер шрифта
-        int style_line = 0;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-        int line_width = 1;                                                           //толщина линии
-        int angle = 0;                                                                //угол наклона
-        int x = 0;                                                                    //координата x
-        int y = 0;                                                                    //координата y
-        int width = 0;                                                                //ширина
-        int height = 0;                                                               //высота
-        int center_x = 0;                                                             //координата x центра
-        int center_y = 0;                                                             //координата y центра
-
-        bool bool_show_help = false;                                                  // показывать подсказку
-        bool bool_show = true;                                                        //показывать прямоугольник
-        bool bool_show_filling = false;                                               //показывать заливку
-	
 	public:
 		//конструкторы класса прямоугольника получающие различные вводные
         Telesignalisation(int x, int y, int width, int height, const std::string &text);
@@ -1163,47 +1083,6 @@ namespace FiguresClasses{
 													"gsHalfArc", "gsQuarterArc", 
 													"gsVertBar", "gsHorzBar"};        //список названий типов приборов
 		int device_type = 0;                                                          //тип прибора 0-"gsNone", 1-"gsDigit", 2-"gsElipse", 3-"gsHalfArc", 4-"gsQuarterArc", 5-"gsVertBar", 6-"gsHorzBar"
-
-		bool bold_font = false;                                                       //флаг жирности шрифта
-        bool italic_font = false;                                                     //флаг наклонности шрифта
-        bool underlined_font = false;                                                 //флаг подчеркнутости шрифта
-        bool crossed_font = false;                                                    //флаг зачеркнутости шрифта
-        bool auto_size_text = true;                                                   //авторазмер текста
-        std::vector<int> font_color = {0, 0, 0};                                      //цвет шрифта
-        std::vector<int> line_color = {0, 0, 0};
-        std::vector<int> filling_color = {0, 0, 0};                             //цвет заливки
-
-        std::vector<std::string> hAlignment_list = {"ahLeft", "ahRight",
-                                                    "ahCenter"};                      //список названий горизонтального выравнивания
-        std::vector<std::string> vAlignment_list = {"avTop", "avBottom",
-                                                    "avCenter"};                      //список названий вертикального выравнивания
-        std::vector<std::string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4",
-                                                    "psDot5",
-                                                    "psDot6",
-                                                    "psDash1", "psDash2"};            //список названий стилей линий
-		
-		std::string text = "";                                                        //текст кнопки
-        std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Объект телеизмерения";                                            //размер шрифта
-        std::string help_text = "";                                                   //текст подсказки
-        
-        int hAlignment = 3;                                                           //номер горизонтального выравнивания
-        int vAlignment = 3;                                                           //номер вертикального выравнивания
-        int font_size = 18;                                                           //размер шрифта
-        int style_line = 0;                                                           //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
-        int line_width = 1;                                                           //толщина линии
-        int angle = 0;                                                                //угол наклона
-        int x = 0;                                                                    //координата x
-        int y = 0;                                                                    //координата y
-        int width = 0;                                                                //ширина
-        int height = 0;                                                               //высота
-        int center_x = 0;                                                             //координата x центра
-        int center_y = 0;                                                             //координата y центра
-
-        bool bool_show_help = false;                                                  // показывать подсказку
-        bool bool_show = true;                                                        //показывать прямоугольник
-        bool bool_show_filling = false;                                               //показывать заливку
-	
 	public:
 		//конструкторы класса прямоугольника получающие различные вводные
 		Telemeasure(int x, int y, int width, int height, const std::string &text);

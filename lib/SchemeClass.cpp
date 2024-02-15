@@ -467,48 +467,101 @@ void Scheme::draw_telesignalisation(FiguresClasses::Telesignalisation &text, QPa
 void Scheme::draw_scheme(QPainter &painter){
     this->draw_set(painter);
     for (int i = 0; i < this->line_vector.size(); i++){
-        this->draw_line(line_vector[i], painter);
+        this->draw_line(this->line_vector[i], painter);
     }
     for (int i = 0; i < this->rectangle_vector.size(); i++){
-        this->draw_rect(rectangle_vector[i], painter);
+        this->draw_rect(this->rectangle_vector[i], painter);
     }
     for (int i = 0; i < this->ellipse_vector.size(); i++){
-        this->draw_ellipse(ellipse_vector[i], painter);
+        this->draw_ellipse(this->ellipse_vector[i], painter);
     }
     for (int i = 0; i < this->arc_vector.size(); i++){
-        this->draw_arc(arc_vector[i], painter);
+        this->draw_arc(this->arc_vector[i], painter);
     }
     for (int i = 0; i < this->line_vector.size(); i++){
-        this->draw_line(line_vector[i], painter);
+        this->draw_line(this->line_vector[i], painter);
     }
     for (int i = 0; i < this->polygon_vector.size(); i++){
-        this->draw_polygon(polygon_vector[i], painter);
+        this->draw_polygon(this->polygon_vector[i], painter);
     }
     for (int i = 0; i < this->crooked_line_vector.size(); i++){
-        this->draw_crooked_line(crooked_line_vector[i], painter);
+        this->draw_crooked_line(this->crooked_line_vector[i], painter);
     }
     for (int i = 0; i < this->text_vector.size(); i++){
-        this->draw_text(text_vector[i], painter);
+        this->draw_text(this->text_vector[i], painter);
     }
     for (int i = 0; i < this->image_vector.size(); i++){
-        this->draw_image(image_vector[i], painter);
+        this->draw_image(this->image_vector[i], painter);
     }
     for (int i = 0; i < this->tr_p_vector.size(); i++){
-        this->draw_transition_point(tr_p_vector[i], painter);
+        this->draw_transition_point(this->tr_p_vector[i], painter);
     }
     for (int i = 0; i < this->tr_b_vector.size(); i++){
-        this->draw_transition_button(tr_b_vector[i], painter);
+        this->draw_transition_button(this->tr_b_vector[i], painter);
     }
     for (int i = 0; i < this->telecontrol_vector.size(); i++){
-        this->draw_telecontrol(telecontrol_vector[i], painter);
+        this->draw_telecontrol(this->telecontrol_vector[i], painter);
     }
     for (int i = 0; i < this->telemeasure_vector.size(); i++){
-        this->draw_telemeasure(telemeasure_vector[i], painter);
+        this->draw_telemeasure(this->telemeasure_vector[i], painter);
     }
     for (int i = 0; i < this->telesignalisation_vector.size(); i++){
-        this->draw_telesignalisation(telesignalisation_vector[i], painter);
+        this->draw_telesignalisation(this->telesignalisation_vector[i], painter);
     }
 }
+
+void Scheme::add_object(FiguresClasses::Line &add_line){
+    this->line_vector.push_back(add_line);
+}
+
+void Scheme::add_object(FiguresClasses::Rectangle &add_rect){
+    this->rectangle_vector.push_back(add_rect);
+}
+
+void Scheme::add_object(FiguresClasses::Ellipse &add_el){
+    this->ellipse_vector.push_back(add_el);
+}
+
+void Scheme::add_object(FiguresClasses::Arc &add_arc){
+    this->arc_vector.push_back(add_arc);
+}
+
+void Scheme::add_object(FiguresClasses::Polygon &add_poly){
+    this->polygon_vector.push_back(add_poly);
+}
+
+void Scheme::add_object(FiguresClasses::CrookedLine &add_crook){
+    this->crooked_line_vector.push_back(add_crook);
+}
+
+void Scheme::add_object(FiguresClasses::Text &add_text){
+    this->text_vector.push_back(add_text);
+}
+
+void Scheme::add_object(FiguresClasses::Image &add_image){
+    this->image_vector.push_back(add_image);
+}
+
+void Scheme::add_object(FiguresClasses::TransitionPoint &add_tr_p){
+    this->tr_p_vector.push_back(add_tr_p);
+}
+
+void Scheme::add_object(FiguresClasses::TransitionButton &add_tr_b){
+    this->tr_b_vector.push_back(add_tr_b);
+}
+
+void Scheme::add_object(FiguresClasses::Telecontrol &add_telec){
+    this->telecontrol_vector.push_back(add_telec);
+}
+
+void Scheme::add_object(FiguresClasses::Telemeasure &add_telem){
+    this->telemeasure_vector.push_back(add_telem);
+}
+
+void Scheme::add_object(FiguresClasses::Telesignalisation &add_teles){
+    this->telesignalisation_vector.push_back(add_teles);
+}
+
 
 
 
