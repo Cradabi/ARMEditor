@@ -1,7 +1,12 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.21)
+
 project(ARMEditor)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
-add_executable(ARMEditor
-        simple_parser.cpp SchemeFileParser.h)
+add_subdirectory(parser)
+
+add_executable(${PROJECT_NAME} main.cpp)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE parser)
+target_include_directories(${PROJECT_NAME} PUBLIC $ {PROJECT_SOURCE_DIR})

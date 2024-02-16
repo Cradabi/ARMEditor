@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <bitset>
 
-#include "SchemeFileParser.h"
+#include "parser/SchemeFileParser.cpp"
 
 int main() {
 
@@ -13,7 +13,7 @@ int main() {
 
     SchemeFileParser NewParser;
 
-    NewParser.OpenWorkFiles(L"Линия.схема", "logs\\SchemeLogs.txt");
+    NewParser.OpenWorkFiles(L"..\\schemes_exp\\ЛинияВерт.схема", "..\\logs\\SchemeLogs.txt");
 
     NewParser.Parsing();
 
