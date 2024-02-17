@@ -52,8 +52,8 @@ private:
         }
     }
 
-    template<class LogType>
     // Функция записи в файл логов
+    template<class LogType>
     void WriteLog(const LogType& report, bool new_string = false, int8_t colour = 15) {
         SetConsoleTextAttribute(hConsole, colour);
 
@@ -137,6 +137,7 @@ private:
 
     }
 
+    // Функция чтения заголовка секции схемы
     void EnterSection() {
         // Если стек секции не пустой, секция считается вложенной
         if (!sections_stack.empty()) {
@@ -187,6 +188,7 @@ private:
         ClearBuffer();
     }
 
+    // Функция чтения блока байтов в схеме
     void EnterBlock() {
         int8_t tmp_bytes_for_blocksize = 0;
         uint32_t tmp_block_size = 0;
