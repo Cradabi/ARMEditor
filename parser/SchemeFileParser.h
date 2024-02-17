@@ -66,10 +66,11 @@ private:
         }
     }
 
-    // шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
+    // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<class IntType>
     IntType GetSomeInt(IntType some_int, int8_t block_size, bool is_buffer_filled = false) {
 
+        // Если буффер заполнен, не заполняем его
         if (!is_buffer_filled) {
             ClearBuffer();
             buffer = new char[block_size];
@@ -152,7 +153,6 @@ private:
 
         // Считаем размер секции
         new_section.sect_size = GetSomeInt(new_section.sect_size, 4);
-        // new_section.sect_size = tmp_section_size;
 
         // Находим имя или номер секции
         buffer = new char[4];
@@ -204,8 +204,8 @@ private:
         else if (static_cast<uint8_t>(byte) == size_32_bit)
             tmp_bytes_for_blocksize = 4;
 
-        // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
         if (tmp_bytes_for_blocksize != 0 || tmp_block_size != 0) {
+            // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
             if (tmp_block_size == 0) {
                 tmp_block_size = GetSomeInt(tmp_block_size, tmp_bytes_for_blocksize);
             }
