@@ -32,6 +32,7 @@ if(ANDROID)
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    mywidget.h
   )
 else()
   add_executable(ARM
@@ -39,6 +40,7 @@ else()
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    mywidget.h
   )
 endif()
 
