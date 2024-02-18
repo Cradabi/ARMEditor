@@ -4,41 +4,58 @@
 #include <QPainter>
 
 
-class Scheme{
+class Scheme {
+public:
+
+#pragma pack(push, 1)
+    struct SchemeParams {
+        int width{0};
+        int height{0};
+        int version{0};
+        int scale{1};
+        int scale_in_ARM{1};
+        int fonts_amount{0};
+        int objects_amount{0};
+        int groups_amount{0};
+
+        std::string name_scheme = std::string();    // Конструктор пустой строки ("")
+        std::string file_path = std::string();
+        std::string name_bd = std::string();
+        std::string server = std::string();
+
+        std::vector<FiguresClasses::Line> line_vector;
+        std::vector<FiguresClasses::Rectangle> rectangle_vector;
+        std::vector<FiguresClasses::Ellipse> ellipse_vector;
+        std::vector<FiguresClasses::Arc> arc_vector;
+        std::vector<FiguresClasses::Polygon> polygon_vector;
+        std::vector<FiguresClasses::CrookedLine> crooked_line_vector;
+        std::vector<FiguresClasses::Text> text_vector;
+        std::vector<FiguresClasses::Image> image_vector;
+        std::vector<FiguresClasses::TransitionPoint> tr_p_vector;
+        std::vector<FiguresClasses::TransitionButton> tr_b_vector;
+        std::vector<FiguresClasses::Telecontrol> telecontrol_vector;
+        std::vector<FiguresClasses::Telemeasure> telemeasure_vector;
+        std::vector<FiguresClasses::Telesignalisation> telesignalisation_vector;
+    };
+#pragma pack(pop)
+
 private:
-    int width = 0;
-    int height = 0;
-    int version = 0;
-    int scale = 1;
-    int scale_in_ARM = 1;
-    int fonts_number = 0;
-    int objects_number = 0;
-    int groups_number = 0;
 
-    std::string name_scheme = "";
-    std::string file_path = "";
-    std::string bd_name = "";
-    std::string server = "";
+    SchemeParams actual_params;
 
-    std::vector <FiguresClasses::Line> line_vector;
-    std::vector <FiguresClasses::Rectangle> rectangle_vector;
-    std::vector <FiguresClasses::Ellipse> ellipse_vector;
-    std::vector <FiguresClasses::Arc> arc_vector;
-    std::vector <FiguresClasses::Polygon> polygon_vector;
-    std::vector <FiguresClasses::CrookedLine> crooked_line_vector;
-    std::vector <FiguresClasses::Text> text_vector;
-    std::vector <FiguresClasses::Image> image_vector;
-    std::vector <FiguresClasses::TransitionPoint> tr_p_vector;
-    std::vector <FiguresClasses::TransitionButton> tr_b_vector;
-    std::vector <FiguresClasses::Telecontrol> telecontrol_vector;
-    std::vector <FiguresClasses::Telemeasure> telemeasure_vector;
-    std::vector <FiguresClasses::Telesignalisation> telesignalisation_vector;
-    std::vector <Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
-    std::vector <Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
-    std::vector <Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine, Qt::CustomDashLine};
+    std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
+    std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
+    std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine,
+                                              Qt::DashDotDotLine, Qt::CustomDashLine};
 
 public:
-    Scheme(int _width, int _height, const std::string& _name, const std::string& file_path, const std::string& bd, const std::string& server, int version, int scale, int scale_in_ARM, int fonts_number, int objects_number, int group_number,  const std::vector <FiguresClasses::Line>& _line, const std::vector <FiguresClasses::Rectangle>& _rect, const std::vector <FiguresClasses::Ellipse>& _el, const std::vector <FiguresClasses::Arc>& _arc, const std::vector <FiguresClasses::Polygon>& _poly, const std::vector <FiguresClasses::CrookedLine>& _crook, const std::vector <FiguresClasses::Text>& _text, const std::vector <FiguresClasses::Image>& _image, const std::vector <FiguresClasses::TransitionPoint>& _tr_p, const std::vector <FiguresClasses::TransitionButton>& _tr_b, const std::vector <FiguresClasses::Telecontrol>& _telec, const std::vector <FiguresClasses::Telemeasure>& _telem, const std::vector <FiguresClasses::Telesignalisation>& _teles);
+    // Конструктор пустой схемы
+    Scheme() = default;
+
+    // Конструктор схемы с заданными параметрами
+    Scheme(const SchemeParams &input_params) {
+        actual_params = input_params;
+    }
 
     void set_width(int width);
 
@@ -92,9 +109,7 @@ public:
 
     void draw_rect(FiguresClasses::Rectangle &rect, QPainter &painter);
 
-
     void draw_ellipse(FiguresClasses::Ellipse &el, QPainter &painter);
-
 
     void draw_arc(FiguresClasses::Arc &arc, QPainter &painter);
 

@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-namespace FiguresClasses{
+namespace FiguresClasses {
 
     class Line { // класс линии
     private:
@@ -913,6 +913,7 @@ namespace FiguresClasses{
 
         bool get_show_filling();
     };
+
     class Image {   //класс картинки
     private:
         bool bool_show_help = false;                        //показывать подсказку
@@ -950,11 +951,14 @@ namespace FiguresClasses{
         //конструкторы класса прямоугольника получающие различные вводные
         Image(int x, int y, int width, int height, const std::string &im_path, int angle);
 
-        Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
-                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+        Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width,
+              int style_line,
+              const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
 
-        Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
-                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame, const std::vector<int> &filling_color, bool bool_show_filling);
+        Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width,
+              int style_line,
+              const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
+              const std::vector<int> &filling_color, bool bool_show_filling);
 
         //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
         void change_center_cords(int x, int y, int width, int height);
@@ -1024,86 +1028,96 @@ namespace FiguresClasses{
 
         bool get_show_filling();
     };
+
     class Telecontrol : public Text {
-	private:
-		int id = 0;                                                                   // идентификатор
-		int condition = 0;                                                            // состояние
-	
-	public:
-		//конструкторы класса прямоугольника получающие различные вводные
-		Telecontrol(int x, int y, int width, int height, const std::string &text);
+    private:
+        int id = 0;                                                                   // идентификатор
+        int condition = 0;                                                            // состояние
 
-        Telecontrol(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+    public:
+        //конструкторы класса прямоугольника получающие различные вводные
+        Telecontrol(int x, int y, int width, int height, const std::string &text);
 
-        Telecontrol(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
-             const std::string &font_name, int font_size,
-             const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-             bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
-             
+        Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
+                    const std::string &help_text,
+                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+
+        Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
+                    const std::string &help_text,
+                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                    const std::string &font_name, int font_size,
+                    const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
         //далее идут функции меняющие одноименные переменные класса телеуправления
         void set_condition(int condition);
-        
+
         //далее идут функции по выводу одноименных переменных класса телеуправления
         int get_condition();
-        
+
         int get_id();
-	};
+    };
+
     class Telesignalisation : public Text {
-	private:
-		int id = 0;                                                                   // идентификатор
-		int condition = 0;                                                            // состояние
-		
-	public:
-		//конструкторы класса прямоугольника получающие различные вводные
+    private:
+        int id = 0;                                                                   // идентификатор
+        int condition = 0;                                                            // состояние
+
+    public:
+        //конструкторы класса прямоугольника получающие различные вводные
         Telesignalisation(int x, int y, int width, int height, const std::string &text);
 
-        Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+        Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
+                          const std::string &help_text,
+                          int style_line, const std::vector<int> &filling_color, bool bool_show,
+                          bool bool_show_filling);
 
-        Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
-             const std::string &font_name, int font_size,
-             const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-             bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
-             
+        Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
+                          const std::string &help_text,
+                          int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                          const std::string &font_name, int font_size,
+                          const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
         //далее идут функции меняющие одноименные переменные класса телеуправления
         void set_condition(int condition);
-        
+
         //далее идут функции по выводу одноименных переменных класса телеуправления
         int get_condition();
-        
+
         int get_id();
-	};
-	class Telemeasure : public Text {
-	private:
-		int id = 0;                                                                   // идентификатор
-		std::vector<std::string> device_type_list = {"gsNone", "gsDigit", "gsElipse", 
-													"gsHalfArc", "gsQuarterArc", 
-													"gsVertBar", "gsHorzBar"};        //список названий типов приборов
-		int device_type = 0;                                                          //тип прибора 0-"gsNone", 1-"gsDigit", 2-"gsElipse", 3-"gsHalfArc", 4-"gsQuarterArc", 5-"gsVertBar", 6-"gsHorzBar"
-	public:
-		//конструкторы класса прямоугольника получающие различные вводные
-		Telemeasure(int x, int y, int width, int height, const std::string &text);
+    };
 
-        Telemeasure(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+    class Telemeasure : public Text {
+    private:
+        int id = 0;                                                                   // идентификатор
+        std::vector<std::string> device_type_list = {"gsNone", "gsDigit", "gsElipse",
+                                                     "gsHalfArc", "gsQuarterArc",
+                                                     "gsVertBar", "gsHorzBar"};        //список названий типов приборов
+        int device_type = 0;                                                          //тип прибора 0-"gsNone", 1-"gsDigit", 2-"gsElipse", 3-"gsHalfArc", 4-"gsQuarterArc", 5-"gsVertBar", 6-"gsHorzBar"
+    public:
+        //конструкторы класса прямоугольника получающие различные вводные
+        Telemeasure(int x, int y, int width, int height, const std::string &text);
 
-        Telemeasure(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
-             const std::string &font_name, int font_size,
-             const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-             bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
-             
+        Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
+                    const std::string &help_text,
+                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+
+        Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
+                    const std::string &help_text,
+                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                    const std::string &font_name, int font_size,
+                    const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
         //далее идут функции меняющие одноименные переменные класса телеуправления
         void set_device_type(int device_type);
-        
+
         //далее идут функции по выводу одноименных переменных класса телеуправления
         int get_device_type();
-        
+
         int get_id();
-	};
+    };
 }
 
 
