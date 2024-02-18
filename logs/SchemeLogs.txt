@@ -1,76 +1,31 @@
 
 File size:  1118  bytes
  
-SECTION OPENED  section name:  ARM   section size:  1050 
--  INTER  SECTION OPENED  section name:  schm  section size:  98 
-Version:  5 
- name[1].length:  11 
- name[1]:  Í î â à ÿ   ñ õ å ì à 
- DBIP[1].length:  9 
- DBIP[1]:  1 2 7 . 0 . 0 . 1 
- DBAlias[1].length:  0 
- width:  2100 
- height:  2236 
- tmp (none):  0 
- tmp (none):  0 
- WorkScale:  0 
- TColorToMColor(TColor(tmp))(BGColor)::  16777215 
- TColorToMColor(TColor(tmp))(NetColor)::  12632256 
- BitDepth:  0 
- Count Of Objects:  1 
- WindowsSize.x:  1024 
- WindowsSize.y:  768 
- -  INTER  SECTION CLOSED  section name:  schm 
--  INTER  SECTION OPENED  section name:  cach  section size:  5 
-CacheObject.Count:  0 
- -  INTER  SECTION CLOSED  section name:  cach 
--  INTER  SECTION OPENED  section name:  link  section size:  5 
-Links.Count:  0 
- -  INTER  SECTION CLOSED  section name:  link 
--  INTER  SECTION OPENED  section name:  sect  section size:  10 
-NextSectionNumber:  0 
- tmp1(counter of sections):  0 
- -  INTER  SECTION CLOSED  section name:  sect 
--  INTER  SECTION OPENED  section name:  objs  section size:  887 
-Object.Count:  1 
- -  -  INTER  SECTION OPENED   section number:  1  section size:  873 
-1 
-4 
-4 
-4 
--  -  -  INTER  SECTION OPENED   section number:  1  section size:  778 
-1 
-4 
-768 
--  -  -  INTER  SECTION CLOSED  section id:  1 
--  -  -  INTER  SECTION OPENED   section number:  2  section size:  17 
-1 
-4 
-9 
--  -  -  INTER  SECTION CLOSED  section id:  2 
--  -  -  INTER  SECTION OPENED   section number:  3  section size:  12 
-1 
-4 
-4 
--  -  -  INTER  SECTION CLOSED  section id:  3 
--  -  -  INTER  SECTION OPENED   section number:  4  section size:  13 
-1 
-4 
-5 
--  -  -  INTER  SECTION CLOSED  section id:  4 
--  -  INTER  SECTION CLOSED  section id:  1 
--  INTER  SECTION CLOSED  section name:  objs 
-SECTION CLOSED  section name:  ARM  
-SECTION OPENED  section name:  extd  section size:  5 
-FWorkVariable:  0 
- SECTION CLOSED  section name:  extd 
-SECTION OPENED  section name:  sch2  section size:  22 
-WindowSize.X:  1024 
- WindowSize.Y:  768 
- tmpbool:  0 
- PixelsPerInchX:  600 
- PixelsPerInchY:  600 
- SECTION CLOSED  section name:  sch2 
-SECTION OPENED  section name:  font  section size:  5 
-4 
-SECTION CLOSED  section name:  font 
+SECTION OPENED section name:  ARM   section size:  1050 
+ -  INTER SECTION OPENED section name:  schm  section size:  98  parent section:  0 
+-  INTER SECTION CLOSED section name:  schm 
+-  INTER SECTION OPENED section name:  cach  section size:  5  parent section:  ARM  
+-  INTER SECTION CLOSED section name:  cach 
+-  INTER SECTION OPENED section name:  link  section size:  5  parent section:  ARM  
+-  INTER SECTION CLOSED section name:  link 
+-  INTER SECTION OPENED section name:  sect  section size:  10  parent section:  ARM  
+-  INTER SECTION CLOSED section name:  sect 
+-  INTER SECTION OPENED section name:  objs  section size:  887  parent section:  ARM  
+-  -  INTER SECTION OPENED section number:  1  section size:  873  parent section:  0 
+-  -  -  INTER SECTION OPENED section number:  1  section size:  778  parent section:  1 
+-  -  -  INTER SECTION CLOSED section number:  1 
+-  -  -  INTER SECTION OPENED section number:  2  section size:  17  parent section:  1 
+-  -  -  INTER SECTION CLOSED section number:  2 
+-  -  -  INTER SECTION OPENED section number:  3  section size:  12  parent section:  1 
+-  -  -  INTER SECTION CLOSED section number:  3 
+-  -  -  INTER SECTION OPENED section number:  4  section size:  13  parent section:  1 
+-  -  -  INTER SECTION CLOSED section number:  4 
+-  -  INTER SECTION CLOSED section number:  1 
+-  INTER SECTION CLOSED section name:  objs 
+SECTION CLOSED section name:  ARM  
+SECTION OPENED section name:  extd  section size:  5 
+ SECTION CLOSED section name:  extd 
+SECTION OPENED section name:  sch2  section size:  22 
+ SECTION CLOSED section name:  sch2 
+SECTION OPENED section name:  font  section size:  5 
+ SECTION CLOSED section name:  font 

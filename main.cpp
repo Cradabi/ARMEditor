@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <bitset>
 
-#include "parser/SchemeFileParser.cpp"
+#include "parser/SchemeFileParser.h"
 
 int main() {
 

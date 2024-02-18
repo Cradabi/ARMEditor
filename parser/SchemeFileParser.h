@@ -30,6 +30,8 @@ private:
 #pragma pack(push, 1)
     // Структура секции
     struct Section {
+        Section* parrent_sect{nullptr};
+
         uint32_t sect_size{0};          // Размер секции
         uint32_t start_pos;             // Номер стартового байта секции
 
@@ -52,17 +54,32 @@ private:
         }
     }
 
+    // Функция выделения памяти под нужный объем
+    void UpdateBuffer(const uint32_t& new_size) {
+        ClearBuffer();
+        buffer = new char[new_size];
+    }
+
     // Функция записи в файл логов
-    template<class LogType>
-    void WriteLog(const LogType& report, bool new_string = false, int8_t colour = 15) {
-        SetConsoleTextAttribute(hConsole, colour);
+    template<typename LogType>
+    void WriteLog(const LogType& report, bool new_string = false) {
 
         LogsFile << report << ' ';
-        //std::cout << report << ' ';
 
         if (new_string) {
             LogsFile << '\n';
-            // std::cout << '\n';
+        }
+    }
+
+    // Функция выввода логов в консоль
+    template<typename LogType>
+    void PrintLog(const LogType& report, bool new_string = false, int8_t colour = 15) {
+        SetConsoleTextAttribute(hConsole, colour);
+
+        std::cout << report << ' ';
+
+        if (new_string) {
+            std::cout << '\n';
         }
     }
 
@@ -72,8 +89,7 @@ private:
 
         // Если буффер заполнен, не заполняем его
         if (!is_buffer_filled) {
-            ClearBuffer();
-            buffer = new char[block_size];
+            UpdateBuffer(block_size);
             SchemeFile.read(buffer, block_size);
         }
 
@@ -97,8 +113,6 @@ private:
 
     // Функция получения размера файла
     void GetFileSize() {
-        SetConsoleTextAttribute(hConsole, 2);
-        std::cout << "Файлы схемы и логов успешно открыты\n";
 
         SchemeFile.seekg(0, std::ios::end);    // Курсор ставится в конец файла
         file_size = SchemeFile.tellg();        // Записывается позиция курсора
@@ -106,11 +120,13 @@ private:
         SchemeFile.seekg(0, std::ios::beg);    // Курсор возвращается в начало файла
         SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
 
-        std::cout << "Размер файла схемы: " << file_size << '\n';
+        PrintLog("Размер файла схемы: ", false, 2);
+        PrintLog(file_size, false, 2);
+        PrintLog(" байт", true, 2);
 
-        WriteLog("\nFile size: ", false, 12);
-        WriteLog(file_size, false, 1);
-        WriteLog(" bytes\n", true, 12);
+        WriteLog("\nFile size: ");
+        WriteLog(file_size);
+        WriteLog(" bytes\n", true);
     }
 
     // Функция закрытия секции
@@ -118,21 +134,22 @@ private:
         // Если размер стека секция больше 1, то секция считается вложенной
         if (sections_stack.size() > 1) {
             for (int16_t i = 1; i < sections_stack.size(); ++i)
-                WriteLog("- ", false, 7);
-            WriteLog("INTER ", false, 2);
+                WriteLog("- ");
+            WriteLog("INTER");
         }
 
-        WriteLog("SECTION CLOSED ", false, 2);
+        WriteLog("SECTION CLOSED");
 
         // Если имя секции пустое, выводися её номер
         if (sections_stack.back().sect_name.empty()) {
-            WriteLog("section id: ", false, 4);
-            WriteLog(sections_stack.back().sect_number, true, 1);
+            WriteLog("section number: ");
+            WriteLog(sections_stack.back().sect_number, true);
             sections_stack.pop_back();
+
             // В противном случае выводится имя секции
         } else {
-            WriteLog("section name: ", false, 4);
-            WriteLog(sections_stack.back().sect_name, true, 1);
+            WriteLog("section name: ");
+            WriteLog(sections_stack.back().sect_name, true);
             sections_stack.pop_back();
         }
 
@@ -140,22 +157,24 @@ private:
 
     // Функция чтения заголовка секции схемы
     void EnterSection() {
-        // Если стек секции не пустой, секция считается вложенной
-        if (!sections_stack.empty()) {
-            for (int16_t i = 0; i < sections_stack.size(); ++i)
-                WriteLog("- ", false, 7);
-            WriteLog("INTER ", false, 2);
-        }
-        WriteLog("SECTION OPENED ", false, 2);
-
         // Новый экземпляр структуры секции
         Section new_section;
+
+        // Если стек секции не пустой, секция считается вложенной
+        if (!sections_stack.empty()) {
+            new_section.parrent_sect = &sections_stack.back();
+
+            for (int16_t i = 0; i < sections_stack.size(); ++i)
+                WriteLog("- ");
+            WriteLog("INTER");
+        }
+        WriteLog("SECTION OPENED");
 
         // Считаем размер секции
         new_section.sect_size = GetSomeInt(new_section.sect_size, 4);
 
         // Находим имя или номер секции
-        buffer = new char[4];
+        UpdateBuffer(4);
         SchemeFile.read(buffer, 4);
 
         // Если байт это буква, то считаем, что это именнованная секция
@@ -164,15 +183,15 @@ private:
             GetSectName(tmp_section_name);
 
             new_section.sect_name = tmp_section_name;
-            WriteLog("section name: ", false, 4);
-            WriteLog(new_section.sect_name, false, 1);
+            WriteLog("section name: ");
+            WriteLog(new_section.sect_name);
 
             // В противном случае, считаем, что это нумерованная секция
         } else {
             new_section.sect_number = GetSomeInt(new_section.sect_number, 4, true);
 
-            WriteLog(" section number: ", false, 4);
-            WriteLog(new_section.sect_number, false, 1);
+            WriteLog("section number: ");
+            WriteLog(new_section.sect_number);
         }
 
         // Запоминаем стартовую позицию секции
@@ -182,8 +201,17 @@ private:
         // Добавляем новую секцию в стек
         sections_stack.push_back(new_section);
 
-        WriteLog(" section size: ", false, 4);
-        WriteLog(sections_stack.back().sect_size, true, 1);
+        WriteLog(" section size: ");
+        WriteLog(sections_stack.back().sect_size);
+
+        if (new_section.parrent_sect != nullptr) {
+            WriteLog(" parent section: ");
+            if (!new_section.parrent_sect->sect_name.empty())
+                WriteLog(new_section.parrent_sect->sect_name, true);
+            else
+                WriteLog(new_section.parrent_sect->sect_number, true);
+        } else
+            WriteLog('\n');
 
         ClearBuffer();
     }
@@ -210,15 +238,16 @@ private:
                 tmp_block_size = GetSomeInt(tmp_block_size, tmp_bytes_for_blocksize);
             }
 
+            UpdateBuffer(tmp_block_size);
+            SchemeFile.read(buffer, tmp_block_size);
             ClearBuffer();
-            buffer = new char[tmp_block_size];
 
-            ReadInfoInBlock(tmp_block_size);
+            // ReadInfoInBlock(tmp_block_size);
 
         }
     }
 
-    void ReadInfoInBlock(const uint32_t& block_size);
+    // void ReadInfoInBlock(const uint32_t& block_size);
 
 public:
     // Главная функция парсера схемы
@@ -240,8 +269,7 @@ public:
 
                 // Если буффер не пустой, а мы не находимся ни в секции, ни в блоке, значит что-то сломалось :/
             else {
-                SetConsoleTextAttribute(hConsole, 12);
-                std::cout << "Ошибка при чтении файла, нарушена структура байтов\n";
+                PrintLog("Ошибка при чтении файла, нарушена структура байтов", true, 12);
                 return false;
             }
         }
@@ -264,15 +292,16 @@ public:
         LogsFile.open(logfile_path, std::ios_base::binary);
 
         if (!SchemeFile) {
-            std::cout << "Файл схемы не был открыт\n";
+            PrintLog("Файл схемы не был открыт", true, 12);
             return false;
         }
 
         if (!LogsFile) {
-            std::cout << "Файл логов не был открыт\n";
+            PrintLog("Файл логов не был открыт", true, 12);
             return false;
         }
 
+        PrintLog("Файлы схемы и логов успешно открыты", true, 2);
         GetFileSize();
 
         return true;
