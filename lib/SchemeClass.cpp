@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QPainter>
+#include <iostream>
 
 
 void Scheme::set_width(int input_width) {
@@ -102,37 +103,109 @@ std::string Scheme::get_server() {
 
 void Scheme::draw_line(FiguresClasses::Line &pol, QPainter &painter) {
     QColor color_line = {pol.get_line_color()[0], pol.get_line_color()[1], pol.get_line_color()[2]};
-    painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
-    painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
-
+    QLineF linef(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
     switch (pol.get_start_style_arrow()) {
-        case 1:
-            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
-        case 2:
-            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
-        case 3:
-            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
-        case 4:
-            painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
+        case 0:
+        {
+        painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+        painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
     }
-
-    switch (pol.get_end_style_arrow()) {
         case 1:
-            painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
+    {
+        painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+        painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+        painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+        painter.save();
+        painter.translate(pol.get_st_x(), pol.get_st_y());
+        painter.rotate(-1*(linef.angle()));
+        painter.rotate(20);
+        painter.drawLine(0, 0, pol.get_line_width() * 3, 0);
+        painter.rotate(-40);
+        painter.drawLine(0, 0, pol.get_line_width() * 3, 0);
+        painter.restore();
+    }
+        break;
         case 2:
-            painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
+        {
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::FlatCap, Qt::MiterJoin));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+            painter.save();
+            painter.translate(pol.get_st_x(), pol.get_st_y());
+            painter.rotate(-1*(linef.angle()));
+            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(pol.get_line_width()*3, pol.get_line_width()/2), QPoint(pol.get_line_width()*3, (-1)*(pol.get_line_width()/2))};
+            painter.drawPolygon(qpoints1, 3);
+            painter.restore();
+        }
+        break;
         case 3:
-            painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
+            {
+                painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+                painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+                painter.drawEllipse(pol.get_st_x() - pol.get_line_width() / 2, pol.get_st_y() - pol.get_line_width() / 2,
+                                                pol.get_line_width(), pol.get_line_width());
+            }
+        break;
         case 4:
+        {
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::FlatCap, Qt::MiterJoin));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+            painter.save();
+            painter.translate(pol.get_st_x(), pol.get_st_y());
+            painter.rotate(-1*(linef.angle()));
+            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(pol.get_line_width(), pol.get_line_width()), QPoint(pol.get_line_width(), (-1)*(pol.get_line_width()))};
+            painter.drawPolygon(qpoints1, 3);
+            painter.restore();
+        }
+        break;
+    };
+    switch (pol.get_end_style_arrow()) {
+        case 0:
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+        case 1:
+        {
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+            painter.save();
+            painter.translate(pol.get_end_x(), pol.get_end_y());
+            painter.rotate(-1*(linef.angle()) + 180);
+            painter.rotate(20);
+            painter.drawLine(0, 0, pol.get_line_width() * 3, 0);
+            painter.rotate(-40);
+            painter.drawLine(0, 0, pol.get_line_width() * 3, 0);
+            painter.restore();
+    }
+        break;
+        case 2:
+        {
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::FlatCap, Qt::MiterJoin));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+            painter.save();
+            painter.translate(pol.get_end_x(), pol.get_end_y());
+            painter.rotate(-1*(linef.angle()) + 180);
+            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(pol.get_line_width()*3, pol.get_line_width()/2), QPoint(pol.get_line_width()*3, (-1)*(pol.get_line_width()/2))};
+            painter.drawPolygon(qpoints1, 3);
+            painter.restore();
+    }
+        break;
+        case 3:
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::RoundCap));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
             painter.drawEllipse(pol.get_end_x() - pol.get_line_width() / 2, pol.get_end_y() - pol.get_line_width() / 2,
-                                pol.get_line_width(), pol.get_line_width());
+                                       pol.get_line_width(), pol.get_line_width());
+        break;
+        case 4:
+        {
+            painter.setPen(QPen(color_line, pol.get_line_width(), style_vector[pol.get_style_line()], Qt::FlatCap, Qt::MiterJoin));
+            painter.drawLine(pol.get_st_x(), pol.get_st_y(), pol.get_end_x(), pol.get_end_y());
+            painter.save();
+            painter.translate(pol.get_end_x(), pol.get_end_y());
+            painter.rotate(-1*(linef.angle()) + 180);
+            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(pol.get_line_width(), pol.get_line_width()), QPoint(pol.get_line_width(), (-1)*(pol.get_line_width()))};
+            painter.drawPolygon(qpoints1, 3);
+            painter.restore();
+        }
+        break;
 
     }
 }

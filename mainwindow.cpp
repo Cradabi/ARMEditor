@@ -7,8 +7,10 @@
 #include "mywidget.h"
 
 void MyWidget::paintEvent(QPaintEvent *event) {
-
+    std::string text2 = "";
+    std::vector <int> col2 = {255, 0, 0};
     FiguresClasses::Line pol(100, 100, 450, 300);
+    FiguresClasses::Line pol2(100, 200, 450, 400, text2, text2, true, 1, 0, 12, 2, 4, col2);
     FiguresClasses::Rectangle rect(600, 120, 300, 200);
     FiguresClasses::Ellipse el(50, 350, 300, 200, 0);
     FiguresClasses::Arc arc(100, 650, 300, 200, 45, 0, 45);
@@ -50,7 +52,7 @@ void MyWidget::paintEvent(QPaintEvent *event) {
     tmp_sch_params.height = 900;
     tmp_sch_params.objects_amount = 10;
     tmp_sch_params.name_scheme = "Мультищитовая";
-    tmp_sch_params.line_vector = {pol};
+    tmp_sch_params.line_vector = {pol, pol2};
     tmp_sch_params.rectangle_vector = {rect};
     tmp_sch_params.ellipse_vector = {el};
     tmp_sch_params.arc_vector = {arc};

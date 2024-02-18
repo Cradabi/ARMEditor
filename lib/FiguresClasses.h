@@ -38,7 +38,7 @@ namespace FiguresClasses {
 
         int line_width = 12;                      //ширина линнии
 
-        int start_style_arrow = 3;               //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
+        int start_style_arrow = 1;               //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
         int end_style_arrow = 3;                 //тип начала линии 0-"esNone", 1-"esRoundArrow", 2-"esSharpArrow", 3-"esDot", 4-"esRightArrow"
 
         std::vector<int> line_color = {0, 200, 0}; //цвет линии
