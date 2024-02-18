@@ -56,10 +56,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QLabel *lbl = new QLabel("Label", this);
+    //QLabel *lbl = new QLabel("Label", this);
     MyWidget *widget = new MyWidget();
-    ui->horizontalLayout->addWidget(widget);
-    ui->horizontalLayout->addWidget(lbl);
+    widget->setFixedSize(1400, 900);
+    ui->scrollArea->setWidget(widget);
+    //ui->frame->setObjectName();
+    ui->frame->setStyleSheet("#frame {border: 2px solid black;}");
+    //ui->horizontalLayout->addWidget(lbl);
 
 }
 
@@ -67,4 +70,3 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
