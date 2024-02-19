@@ -44,9 +44,6 @@ else()
   )
 endif()
 
-add_executable(${PROJECT_NAME} parser.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE parser)
-
 add_library(figures)
 
 target_link_libraries(ARM PRIVATE Qt5::Widgets)

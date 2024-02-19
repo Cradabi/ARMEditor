@@ -48,8 +48,8 @@ void MyWidget::paintEvent(QPaintEvent *event) {
     Scheme::SchemeParams tmp_sch_params;    // Экземплр структуры параметров схемы
 
     // Заполняем текущие параметры схемы
-    tmp_sch_params.width = 1400;
-    tmp_sch_params.height = 900;
+    tmp_sch_params.width = 15360;
+    tmp_sch_params.height = 1200;
     tmp_sch_params.objects_amount = 10;
     tmp_sch_params.name_scheme = "Мультищитовая";
     tmp_sch_params.line_vector = {pol, pol2};
@@ -63,6 +63,25 @@ void MyWidget::paintEvent(QPaintEvent *event) {
     tmp_sch_params.tr_p_vector = {tr_p};
     tmp_sch_params.tr_b_vector = {tr_b};
     tmp_sch_params.telemeasure_vector = {tel_m};
+    //чтобы отобразить тестовую большую схему надо раскоментить текст нижу
+    //for (int i = 0; i < 4000; i++){
+      //  if((i%5) == 0){
+        //    FiguresClasses::Line pol2(i*30, 30, i*30+100, 100, text2, text2, true, 1, 0, 12, 2, 4, col2);
+          //  tmp_sch_params.line_vector.push_back(pol2);
+        //} else if((i%5) == 1){
+          //  FiguresClasses::Rectangle rect(i*30, 120, 250, 250);
+        //    tmp_sch_params.rectangle_vector.push_back(rect);
+        //}else if((i%5) == 2){
+          //  FiguresClasses::Ellipse el(i*30, 560, 100, 100, 0);
+           // tmp_sch_params.ellipse_vector.push_back(el);
+        //}else if((i%5) == 3){
+          //  FiguresClasses::Arc arc(i*30, 750, 200, 200, 45, 0, 45);
+           // tmp_sch_params.arc_vector.push_back(arc);
+        //}else if((i%5) == 4){
+         //   FiguresClasses::Image image(i*150, 700, 450, 140, path, 0);
+           // tmp_sch_params.image_vector.push_back(image);
+        //}
+    //}
 
     Scheme sch(tmp_sch_params);     // Экземпляр схемы
 
@@ -77,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //QLabel *lbl = new QLabel("Label", this);
     MyWidget *widget = new MyWidget();
-    widget->setFixedSize(1400, 900);
+    widget->setFixedSize(15360, 1200);
     ui->scrollArea->setWidget(widget);
     //ui->frame->setObjectName();
     ui->frame->setStyleSheet("#frame {border: 2px solid black;}");
