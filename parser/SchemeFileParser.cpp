@@ -56,8 +56,6 @@
 
 void SchemeFileParser::ParseBlockData(const uint32_t& block_size) {
 
-    TSchemeDataType data_types; // Экземпляр типов данных схемы
-
     // TODO при работе раскомментировать
 
     //    uint32_t bytes_counter = 0;

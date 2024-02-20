@@ -1,31 +1,31 @@
 
-File size:  1118  bytes
- 
-SECTION OPENED section name:  ARM   section size:  1050 
- -  INTER SECTION OPENED section name:  schm  section size:  98  parent section:  0 
--  INTER SECTION CLOSED section name:  schm 
--  INTER SECTION OPENED section name:  cach  section size:  5  parent section:  ARM  
--  INTER SECTION CLOSED section name:  cach 
--  INTER SECTION OPENED section name:  link  section size:  5  parent section:  ARM  
--  INTER SECTION CLOSED section name:  link 
--  INTER SECTION OPENED section name:  sect  section size:  10  parent section:  ARM  
--  INTER SECTION CLOSED section name:  sect 
--  INTER SECTION OPENED section name:  objs  section size:  887  parent section:  ARM  
--  -  INTER SECTION OPENED section number:  1  section size:  873  parent section:  0 
--  -  -  INTER SECTION OPENED section number:  1  section size:  778  parent section:  1 
--  -  -  INTER SECTION CLOSED section number:  1 
--  -  -  INTER SECTION OPENED section number:  2  section size:  17  parent section:  1 
--  -  -  INTER SECTION CLOSED section number:  2 
--  -  -  INTER SECTION OPENED section number:  3  section size:  12  parent section:  1 
--  -  -  INTER SECTION CLOSED section number:  3 
--  -  -  INTER SECTION OPENED section number:  4  section size:  13  parent section:  1 
--  -  -  INTER SECTION CLOSED section number:  4 
--  -  INTER SECTION CLOSED section number:  1 
--  INTER SECTION CLOSED section name:  objs 
-SECTION CLOSED section name:  ARM  
-SECTION OPENED section name:  extd  section size:  5 
- SECTION CLOSED section name:  extd 
-SECTION OPENED section name:  sch2  section size:  22 
- SECTION CLOSED section name:  sch2 
-SECTION OPENED section name:  font  section size:  5 
- SECTION CLOSED section name:  font 
+File size: 1118 bytes
+
+SECTION OPENED section name: ARM  section size: 1050
+- INTER SECTION OPENED section name: schm section size: 98
+- INTER SECTION CLOSED section name: schm
+- INTER SECTION OPENED section name: cach section size: 5
+- INTER SECTION CLOSED section name: cach
+- INTER SECTION OPENED section name: link section size: 5
+- INTER SECTION CLOSED section name: link
+- INTER SECTION OPENED section name: sect section size: 10
+- INTER SECTION CLOSED section name: sect
+- INTER SECTION OPENED section name: objs section size: 887
+- - INTER SECTION OPENED section name: objs.1 section size: 873
+- - - INTER SECTION OPENED section name: objs.1.1 section size: 778
+- - - INTER SECTION CLOSED section name: objs.1.1
+- - - INTER SECTION OPENED section name: objs.1.2 section size: 17
+- - - INTER SECTION CLOSED section name: objs.1.2
+- - - INTER SECTION OPENED section name: objs.1.3 section size: 12
+- - - INTER SECTION CLOSED section name: objs.1.3
+- - - INTER SECTION OPENED section name: objs.1.4 section size: 13
+- - - INTER SECTION CLOSED section name: objs.1.4
+- - INTER SECTION CLOSED section name: objs.1
+- INTER SECTION CLOSED section name: objs
+SECTION CLOSED section name: ARM 
+SECTION OPENED section name: extd section size: 5
+SECTION CLOSED section name: extd
+SECTION OPENED section name: sch2 section size: 22
+SECTION CLOSED section name: sch2
+SECTION OPENED section name: font section size: 5
+SECTION CLOSED section name: font
