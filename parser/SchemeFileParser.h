@@ -5,6 +5,7 @@
 #include <bitset>
 #include <stack>
 #include <vector>
+#include <bitset>
 
 #ifdef WIN32    // Подключаем библиотеку, только если компиляция происхоидит в ос windows
 
@@ -16,6 +17,7 @@
 
 // Пространство имен для структур, содержащих константые выражения, необходимые для парса файла схемы
 namespace sce {          // Scheme Const Expressions
+
     // Структура, хранящая флаги секций и блоков, используемые в схеме
     struct SchemeFlags {
         static constexpr uint8_t section_flag = 0b00000000;      // Признак секции
@@ -29,7 +31,7 @@ namespace sce {          // Scheme Const Expressions
 
     // Структура, хранящая типы данных, используемых в схеме
     struct SchemeDataTypes {
-        static constexpr uint8_t dtUnknown = 0x00;   // Неизвестный тип данных, нужен для поиска ошибок
+        static constexpr uint8_t dtUnknown = 0x00;      // Неизвестный тип данных, нужен для поиска ошибок
 
         // Записи фиксированной длины
         static constexpr uint8_t dtInteger = 0x01;       // rtInteger (Целое число)
@@ -110,30 +112,15 @@ private:
     // Стек открытых секций
     std::vector<Section> sections_stack;
 
-    char byte;                    // Переменная для работы с байтами
-    char* buffer = nullptr;       // Массив байт
-
-    // Функция очистки буффера
-    void ClearBuffer() {
-        if (buffer != nullptr) {
-            delete[] buffer;
-            buffer = nullptr;
-        }
-    }
-
-    // Функция выделения памяти под нужный объем
-    void UpdateBuffer(const uint32_t& new_size) {
-        ClearBuffer();
-        buffer = new char[new_size];
-    }
+    char byte;                      // Переменная для работы с байтами
+    char* buffer = new char[4096];  // Массив байт
 
     // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<class IntType>
     IntType GetSomeInt(IntType some_int, int8_t block_size, bool is_buffer_filled = false) {
 
-        // Если буффер заполнен, не заполняем его
+        // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
-            UpdateBuffer(block_size);
             SchemeFile.read(buffer, block_size);
         }
 
@@ -144,7 +131,6 @@ private:
                 some_int <<= 8;
         }
 
-        ClearBuffer();
         return some_int;
     }
 
@@ -219,7 +205,6 @@ private:
         new_section.sect_size = GetSomeInt(new_section.sect_size, 4);
 
         // Находим имя или номер секции
-        UpdateBuffer(4);
         SchemeFile.read(buffer, 4);
 
         // Если байт это буква, то считаем, что это именованная секция
@@ -250,8 +235,6 @@ private:
 
         lae::WriteLog(LogsFile, " section size: ");
         lae::WriteLog(LogsFile, sections_stack.back().sect_size, true);
-
-        ClearBuffer();
     }
 
     // Функция чтения блока байтов в схеме
@@ -285,6 +268,8 @@ private:
     // Функция чтения информации из блока
     void ParseBlockData(const uint32_t& block_size);
 
+    void ParseSCHM();
+
 public:
     // Главная функция парсера схемы
     bool parse() {
@@ -296,18 +281,17 @@ public:
             }
 
             // Если обнаружили флаг секции, открываем её
-            if (buffer == nullptr && byte == scheme_flags.section_flag)
+            if (byte == scheme_flags.section_flag)
                 EnterSection();
 
                 // Если обнаружили флаг блока, открываем его
-            else if (buffer == nullptr &&
-                     (static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag)
+            else if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag)
                 EnterBlock();
 
                 // Если буффер не пустой, а мы не находимся ни в секции, ни в блоке, значит что-то сломалось :/
             else {
-                lae::PrintLog("Ошибка при чтении файла, нарушена структура байтов", true, 12);
-                return false;
+                // lae::PrintLog("Ошибка при чтении файла, нарушена структура байтов", true, 12);
+                // return false;
             }
         }
 
