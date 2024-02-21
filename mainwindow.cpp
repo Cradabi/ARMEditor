@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QLabel>
+#include <QMessageBox>
 #include <lib/SchemeClass.cpp>
 #include "mywidget.h"
 
@@ -96,14 +97,72 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //QLabel *lbl = new QLabel("Label", this);
     MyWidget *widget = new MyWidget();
-    widget->setFixedSize(15360, 1200);
+    widget->setFixedSize(1536, 1200);
     ui->scrollArea->setWidget(widget);
     //ui->frame->setObjectName();
-    ui->frame->setStyleSheet("#frame {border: 2px solid black;}");
+    //ui->frame->setStyleSheet("#frame {border: 2px solid black;}");
     //ui->horizontalLayout->addWidget(lbl);
+
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slot_button1()));
+    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(slot_button2()));
+    connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(slot_button3()));
+    connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(slot_button4()));
+
+    connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
+
+    connect(this, &MainWindow::signal_from_button, this, &MainWindow::slot_button_clicked);
+    connect(this, &MainWindow::signal_from_close_button, this, &MainWindow::slot_change_panel_visibility);
+
 
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::slot_button1() {
+    emit signal_from_button(1);
+}
+
+void MainWindow::slot_button2() {
+    emit signal_from_button(2);
+}
+
+void MainWindow::slot_button3() {
+    emit signal_from_button(3);
+}
+
+void MainWindow::slot_button4() {
+    emit signal_from_button(4);
+}
+
+void MainWindow::slot_button_close() {
+    emit signal_from_close_button();
+}
+
+
+void MainWindow::slot_button_clicked(int buttonID) {
+    QMessageBox::information(this,
+                             "Уведомление о нажатой кнопке",
+                             "Нажата кнопка под номером " + QString::number(buttonID));
+}
+
+void MainWindow::slot_change_panel_visibility() {
+    if (this->panel_is_visible) {
+        this->panel_is_visible = false;
+        ui->listView->setVisible(false);
+        ui->line_2->setVisible(false);
+        QLayoutItem *d_item1;
+        QLayoutItem *d_item2;
+        d_item2 = ui->horizontalLayout->layout()->takeAt(2);
+        ui->horizontalLayout->layout()->removeItem(d_item2);
+        d_item1 = ui->horizontalLayout->layout()->takeAt(1);
+        ui->horizontalLayout->layout()->removeItem(d_item1);
+    } else {
+        this->panel_is_visible = true;
+        ui->listView->setVisible(true);
+        ui->line_2->setVisible(true);
+        ui->horizontalLayout->addWidget(ui->line_2);
+        ui->horizontalLayout->addWidget(ui->listView);
+    }
 }
