@@ -13,10 +13,11 @@
 
 // Главный класс парсера схемы
 class SchemeFileParser {
-protected:
+private:
     std::ofstream LogsFile;         // Файл логов
     std::ifstream SchemeFile;       // Файл схемы
 
+protected:
     uint64_t file_size;             // Размер файла схемы
 
     static sce::SchemeFlags scheme_flags;              // Флаги схемы
@@ -124,7 +125,7 @@ private:
         // Если байт это буква, то считаем, что это именованная секция
         if (isalpha(buffer[0])) {
             for (int8_t i = 0; i < 4; ++i) {
-                new_section.sect_name = buffer[i];
+                new_section.sect_name += buffer[i];
             }
 
             // В противном случае, считаем, что это нумерованная секция
@@ -135,7 +136,6 @@ private:
 
         // Запоминаем стартовую позицию секции
         new_section.start_pos = SchemeFile.tellg();
-        ++new_section.start_pos;
 
         // Добавляем новую секцию в стек
         sections_stack.push_back(new_section);
@@ -149,7 +149,66 @@ private:
 
         lae::WriteLog(LogsFile, " section size: ");
         lae::WriteLog(LogsFile, sections_stack.back().sect_size, true);
+
+        ParseSectionData();
     }
+
+    void ParseSectionData() {
+        while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+            SchemeFile.get(byte);
+            // Если обнаружили флаг блока, открываем его
+            if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag)
+                EnterBlock();
+        }
+    }
+
+    // Функция чтения блока байтов в схеме
+    void EnterBlock() {
+        int8_t tmp_bytes_for_blocksize = 0;
+        uint32_t tmp_block_size = 0;
+
+        // По признаку блока определяем его размер
+        if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit)
+            tmp_block_size |= (static_cast<uint8_t>(byte) & 0b00111111);
+        else {
+            // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
+            switch (static_cast<uint8_t>(byte)) {
+                case scheme_flags.size_8_bit:
+                    tmp_bytes_for_blocksize = 1;
+                    break;
+                case scheme_flags.size_16_bit:
+                    tmp_bytes_for_blocksize = 2;
+                    break;
+                case scheme_flags.size_32_bit:
+                    tmp_bytes_for_blocksize = 4;
+                    break;
+            }
+            tmp_block_size = GetSomeInt(tmp_block_size, tmp_bytes_for_blocksize);
+        }
+
+        // Вызываем функцию парса информации в блоке
+        ParseBlockData(tmp_block_size);
+    }
+
+    // Функция чтения информации из блока
+    void ParseBlockData(const uint32_t& block_size) {
+
+        lae::WriteLog(LogsFile, "BLOCK OPENED ");
+        lae::WriteLog(LogsFile, "block size: ");
+        lae::WriteLog(LogsFile, block_size, true);
+
+        uint32_t bytes_counter = 0;
+        while (bytes_counter < block_size) {
+            SchemeFile.get(byte);
+            ++bytes_counter;
+            lae::WriteLog(LogsFile, byte);
+            lae::WriteLog(LogsFile, ' ');
+        }
+        lae::WriteLog(LogsFile, ' ', true);
+
+        lae::WriteLog(LogsFile, "BLOCK CLOSED", true);
+
+    };
 
     // Функция открытия рабочих файлов
     bool OpenWorkFiles(const std::wstring& schemefile_path, const std::string& logfile_path) {
@@ -205,60 +264,3 @@ bool SchemeFileParser::parse(const std::wstring& schemefile_path, const std::str
 
     return true;
 }
-
-class SchemeSectionParser : private SchemeFileParser {
-private:
-
-    // Функция чтения блока байтов в схеме
-    void EnterBlock() {
-        int8_t tmp_bytes_for_blocksize = 0;
-        uint32_t tmp_block_size = 0;
-
-        // По признаку блока определяем его размер
-        if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit)
-            tmp_block_size |= (static_cast<uint8_t>(byte) & 0b00111111);
-        else {
-            // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
-            switch (static_cast<uint8_t>(byte)) {
-                case scheme_flags.size_8_bit:
-                    tmp_bytes_for_blocksize = 1;
-                    break;
-                case scheme_flags.size_16_bit:
-                    tmp_bytes_for_blocksize = 2;
-                    break;
-                case scheme_flags.size_32_bit:
-                    tmp_bytes_for_blocksize = 4;
-                    break;
-            }
-            tmp_block_size = GetSomeInt(tmp_block_size, tmp_bytes_for_blocksize);
-        }
-
-        // Вызываем функцию парса информации в блоке
-        ParseBlockData(tmp_block_size);
-    }
-
-// Функция чтения информации из блока
-    void ParseBlockData(const uint32_t& block_size);
-
-public:
-
-    SchemeSectionParser(const std::wstring& schemefile_path, const std::string& logfile_path,
-                        const std::vector<Section>& _sections_stack) {
-        SchemeFile.open(schemefile_path.c_str(), std::ios_base::binary);
-        LogsFile.open(logfile_path, std::ios_base::app);
-
-        sections_stack = _sections_stack;
-    }
-
-    virtual bool parse() {
-
-        while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
-            SchemeFile.get(byte);
-            // Если обнаружили флаг блока, открываем его
-            if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag)
-                EnterBlock();
-        }
-    }
-
-};
-

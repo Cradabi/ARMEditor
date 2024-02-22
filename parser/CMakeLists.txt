@@ -1,1 +1,1 @@
-add_library(parser SchemeFileParser.h SchemeFileParser.cpp)
+add_library(parser SchemeFileParser.cpp SchemeFileParser.h SchemeFileNS.h)
