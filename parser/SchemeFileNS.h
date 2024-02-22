@@ -122,51 +122,42 @@ namespace ssp {          // Scheme Sections Params
 
         int32_t windowsSize_x{0};
         int32_t windowsSize_y{0};
+    };
 
-        template<typename SectParam>
-        SectParam& operator[](const uint8_t index) {
-            switch (index) {
-                case 0:
-                    return Version;
-                case 1:
-                    return name_length;
-                case 2:
-                    return name;
-                case 3:
-                    return DBIP_length;
-                case 4:
-                    return DBIP;
-                case 5:
-                    return DBAlias_length;
-                case 6:
-                    return DBAlias;
-                case 7:
-                    return width;
-                case 8:
-                    return height;
-                case 9:
-                    return reserved_1;
-                case 10:
-                    return reserved_2;
-                case 11:
-                    return work_scale;
-                case 12:
-                    return bg_color;
-                case 13:
-                    return net_color;
-                case 14:
-                    return BitDepth;
-                case 15:
-                    return count_of_objects;
-                case 16:
-                    return windowsSize_x;
-                case 17:
-                    return windowsSize_y;
-                default:
-                    throw std::out_of_range("Index out of range");
-            }
-        }
+    struct cach {
+        int32_t cache_count{0};
+    };
+
+    struct link {
+        int32_t links_count{0};
+    };
+
+    struct sect {
+        int32_t next_section_number{0};
+        int32_t sect_count{0};
+    };
+
+    struct objs {
+        int32_t objs_count{0};
+        //тут должно лежать что-то для объектов
+    };
+
+    struct extd {
+        int32_t f_work_variable{0};
+    };
+
+    struct sch2{
+        int32_t window_size_X{0};
+        int32_t window_size_Y{0};
+        bool tmpbool{0};
+        int32_t MS_size{0};
+        int32_t back_bitmap_info{0};
+        int32_t pixels_per_inch_X{0};
+        int32_t pixels_per_inch_Y{0};
 
     };
 
+    struct font{
+        //тут должно лежать что-то для шрифтов
+    };
 }
