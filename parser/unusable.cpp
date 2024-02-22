@@ -80,3 +80,16 @@ lae::WriteLog(LogsFile, byte);
 lae::WriteLog(LogsFile, " : ");
 print_byte = byte;
 lae::WriteLog(LogsFile, print_byte, true);
+
+
+
+
+// Если буффер не пустой, а мы не находимся ни в секции, ни в блоке, значит что-то сломалось :/
+else {
+// lae::PrintLog("Ошибка при чтении файла, нарушена структура байтов", true, 12);
+// return false;
+}
+
+
+
+void ParseSCHM();

@@ -13,9 +13,7 @@ int main() {
 
     SchemeFileParser NewParser;
 
-    NewParser.open_work_files(L"schemes_exp\\ЛинияВерт.схема", "logs\\SchemeLogs.txt");
-
-    NewParser.parse();
+    NewParser.parse(L"schemes_exp\\ЛинияВерт.схема", "logs\\SchemeLogs.txt");
 
     return 0;
 }
