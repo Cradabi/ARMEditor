@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QVBoxLayout>
+#include <QGuiApplication>
+#include <QDesktopWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,6 +27,9 @@ private:
     QVBoxLayout* verticalLayout;
 
     bool panel_is_visible = true;
+    bool is_fullscreen = true;
+
+    QDesktopWidget desk;
 
 private slots:
     void slot_button1();
@@ -36,5 +41,7 @@ private slots:
 
     void slot_button_clicked(int buttonID);
     void slot_change_panel_visibility();
+
+    void resizeEvent(QResizeEvent* event);
 };
 #endif // MAINWINDOW_H

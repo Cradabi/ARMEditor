@@ -95,13 +95,12 @@ void MyWidget::paintEvent(QPaintEvent *event) {
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    //QLabel *lbl = new QLabel("Label", this);
+
     MyWidget *widget = new MyWidget();
-    widget->setFixedSize(1536, 1200);
+    widget->setFixedSize(15360, 1200);
     ui->scrollArea->setWidget(widget);
-    //ui->frame->setObjectName();
-    //ui->frame->setStyleSheet("#frame {border: 2px solid black;}");
-    //ui->horizontalLayout->addWidget(lbl);
+    ui->listView->setVisible(this->panel_is_visible);
+    ui->line_2->setVisible(this->panel_is_visible);
 
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slot_button1()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(slot_button2()));
@@ -119,6 +118,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
     delete ui;
 }
+
 
 void MainWindow::slot_button1() {
     emit signal_from_button(1);
@@ -148,21 +148,14 @@ void MainWindow::slot_button_clicked(int buttonID) {
 }
 
 void MainWindow::slot_change_panel_visibility() {
-    if (this->panel_is_visible) {
-        this->panel_is_visible = false;
-        ui->listView->setVisible(false);
-        ui->line_2->setVisible(false);
-        QLayoutItem *d_item1;
-        QLayoutItem *d_item2;
-        d_item2 = ui->horizontalLayout->layout()->takeAt(2);
-        ui->horizontalLayout->layout()->removeItem(d_item2);
-        d_item1 = ui->horizontalLayout->layout()->takeAt(1);
-        ui->horizontalLayout->layout()->removeItem(d_item1);
-    } else {
-        this->panel_is_visible = true;
-        ui->listView->setVisible(true);
-        ui->line_2->setVisible(true);
-        ui->horizontalLayout->addWidget(ui->line_2);
-        ui->horizontalLayout->addWidget(ui->listView);
-    }
+    this->panel_is_visible = not this->panel_is_visible;
+    ui->listView->setVisible(this->panel_is_visible);
+    ui->line_2->setVisible(this->panel_is_visible);
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event) {
+    int px_width = this->width();
+    int px_height = this->height();
+    QRect rect = QRect(0, 0, px_width, px_height - 20); // Почему то центральный виджет (главный контейнер) обрезает все содержимое в самом низу
+    ui->verticalLayoutWidget->setGeometry(rect);
 }
