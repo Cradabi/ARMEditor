@@ -101,19 +101,8 @@ std::string Scheme::get_server() {
     return actual_params.server;
 }
 
-void Scheme::draw_set(QPainter &painter) {
-    QColor color_set = {200, 200, 200};
-    painter.setPen(QPen(color_set, 1, Qt::DashLine, Qt::RoundCap));
-    for (int i = 0; i < actual_params.width; i += 10) {
-        painter.drawLine(i, 0, i, actual_params.height);
-    }
-    for (int i = 0; i < actual_params.height; i += 10) {
-        painter.drawLine(0, i, actual_params.width, i);
-    }
-}
-
 void Scheme::draw_scheme(QPainter &painter) {
-    draw_set(painter);
+    actual_params.set_object.draw(painter, actual_params.width, actual_params.height);
     for (auto primitive: actual_params.objects_vector) {
        primitive->draw(painter);
     }

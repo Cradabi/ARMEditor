@@ -55,6 +55,9 @@ void MyWidget::paintEvent(QPaintEvent *event) {
     tmp_sch_params.objects_vector.push_back(new TransitionButton(1, 80, 30, 120, 50, 0));
     tmp_sch_params.objects_vector.push_back(new Telemeasure(400, 50, 48, 24, 0, txt2, txt, 0, telem_color, true, true, fn_name, 14,
                                                             telem_font, 1, 1, false, false, false, false, false));
+    std::vector <int> col = {200, 200, 200};
+    FiguresClasses::Set set(1, 20, 20, 1, col);
+    tmp_sch_params.set_object = set;
     //tmp_sch_params.objects_vector = {pol, pol2, rect, el, arc, poly, crook, text, image, tr_p, tr_b, tel_m};
     //чтобы отобразить тестовую большую схему надо раскоментить текст нижу
     //for (int i = 0; i < 4000; i++){

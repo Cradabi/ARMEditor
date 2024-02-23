@@ -24,6 +24,7 @@ public:
         std::string server = std::string();
 
         std::vector<FiguresClasses::Primitive*> objects_vector;
+        FiguresClasses::Set set_object = Set();
     };
 #pragma pack(pop)
 
@@ -87,8 +88,6 @@ public:
     std::string get_bd_name();
 
     std::string get_server();
-
-    void draw_set(QPainter &painter);
 
     void draw_scheme(QPainter &painter);
 

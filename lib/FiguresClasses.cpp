@@ -2146,3 +2146,66 @@ int Telemeasure::get_device_type(){
 int Telemeasure::get_id(){
 	return this->id;
 }
+
+Set::Set() : Primitive::Primitive(){}
+
+Set::Set(int ln_width, int hor_space, int vert_space, int ln_style, std::vector <int>& ln_color) : Primitive::Primitive(){
+    line_width = ln_width;
+    horizontal_space = hor_space;
+    vertical_space = vert_space;
+    line_style = ln_style;
+    line_color = ln_color;
+}
+
+void Set::draw(QPainter &painter, int scheme_width, int scheme_height){
+    if (bool_show){
+        QColor color_set = {line_color[0], line_color[1], line_color[2]};
+        painter.setPen(QPen(color_set, line_width, style_vector[line_style], Qt::RoundCap));
+        for (int i = 0; i < scheme_width; i += horizontal_space) {
+            painter.drawLine(i, 0, i, scheme_height);
+        }
+        for (int i = 0; i < scheme_height; i += vertical_space) {
+            painter.drawLine(0, i, scheme_width, i);
+        }
+    }
+}
+
+void Set::set_line_width(int ln_width){
+    line_width = ln_width;
+}
+
+void Set::set_horizontal_space(int hor_space){
+    horizontal_space = hor_space;
+}
+
+void Set::set_vertical_space(int ver_space){
+    vertical_space = ver_space;
+}
+
+void Set::set_line_style(int ln_style){
+    line_style = ln_style;
+}
+
+void Set::set_line_color(std::vector <int> &col){
+    line_color = col;
+}
+
+int Set::get_line_width(){
+    return line_width;
+}
+
+int Set::get_horizontal_space(){
+    return horizontal_space;
+}
+
+int Set::get_vertical_space(){
+    return vertical_space;
+}
+
+int Set::get_line_style(){
+    return line_style;
+}
+
+std::vector <int> Set::get_line_color(){
+    return line_color;
+}

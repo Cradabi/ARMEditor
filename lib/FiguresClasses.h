@@ -1036,6 +1036,42 @@ namespace FiguresClasses {
 
         int get_id();
     };
+
+    class Set : public Primitive{ //класс сетки
+    private:
+        int line_width = 1;
+        int horizontal_space = 20;           //расстояние между линиями сетки по горизонтали
+        int vertical_space = 20;           //расстояние между линиями сетки по горизонтали
+        int line_style = 2;
+
+        std::vector <int> line_color = {200, 200, 200};
+    public:
+        Set();
+
+        Set(int ln_width, int hor_space, int vert_space, int ln_style, std::vector <int>& ln_color);
+
+        void draw(QPainter &painter, int scheme_width, int scheme_height);
+
+        void set_line_width(int ln_width);
+
+        void set_horizontal_space(int hor_space);
+
+        void set_vertical_space(int ver_space);
+
+        void set_line_style(int ln_style);
+
+        void set_line_color(std::vector <int> &col);
+
+        int get_line_width();
+
+        int get_horizontal_space();
+
+        int get_vertical_space();
+
+        int get_line_style();
+
+        std::vector <int> get_line_color();
+    };
 }
 
 
