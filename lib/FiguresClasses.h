@@ -1,10 +1,49 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <QPainter>
 
 namespace FiguresClasses {
 
-    class Line { // класс линии
+    class Primitive{ //класс примитива
+    protected:
+        bool bool_show_help = false;
+        bool bool_show = true;
+
+        std::string type_object = "";
+        std::string help_text = "";
+
+        std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
+        std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
+        std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine,
+                                                  Qt::DashDotDotLine, Qt::CustomDashLine};
+
+    public:
+        Primitive();
+
+        virtual void draw(QPainter &painter);
+
+        void set_help_text(const std::string &help);
+
+        std::string get_help_text();
+
+        std::string get_type_object();
+
+        void show_help();
+
+        void show();
+
+        void hide_help();
+
+        void hide();
+
+        bool get_show_help();
+
+        bool get_show();
+
+    };
+
+    class Line : public Primitive{ // класс линии
     private:
         bool bool_show_help = false;             //флаг показывания подсказки
         bool bool_show = true;                   //флаг показывания линии
@@ -63,6 +102,8 @@ namespace FiguresClasses {
              int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
              bool crossed_font);
 
+        void draw(QPainter &painter) override;
+
         //меняет координаты начала, конца, центра линии
         void change_center_cords(int st_x, int st_y, int end_x,
                                  int end_y);
@@ -77,8 +118,6 @@ namespace FiguresClasses {
         void set_start_style_arrow(int st_arrow);
 
         void set_end_style_arrow(int end_arrow);
-
-        void set_help_text(const std::string &help);
 
         void set_font_name(const std::string &fn_name);
 
@@ -106,11 +145,7 @@ namespace FiguresClasses {
         //далее идут функции по выводу одноименных переменных класса линии
         std::vector<int> get_line_color();
 
-        std::string get_type_object();
-
         std::string get_text();
-
-        std::string get_help_text();
 
         int get_line_width();
 
@@ -152,26 +187,11 @@ namespace FiguresClasses {
 
         std::vector<int> get_font_color();
 
-        //далее идут функции меняющие настройки показывания различных элементов
-        void show_help();
-
-        void show();
-
-        void hide_help();
-
-        void hide();
-
-        bool get_show_help();
-
-        bool get_show();
-
     };
 
 
-    class Rectangle {   //класс прямоугольника
-    private:
-        bool bool_show_help = false;                        //показывать подсказку
-        bool bool_show = true;                              //показывать прямоугольник
+    class Rectangle : public Primitive{   //класс прямоугольника
+    private:                             //показывать прямоугольник
         bool bool_show_filling = false;                     //показывать заливку
         std::vector<int> line_color = {0, 0, 0};            //цвет линии
         std::vector<int> filling_color = {255, 255, 255};   //цвет заливки
@@ -185,10 +205,7 @@ namespace FiguresClasses {
                  "stTBTrapezoid"};
         std::vector<std::string> style_line_list =          //список названий стилей линий
                 {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
-                 "psDash1", "psDash2"};
-
-        std::string type_object = "Прямоугольник";          //тип объекта
-        std::string help_text = "";                         //текст подсказки
+                 "psDash1", "psDash2"};                    //текст подсказки
 
         int style_frame = 0;                                // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
         int style_gradient_filling = 0;                     //0-stNone", 1-"stHorzPlane", 2-"stVertPlane", 3-"stHorzPipe", 4-"stVertPipe", 5-"stSphere", 6-"stCone", 7-"stBTTrapezoid", 8-"stLRTrapezoid", 9-"stTBTrapezoid"
@@ -214,6 +231,8 @@ namespace FiguresClasses {
                   const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
                   int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling);
 
+        void draw(QPainter &painter) override;
+
         //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
         void change_center_cords(int x, int y, int width, int height);
 
@@ -226,8 +245,6 @@ namespace FiguresClasses {
 
         void set_filling_color(const std::vector<int> &fil_col);
 
-        void set_help_text(const std::string &help);
-
         void set_style_frame(int st_frame);
 
         void set_style_gradient_filling(int st_gradient);
@@ -235,8 +252,6 @@ namespace FiguresClasses {
         void set_style_line(int st_line);
 
         //далее идут функции по выводу одноименных переменных класса прямоугольника
-        std::string get_type_object();
-
         int get_style_frame();
 
         int get_line_width();
@@ -264,30 +279,17 @@ namespace FiguresClasses {
         std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
-        void show();
-
-        void show_help();
 
         void show_filling();
 
-        void hide();
-
-        void hide_help();
-
         void hide_filling();
-
-        bool get_show();
-
-        bool get_show_help();
 
         bool get_show_filling();
     };
 
 
-    class Ellipse { //класс эллипса
-    protected:
-        bool bool_show_help = false;                                      // показывать подсказку
-        bool bool_show = true;                                            //показывать эллипс
+    class Ellipse: public Primitive { //класс эллипса
+    protected:                                           //показывать эллипс
         bool bool_show_filling = false;                                   //показывать заливку
         std::vector<int> line_color = {0, 0, 0};                          //цвет линии
         std::vector<int> filling_color = {255, 255, 255};                 //цвет заливки
@@ -295,8 +297,7 @@ namespace FiguresClasses {
                                                     "psDot5",
                                                     "psDot6",
                                                     "psDash1", "psDash2"}; //список названий стилей линий
-        std::string type_object = "Эллипс";                                //тип объекта
-        std::string help_text = "";                                        //текст подсказки
+
         int style_line = 1;                                                //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
         int line_width = 16;                                                //ширина линии
         int angle = 0;                                                     //угол наклона
@@ -309,6 +310,8 @@ namespace FiguresClasses {
 
 
     public:
+        void draw(QPainter &painter) override;
+
         //конструкторы класса эллипса получающие различные вводные
         Ellipse();
 
@@ -330,19 +333,13 @@ namespace FiguresClasses {
 
         void set_line_width(int line_width);
 
-        void set_help_text(const std::string &text);
-
         void set_line_color(const std::vector<int> &ln_col);
 
         void set_filling_color(const std::vector<int> &fil_col);
 
         void set_style_line(int st_line);
 
-        //далее идут функции по выводу одноименных переменных класса Эллипса
-        std::string get_type_object();
-
-        std::string get_help_text();
-
+        //далее идут функции по выводу одноименных переменных класса Эллипс
         int get_style_line();
 
         int get_line_width();
@@ -366,21 +363,9 @@ namespace FiguresClasses {
         std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
-        void show();
-
-        void show_help();
-
         void show_filling();
 
-        void hide();
-
-        void hide_help();
-
         void hide_filling();
-
-        bool get_show();
-
-        bool get_show_help();
 
         bool get_show_filling();
 
@@ -392,6 +377,8 @@ namespace FiguresClasses {
         int end_angle = 0;       //конечный угол
 
     public:
+        void draw(QPainter &painter) override;
+
         //конструкторы класса дуги получающие различные вводные
         Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle);
 
@@ -417,11 +404,8 @@ namespace FiguresClasses {
 
     };
 
-    class CrookedLine {//класс кривой линии
+    class CrookedLine : public Primitive{//класс кривой линии
     protected:
-
-        bool bool_show_help = false;                            // показывать подсказку
-        bool bool_show = true;                                  //показывать прямоугольник
         bool bool_show_filling = true;                         //показывать заливку
 
         std::vector<int> line_color = {0, 0, 0};                //цвет линии
@@ -433,8 +417,6 @@ namespace FiguresClasses {
                 {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                  "psDash1", "psDash2"};                         //список названий стилей линий
 
-        std::string type_object = "Кривая линия";               //тип объекта
-        std::string help_text = "";                             //текст подсказки
         int style_line = 1;                                     //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 8;                                     //ширина линии
@@ -456,6 +438,8 @@ namespace FiguresClasses {
                     const std::string &help_text, const std::vector<int> &line_color,
                     const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
+        void draw(QPainter &painter) override;
+
         void
         change_center_cords(
                 const std::vector<std::vector<int>> &points_vector);
@@ -467,13 +451,9 @@ namespace FiguresClasses {
 
         void set_filling_color(const std::vector<int> &fil_col);
 
-        void set_help_text(const std::string &text);
-
         void set_style_line(int st_line);
 
         //далее идут функции по выводу одноименных переменных класса кривой линии
-        std::string get_type_object();
-
         int get_style_line();
 
         int get_angle();
@@ -488,9 +468,7 @@ namespace FiguresClasses {
 
         int get_center_x();
 
-        int get_center_y();
-
-        std::string get_help_text();
+        int get_center_y();;
 
         int get_line_width();
 
@@ -501,21 +479,9 @@ namespace FiguresClasses {
         std::vector<std::vector<int>> get_points();
 
         //далее идут функции меняющие настройки показывания различных элементов
-        void show();
-
-        void show_help();
-
         void show_filling();
 
-        void hide();
-
-        void hide_help();
-
         void hide_filling();
-
-        bool get_show();
-
-        bool get_show_help();
 
         bool get_show_filling();
 
@@ -534,24 +500,22 @@ namespace FiguresClasses {
                 const std::string &help_text, const std::vector<int> &line_color,
                 const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
+        void draw(QPainter &painter) override;
+
         bool get_end_polygon();
 
         void set_end_polygon(bool end_pol);
     };
 
 
-    class TransitionPoint {                               //класс точки перехода
+    class TransitionPoint : public Primitive{                               //класс точки перехода
     private:
         int number_of_transition_point = 0;               // номер точки перехода
 
     protected:
-        bool bool_show_help = false;                      // показывать подсказку
-        bool bool_show = true;                            //показывать прямоугольник
         bool bool_show_filling = true;                   //показывать заливку
 
         std::vector<int> filling_color = {238, 233, 233}; //цвет заливки
-        std::string type_object = "Точка перехода";       //тип объекта
-        std::string help_text = "";                       //текст подсказки
 
         int x = 0;                                        //координата x
         int y = 0;                                        //координата y
@@ -571,6 +535,8 @@ namespace FiguresClasses {
                         int height, const std::vector<int> &filling_color, const std::string &help_text, bool bool_show,
                         bool bool_show_filling);
 
+        void draw(QPainter &painter) override;
+
         void
         change_center_cords(int x, int y, int width,
                             int height);
@@ -578,15 +544,9 @@ namespace FiguresClasses {
         //далее идут функции меняющие одноименные переменные класса точки перехода
         void set_filling_color(const std::vector<int> &fil_col);
 
-        void set_help_text(const std::string &help_text);
-
         void set_point_number(int num);
 
         //далее идут функции по выводу одноименных переменных класса точки перехода
-        std::string get_type_object();
-
-        std::string get_help_text();
-
         int get_point_number();
 
         int get_x();
@@ -605,21 +565,9 @@ namespace FiguresClasses {
         std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
-        void show();
-
-        void show_help();
-
         void show_filling();
 
-        void hide();
-
-        void hide_help();
-
         void hide_filling();
-
-        bool get_show();
-
-        bool get_show_help();
 
         bool get_show_filling();
 
@@ -665,6 +613,8 @@ namespace FiguresClasses {
                          bool bool_show_filling, const std::string &text, const std::string &font_name, int font_size,
                          const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
+        void draw(QPainter &painter) override;
 
         //далее идут функции меняющие одноименные переменные класса кнопки перехода
         void set_angle(int angl);
@@ -736,7 +686,7 @@ namespace FiguresClasses {
     };
 
 
-    class Text {                                                                      //класс текста
+    class Text : public Primitive{                                                                      //класс текста
     protected:
         bool bold_font = true;                                                       //флаг жирности шрифта
         bool italic_font = true;                                                     //флаг наклонности шрифта
@@ -757,9 +707,7 @@ namespace FiguresClasses {
                                                     "psDash1", "psDash2"};            //список названий стилей линий
 
         std::string text = "";                                                        //текст кнопки
-        std::string font_name = "Arial";                                              //имя шрифта
-        std::string type_object = "Текст";                                            //размер шрифта
-        std::string help_text = "";                                                   //текст подсказки
+        std::string font_name = "Arial";                                              //имя шрифта                                                 //текст подсказки
 
         int hAlignment = 1;                                                           //номер горизонтального выравнивания
         int vAlignment = 1;                                                           //номер вертикального выравнивания
@@ -774,8 +722,6 @@ namespace FiguresClasses {
         int center_x = 0;                                                             //координата x центра
         int center_y = 0;                                                             //координата y центра
 
-        bool bool_show_help = false;                                                  // показывать подсказку
-        bool bool_show = true;                                                        //показывать прямоугольник
         bool bool_show_filling = false;                                               //показывать заливку
 
     public:
@@ -793,6 +739,8 @@ namespace FiguresClasses {
              const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
              bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
 
+        void draw(QPainter &painter) override;
+
         void
         change_center_cords(int x, int y, int width,
                             int height);
@@ -801,8 +749,6 @@ namespace FiguresClasses {
         void set_filling_color(const std::vector<int> &fil_col);
 
         void set_line_color(const std::vector<int> &ln_col);
-
-        void set_help_text(const std::string &help_text);
 
         void set_line_width(int ln_width);
 
@@ -844,10 +790,6 @@ namespace FiguresClasses {
         void set_style_line(int style_line);
 
         //далее идут функции по выводу одноименных переменных класса текста
-        std::string get_type_object();
-
-        std::string get_help_text();
-
         int get_x();
 
         int get_y();
@@ -895,29 +837,15 @@ namespace FiguresClasses {
         std::vector<std::string> get_alignment();
 
         //далее идут функции меняющие настройки показывания различных элементов
-        void show();
-
-        void show_help();
-
         void show_filling();
 
-        void hide();
-
-        void hide_help();
-
         void hide_filling();
-
-        bool get_show();
-
-        bool get_show_help();
 
         bool get_show_filling();
     };
 
-    class Image {   //класс картинки
+    class Image : public Primitive{   //класс картинки
     private:
-        bool bool_show_help = false;                        //показывать подсказку
-        bool bool_show = true;                              //показывать прямоугольник
         bool bool_show_filling = false;                     //показывать заливку
         bool bool_transparancy = false;
         std::vector<int> line_color = {0, 0, 0};            //цвет линии
@@ -931,8 +859,6 @@ namespace FiguresClasses {
                 {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6",
                  "psDash1", "psDash2"};
 
-        std::string type_object = "Картинка";          //тип объекта
-        std::string help_text = "";                         //текст подсказки
         std::string image_path = "";
 
         int style_frame = 0;                                // стиль рамки 0-"fsNull", 1-"fsButtonDown", 2-"fsButtonUp", 3-"fsBagetDown", 4-"fsBagetUp", 5-"fsDoubleDown", 6-"fsDoubleUp"
@@ -960,6 +886,8 @@ namespace FiguresClasses {
               const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
               const std::vector<int> &filling_color, bool bool_show_filling);
 
+        void draw(QPainter &painter) override;
+
         //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
         void change_center_cords(int x, int y, int width, int height);
 
@@ -972,8 +900,6 @@ namespace FiguresClasses {
 
         void set_filling_color(const std::vector<int> &fil_col);
 
-        void set_help_text(const std::string &help);
-
         void set_style_frame(int st_frame);
 
         void set_style_line(int st_line);
@@ -981,8 +907,6 @@ namespace FiguresClasses {
         void set_image_path(const std::string &im_path);
 
         //далее идут функции по выводу одноименных переменных класса прямоугольника
-        std::string get_type_object();
-
         std::string get_image_path();
 
         int get_style_frame();
@@ -1010,21 +934,9 @@ namespace FiguresClasses {
         std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
-        void show();
-
-        void show_help();
-
         void show_filling();
 
-        void hide();
-
-        void hide_help();
-
         void hide_filling();
-
-        bool get_show();
-
-        bool get_show_help();
 
         bool get_show_filling();
     };
@@ -1048,6 +960,8 @@ namespace FiguresClasses {
                     const std::string &font_name, int font_size,
                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                     bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
+        void draw(QPainter &painter) override;
 
         //далее идут функции меняющие одноименные переменные класса телеуправления
         void set_condition(int condition);
@@ -1079,6 +993,8 @@ namespace FiguresClasses {
                           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
 
+        void draw(QPainter &painter) override;
+
         //далее идут функции меняющие одноименные переменные класса телеуправления
         void set_condition(int condition);
 
@@ -1109,6 +1025,8 @@ namespace FiguresClasses {
                     const std::string &font_name, int font_size,
                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                     bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+
+        void draw(QPainter &painter) override;
 
         //далее идут функции меняющие одноименные переменные класса телеуправления
         void set_device_type(int device_type);
