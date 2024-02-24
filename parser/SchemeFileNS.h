@@ -143,36 +143,52 @@ namespace ssp {          // Scheme Sections Params
     };
 
     struct cach {
+        uint8_t params_amount{1};
+        static constexpr uint8_t cache_count_flag{1};
         int32_t cache_count{0};
     };
 
     struct link {
+        uint8_t params_amount{1};
+        static constexpr uint8_t links_count_flag{1};
         int32_t links_count{0};
     };
 
     struct sect {
+        uint8_t params_amount{2};
+        static constexpr uint8_t next_section_number_flag{1};
         int32_t next_section_number{0};
+        static constexpr uint8_t sect_count_flag{2};
         int32_t sect_count{0};
     };
 
     struct objs {
+        uint8_t params_amount{1};
+        static constexpr uint8_t objs_count_flag{1};
         int32_t objs_count{0};
-        //тут должно лежать что-то для объектов
     };
 
     struct extd {
+        uint8_t params_amount{1};
+        static constexpr uint8_t f_work_variable_flag{1};
         int32_t f_work_variable{0};
     };
 
     struct sch2 {
         uint8_t params_amount{7};
-
+        static constexpr uint8_t window_size_X_flag{1};
         int32_t window_size_X{0};
+        static constexpr uint8_t window_size_Y_flag{2};
         int32_t window_size_Y{0};
+        static constexpr uint8_t tmpbool_flag{3};
         bool tmpbool{0};
+        static constexpr uint8_t MS_size_flag{4};
         int32_t MS_size{0};
+        static constexpr uint8_t back_bitmap_info_flag{5};
         int32_t back_bitmap_info{0};
+        static constexpr uint8_t pixels_per_inch_X_flag{6};
         int32_t pixels_per_inch_X{0};
+        static constexpr uint8_t pixels_per_inch_Y_flag{7};
         int32_t pixels_per_inch_Y{0};
     };
 

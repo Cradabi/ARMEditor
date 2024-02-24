@@ -6,7 +6,7 @@ void SchemeFileParser::ParseSCHM() {
     while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
         SchemeFile.get(byte);
 
-        uint8_t data_counter{0};
+        uint8_t data_counter = 0;
         uint32_t block_size;
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
@@ -23,7 +23,8 @@ void SchemeFileParser::ParseSCHM() {
                     schm_data.name_length = GetSomeInt(schm_data.name_length, block_size);
                     break;
                 case schm_data.scheme_name_flag:
-                    for (uint32_t digit = 0; digit < block_size; ++block_size) {
+                    for (uint32_t digit = 0; digit < block_size; ++block_size) { //TODO ошибка, поменять на блоксайз
+
                         SchemeFile.get(byte);
                         schm_data.scheme_name += byte;
                     }
@@ -100,6 +101,186 @@ void SchemeFileParser::ParseSCHM() {
         }
     }
 }
+
+void SchemeFileParser::ParseCASH() {
+    // Пока не дошли до конца секции, считываем данные
+    while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+        SchemeFile.get(byte);
+
+        uint8_t data_counter = 0;
+        uint32_t block_size;
+        // Если нашли флаг блока, открываем его
+        if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+            // Получаем размер блока
+            block_size = GetBlockSize();
+            ++data_counter;
+
+            switch (data_counter) {
+                case cash_data.cache_count_flag:
+                    cash_data.cache_count = GetSomeInt(cash_data.cache_count, block_size);
+                    break;
+                default:
+                    //TODO обработка объекта
+                        ;
+                    break;
+            }
+        }
+    }
+}
+
+void SchemeFileParser::ParseLINK() {
+    // Пока не дошли до конца секции, считываем данные
+    while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+        SchemeFile.get(byte);
+
+        uint8_t data_counter = 0;
+        uint32_t block_size;
+        // Если нашли флаг блока, открываем его
+        if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+            // Получаем размер блока
+            block_size = GetBlockSize();
+            ++data_counter;
+
+            switch (data_counter) {
+                case link_data.links_count_flag:
+                    link_data.links_count = GetSomeInt(link_data.links_count, block_size);
+                    break;
+                default:
+                    //TODO обработка линков
+                        ;
+                    break;
+            }
+        }
+    }
+}
+
+void SchemeFileParser::ParseSECT() {
+    // Пока не дошли до конца секции, считываем данные
+    while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+        SchemeFile.get(byte);
+
+        uint8_t data_counter = 0;
+        uint32_t block_size;
+        // Если нашли флаг блока, открываем его
+        if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+            // Получаем размер блока
+            block_size = GetBlockSize();
+            ++data_counter;
+
+            switch (data_counter) {
+                case sect_data.next_section_number_flag:
+                    sect_data.next_section_number = GetSomeInt(sect_data.next_section_number, block_size);
+                    break;
+                case sect_data.sect_count_flag:
+                    sect_data.sect_count = GetSomeInt(sect_data.sect_count_flag, block_size);
+                    break;
+                default:
+                    //TODO обработка секций
+                        ;
+                    break;
+            }
+        }
+    }
+}
+
+void SchemeFileParser::ParseOBJS() {
+    // Пока не дошли до конца секции, считываем данные
+    while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+        SchemeFile.get(byte);
+
+        uint8_t data_counter = 0;
+        uint32_t block_size;
+        // Если нашли флаг блока, открываем его
+        if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+            // Получаем размер блока
+            block_size = GetBlockSize();
+            ++data_counter;
+
+            switch (data_counter) {
+                case objs_data.objs_count_flag:
+                    objs_data.objs_count = GetSomeInt(objs_data.objs_count, block_size);
+                    break;
+                default:
+                    //TODO обработка объектов
+                        ;
+                    break;
+            }
+        }
+    }
+}
+
+void SchemeFileParser::ParseEXTD() {
+    // Пока не дошли до конца секции, считываем данные
+    while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+        SchemeFile.get(byte);
+
+        uint8_t data_counter = 0;
+        uint32_t block_size;
+        // Если нашли флаг блока, открываем его
+        if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+            // Получаем размер блока
+            block_size = GetBlockSize();
+            ++data_counter;
+
+            switch (data_counter) {
+                case extd_data.f_work_variable_flag:
+                    extd_data.f_work_variable = GetSomeInt(extd_data.f_work_variable, block_size);
+                break;
+            }
+        }
+    }
+}
+
+void SchemeFileParser::ParseSCH2() {
+    // Пока не дошли до конца секции, считываем данные
+    while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+        SchemeFile.get(byte);
+
+        uint8_t data_counter = 0;
+        uint32_t block_size;
+        // Если нашли флаг блока, открываем его
+        if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+            // Получаем размер блока
+            block_size = GetBlockSize();
+            ++data_counter;
+
+            switch (data_counter) {
+                case sch2_data.window_size_X_flag:
+                    sch2_data.window_size_X = GetSomeInt(sch2_data.window_size_X, block_size);
+                break;
+                case sch2_data.window_size_Y_flag:
+                    sch2_data.window_size_Y = GetSomeInt(sch2_data.window_size_Y, block_size);
+                break;
+                case sch2_data.tmpbool_flag:
+                    sch2_data.tmpbool = GetSomeInt(sch2_data.tmpbool, block_size);
+                    if (sch2_data.tmpbool == 0) {
+                        data_counter = data_counter + 2; //TODO почему NEVER USED???
+                    }
+                break;
+                case sch2_data.MS_size_flag:
+                    sch2_data.MS_size = GetSomeInt(sch2_data.MS_size, block_size);
+                break;
+                case sch2_data.back_bitmap_info_flag:
+                    sch2_data.back_bitmap_info = GetSomeInt(sch2_data.back_bitmap_info, block_size);
+                break;
+                case sch2_data.pixels_per_inch_X_flag:
+                    sch2_data.pixels_per_inch_X = GetSomeInt(sch2_data.pixels_per_inch_X, block_size);
+                break;
+                case sch2_data.pixels_per_inch_Y_flag:
+                    sch2_data.pixels_per_inch_Y = GetSomeInt(sch2_data.pixels_per_inch_Y, block_size);
+                break;
+
+            }
+        }
+    }
+}
+
+void SchemeFileParser::ParseFONT() {
+    //TODO пока не разбираем.
+    ;
+}
+
+
 
 
 void SchemeFileParser::ParseSectionData() {
