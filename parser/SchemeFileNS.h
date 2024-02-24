@@ -94,33 +94,51 @@ namespace ssp {          // Scheme Sections Params
     struct schm {
         uint8_t params_amount{18};
 
-        int32_t Version{0};
+        static constexpr uint8_t version_flag{1};
+        int32_t version{0};
 
+        static constexpr uint8_t name_length_flag{2};
         int32_t name_length{0};
-        std::string name;
+        static constexpr uint8_t scheme_name_flag{3};
+        std::string scheme_name;
 
+        static constexpr uint8_t DBIP_length_flag{4};
         int32_t DBIP_length{0};
+        static constexpr uint8_t DBIP_flag{5};
         std::string DBIP;
 
+        static constexpr uint8_t DBAlias_length_flag{6};
         int32_t DBAlias_length{0};
+        static constexpr uint8_t DBAlias_flag{7};
         std::string DBAlias;
 
+        static constexpr uint8_t width_flag{8};
         int32_t width{0};
+        static constexpr uint8_t height_flag{9};
         int32_t height{0};
 
+        static constexpr uint8_t reserved_1_flag{10};
         int32_t reserved_1{0};
+        static constexpr uint8_t reserved_2_flag{11};
         int32_t reserved_2{0};
 
+        static constexpr uint8_t work_scale_flag{12};
         double work_scale{0};
 
+        static constexpr uint8_t bg_color_flag{13};
         BGRColor bg_color;
+        static constexpr uint8_t net_color_flag{14};
         BGRColor net_color;
 
-        bool BitDepth{0};
+        static constexpr uint8_t BitDepth_flag{15};
+        bool BitDepth{false};
 
+        static constexpr uint8_t count_of_objects_flag{16};
         int32_t count_of_objects{0};
 
+        static constexpr uint8_t windowsSize_x_flag{17};
         int32_t windowsSize_x{0};
+        static constexpr uint8_t windowsSize_y_flag{18};
         int32_t windowsSize_y{0};
     };
 
@@ -146,7 +164,9 @@ namespace ssp {          // Scheme Sections Params
         int32_t f_work_variable{0};
     };
 
-    struct sch2{
+    struct sch2 {
+        uint8_t params_amount{7};
+
         int32_t window_size_X{0};
         int32_t window_size_Y{0};
         bool tmpbool{0};
@@ -154,10 +174,9 @@ namespace ssp {          // Scheme Sections Params
         int32_t back_bitmap_info{0};
         int32_t pixels_per_inch_X{0};
         int32_t pixels_per_inch_Y{0};
-
     };
 
-    struct font{
+    struct font {
         //тут должно лежать что-то для шрифтов
     };
 }

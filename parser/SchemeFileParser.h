@@ -18,6 +18,17 @@ private:
     std::ifstream SchemeFile;       // Файл схемы
 
 protected:
+    // Структуры содержащие параметры секций
+
+    static ssp::schm schm_data;
+    ssp::cach cash_data;
+    ssp::link link_data;
+    ssp::sect sect_data;
+    ssp::objs objs_data;
+    static ssp::extd extd_data;
+    static ssp::sch2 sch2_data;
+    ssp::font font_data;
+
     uint64_t file_size;             // Размер файла схемы
 
     static sce::SchemeFlags scheme_flags;              // Флаги схемы
@@ -41,8 +52,8 @@ protected:
     char* buffer = new char[4096];  // Массив байт
 
     // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
-    template<class IntType>
-    IntType GetSomeInt(IntType some_int, int8_t block_size, bool is_buffer_filled = false) {
+    template<typename IntType>
+    IntType GetSomeInt(IntType some_int, uint8_t block_size, bool is_buffer_filled = false) {
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
@@ -89,7 +100,7 @@ private:
 
         lae::WriteLog(LogsFile, "SECTION CLOSED ");
 
-        lae::WriteLog(LogsFile, "section name: ");
+        lae::WriteLog(LogsFile, "section scheme_name: ");
         for (uint16_t _section = 1; _section < sections_stack.size() - 1; ++_section) {
             lae::WriteLog(LogsFile, sections_stack[_section].sect_name);
             lae::WriteLog(LogsFile, ".");
@@ -140,7 +151,7 @@ private:
         // Добавляем новую секцию в стек
         sections_stack.push_back(new_section);
 
-        lae::WriteLog(LogsFile, "section name: ");
+        lae::WriteLog(LogsFile, "section scheme_name: ");
         for (uint16_t _section = 1; _section < sections_stack.size() - 1; ++_section) {
             lae::WriteLog(LogsFile, sections_stack[_section].sect_name);
             lae::WriteLog(LogsFile, ".");
@@ -153,62 +164,33 @@ private:
         ParseSectionData();
     }
 
-    void ParseSectionData() {
-        while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
-            SchemeFile.get(byte);
-            // Если обнаружили флаг блока, открываем его
-            if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag)
-                EnterBlock();
-        }
-    }
+    // Функция для парса информации секции
+    void ParseSectionData();
 
-    // Функция чтения блока байтов в схеме
-    void EnterBlock() {
-        int8_t tmp_bytes_for_blocksize = 0;
-        uint32_t tmp_block_size = 0;
-
-        // По признаку блока определяем его размер
-        if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit)
-            tmp_block_size |= (static_cast<uint8_t>(byte) & 0b00111111);
-        else {
-            // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
-            switch (static_cast<uint8_t>(byte)) {
-                case scheme_flags.size_8_bit:
-                    tmp_bytes_for_blocksize = 1;
-                    break;
-                case scheme_flags.size_16_bit:
-                    tmp_bytes_for_blocksize = 2;
-                    break;
-                case scheme_flags.size_32_bit:
-                    tmp_bytes_for_blocksize = 4;
-                    break;
-            }
-            tmp_block_size = GetSomeInt(tmp_block_size, tmp_bytes_for_blocksize);
-        }
-
-        // Вызываем функцию парса информации в блоке
-        ParseBlockData(tmp_block_size);
-    }
+    // Функция для получения размера блока
+    uint32_t GetBlockSize();
 
     // Функция чтения информации из блока
-    void ParseBlockData(const uint32_t& block_size) {
+    void ParseBlockData(const uint32_t& block_size);
 
-        lae::WriteLog(LogsFile, "BLOCK OPENED ");
-        lae::WriteLog(LogsFile, "block size: ");
-        lae::WriteLog(LogsFile, block_size, true);
+    // Функции парса основных секций схемы
 
-        uint32_t bytes_counter = 0;
-        while (bytes_counter < block_size) {
-            SchemeFile.get(byte);
-            ++bytes_counter;
-            lae::WriteLog(LogsFile, byte);
-            lae::WriteLog(LogsFile, ' ');
-        }
-        lae::WriteLog(LogsFile, ' ', true);
+    void ParseSCHM();
 
-        lae::WriteLog(LogsFile, "BLOCK CLOSED", true);
+    void ParseCASH();
 
-    };
+    void ParseLINK();
+
+    void ParseSECT();
+
+    void ParseOBJS();
+
+    void ParseEXTD();
+
+    void ParseSCH2();
+
+    void ParseFONT();
+
 
     // Функция открытия рабочих файлов
     bool OpenWorkFiles(const std::wstring& schemefile_path, const std::string& logfile_path) {
