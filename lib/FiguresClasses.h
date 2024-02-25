@@ -16,7 +16,7 @@ namespace FiguresClasses {
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
         std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine,
-                                                  Qt::DashDotDotLine, Qt::CustomDashLine};
+                                                  Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine};
 
     public:
         Primitive();
