@@ -482,7 +482,13 @@ void SchemeFileParser::PrintBlockData(const uint32_t& block_size) {
         print_byte = byte;
         ++bytes_counter;
         lae::WriteLog(LogsFile, print_byte);
-        lae::WriteLog(LogsFile, ' ');
+        if (bytes_counter%4==0){
+            lae::WriteLog(LogsFile, "\n");
+        }
+        else {
+            lae::WriteLog(LogsFile, ' ');
+        }
+
     }
     lae::WriteLog(LogsFile, ' ');
 
