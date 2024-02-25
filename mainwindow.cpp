@@ -104,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(slot_button4()));
 
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
+    connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));
 
     connect(this, &MainWindow::signal_from_button, this, &MainWindow::slot_button_clicked);
     connect(this, &MainWindow::signal_from_close_button, this, &MainWindow::slot_change_panel_visibility);
@@ -147,11 +148,12 @@ void MainWindow::slot_change_panel_visibility() {
     this->panel_is_visible = not this->panel_is_visible;
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
+    ui->pushButton_close->setVisible(this->panel_is_visible);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
     int px_width = this->width();
     int px_height = this->height();
-    QRect rect = QRect(0, 0, px_width, px_height - 20); // Почему то центральный виджет (главный контейнер) обрезает все содержимое в самом низу
+    QRect rect = QRect(0, 0, px_width, px_height - 50); // Почему то центральный виджет (главный контейнер) обрезает все содержимое в самом низу
     ui->verticalLayoutWidget->setGeometry(rect);
 }
