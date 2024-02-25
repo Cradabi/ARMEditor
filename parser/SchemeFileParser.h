@@ -21,13 +21,13 @@ protected:
     // Структуры содержащие параметры секций
 
     static ssp::schm schm_data;
-    ssp::cach cash_data;
-    ssp::link link_data;
-    ssp::sect sect_data;
-    ssp::objs objs_data;
+    static ssp::cach cash_data;
+    static ssp::link link_data;
+    static ssp::sect sect_data;
+    static ssp::objs objs_data;
     static ssp::extd extd_data;
     static ssp::sch2 sch2_data;
-    ssp::font font_data;
+    static ssp::font font_data;
 
     uint64_t file_size;             // Размер файла схемы
 
@@ -171,7 +171,7 @@ private:
     uint32_t GetBlockSize();
 
     // Функция чтения информации из блока
-    void ParseBlockData(const uint32_t& block_size);
+    void PrintBlockData(const uint32_t& block_size);
 
     // Функции парса основных секций схемы
 
@@ -191,6 +191,7 @@ private:
 
     void ParseFONT();
 
+    void ParseUNKNOWN();
 
     // Функция открытия рабочих файлов
     bool OpenWorkFiles(const std::wstring& schemefile_path, const std::string& logfile_path) {

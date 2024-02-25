@@ -1,19 +1,22 @@
-#include <iostream>
-#include <fstream>
-#include <cinttypes>
-#include <locale>
+#ifdef WIN32
+
 #include <windows.h>
-#include <bitset>
+
+#endif
 
 #include "parser/SchemeFileParser.cpp"
 
 int main() {
 
+#ifdef WIN32
+
     SetConsoleOutputCP(CP_UTF8);
+
+#endif
 
     SchemeFileParser NewParser;
 
-    NewParser.parse(L"..\\schemes_exp\\ЛинияВерт.схема", "..\\logs\\SchemeLogs.txt");
+    NewParser.parse(L"..\\schemes_exp\\Мультищитовая3.схема", "..\\logs\\SchemeLogs.txt");
 
     return 0;
 }
