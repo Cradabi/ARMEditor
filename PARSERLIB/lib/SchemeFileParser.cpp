@@ -4,23 +4,28 @@
 void SchemeFileParser::ParseSCHM() {
 
     int32_t version{0};
+
     int32_t name_length{0};
-    std::string scheme_name;
+
     int32_t DBIP_length{0};
     std::string DBIP;
+
     int32_t DBAlias_length{0};
     std::string DBAlias;
-    int32_t width{0};
-    int32_t height{0};
+
     int32_t reserved_1{0};
     int32_t reserved_2{0};
+
     double work_scale{0};
+
     ssp::BGRColor bg_color;
     ssp::BGRColor net_color;
     bool BitDepth{false};
+
     int32_t count_of_objects{0};
-    int32_t windowsSize_x{0};
-    int32_t windowsSize_y{0};
+
+    int32_t reserved_3{0};
+    int32_t reserved_4{0};
 
     std::string tmp_work_scale = "";
 
@@ -49,10 +54,10 @@ void SchemeFileParser::ParseSCHM() {
                 case schm_data.scheme_name_flag:
                     for (uint32_t digit = 0; digit < block_size; ++digit) {
                         SchemeFile.get(byte);
-                        scheme_name += byte;
+                        scheme_params->name_scheme += byte;
                     }
                     lae::WriteLog(LogsFile, "Name: ");
-                    lae::WriteLog(LogsFile, scheme_name, true);
+                    lae::WriteLog(LogsFile, scheme_params->name_scheme, true);
                     break;
                 case schm_data.DBIP_length_flag:
                     DBIP_length = GetSomeInt(DBIP_length, block_size);
@@ -81,14 +86,14 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, DBAlias, true);
                     break;
                 case schm_data.width_flag:
-                    width = GetSomeInt(width, block_size);
+                    scheme_params->width = GetSomeInt(scheme_params->width, block_size);
                     lae::WriteLog(LogsFile, "width: ");
-                    lae::WriteLog(LogsFile, width, true);
+                    lae::WriteLog(LogsFile, scheme_params->width, true);
                     break;
                 case schm_data.height_flag:
-                    height = GetSomeInt(height, block_size);
+                    scheme_params->height = GetSomeInt(scheme_params->height, block_size);
                     lae::WriteLog(LogsFile, "height: ");
-                    lae::WriteLog(LogsFile, height, true);
+                    lae::WriteLog(LogsFile, scheme_params->height, true);
                     break;
                 case schm_data.reserved_1_flag:
                     reserved_1 = GetSomeInt(reserved_1, block_size);
@@ -145,14 +150,14 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, count_of_objects, true);
                     break;
                 case schm_data.windowsSize_x_flag:
-                    windowsSize_x = GetSomeInt(windowsSize_x, block_size);
+                    reserved_3 = GetSomeInt(reserved_3, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_x: ");
-                    lae::WriteLog(LogsFile, windowsSize_x, true);
+                    lae::WriteLog(LogsFile, reserved_3, true);
                     break;
                 case schm_data.windowsSize_y_flag:
-                    windowsSize_y = GetSomeInt(windowsSize_y, block_size);
+                    reserved_4 = GetSomeInt(reserved_4, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_y: ");
-                    lae::WriteLog(LogsFile, windowsSize_y, true);
+                    lae::WriteLog(LogsFile, reserved_4, true);
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
@@ -401,6 +406,7 @@ void SchemeFileParser::ParseFONT() {
     ;
 }
 
+
 void SchemeFileParser::ParseUNKNOWN() {
     // Пока не дошли до конца секции, считываем данные
     while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
@@ -416,6 +422,112 @@ void SchemeFileParser::ParseUNKNOWN() {
         } else if (byte == scheme_flags.section_flag)
             EnterSection();
     }
+}
+
+void SchemeFileParser::ParseOBJECT() {
+
+    uint8_t data_counter = 0;
+    uint32_t block_size;
+
+    if (sections_stack.back().sect_name.substr(sections_stack.back().sect_name.size(), 1) != "1")
+        // Пока не дошли до конца секции, считываем данные
+        while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
+            SchemeFile.get(byte);
+            // Если нашли флаг блока, открываем его
+            if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
+                // Получаем размер блока
+                block_size = GetBlockSize();
+
+            } else if (byte == scheme_flags.section_flag)
+                EnterSection();
+        }
+    else {
+        SchemeFile.get(byte);
+        // Получаем размер блока
+        block_size = GetBlockSize();
+
+        SchemeFile.read(buffer, block_size);
+
+        if (static_cast<uint8_t>(buffer[616]) == 7)
+            ParseELLIPS(block_size);
+
+    }
+
+}
+
+void SchemeFileParser::ParseELLIPS(const uint32_t& block_size) {
+
+    uint32_t bytes_counter = 16;
+
+    std::string tmp_center_x = std::string();
+    for (uint8_t _byte; _byte < 8; ++_byte)
+        tmp_center_x += buffer[bytes_counter + _byte];
+
+    bytes_counter += 16;
+
+    std::string tmp_center_y = std::string();
+    for (uint8_t _byte; _byte < 8; ++_byte)
+        tmp_center_y += buffer[bytes_counter + _byte];
+
+    bytes_counter += 24;
+
+    std::string tmp_angle = std::string();
+    for (uint8_t _byte; _byte < 8; ++_byte)
+        tmp_angle += buffer[bytes_counter + _byte];
+
+    bytes_counter += 496;
+
+    uint32_t tmp_id = 0;
+    for (int8_t i = bytes_counter + 7; i >= bytes_counter; --i) {
+        tmp_id |= static_cast<uint8_t>(buffer[i]);
+
+        if (i != 0)
+            tmp_id <<= 8;
+    }
+
+    bytes_counter += 12;
+
+    uint32_t tmp_half_x = 0;
+    for (int8_t i = bytes_counter + 3; i >= bytes_counter; --i) {
+        tmp_half_x |= static_cast<uint8_t>(buffer[i]);
+
+        if (i != 0)
+            tmp_half_x <<= 8;
+    }
+
+    bytes_counter += 8;
+
+    uint32_t tmp_half_y = 0;
+    for (int8_t i = bytes_counter + 3; i >= bytes_counter; --i) {
+        tmp_half_y |= static_cast<uint8_t>(buffer[i]);
+
+        if (i != 0)
+            tmp_half_y <<= 8;
+    }
+
+    bytes_counter += 10;
+
+    ssp::BGRColor tmp_pen;
+    tmp_pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+    tmp_pen.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+    tmp_pen.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+    ssp::BGRColor tmp_brush;
+    tmp_brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+    tmp_brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+    tmp_brush.red = static_cast<uint8_t>(buffer[bytes_counter]);
+
+    bytes_counter += 4;
+
+    uint8_t tmp_brush_style;
+    tmp_brush_style = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+    uint8_t tmp_line_style;
+    tmp_line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+    uint8_t tmp_fill;
+    tmp_fill = static_cast<uint8_t>(buffer[bytes_counter]);
+
 }
 
 void SchemeFileParser::ParseSectionData() {
@@ -435,6 +547,8 @@ void SchemeFileParser::ParseSectionData() {
         ParseSCH2();
     else if (sections_stack.back().sect_name == "font")
         ParseUNKNOWN();     // TODO Заменить на ParseFONT
+    else if (sections_stack.back().sect_name.substr(0, 4) == "objs")
+        ParseOBJECT();
     else
         ParseUNKNOWN();
 }
@@ -482,10 +596,9 @@ void SchemeFileParser::PrintBlockData(const uint32_t& block_size) {
         print_byte = byte;
         ++bytes_counter;
         lae::WriteLog(LogsFile, print_byte);
-        if (bytes_counter%4==0){
+        if (bytes_counter % 4 == 0) {
             lae::WriteLog(LogsFile, "\n");
-        }
-        else {
+        } else {
             lae::WriteLog(LogsFile, ' ');
         }
 

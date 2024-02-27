@@ -4,7 +4,7 @@
 
 #endif
 
-#include "parser/SchemeFileParser.cpp"
+#include "lib/SchemeFileParser.cpp"
 
 int main() {
 

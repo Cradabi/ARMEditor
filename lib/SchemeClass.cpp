@@ -1,8 +1,4 @@
 #include "SchemeClass.h"
-#include <QApplication>
-#include <QWidget>
-#include <QPainter>
-#include <iostream>
 
 
 void Scheme::set_width(int input_width) {

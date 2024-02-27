@@ -6,6 +6,8 @@
 #include <vector>
 #include <bitset>
 
+#include "lib/SchemeClass.cpp"
+
 #include "SchemeFileNS.h"
 
 #pragma once    // Сообщаем препроцессору, что данный заголовочный файл может быть подключен только 1 раз
@@ -18,7 +20,11 @@ private:
     std::ifstream SchemeFile;       // Файл схемы
 
 protected:
-    // Структуры содержащие параметры секций
+
+    // Параметры схемы
+    Scheme::SchemeParams *scheme_params;
+
+    // Структуры содержащие флаги параметров секций
 
     static ssp::schm schm_data;
     static ssp::cach cash_data;
@@ -193,9 +199,14 @@ private:
 
     void ParseUNKNOWN();
 
+    // Функция парса параметров объекта схемы
+    void ParseOBJECT();
+
+    void ParseELLIPS(const uint32_t& block_size);
+
     // Функция открытия рабочих файлов
-    bool OpenWorkFiles(const std::wstring& schemefile_path, const std::string& logfile_path) {
-        SchemeFile.open(schemefile_path.c_str(), std::ios_base::binary);
+    bool OpenWorkFiles(const std::string& schemefile_path, const std::string& logfile_path) {
+        SchemeFile.open(schemefile_path, std::ios_base::binary);
         LogsFile.open(logfile_path);
 
         if (!SchemeFile) {
@@ -216,11 +227,15 @@ private:
     }
 
 public:
+    SchemeFileParser(Scheme::SchemeParams& _scheme_params){
+        scheme_params = &_scheme_params;
+    }
+
     // Главная функция парсера схемы
-    virtual bool parse(const std::wstring& schemefile_path, const std::string& logfile_path);
+    virtual bool parse(const std::string& schemefile_path, const std::string& logfile_path);
 };
 
-bool SchemeFileParser::parse(const std::wstring& schemefile_path, const std::string& logfile_path) {
+bool SchemeFileParser::parse(const std::string& schemefile_path, const std::string& logfile_path) {
     if (!OpenWorkFiles(schemefile_path, logfile_path))
         return false;
 

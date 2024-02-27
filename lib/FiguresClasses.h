@@ -3,6 +3,8 @@
 #include <cmath>
 #include <QPainter>
 
+#pragma once
+
 namespace FiguresClasses {
 
     class Primitive{ //класс примитива
@@ -1048,7 +1050,7 @@ namespace FiguresClasses {
     public:
         Set();
 
-        Set(int ln_width, int hor_space, int vert_space, int ln_style, std::vector <int>& ln_color);
+        Set(int ln_width, int hor_space, int vert_space, int ln_style,const std::vector <int>& ln_color);
 
         void draw(QPainter &painter, int scheme_width, int scheme_height);
 

@@ -1,16 +1,14 @@
-#include <lib/FiguresClasses.cpp>
+#include "lib/FiguresClasses.cpp"
 #include <QApplication>
-#include <QWidget>
-#include <QPainter>
 
+#pragma once
 
 class Scheme {
 public:
 
-#pragma pack(push, 1)
     struct SchemeParams {
-        int width{0};
-        int height{0};
+        int width{15200};
+        int height{1200};
         int version{0};
         int scale{1};
         int scale_in_ARM{1};
@@ -24,9 +22,8 @@ public:
         std::string server = std::string();
 
         std::vector<FiguresClasses::Primitive*> objects_vector;
-        FiguresClasses::Set set_object = Set();
+        FiguresClasses::Set set_object = Set(1, 20, 20, 1, {200, 200, 200});
     };
-#pragma pack(pop)
 
 private:
 
@@ -37,7 +34,7 @@ public:
     Scheme() = default;
 
     // Конструктор схемы с заданными параметрами
-    Scheme(const SchemeParams &input_params) {
+    Scheme(const SchemeParams& input_params) {
         actual_params = input_params;
     }
 
@@ -57,13 +54,13 @@ public:
 
     void set_groups_number(int groups_number);
 
-    void set_name_scheme(const std::string &name);
+    void set_name_scheme(const std::string& name);
 
-    void set_file_path(const std::string &file_path);
+    void set_file_path(const std::string& file_path);
 
-    void set_bd_name(const std::string &bd);
+    void set_bd_name(const std::string& bd);
 
-    void set_server(const std::string &server);
+    void set_server(const std::string& server);
 
     int get_width();
 
@@ -89,7 +86,7 @@ public:
 
     std::string get_server();
 
-    void draw_scheme(QPainter &painter);
+    void draw_scheme(QPainter& painter);
 
     void add_object(FiguresClasses::Primitive* add_object);
 
