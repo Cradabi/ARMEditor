@@ -4,9 +4,43 @@
 #include <QMessageBox>
 #include "mywidget.h"
 #include "PARSERLIB/lib/SchemeFileParser.cpp"
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
 int counter = 0;
 
+MyWidget::MyWidget(){
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    QGraphicsScene *scene = new QGraphicsScene(this);
+    QGraphicsView *view = new QGraphicsView(scene);
+
+    view->resize(15200,1200);
+    layout->addWidget(view);
+
+    QPixmap pix(15200,1200);
+    pix.fill(Qt::white);
+
+    QPainter *painter = new QPainter(&pix);
+
+    painter->setPen(QColor(255,34,255,255));
+    //painter->drawRect(15,15,100,100);
+    Scheme::SchemeParams tmp_scheme_params;
+
+//    SchemeFileParser parser(tmp_scheme_params);
+//    parser.parse("/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/schemes_exp/Эллипс.схема",
+//                 "/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
+    tmp_scheme_params.objects_vector.push_back(new Line(100, 100, 450, 300));
+
+    Scheme scheme(tmp_scheme_params);
+    std::string text2 = "";
+    std::vector<int> col2 = {255, 0, 0};
+    scheme.draw_scheme(*painter);
+    delete painter;
+    scene->addPixmap(pix);
+
+}
+
+/*
 void MyWidget::paintEvent(QPaintEvent* event) {
 //    std::string text2 = "";
 //    std::vector<int> col2 = {255, 0, 0};
@@ -96,14 +130,15 @@ void MyWidget::paintEvent(QPaintEvent* event) {
     painter.end();
 
     std::cout << ++counter << '\n';
-}
+} */
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     MyWidget* widget = new MyWidget();
-    widget->setFixedSize(15360, 1200);
+    std::cout << this->width() << "\n" << this->height();
+    widget->setFixedSize(1430, 830);
     ui->scrollArea->setWidget(widget);
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);

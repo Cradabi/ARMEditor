@@ -4,10 +4,11 @@
 
 class MyWidget : public QFrame {
 Q_OBJECT
+public:
+    MyWidget();
 
 private:
-
-    void paintEvent(QPaintEvent* event);
+    //void paintEvent(QPaintEvent* event);
 
 };
 
