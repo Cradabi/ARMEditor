@@ -32,11 +32,6 @@ private:
     QDesktopWidget desk;
 
 private slots:
-    void slot_button1();
-    void slot_button2();
-    void slot_button3();
-    void slot_button4();
-
     void slot_button_close();
 
     void slot_button_clicked(int buttonID);

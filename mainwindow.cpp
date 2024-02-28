@@ -143,11 +143,6 @@ MainWindow::MainWindow(QWidget* parent)
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
 
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slot_button1()));
-    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(slot_button2()));
-    connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(slot_button3()));
-    connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(slot_button4()));
-
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
     connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));
 
@@ -159,23 +154,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow() {
     delete ui;
-}
-
-
-void MainWindow::slot_button1() {
-    emit signal_from_button(1);
-}
-
-void MainWindow::slot_button2() {
-    emit signal_from_button(2);
-}
-
-void MainWindow::slot_button3() {
-    emit signal_from_button(3);
-}
-
-void MainWindow::slot_button4() {
-    emit signal_from_button(4);
 }
 
 void MainWindow::slot_button_close() {
@@ -193,7 +171,6 @@ void MainWindow::slot_change_panel_visibility() {
     this->panel_is_visible = not this->panel_is_visible;
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
-    ui->pushButton_close->setVisible(this->panel_is_visible);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {

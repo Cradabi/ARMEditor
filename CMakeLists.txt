@@ -22,6 +22,7 @@ add_executable(${PROJECT_NAME}
         mainwindow.cpp
         mainwindow.h
         mywidget.h
+        mainwindow.ui
 )
 
 
