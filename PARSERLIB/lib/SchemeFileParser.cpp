@@ -27,7 +27,7 @@ void SchemeFileParser::ParseSCHM() {
     int32_t reserved_3{0};
     int32_t reserved_4{0};
 
-    std::string tmp_work_scale = "";
+    char* tmp_work_scale = new char[8];
 
     uint8_t data_counter = 0;
     uint32_t block_size;
@@ -102,13 +102,12 @@ void SchemeFileParser::ParseSCHM() {
                     reserved_2 = GetSomeInt(reserved_2, block_size);
                     break;
                 case schm_data.work_scale_flag:
-                    for (uint32_t digit = 0; digit < block_size; ++digit) {
-                        SchemeFile.get(byte);
-                        tmp_work_scale += byte;
-                    }
-                    // work_scale = std::stod(tmp_work_scale);
+//                    tmp_work_scale = new char[9];
+                    SchemeFile.read(tmp_work_scale, block_size);
+                    work_scale = *reinterpret_cast<double*>(tmp_work_scale);
+                    delete[] tmp_work_scale;
                     lae::WriteLog(LogsFile, "work_scale: ");
-                    lae::WriteLog(LogsFile, tmp_work_scale, true);
+                    lae::WriteLog(LogsFile, work_scale, true);
                     break;
                 case schm_data.bg_color_flag:
                     SchemeFile.read(buffer, block_size);
@@ -527,6 +526,10 @@ void SchemeFileParser::ParseELLIPS(const uint32_t& block_size) {
 
     uint8_t tmp_fill;
     tmp_fill = static_cast<uint8_t>(buffer[bytes_counter]);
+
+//    tmp_sch_params.objects_vector.push_back(new Ellipse(central_x - half_width, central_y - half_height, half_width * 2, half_height * 2, (360 - angle) % 360, int line_width, int style_line,
+//    const std::vector<int> &line_color(rgb), const std::string &help_text, bool bool_show,
+//    const std::vector<int> &filling_color(rgb), bool bool_show_filling));
 
 }
 
