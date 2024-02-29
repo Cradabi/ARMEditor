@@ -38,6 +38,8 @@ public:
         actual_params = input_params;
     }
 
+    ~Scheme();
+
     void set_width(int width);
 
     void set_height(int height);

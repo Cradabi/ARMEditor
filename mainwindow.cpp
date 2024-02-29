@@ -13,22 +13,28 @@ MyWidget::MyWidget() {
     QVBoxLayout* layout = new QVBoxLayout(this);
     QGraphicsScene* scene = new QGraphicsScene(this);
     QGraphicsView* view = new QGraphicsView(scene);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    view->resize(15200, 1200);
+    Scheme::SchemeParams tmp_scheme_params;
+
+    SchemeFileParser parser(tmp_scheme_params);
+    parser.parse("/home/astra/ARMEditor/PARSERLIB/schemes_exp/Эллипс2.схема",
+                 "/home/astra/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
+
+    this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
+
+    view->resize(tmp_scheme_params.width, tmp_scheme_params.height);
     layout->addWidget(view);
 
-    QPixmap pix(15200, 1200);
+    QPixmap pix(tmp_scheme_params.width, tmp_scheme_params.height);
     pix.fill(Qt::white);
 
     QPainter* painter = new QPainter(&pix);
 
     //painter->setPen(QColor(255, 34, 255, 255));
     // painter->drawRect(15,15,100,100);
-    Scheme::SchemeParams tmp_scheme_params;
 
-    SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/schemes_exp/Эллипс2.схема",
-                 "/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
 
     //tmp_scheme_params.objects_vector.push_back(new Line(100, 100, 450, 300));
 
@@ -39,7 +45,9 @@ MyWidget::MyWidget() {
     delete painter;
     scene->addPixmap(pix);
 
+    //TODO сделать ужаление лэйаута, сцены и отображения
 }
+
 
 /*
 void MyWidget::paintEvent(QPaintEvent* event) {
@@ -138,8 +146,6 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
 
     MyWidget* widget = new MyWidget();
-    std::cout << this->width() << "\n" << this->height();
-    widget->setFixedSize(1430, 830);
     ui->scrollArea->setWidget(widget);
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);

@@ -1,5 +1,11 @@
 #include "SchemeClass.h"
 
+Scheme::~Scheme(){
+    for (auto object: actual_params.objects_vector){
+        delete object;
+    }
+    actual_params = {};
+}
 
 void Scheme::set_width(int input_width) {
     actual_params.width = input_width;
