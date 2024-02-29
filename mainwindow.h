@@ -34,7 +34,6 @@ private:
 private slots:
     void slot_button_close();
 
-    void slot_button_clicked(int buttonID);
     void slot_change_panel_visibility();
 
     void resizeEvent(QResizeEvent* event);

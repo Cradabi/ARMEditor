@@ -6,6 +6,7 @@
 #include "PARSERLIB/lib/SchemeFileParser.cpp"
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QMenu>
 
 int counter = 0;
 
@@ -153,7 +154,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
     connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));
 
-    connect(this, &MainWindow::signal_from_button, this, &MainWindow::slot_button_clicked);
+    //connect(ui->menu_file, SIGNAL(hovered()), this, SLOT(slot_menu_hover()));
+
     connect(this, &MainWindow::signal_from_close_button, this, &MainWindow::slot_change_panel_visibility);
 
 
@@ -167,17 +169,15 @@ void MainWindow::slot_button_close() {
     emit signal_from_close_button();
 }
 
-
-void MainWindow::slot_button_clicked(int buttonID) {
-    QMessageBox::information(this,
-                             "Уведомление о нажатой кнопке",
-                             "Нажата кнопка под номером " + QString::number(buttonID));
-}
-
 void MainWindow::slot_change_panel_visibility() {
     this->panel_is_visible = not this->panel_is_visible;
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
+    if (this->panel_is_visible) {
+        ui->pushButton_close->setText(">");
+    } else {
+        ui->pushButton_close->setText("<");
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
