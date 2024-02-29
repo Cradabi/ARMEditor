@@ -27,7 +27,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/schemes_exp/Эллипс.схема",
+    parser.parse("/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/schemes_exp/Эллипс2.схема",
                  "/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
 
     //tmp_scheme_params.objects_vector.push_back(new Line(100, 100, 450, 300));

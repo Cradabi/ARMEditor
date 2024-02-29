@@ -214,6 +214,8 @@ private:
             return false;
         }
 
+        scheme_params->file_path = schemefile_path;
+
         if (!LogsFile) {
             lae::PrintLog("Файл логов не был открыт", true, 12);
             return false;

@@ -8,10 +8,8 @@ void SchemeFileParser::ParseSCHM() {
     int32_t name_length{0};
 
     int32_t DBIP_length{0};
-    std::string DBIP;
 
     int32_t DBAlias_length{0};
-    std::string DBAlias;
 
     int32_t reserved_1{0};
     int32_t reserved_2{0};
@@ -67,10 +65,10 @@ void SchemeFileParser::ParseSCHM() {
                 case schm_data.DBIP_flag:
                     for (uint32_t digit = 0; digit < block_size; ++digit) {
                         SchemeFile.get(byte);
-                        DBIP += byte;
+                        scheme_params->name_bd += byte;
                     }
                     lae::WriteLog(LogsFile, "DBIP: ");
-                    lae::WriteLog(LogsFile, DBIP, true);
+                    lae::WriteLog(LogsFile, scheme_params->name_bd, true);
                     break;
                 case schm_data.DBAlias_length_flag:
                     DBAlias_length = GetSomeInt(DBAlias_length, block_size);
@@ -80,10 +78,10 @@ void SchemeFileParser::ParseSCHM() {
                 case schm_data.DBAlias_flag:
                     for (uint32_t digit = 0; digit < block_size; ++digit) {
                         SchemeFile.get(byte);
-                        DBAlias += byte;
+                        scheme_params->server += byte;
                     }
                     lae::WriteLog(LogsFile, "DBAlias: ");
-                    lae::WriteLog(LogsFile, DBAlias, true);
+                    lae::WriteLog(LogsFile, scheme_params->server, true);
                     break;
                 case schm_data.width_flag:
                     scheme_params->width = GetSomeInt(scheme_params->width, block_size);
@@ -435,11 +433,22 @@ void SchemeFileParser::ParseOBJECT() {
             if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
                 // Получаем размер блока
                 block_size = GetBlockSize();
+                PrintBlockData(block_size);
 
             } else if (byte == scheme_flags.section_flag)
                 EnterSection();
         }
     else {
+        SchemeFile.get(byte);
+        // Получаем размер блока
+        block_size = GetBlockSize();
+        PrintBlockData(block_size);
+
+        SchemeFile.get(byte);
+        // Получаем размер блока
+        block_size = GetBlockSize();
+        PrintBlockData(block_size);
+
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = GetBlockSize();
@@ -455,58 +464,61 @@ void SchemeFileParser::ParseOBJECT() {
 
 void SchemeFileParser::ParseELLIPS(const uint32_t& block_size) {
 
+    std::bitset<8> print_byte;
+
     uint32_t bytes_counter = 16;
 
     char tmp_center_x[9];
-    for (uint8_t _byte = 7; _byte >= 0; ++_byte)
-        tmp_center_x[_byte] = buffer[bytes_counter + 8 - _byte];
+    for (int8_t _byte = 0; _byte < 8; ++_byte)
+        tmp_center_x[_byte] = buffer[bytes_counter + _byte];
+
     double center_x = *reinterpret_cast<double*>(tmp_center_x);
-
-    bytes_counter += 16;
-
-    char tmp_center_y[9];
-    for (uint8_t _byte = 7; _byte >= 0; ++_byte)
-        tmp_center_y[_byte] = buffer[bytes_counter + 8 - _byte];
-    double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
     bytes_counter += 24;
 
+    char tmp_center_y[9];
+    for (int8_t _byte = 0; _byte < 8; ++_byte)
+        tmp_center_y[_byte] = buffer[bytes_counter + _byte];
+    double center_y = *reinterpret_cast<double*>(tmp_center_y);
+
+    bytes_counter += 32;
+
     char tmp_angle[9];
-    for (uint8_t _byte = 7; _byte >= 0; ++_byte)
-        tmp_angle[_byte] = buffer[bytes_counter + 8 - _byte];
+    for (int8_t _byte = 0; _byte < 8; ++_byte)
+        tmp_angle[_byte] = buffer[bytes_counter + _byte];
     double angle = *reinterpret_cast<double*>(tmp_angle);
 
-    bytes_counter += 496;
+    bytes_counter = 576;
 
     uint32_t id = 0;
-    for (int8_t i = bytes_counter + 7; i >= bytes_counter; --i) {
+    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
         id |= static_cast<uint8_t>(buffer[i]);
 
-        if (i != 0)
+        if (i != bytes_counter)
             id <<= 8;
+    }
+
+    bytes_counter += 16;
+
+    uint32_t half_x = 0;
+    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
+        half_x |= static_cast<uint8_t>(buffer[i]);
+
+        if (i != bytes_counter)
+            half_x <<= 8;
     }
 
     bytes_counter += 12;
 
-    uint32_t half_x = 0;
-    for (int8_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != 0)
-            half_x <<= 8;
-    }
-
-    bytes_counter += 8;
-
     uint32_t half_y = 0;
-    for (int8_t i = bytes_counter + 3; i >= bytes_counter; --i) {
+    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
         half_y |= static_cast<uint8_t>(buffer[i]);
 
-        if (i != 0)
+        if (i != bytes_counter)
             half_y <<= 8;
     }
 
-    bytes_counter += 10;
+    bytes_counter += 14;
 
     ssp::BGRColor pen;
     pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -516,7 +528,7 @@ void SchemeFileParser::ParseELLIPS(const uint32_t& block_size) {
     ssp::BGRColor brush;
     brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
     brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-    brush.red = static_cast<uint8_t>(buffer[bytes_counter]);
+    brush.red = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     bytes_counter += 4;
 
@@ -615,7 +627,6 @@ void SchemeFileParser::PrintBlockData(const uint32_t& block_size) {
         }
 
     }
-    lae::WriteLog(LogsFile, ' ');
 
     lae::WriteLog(LogsFile, "BLOCK CLOSED", true);
 
