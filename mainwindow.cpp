@@ -11,9 +11,9 @@
 int counter = 0;
 
 MyWidget::MyWidget() {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    QGraphicsScene* scene = new QGraphicsScene(this);
-    QGraphicsView* view = new QGraphicsView(scene);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    QGraphicsScene *scene = new QGraphicsScene(this);
+    QGraphicsView *view = new QGraphicsView(scene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -31,13 +31,13 @@ MyWidget::MyWidget() {
     QPixmap pix(tmp_scheme_params.width, tmp_scheme_params.height);
     pix.fill(Qt::white);
 
-    QPainter* painter = new QPainter(&pix);
+    QPainter *painter = new QPainter(&pix);
 
     //painter->setPen(QColor(255, 34, 255, 255));
     // painter->drawRect(15,15,100,100);
 
 
-    //tmp_scheme_params.objects_vector.push_back(new Line(100, 100, 450, 300));
+    //tmp_scheme_params.objects_vector.push_back(new Point(20, 20, 8, {255, 0, 0}));
 
     Scheme scheme(tmp_scheme_params);
     std::string text2 = "";
@@ -46,7 +46,7 @@ MyWidget::MyWidget() {
     delete painter;
     scene->addPixmap(pix);
 
-    //TODO сделать ужаление лэйаута, сцены и отображения
+    //TODO сделать удаление лэйаута, сцены и отображения
 }
 
 
@@ -142,11 +142,11 @@ void MyWidget::paintEvent(QPaintEvent* event) {
     std::cout << ++counter << '\n';
 } */
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    MyWidget* widget = new MyWidget();
+    MyWidget *widget = new MyWidget();
     ui->scrollArea->setWidget(widget);
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
@@ -180,7 +180,7 @@ void MainWindow::slot_change_panel_visibility() {
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event) {
+void MainWindow::resizeEvent(QResizeEvent *event) {
     int px_width = this->width();
     int px_height = this->height();
     QRect rect = QRect(0, 0, px_width, px_height -

@@ -7,7 +7,7 @@
 
 namespace FiguresClasses {
 
-    class Primitive{ //класс примитива
+    class Primitive { //класс примитива
     protected:
         bool bool_show_help = false;
         bool bool_show = true;
@@ -18,7 +18,8 @@ namespace FiguresClasses {
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
         std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine,
-                                                  Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine};
+                                                  Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine,
+                                                  Qt::DashDotDotLine, Qt::DashDotDotLine};
 
     public:
         Primitive();
@@ -45,7 +46,7 @@ namespace FiguresClasses {
 
     };
 
-    class Line : public Primitive{ // класс линии
+    class Line : public Primitive { // класс линии
     private:
         bool bool_show_help = false;             //флаг показывания подсказки
         bool bool_show = true;                   //флаг показывания линии
@@ -192,7 +193,7 @@ namespace FiguresClasses {
     };
 
 
-    class Rectangle : public Primitive{   //класс прямоугольника
+    class Rectangle : public Primitive {   //класс прямоугольника
     private:                             //показывать прямоугольник
         bool bool_show_filling = false;                     //показывать заливку
         std::vector<int> line_color = {0, 0, 0};            //цвет линии
@@ -290,7 +291,7 @@ namespace FiguresClasses {
     };
 
 
-    class Ellipse: public Primitive { //класс эллипса
+    class Ellipse : public Primitive { //класс эллипса
     protected:                                           //показывать эллипс
         bool bool_show_filling = false;                                   //показывать заливку
         std::vector<int> line_color = {0, 0, 0};                          //цвет линии
@@ -406,7 +407,7 @@ namespace FiguresClasses {
 
     };
 
-    class CrookedLine : public Primitive{//класс кривой линии
+    class CrookedLine : public Primitive {//класс кривой линии
     protected:
         bool bool_show_filling = true;                         //показывать заливку
 
@@ -510,7 +511,7 @@ namespace FiguresClasses {
     };
 
 
-    class TransitionPoint : public Primitive{                               //класс точки перехода
+    class TransitionPoint : public Primitive {                               //класс точки перехода
     private:
         int number_of_transition_point = 0;               // номер точки перехода
 
@@ -688,7 +689,7 @@ namespace FiguresClasses {
     };
 
 
-    class Text : public Primitive{                                                                      //класс текста
+    class Text : public Primitive {                                                                      //класс текста
     protected:
         bool bold_font = true;                                                       //флаг жирности шрифта
         bool italic_font = true;                                                     //флаг наклонности шрифта
@@ -846,7 +847,7 @@ namespace FiguresClasses {
         bool get_show_filling();
     };
 
-    class Image : public Primitive{   //класс картинки
+    class Image : public Primitive {   //класс картинки
     private:
         bool bool_show_filling = false;                     //показывать заливку
         bool bool_transparancy = false;
@@ -1039,18 +1040,26 @@ namespace FiguresClasses {
         int get_id();
     };
 
-    class Set : public Primitive{ //класс сетки
+    class Set : public Primitive { //класс сетки
     private:
         int line_width = 1;
-        int horizontal_space = 20;           //расстояние между линиями сетки по горизонтали
-        int vertical_space = 20;           //расстояние между линиями сетки по горизонтали
+        int line_width2 = 1;
+        int line_width3 = 1;
+        int horizontal_space = 128;           //расстояние между линиями сетки по горизонтали
+        int vertical_space = 128;           //расстояние между линиями сетки по горизонтали
+        int horizontal_space2 = 64;           //расстояние между линиями сетки по горизонтали
+        int vertical_space2 = 64;           //расстояние между линиями сетки по горизонтали
+        int horizontal_space3 = 16;           //расстояние между линиями сетки по горизонтали
+        int vertical_space3 = 16;           //расстояние между линиями сетки по горизонтали
         int line_style = 2;
 
-        std::vector <int> line_color = {200, 200, 200};
+        std::vector<int> line_color = {200, 200, 200};
     public:
         Set();
 
-        Set(int ln_width, int hor_space, int vert_space, int ln_style,const std::vector <int>& ln_color);
+        Set(int ln_width, int ln_width2, int ln_width3, int hor_space1, int vert_space1, int hor_space2,
+            int vert_space2, int hor_space3,
+            int vert_space3, int ln_style, const std::vector<int> &ln_color);
 
         void draw(QPainter &painter, int scheme_width, int scheme_height);
 
@@ -1062,7 +1071,7 @@ namespace FiguresClasses {
 
         void set_line_style(int ln_style);
 
-        void set_line_color(std::vector <int> &col);
+        void set_line_color(std::vector<int> &col);
 
         int get_line_width();
 
@@ -1072,7 +1081,37 @@ namespace FiguresClasses {
 
         int get_line_style();
 
-        std::vector <int> get_line_color();
+        std::vector<int> get_line_color();
+    };
+
+    class Point : public Primitive {
+    private:
+        int x = 0;
+        int y = 0;
+        int line_width = 1;
+
+        std::vector<int> line_color = {};
+
+    public:
+        Point();
+
+        Point(int x, int y, int ln_width, const std::vector<int> &ln_color);
+
+        void draw(QPainter &painter) override;
+
+        void change_cords(int x, int y);
+
+        void set_line_width(int ln_width);
+
+        void set_line_color(std::vector<int> ln_color);
+
+        int get_x();
+
+        int get_y();
+
+        int get_line_width();
+
+        std::vector<int> get_line_color();
     };
 }
 

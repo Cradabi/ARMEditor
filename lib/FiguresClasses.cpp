@@ -5,11 +5,11 @@ using namespace FiguresClasses;
 
 Primitive::Primitive() {}
 
-void Primitive::draw(QPainter& painter) {
+void Primitive::draw(QPainter &painter) {
     std::cout << 1 << "\n";
 }
 
-void Primitive::set_help_text(const std::string& help) {
+void Primitive::set_help_text(const std::string &help) {
     this->help_text = help;
 }
 
@@ -53,9 +53,9 @@ Line::Line(int st_x, int st_y, int end_x, int end_y) : Primitive::Primitive() {
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, const std::string& help_text,
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int>& line_color) : Primitive::Primitive() {
+           int end_style_arrow, const std::vector<int> &line_color) : Primitive::Primitive() {
     this->text = text;
     this->help_text = help_text;
     this->bool_show = bool_show;
@@ -69,10 +69,10 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, co
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, const std::string& help_text,
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int>& line_color, const std::string& font_name,
-           int font_size, const std::vector<int>& font_color) : Primitive::Primitive() {
+           int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
+           int font_size, const std::vector<int> &font_color) : Primitive::Primitive() {
     this->text = text;
     this->help_text = help_text;
     this->bool_show = bool_show;
@@ -89,10 +89,10 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, co
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, const std::string& help_text,
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int>& line_color, const std::string& font_name,
-           int font_size, const std::vector<int>& font_color, bool bold_font, bool italic_font, bool underlined_font,
+           int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
+           int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
            bool crossed_font) : Primitive::Primitive() {
     this->text = text;
     this->help_text = help_text;
@@ -114,7 +114,7 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, co
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-void Line::draw(QPainter& painter) {
+void Line::draw(QPainter &painter) {
     QColor color_line = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
     QLineF linef(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
     switch (this->get_start_style_arrow()) {
@@ -260,7 +260,7 @@ void Line::change_center_cords(int st_x, int st_y, int end_x,
 }
 
 //далее идут функции меняющие одноименные переменные класса линии
-void Line::set_line_color(const std::vector<int>& lin_col) {
+void Line::set_line_color(const std::vector<int> &lin_col) {
     this->line_color = lin_col;
 }
 
@@ -276,11 +276,11 @@ void Line::set_end_style_arrow(int end_arrow) {
     this->end_style_arrow = end_arrow;
 }
 
-void Line::set_text(const std::string& text) {
+void Line::set_text(const std::string &text) {
     this->text = text;
 }
 
-void Line::set_font_name(const std::string& fn_name) {
+void Line::set_font_name(const std::string &fn_name) {
     this->font_name = fn_name;
 }
 
@@ -288,7 +288,7 @@ void Line::set_font_size(int fn_size) {
     this->font_size = fn_size;
 }
 
-void Line::set_font_color(const std::vector<int>& fn_col) {
+void Line::set_font_color(const std::vector<int> &fn_col) {
     this->font_color = fn_col;
 }
 
@@ -308,19 +308,19 @@ void Line::set_crossed_font(bool crossed) {
     this->crossed_font = crossed;
 }
 
-void Line::set_font(const std::string& font_name, int font_size) {
+void Line::set_font(const std::string &font_name, int font_size) {
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void Line::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color) {
+void Line::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color) {
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-Line::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+Line::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
                bool italic_font,
                bool underlined_font, bool crossed_font) {
     this->font_name = font_name;
@@ -417,7 +417,7 @@ Rectangle::Rectangle(int x, int y, int width, int height) : Primitive::Primitive
 }
 
 Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                     const std::vector<int>& line_color, const std::string& help_text, bool bool_show)
+                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show)
         : Primitive::Primitive() {
     this->angle = angle;
     this->line_width = line_width;
@@ -430,8 +430,8 @@ Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_wi
 }
 
 Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                     const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int style_frame,
-                     int style_gradient_filling, const std::vector<int>& filling_color, bool bool_show_filling)
+                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
+                     int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling)
         : Primitive::Primitive() {
     this->angle = angle;
     this->line_width = line_width;
@@ -447,7 +447,7 @@ Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_wi
     change_center_cords(x, y, width, height);
 }
 
-void Rectangle::draw(QPainter& painter) {
+void Rectangle::draw(QPainter &painter) {
     //начинаем отрисовку прямоугольника
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
@@ -487,11 +487,11 @@ void Rectangle::set_line_width(int width) {
     this->line_width = width;
 }
 
-void Rectangle::set_line_color(const std::vector<int>& ln_col) {
+void Rectangle::set_line_color(const std::vector<int> &ln_col) {
     this->line_color = ln_col;
 }
 
-void Rectangle::set_filling_color(const std::vector<int>& fil_col) {
+void Rectangle::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
@@ -588,7 +588,7 @@ Ellipse::Ellipse(int x, int y, int width, int height, int angle) : Primitive::Pr
 }
 
 Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                 const std::vector<int>& line_color, const std::string& help_text, bool bool_show)
+                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show)
         : Primitive::Primitive() {
     this->angle = angle;
     this->line_width = line_width;
@@ -601,8 +601,8 @@ Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width,
 }
 
 Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                 const std::vector<int>& line_color, const std::string& help_text, bool bool_show,
-                 const std::vector<int>& filling_color, bool bool_show_filling) : Primitive::Primitive() {
+                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
+                 const std::vector<int> &filling_color, bool bool_show_filling) : Primitive::Primitive() {
     this->angle = angle;
     this->line_width = line_width;
     this->style_line = style_line;
@@ -615,7 +615,7 @@ Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width,
     change_center_cords(x, y, width, height);
 }
 
-void Ellipse::draw(QPainter& painter) {
+void Ellipse::draw(QPainter &painter) {
     //начинаем отрисовку эллипса
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
@@ -656,11 +656,11 @@ void Ellipse::set_line_width(int line_width) {
     this->line_width = line_width;
 }
 
-void Ellipse::set_line_color(const std::vector<int>& ln_col) {
+void Ellipse::set_line_color(const std::vector<int> &ln_col) {
     this->line_color = ln_col;
 }
 
-void Ellipse::set_filling_color(const std::vector<int>& fil_col) {
+void Ellipse::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
@@ -740,7 +740,7 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
 }
 
 Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
-         const std::vector<int>& line_color, const std::string& help_text, bool bool_show) : Ellipse::Ellipse() {
+         const std::vector<int> &line_color, const std::string &help_text, bool bool_show) : Ellipse::Ellipse() {
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
@@ -754,8 +754,8 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
 }
 
 Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
-         const std::vector<int>& line_color, const std::string& help_text, bool bool_show,
-         const std::vector<int>& filling_color, bool bool_show_filling) : Ellipse::Ellipse() {
+         const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
+         const std::vector<int> &filling_color, bool bool_show_filling) : Ellipse::Ellipse() {
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
@@ -770,7 +770,7 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
     change_center_cords(x, y, width, height);
 }
 
-void Arc::draw(QPainter& painter) {
+void Arc::draw(QPainter &painter) {
     //начинаем отрисовку дуги
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
@@ -825,14 +825,14 @@ std::vector<int> Arc::get_arc_angles() {
 //конструкторы класса кривой линии получающие различные вводные
 CrookedLine::CrookedLine() : Primitive::Primitive() {}
 
-CrookedLine::CrookedLine(const std::vector<std::vector<int>>& points_vector) : Primitive::Primitive() {
+CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector) : Primitive::Primitive() {
     this->type_object = "Кривая линия";
     change_center_cords(points_vector);
 }
 
-CrookedLine::CrookedLine(const std::vector<std::vector<int>>& points_vector, int angle, int line_width, int style_line,
-                         const std::string& help_text, const std::vector<int>& line_color,
-                         const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling)
+CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector, int angle, int line_width, int style_line,
+                         const std::string &help_text, const std::vector<int> &line_color,
+                         const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling)
         : Primitive::Primitive() {
     this->angle = angle;
     this->line_width = line_width;
@@ -846,7 +846,7 @@ CrookedLine::CrookedLine(const std::vector<std::vector<int>>& points_vector, int
     change_center_cords(points_vector);
 }
 
-void CrookedLine::draw(QPainter& painter) {
+void CrookedLine::draw(QPainter &painter) {
     //начинаем отрисовку кривой
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
@@ -873,7 +873,7 @@ void CrookedLine::draw(QPainter& painter) {
 
 void
 CrookedLine::change_center_cords(
-        const std::vector<std::vector<int>>& points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
+        const std::vector<std::vector<int>> &points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
     this->points = points_vector;
     int max_x = 0;
     int max_y = 0;
@@ -906,11 +906,11 @@ void CrookedLine::set_angle(int angl) {
     this->angle = angl;
 }
 
-void CrookedLine::set_line_color(const std::vector<int>& ln_col) {
+void CrookedLine::set_line_color(const std::vector<int> &ln_col) {
     this->line_color = ln_col;
 }
 
-void CrookedLine::set_filling_color(const std::vector<int>& fil_col) {
+void CrookedLine::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
@@ -983,15 +983,15 @@ bool CrookedLine::get_show_filling() {
 }
 
 //конструкторы класса многоугольника получающие различные вводные
-Polygon::Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon) : CrookedLine::CrookedLine() {
+Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon) : CrookedLine::CrookedLine() {
     this->type_object = "Полигон";
     this->end_polygone = end_polygon;
     change_center_cords(points_vector);
 }
 
-Polygon::Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon, int angle, int line_width,
-                 int style_line, const std::string& help_text, const std::vector<int>& line_color,
-                 const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling)
+Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int angle, int line_width,
+                 int style_line, const std::string &help_text, const std::vector<int> &line_color,
+                 const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling)
         : CrookedLine::CrookedLine() {
     this->type_object = "Полигон";
     this->end_polygone = end_polygon;
@@ -1006,7 +1006,7 @@ Polygon::Polygon(const std::vector<std::vector<int>>& points_vector, bool end_po
     change_center_cords(points_vector);
 }
 
-void Polygon::draw(QPainter& painter) {
+void Polygon::draw(QPainter &painter) {
     //начинаем отрисовку полигона
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
@@ -1053,7 +1053,7 @@ TransitionPoint::TransitionPoint(int number, int x, int y, int width,
 }
 
 TransitionPoint::TransitionPoint(int number, int x, int y, int width,
-                                 int height, const std::vector<int>& filling_color, const std::string& help_text,
+                                 int height, const std::vector<int> &filling_color, const std::string &help_text,
                                  bool bool_show,
                                  bool bool_show_filling) : Primitive::Primitive() {
     this->number_of_transition_point = number;
@@ -1065,7 +1065,7 @@ TransitionPoint::TransitionPoint(int number, int x, int y, int width,
     change_center_cords(x, y, width, height);
 }
 
-void TransitionPoint::draw(QPainter& painter) {
+void TransitionPoint::draw(QPainter &painter) {
     //начало отображения точки перехода
     if (this->get_show()) {
         if (this->get_show_filling()) {
@@ -1092,7 +1092,7 @@ TransitionPoint::change_center_cords(int x, int y, int width,
 }
 
 //далее идут функции меняющие одноименные переменные класса точки перехода
-void TransitionPoint::set_filling_color(const std::vector<int>& fil_col) {
+void TransitionPoint::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
@@ -1158,8 +1158,8 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
 }
 
 TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle,
-                                   const std::vector<int>& filling_color,
-                                   const std::string& help_text, bool bool_show,
+                                   const std::vector<int> &filling_color,
+                                   const std::string &help_text, bool bool_show,
                                    bool bool_show_filling)
         : TransitionPoint::TransitionPoint() {
     this->number_of_transition_button = number;
@@ -1174,11 +1174,11 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
 }
 
 TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle,
-                                   const std::vector<int>& filling_color,
-                                   const std::string& help_text, bool bool_show,
-                                   bool bool_show_filling, const std::string& text, const std::string& font_name,
+                                   const std::vector<int> &filling_color,
+                                   const std::string &help_text, bool bool_show,
+                                   bool bool_show_filling, const std::string &text, const std::string &font_name,
                                    int font_size,
-                                   const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
+                                   const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
         : TransitionPoint::TransitionPoint() {
     this->number_of_transition_button = number;
@@ -1203,7 +1203,7 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
     change_center_cords(x, y, width, height);
 }
 
-void TransitionButton::draw(QPainter& painter) {
+void TransitionButton::draw(QPainter &painter) {
     //начало отображения кнопки перехода
     painter.save();
     QFont tr_b_font(this->get_font_name().c_str(), this->get_font_size());
@@ -1263,19 +1263,19 @@ void TransitionButton::set_crossed_font(bool crossed) {
     this->crossed_font = crossed;
 }
 
-void TransitionButton::set_font(const std::string& font_name, int font_size) {
+void TransitionButton::set_font(const std::string &font_name, int font_size) {
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void TransitionButton::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color) {
+void TransitionButton::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color) {
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-TransitionButton::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color,
+TransitionButton::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color,
                            bool bold_font, bool italic_font,
                            bool underlined_font, bool crossed_font) {
     this->font_name = font_name;
@@ -1291,11 +1291,11 @@ void TransitionButton::set_auto_size_text(bool auto_size) {
     this->auto_size_text = auto_size;
 }
 
-void TransitionButton::set_text(const std::string& text) {
+void TransitionButton::set_text(const std::string &text) {
     this->text = text;
 }
 
-void TransitionButton::set_font_name(const std::string& font_name) {
+void TransitionButton::set_font_name(const std::string &font_name) {
     this->font_name = font_name;
 }
 
@@ -1315,7 +1315,7 @@ void TransitionButton::set_vAlignment(int vAlignment) {
     }
 }
 
-void TransitionButton::set_Alignment(const std::vector<int>& al) {
+void TransitionButton::set_Alignment(const std::vector<int> &al) {
     if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
         this->hAlignment = al[0];
         this->vAlignment = al[1];
@@ -1326,7 +1326,7 @@ void TransitionButton::set_button_number(int num) {
     this->number_of_transition_button = num;
 }
 
-void TransitionButton::set_font_color(const std::vector<int>& fn_col) {
+void TransitionButton::set_font_color(const std::vector<int> &fn_col) {
     this->font_color = fn_col;
 }
 
@@ -1390,14 +1390,14 @@ std::vector<std::string> TransitionButton::get_alignment() {
 //конструкторы класса текста получающие различные вводные
 Text::Text() : Primitive::Primitive() {}
 
-Text::Text(int x, int y, int width, int height, const std::string& text) : Primitive::Primitive() {
+Text::Text(int x, int y, int width, int height, const std::string &text) : Primitive::Primitive() {
     this->text = text;
     this->type_object = "Текст";
     change_center_cords(x, y, width, height);
 }
 
-Text::Text(int x, int y, int width, int height, int angle, const std::string& text, const std::string& help_text,
-           int style_line, const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling)
+Text::Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling)
         : Primitive::Primitive() {
     this->angle = angle;
     this->text = text;
@@ -1410,10 +1410,10 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string& te
     change_center_cords(x, y, width, height);
 }
 
-Text::Text(int x, int y, int width, int height, int angle, const std::string& text, const std::string& help_text,
-           int style_line, const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling,
-           const std::string& font_name, int font_size,
-           const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
+Text::Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
+           int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+           const std::string &font_name, int font_size,
+           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
            bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) : Primitive::Primitive() {
     this->angle = angle;
     this->text = text;
@@ -1436,7 +1436,7 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string& te
     change_center_cords(x, y, width, height);
 }
 
-void Text::draw(QPainter& painter) {
+void Text::draw(QPainter &painter) {
     //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
@@ -1490,11 +1490,11 @@ Text::change_center_cords(int x, int y, int width,
 }
 
 //далее идут функции меняющие одноименные переменные класса текста
-void Text::set_filling_color(const std::vector<int>& fil_col) {
+void Text::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
-void Text::set_line_color(const std::vector<int>& ln_col) {
+void Text::set_line_color(const std::vector<int> &ln_col) {
     this->line_color = ln_col;
 }
 
@@ -1522,19 +1522,19 @@ void Text::set_crossed_font(bool crossed) {
     this->crossed_font = crossed;
 }
 
-void Text::set_font(const std::string& font_name, int font_size) {
+void Text::set_font(const std::string &font_name, int font_size) {
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void Text::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color) {
+void Text::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color) {
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-Text::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
+Text::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
                bool italic_font,
                bool underlined_font, bool crossed_font) {
     this->font_name = font_name;
@@ -1550,11 +1550,11 @@ void Text::set_auto_size_text(bool auto_size) {
     this->auto_size_text = auto_size;
 }
 
-void Text::set_text(const std::string& text) {
+void Text::set_text(const std::string &text) {
     this->text = text;
 }
 
-void Text::set_font_name(const std::string& font_name) {
+void Text::set_font_name(const std::string &font_name) {
     this->font_name = font_name;
 }
 
@@ -1574,14 +1574,14 @@ void Text::set_vAlignment(int vAlignment) {
     }
 }
 
-void Text::set_Alignment(const std::vector<int>& al) {
+void Text::set_Alignment(const std::vector<int> &al) {
     if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
         this->hAlignment = al[0];
         this->vAlignment = al[1];
     }
 }
 
-void Text::set_font_color(const std::vector<int>& fn_col) {
+void Text::set_font_color(const std::vector<int> &fn_col) {
     this->font_color = fn_col;
 }
 
@@ -1699,15 +1699,15 @@ bool Text::get_show_filling() {
 }
 
 //конструкторы класса прямоугольника получающие различные вводные
-Image::Image(int x, int y, int width, int height, const std::string& im_path, int angle) : Primitive::Primitive() {
+Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle) : Primitive::Primitive() {
     this->image_path = im_path;
     this->angle = angle;
     this->type_object = "Картинка";
     change_center_cords(x, y, width, height);
 }
 
-Image::Image(int x, int y, int width, int height, const std::string& im_path, int angle, int line_width, int style_line,
-             const std::vector<int>& line_color, const std::string& help_text, bool bool_show)
+Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
+             const std::vector<int> &line_color, const std::string &help_text, bool bool_show)
         : Primitive::Primitive() {
     this->image_path = im_path;
     this->angle = angle;
@@ -1720,9 +1720,9 @@ Image::Image(int x, int y, int width, int height, const std::string& im_path, in
     change_center_cords(x, y, width, height);
 }
 
-Image::Image(int x, int y, int width, int height, const std::string& im_path, int angle, int line_width, int style_line,
-             const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int style_frame,
-             const std::vector<int>& filling_color, bool bool_show_filling) : Primitive::Primitive() {
+Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
+             const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
+             const std::vector<int> &filling_color, bool bool_show_filling) : Primitive::Primitive() {
     this->image_path = im_path;
     this->angle = angle;
     this->line_width = line_width;
@@ -1737,7 +1737,7 @@ Image::Image(int x, int y, int width, int height, const std::string& im_path, in
     change_center_cords(x, y, width, height);
 }
 
-void Image::draw(QPainter& painter) {
+void Image::draw(QPainter &painter) {
     //начало отображения картинки
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
@@ -1771,11 +1771,11 @@ void Image::set_line_width(int width) {
     this->line_width = width;
 }
 
-void Image::set_line_color(const std::vector<int>& ln_col) {
+void Image::set_line_color(const std::vector<int> &ln_col) {
     this->line_color = ln_col;
 }
 
-void Image::set_filling_color(const std::vector<int>& fil_col) {
+void Image::set_filling_color(const std::vector<int> &fil_col) {
     this->filling_color = fil_col;
 }
 
@@ -1791,7 +1791,7 @@ void Image::set_style_line(int st_line) {
     }
 }
 
-void Image::set_image_path(const std::string& im_path) {
+void Image::set_image_path(const std::string &im_path) {
     this->image_path = im_path;
 }
 
@@ -1862,15 +1862,15 @@ bool Image::get_show_filling() {
 }
 
 //конструкторы класса текста получающие различные вводные
-Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string& text) : Text::Text() {
+Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string &text) : Text::Text() {
     this->text = text;
     this->type_object = "Телеконтроль";
     change_center_cords(x, y, width, height);
 }
 
-Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string& text,
-                         const std::string& help_text,
-                         int style_line, const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling)
+Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
+                         const std::string &help_text,
+                         int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling)
         : Text::Text() {
     this->angle = angle;
     this->text = text;
@@ -1883,11 +1883,11 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
     change_center_cords(x, y, width, height);
 }
 
-Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string& text,
-                         const std::string& help_text,
-                         int style_line, const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling,
-                         const std::string& font_name, int font_size,
-                         const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
+Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
+                         const std::string &help_text,
+                         int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                         const std::string &font_name, int font_size,
+                         const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
         : Text::Text() {
     this->angle = angle;
@@ -1911,7 +1911,7 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
     change_center_cords(x, y, width, height);
 }
 
-void Telecontrol::draw(QPainter& painter) {
+void Telecontrol::draw(QPainter &painter) {
     //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
@@ -1970,15 +1970,15 @@ int Telecontrol::get_id() {
 }
 
 //конструкторы класса текста получающие различные вводные
-Telesignalisation::Telesignalisation(int x, int y, int width, int height, const std::string& text) : Text::Text() {
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, const std::string &text) : Text::Text() {
     this->text = text;
     this->type_object = "Телесигнализация";
     change_center_cords(x, y, width, height);
 }
 
-Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string& text,
-                                     const std::string& help_text,
-                                     int style_line, const std::vector<int>& filling_color, bool bool_show,
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
+                                     const std::string &help_text,
+                                     int style_line, const std::vector<int> &filling_color, bool bool_show,
                                      bool bool_show_filling) : Text::Text() {
     this->angle = angle;
     this->text = text;
@@ -1991,12 +1991,12 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
     change_center_cords(x, y, width, height);
 }
 
-Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string& text,
-                                     const std::string& help_text,
-                                     int style_line, const std::vector<int>& filling_color, bool bool_show,
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
+                                     const std::string &help_text,
+                                     int style_line, const std::vector<int> &filling_color, bool bool_show,
                                      bool bool_show_filling,
-                                     const std::string& font_name, int font_size,
-                                     const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
+                                     const std::string &font_name, int font_size,
+                                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                                      bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
         : Text::Text() {
     this->angle = angle;
@@ -2020,7 +2020,7 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
     change_center_cords(x, y, width, height);
 }
 
-void Telesignalisation::draw(QPainter& painter) {
+void Telesignalisation::draw(QPainter &painter) {
     //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
@@ -2079,15 +2079,15 @@ int Telesignalisation::get_id() {
 }
 
 //конструкторы класса текста получающие различные вводные
-Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string& text) : Text::Text() {
+Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string &text) : Text::Text() {
     this->text = text;
     this->type_object = "Телеизмерение";
     change_center_cords(x, y, width, height);
 }
 
-Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string& text,
-                         const std::string& help_text,
-                         int style_line, const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling)
+Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
+                         const std::string &help_text,
+                         int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling)
         : Text::Text() {
     this->angle = angle;
     this->text = text;
@@ -2100,11 +2100,11 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     change_center_cords(x, y, width, height);
 }
 
-Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string& text,
-                         const std::string& help_text,
-                         int style_line, const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling,
-                         const std::string& font_name, int font_size,
-                         const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
+Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
+                         const std::string &help_text,
+                         int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                         const std::string &font_name, int font_size,
+                         const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
         : Text::Text() {
     this->angle = angle;
@@ -2128,7 +2128,7 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     change_center_cords(x, y, width, height);
 }
 
-void Telemeasure::draw(QPainter& painter) {
+void Telemeasure::draw(QPainter &painter) {
     //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
@@ -2186,16 +2186,24 @@ int Telemeasure::get_id() {
 
 Set::Set() : Primitive::Primitive() {}
 
-Set::Set(int ln_width, int hor_space, int vert_space, int ln_style, const std::vector<int>& ln_color)
+Set::Set(int ln_width, int ln_width2, int ln_width3, int hor_space, int vert_space, int hor_space2, int vert_space2,
+         int hor_space3, int vert_space3,
+         int ln_style, const std::vector<int> &ln_color)
         : Primitive::Primitive() {
     line_width = ln_width;
+    line_width2 = ln_width2;
+    line_width3 = ln_width3;
     horizontal_space = hor_space;
     vertical_space = vert_space;
+    horizontal_space2 = hor_space2;
+    vertical_space2 = vert_space2;
+    horizontal_space3 = hor_space3;
+    vertical_space3 = vert_space3;
     line_style = ln_style;
     line_color = ln_color;
 }
 
-void Set::draw(QPainter& painter, int scheme_width, int scheme_height) {
+void Set::draw(QPainter &painter, int scheme_width, int scheme_height) {
     if (bool_show) {
         QColor color_set = {line_color[0], line_color[1], line_color[2]};
         painter.setPen(QPen(color_set, line_width, style_vector[line_style], Qt::RoundCap));
@@ -2203,6 +2211,20 @@ void Set::draw(QPainter& painter, int scheme_width, int scheme_height) {
             painter.drawLine(i, 0, i, scheme_height);
         }
         for (int i = 0; i < scheme_height; i += vertical_space) {
+            painter.drawLine(0, i, scheme_width, i);
+        }
+        painter.setPen(QPen(color_set, line_width2, Qt::DashLine, Qt::RoundCap));
+        for (int i = 0; i < scheme_width; i += horizontal_space2) {
+            painter.drawLine(i, 0, i, scheme_height);
+        }
+        for (int i = 0; i < scheme_height; i += vertical_space2) {
+            painter.drawLine(0, i, scheme_width, i);
+        }
+        painter.setPen(QPen(color_set, line_width3, Qt::DotLine, Qt::RoundCap));
+        for (int i = 0; i < scheme_width; i += horizontal_space3) {
+            painter.drawLine(i, 0, i, scheme_height);
+        }
+        for (int i = 0; i < scheme_height; i += vertical_space3) {
             painter.drawLine(0, i, scheme_width, i);
         }
     }
@@ -2224,7 +2246,7 @@ void Set::set_line_style(int ln_style) {
     line_style = ln_style;
 }
 
-void Set::set_line_color(std::vector<int>& col) {
+void Set::set_line_color(std::vector<int> &col) {
     line_color = col;
 }
 
@@ -2245,5 +2267,50 @@ int Set::get_line_style() {
 }
 
 std::vector<int> Set::get_line_color() {
+    return line_color;
+}
+
+Point::Point() : Primitive() {}
+
+Point::Point(int x, int y, int ln_width, const std::vector<int> &ln_color) : Point() {
+    this->x = x;
+    this->y = y;
+    line_width = ln_width;
+    line_color = ln_color;
+}
+
+void Point::draw(QPainter &painter) {
+    QColor col = QColor(line_color[0], line_color[1], line_color[2]);
+    painter.setPen(QPen(col, line_width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.drawPoint(this->x, this->y);
+
+}
+
+void Point::change_cords(int x, int y) {
+    this->x = x;
+    this->y = y;
+}
+
+void Point::set_line_width(int ln_width) {
+    line_width = ln_width;
+}
+
+void Point::set_line_color(std::vector<int> ln_color) {
+    line_color = ln_color;
+}
+
+int Point::get_x() {
+    return this->x;
+}
+
+int Point::get_y() {
+    return this->y;
+}
+
+int Point::get_line_width() {
+    return line_width;
+}
+
+std::vector<int> Point::get_line_color() {
     return line_color;
 }
