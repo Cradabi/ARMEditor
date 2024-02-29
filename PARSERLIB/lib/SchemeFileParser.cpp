@@ -27,7 +27,7 @@ void SchemeFileParser::ParseSCHM() {
     int32_t reserved_3{0};
     int32_t reserved_4{0};
 
-    char* tmp_work_scale = new char[8];
+    char* tmp_work_scale = new char[9];
 
     uint8_t data_counter = 0;
     uint32_t block_size;
@@ -102,7 +102,6 @@ void SchemeFileParser::ParseSCHM() {
                     reserved_2 = GetSomeInt(reserved_2, block_size);
                     break;
                 case schm_data.work_scale_flag:
-//                    tmp_work_scale = new char[9];
                     SchemeFile.read(tmp_work_scale, block_size);
                     work_scale = *reinterpret_cast<double*>(tmp_work_scale);
                     delete[] tmp_work_scale;
@@ -428,7 +427,7 @@ void SchemeFileParser::ParseOBJECT() {
     uint8_t data_counter = 0;
     uint32_t block_size;
 
-    if (sections_stack.back().sect_name.substr(sections_stack.back().sect_name.size(), 1) != "1")
+    if (sections_stack.back().sect_name != "1")
         // Пока не дошли до конца секции, считываем данные
         while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
             SchemeFile.get(byte);
@@ -447,7 +446,7 @@ void SchemeFileParser::ParseOBJECT() {
 
         SchemeFile.read(buffer, block_size);
 
-        if (static_cast<uint8_t>(buffer[616]) == 7)
+        if (static_cast<int>(buffer[616]) == 7)
             ParseELLIPS(block_size);
 
     }
@@ -458,78 +457,87 @@ void SchemeFileParser::ParseELLIPS(const uint32_t& block_size) {
 
     uint32_t bytes_counter = 16;
 
-    std::string tmp_center_x = std::string();
-    for (uint8_t _byte; _byte < 8; ++_byte)
-        tmp_center_x += buffer[bytes_counter + _byte];
+    char tmp_center_x[9];
+    for (uint8_t _byte = 7; _byte >= 0; ++_byte)
+        tmp_center_x[_byte] = buffer[bytes_counter + 8 - _byte];
+    double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
     bytes_counter += 16;
 
-    std::string tmp_center_y = std::string();
-    for (uint8_t _byte; _byte < 8; ++_byte)
-        tmp_center_y += buffer[bytes_counter + _byte];
+    char tmp_center_y[9];
+    for (uint8_t _byte = 7; _byte >= 0; ++_byte)
+        tmp_center_y[_byte] = buffer[bytes_counter + 8 - _byte];
+    double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
     bytes_counter += 24;
 
-    std::string tmp_angle = std::string();
-    for (uint8_t _byte; _byte < 8; ++_byte)
-        tmp_angle += buffer[bytes_counter + _byte];
+    char tmp_angle[9];
+    for (uint8_t _byte = 7; _byte >= 0; ++_byte)
+        tmp_angle[_byte] = buffer[bytes_counter + 8 - _byte];
+    double angle = *reinterpret_cast<double*>(tmp_angle);
 
     bytes_counter += 496;
 
-    uint32_t tmp_id = 0;
+    uint32_t id = 0;
     for (int8_t i = bytes_counter + 7; i >= bytes_counter; --i) {
-        tmp_id |= static_cast<uint8_t>(buffer[i]);
+        id |= static_cast<uint8_t>(buffer[i]);
 
         if (i != 0)
-            tmp_id <<= 8;
+            id <<= 8;
     }
 
     bytes_counter += 12;
 
-    uint32_t tmp_half_x = 0;
+    uint32_t half_x = 0;
     for (int8_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        tmp_half_x |= static_cast<uint8_t>(buffer[i]);
+        half_x |= static_cast<uint8_t>(buffer[i]);
 
         if (i != 0)
-            tmp_half_x <<= 8;
+            half_x <<= 8;
     }
 
     bytes_counter += 8;
 
-    uint32_t tmp_half_y = 0;
+    uint32_t half_y = 0;
     for (int8_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        tmp_half_y |= static_cast<uint8_t>(buffer[i]);
+        half_y |= static_cast<uint8_t>(buffer[i]);
 
         if (i != 0)
-            tmp_half_y <<= 8;
+            half_y <<= 8;
     }
 
     bytes_counter += 10;
 
-    ssp::BGRColor tmp_pen;
-    tmp_pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-    tmp_pen.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-    tmp_pen.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+    ssp::BGRColor pen;
+    pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+    pen.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+    pen.red = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-    ssp::BGRColor tmp_brush;
-    tmp_brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-    tmp_brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-    tmp_brush.red = static_cast<uint8_t>(buffer[bytes_counter]);
+    ssp::BGRColor brush;
+    brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+    brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+    brush.red = static_cast<uint8_t>(buffer[bytes_counter]);
 
     bytes_counter += 4;
 
-    uint8_t tmp_brush_style;
-    tmp_brush_style = static_cast<uint8_t>(buffer[bytes_counter++]);
+    uint8_t brush_style;
+    brush_style = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-    uint8_t tmp_line_style;
-    tmp_line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
+    uint8_t line_style;
+    line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-    uint8_t tmp_fill;
-    tmp_fill = static_cast<uint8_t>(buffer[bytes_counter]);
+    uint8_t width;
+    width = static_cast<uint8_t>(buffer[bytes_counter]);
 
-//    tmp_sch_params.objects_vector.push_back(new Ellipse(central_x - half_width, central_y - half_height, half_width * 2, half_height * 2, (360 - angle) % 360, int line_width, int style_line,
-//    const std::vector<int> &line_color(rgb), const std::string &help_text, bool bool_show,
-//    const std::vector<int> &filling_color(rgb), bool bool_show_filling));
+    scheme_params->objects_vector.push_back(
+            new Ellipse(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
+                        (360 - (int) angle) % 360,
+                        width, line_style,
+                        {pen.red, pen.green, pen.blue},
+                        " Эллипс ",
+                        true,
+                        {brush.red, brush.green, brush.blue},
+                        true));
 
 }
 
@@ -550,10 +558,11 @@ void SchemeFileParser::ParseSectionData() {
         ParseSCH2();
     else if (sections_stack.back().sect_name == "font")
         ParseUNKNOWN();     // TODO Заменить на ParseFONT
-    else if (sections_stack.back().sect_name.substr(0, 4) == "objs")
+    else if (sections_stack.size() > 3 and sections_stack[1].sect_name == "objs") {
         ParseOBJECT();
-    else
+    } else
         ParseUNKNOWN();
+
 }
 
 // Функция чтения блока байтов в схеме

@@ -7,8 +7,8 @@ class Scheme {
 public:
 
     struct SchemeParams {
-        int width{15200};
-        int height{1200};
+        int width{0};
+        int height{0};
         int version{0};
         int scale{1};
         int scale_in_ARM{1};

@@ -9,27 +9,28 @@
 
 int counter = 0;
 
-MyWidget::MyWidget(){
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    QGraphicsView *view = new QGraphicsView(scene);
+MyWidget::MyWidget() {
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    QGraphicsScene* scene = new QGraphicsScene(this);
+    QGraphicsView* view = new QGraphicsView(scene);
 
-    view->resize(15200,1200);
+    view->resize(15200, 1200);
     layout->addWidget(view);
 
-    QPixmap pix(15200,1200);
+    QPixmap pix(15200, 1200);
     pix.fill(Qt::white);
 
-    QPainter *painter = new QPainter(&pix);
+    QPainter* painter = new QPainter(&pix);
 
-    painter->setPen(QColor(255,34,255,255));
-    //painter->drawRect(15,15,100,100);
+    //painter->setPen(QColor(255, 34, 255, 255));
+    // painter->drawRect(15,15,100,100);
     Scheme::SchemeParams tmp_scheme_params;
 
-//    SchemeFileParser parser(tmp_scheme_params);
-//    parser.parse("/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/schemes_exp/Эллипс.схема",
-//                 "/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
-    tmp_scheme_params.objects_vector.push_back(new Line(100, 100, 450, 300));
+    SchemeFileParser parser(tmp_scheme_params);
+    parser.parse("/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/schemes_exp/Эллипс.схема",
+                 "/home/chekhov/Документы/GitHub/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
+
+    //tmp_scheme_params.objects_vector.push_back(new Line(100, 100, 450, 300));
 
     Scheme scheme(tmp_scheme_params);
     std::string text2 = "";

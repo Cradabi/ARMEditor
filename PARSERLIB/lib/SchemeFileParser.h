@@ -260,5 +260,7 @@ bool SchemeFileParser::parse(const std::string& schemefile_path, const std::stri
     SchemeFile.close();
     LogsFile.close();
 
+    lae::PrintLog("Парсер отработал", true, 2);
+
     return true;
 }
