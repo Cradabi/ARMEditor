@@ -2340,13 +2340,20 @@ LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int
     this->help_text = help_text;
     this->bool_show = show;
     this->bool_show_help = show_help;
+    change_center_cords(this->x, this->y, this->width, this->height);
 }
 
 void LibraryObject::draw(QPainter &painter) {
-    if (condition < patterns.size() && condition >= 0) {
-        for (auto obj: patterns[condition]) {
-            obj->draw(painter);
+    if (this->bool_show){
+        painter.save();
+        painter.translate(this->center_x, this->center_y);
+        painter.rotate((360 - this->angle) % 360);
+        if (condition < patterns.size() && condition >= 0) {
+            for (auto obj: patterns[condition]) {
+                obj->draw(painter);
+            }
         }
+        painter.restore();
     }
 }
 
