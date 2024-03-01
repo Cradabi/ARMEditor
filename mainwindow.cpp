@@ -37,7 +37,12 @@ MyWidget::MyWidget() {
     // painter->drawRect(15,15,100,100);
 
 
-    //tmp_scheme_params.objects_vector.push_back(new Point(20, 20, 8, {255, 0, 0}));
+    /*tmp_scheme_params.objects_vector.push_back(new LibraryObject(600, 300, 400, 250, 0, 0, 0, "huihui", "huihui2",
+                                                                 {{new Line(600, 300, 1000, 550),
+                                                                   new Line(600, 300, 700, 450),
+                                                                   new Rectangle(700, 400, 800, 500)},
+                                                                  {new Line(600, 300, 1000, 550)}}, "", true, true));
+                                                                  */
 
     Scheme scheme(tmp_scheme_params);
     std::string text2 = "";

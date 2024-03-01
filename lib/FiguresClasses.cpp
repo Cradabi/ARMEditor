@@ -2270,9 +2270,12 @@ std::vector<int> Set::get_line_color() {
     return line_color;
 }
 
-Point::Point() : Primitive() {}
+Point::Point() : Primitive() {
+    type_object = "Point";
+}
 
 Point::Point(int x, int y, int ln_width, const std::vector<int> &ln_color) : Point() {
+    type_object = "Point";
     this->x = x;
     this->y = y;
     line_width = ln_width;
@@ -2313,4 +2316,109 @@ int Point::get_line_width() {
 
 std::vector<int> Point::get_line_color() {
     return line_color;
+}
+
+LibraryObject::LibraryObject() : Primitive() {
+    type_object = "Библиотечный объект";
+}
+
+LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
+                             const std::string &lib_name, const std::string &obj_name,
+                             const std::vector<std::vector<Primitive *>> &patterns, const std::string &help_text,
+                             bool show, bool show_help) : Primitive() {
+    type_object = "Библиотечный объект";
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+    this->angle = angle;
+    this->id = id;
+    this->condition = condition;
+    library_name = lib_name;
+    object_name = obj_name;
+    this->patterns = patterns;
+    this->help_text = help_text;
+    this->bool_show = show;
+    this->bool_show_help = show_help;
+}
+
+void LibraryObject::draw(QPainter &painter) {
+    if (condition < patterns.size() && condition >= 0) {
+        for (auto obj: patterns[condition]) {
+            obj->draw(painter);
+        }
+    }
+}
+
+void LibraryObject::change_center_cords(int x, int y, int width, int height) {
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+    this->center_x = this->x + floor(this->width / 2);
+    this->center_y = this->y + floor(this->height / 2);
+}
+
+void LibraryObject::set_angle(int angle) {
+    this->angle = angle;
+}
+
+void LibraryObject::set_condition(int cond) {
+    condition = cond;
+}
+
+void LibraryObject::set_library_name(const std::string &lib_name) {
+    library_name = lib_name;
+}
+
+void LibraryObject::set_object_name(const std::string &obj_name) {
+    object_name = obj_name;
+}
+
+void LibraryObject::set_patterns(const std::vector<std::vector<Primitive *>> &patterns) {
+    this->patterns = patterns;
+}
+
+void LibraryObject::add_pattern(const std::vector<Primitive *> pattern) {
+    this->patterns.push_back(pattern);
+}
+
+int LibraryObject::get_x() {
+    return this->x;
+}
+
+int LibraryObject::get_y() {
+    return this->y;
+}
+
+int LibraryObject::get_width() {
+    return this->width;
+}
+
+int LibraryObject::get_height() {
+    return this->height;
+}
+
+int LibraryObject::get_angle() {
+    return this->angle;
+}
+
+int LibraryObject::get_id() {
+    return this->id;
+}
+
+int LibraryObject::get_condition() {
+    return condition;
+}
+
+std::string LibraryObject::get_library_name() {
+    return library_name;
+}
+
+std::string LibraryObject::get_object_name() {
+    return object_name;
+}
+
+std::vector<std::vector<Primitive *>> LibraryObject::get_patterns() {
+    return patterns;
 }

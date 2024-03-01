@@ -1113,6 +1113,66 @@ namespace FiguresClasses {
 
         std::vector<int> get_line_color();
     };
+
+    class LibraryObject : public Primitive {
+    private:
+        int x = 0;
+        int y = 0;
+        int width = 0;
+        int height = 0;
+        int center_x = 0;
+        int center_y = 0;
+        int angle = 0;
+        int id = 0;
+        int condition = 0;
+
+        std::string library_name;
+        std::string object_name;
+
+        std::vector<std::vector<Primitive *>> patterns = {};
+    public:
+        LibraryObject();
+
+        LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
+                      const std::string &lib_name, const std::string &obj_name,
+                      const std::vector<std::vector<Primitive *>> &patterns, const std::string &help_text, bool show, bool show_help);
+
+        void draw(QPainter &painter) override;
+
+        void change_center_cords(int x, int y, int width, int height);
+
+        void set_angle(int angle);
+
+        void set_condition(int cond);
+
+        void set_library_name(const std::string &lib_name);
+
+        void set_object_name(const std::string &obj_name);
+
+        void set_patterns(const std::vector<std::vector<Primitive *>> &patterns);
+
+        void add_pattern(const std::vector<Primitive *> pattern);
+
+        int get_x();
+
+        int get_y();
+
+        int get_width();
+
+        int get_height();
+
+        int get_angle();
+
+        int get_id();
+
+        int get_condition();
+
+        std::string get_library_name();
+
+        std::string get_object_name();
+
+        std::vector<std::vector<Primitive *>> get_patterns();
+    };
 }
 
 

@@ -1,7 +1,8 @@
 #include "SchemeClass.h"
 
-Scheme::~Scheme(){
-    for (auto object: actual_params.objects_vector){
+Scheme::~Scheme() {
+    //TODO сделать удаление объектов в библиотечных объектах
+    for (auto object: actual_params.objects_vector) {
         delete object;
     }
     actual_params = {};
@@ -106,11 +107,11 @@ std::string Scheme::get_server() {
 void Scheme::draw_scheme(QPainter &painter) {
     actual_params.set_object.draw(painter, actual_params.width, actual_params.height);
     for (auto primitive: actual_params.objects_vector) {
-       primitive->draw(painter);
+        primitive->draw(painter);
     }
 }
 
-void Scheme::add_object(FiguresClasses::Primitive* add_line) {
+void Scheme::add_object(FiguresClasses::Primitive *add_line) {
     actual_params.objects_vector.push_back(add_line);
 }
 
