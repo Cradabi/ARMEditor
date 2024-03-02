@@ -20,8 +20,8 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("/home/astra/ARMEditor/PARSERLIB/schemes_exp/Эллипс2.схема",
-                 "/home/astra/ARMEditor/PARSERLIB/logs/SchemeLogs.txt");
+    parser.parse("../PARSERLIB/schemes_exp/Эллипс2.схема",
+                 "../PARSERLIB/logs/SchemeLogs.txt");
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
 

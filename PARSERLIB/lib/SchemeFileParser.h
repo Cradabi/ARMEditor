@@ -3,12 +3,8 @@
 #include <locale>
 #include <bitset>
 #include <stack>
-#include <vector>
-#include <bitset>
 
-#include "lib/SchemeClass.cpp"
-
-#include "SchemeFileNS.h"
+#include "SchemeObjectParser.cpp"
 
 #pragma once    // Сообщаем препроцессору, что данный заголовочный файл может быть подключен только 1 раз
 
@@ -18,8 +14,6 @@ class SchemeFileParser {
 private:
     std::ofstream LogsFile;         // Файл логов
     std::ifstream SchemeFile;       // Файл схемы
-
-protected:
 
     // Параметры схемы
     Scheme::SchemeParams *scheme_params;
@@ -57,6 +51,8 @@ protected:
     char byte;                      // Переменная для работы с байтами
     char* buffer = new char[4096];  // Массив байт
 
+    SchemeObjectParser objectParser;    // Экземпляр парсера объектов схемы
+
     // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<typename IntType>
     IntType GetSomeInt(IntType some_int, uint8_t block_size, bool is_buffer_filled = false) {
@@ -76,7 +72,6 @@ protected:
         return some_int;
     }
 
-private:
     // Функция получения размера файла
     void GetFileSize() {
 
@@ -202,8 +197,6 @@ private:
     // Функция парса параметров объекта схемы
     void ParseOBJECT();
 
-    void ParseELLIPS(const uint32_t& block_size);
-
     // Функция открытия рабочих файлов
     bool OpenWorkFiles(const std::string& schemefile_path, const std::string& logfile_path) {
         SchemeFile.open(schemefile_path, std::ios_base::binary);
@@ -258,6 +251,8 @@ bool SchemeFileParser::parse(const std::string& schemefile_path, const std::stri
     while (!sections_stack.empty()) {
         CloseSection();
     }
+
+    delete[] buffer;
 
     SchemeFile.close();
     LogsFile.close();

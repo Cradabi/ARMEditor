@@ -3,7 +3,7 @@
 
 void SchemeFileParser::ParseSCHM() {
 
-    int32_t version{0};
+    int32_t reserved{0};
 
     int32_t name_length{0};
 
@@ -11,19 +11,11 @@ void SchemeFileParser::ParseSCHM() {
 
     int32_t DBAlias_length{0};
 
-    int32_t reserved_1{0};
-    int32_t reserved_2{0};
-
     double work_scale{0};
 
     ssp::BGRColor bg_color;
     ssp::BGRColor net_color;
     bool BitDepth{false};
-
-    int32_t count_of_objects{0};
-
-    int32_t reserved_3{0};
-    int32_t reserved_4{0};
 
     char* tmp_work_scale = new char[9];
 
@@ -42,9 +34,10 @@ void SchemeFileParser::ParseSCHM() {
 
             switch (data_counter) {
                 case schm_data.version_flag:
-                    version = GetSomeInt(version, block_size);
+                    reserved = GetSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "Version: ");
-                    lae::WriteLog(LogsFile, version, true);
+                    lae::WriteLog(LogsFile, reserved, true);
+                    reserved = 0;
                     break;
                 case schm_data.name_length_flag:
                     name_length = GetSomeInt(name_length, block_size);
@@ -94,10 +87,12 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, scheme_params->height, true);
                     break;
                 case schm_data.reserved_1_flag:
-                    reserved_1 = GetSomeInt(reserved_1, block_size);
+                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = 0;
                     break;
                 case schm_data.reserved_2_flag:
-                    reserved_2 = GetSomeInt(reserved_2, block_size);
+                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = 0;
                     break;
                 case schm_data.work_scale_flag:
                     SchemeFile.read(tmp_work_scale, block_size);
@@ -141,19 +136,22 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, BitDepth, true);
                     break;
                 case schm_data.count_of_objects_flag:
-                    count_of_objects = GetSomeInt(count_of_objects, block_size);
+                    reserved = GetSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "count_of_objects: ");
-                    lae::WriteLog(LogsFile, count_of_objects, true);
+                    lae::WriteLog(LogsFile, reserved, true);
+                    reserved = 0;
                     break;
                 case schm_data.windowsSize_x_flag:
-                    reserved_3 = GetSomeInt(reserved_3, block_size);
+                    reserved = GetSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_x: ");
-                    lae::WriteLog(LogsFile, reserved_3, true);
+                    lae::WriteLog(LogsFile, reserved, true);
+                    reserved = 0;
                     break;
                 case schm_data.windowsSize_y_flag:
-                    reserved_4 = GetSomeInt(reserved_4, block_size);
+                    reserved = GetSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_y: ");
-                    lae::WriteLog(LogsFile, reserved_4, true);
+                    lae::WriteLog(LogsFile, reserved, true);
+                    reserved = 0;
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
@@ -456,102 +454,12 @@ void SchemeFileParser::ParseOBJECT() {
         SchemeFile.read(buffer, block_size);
 
         if (static_cast<int>(buffer[616]) == 7)
-            ParseELLIPS(block_size);
+            objectParser.ParseELLIPS(buffer, *scheme_params, block_size);
 
     }
 
 }
 
-void SchemeFileParser::ParseELLIPS(const uint32_t& block_size) {
-
-    std::bitset<8> print_byte;
-
-    uint32_t bytes_counter = 16;
-
-    char tmp_center_x[9];
-    for (int8_t _byte = 0; _byte < 8; ++_byte)
-        tmp_center_x[_byte] = buffer[bytes_counter + _byte];
-
-    double center_x = *reinterpret_cast<double*>(tmp_center_x);
-
-    bytes_counter += 24;
-
-    char tmp_center_y[9];
-    for (int8_t _byte = 0; _byte < 8; ++_byte)
-        tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-    double center_y = *reinterpret_cast<double*>(tmp_center_y);
-
-    bytes_counter += 32;
-
-    char tmp_angle[9];
-    for (int8_t _byte = 0; _byte < 8; ++_byte)
-        tmp_angle[_byte] = buffer[bytes_counter + _byte];
-    double angle = *reinterpret_cast<double*>(tmp_angle);
-
-    bytes_counter = 576;
-
-    uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
-
-    bytes_counter += 12;
-
-    uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
-
-    ssp::BGRColor pen;
-    pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-    pen.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-    pen.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-    ssp::BGRColor brush;
-    brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-    brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-    brush.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-    bytes_counter += 4;
-
-    uint8_t brush_style;
-    brush_style = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-    uint8_t line_style;
-    line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-    uint8_t width;
-    width = static_cast<uint8_t>(buffer[bytes_counter]);
-
-    scheme_params->objects_vector.push_back(
-            new Ellipse(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                        (360 - (int) angle) % 360,
-                        width, line_style,
-                        {pen.red, pen.green, pen.blue},
-                        " Эллипс ",
-                        true,
-                        {brush.red, brush.green, brush.blue},
-                        true));
-
-}
 
 void SchemeFileParser::ParseSectionData() {
     if (sections_stack.back().sect_name == "schm")
