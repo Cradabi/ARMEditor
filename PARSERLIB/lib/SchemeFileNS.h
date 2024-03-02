@@ -1,3 +1,4 @@
+#include <cinttypes>
 
 #ifdef WIN32    // Подключаем библиотеку, только если компиляция происхоидит в ос windows
 
@@ -19,6 +20,28 @@ namespace sce {          // Scheme Const Expressions
         static constexpr uint8_t size_8_bit = 0b10000000;        // Признак блока с длиной 8 бит
         static constexpr uint8_t size_16_bit = 0b10000001;       // Признак блока с длиной 16 бит
         static constexpr uint8_t size_32_bit = 0b10000010;       // Признак блока с длиной 32 бит
+    };
+
+    // Структура, хранящая флаги типов объектов схем
+    struct SchemeObjectsTypes {
+        static constexpr uint8_t ptNone = 0;        // Multi
+        static constexpr uint8_t ptGoBtn = 1;       // Кнопка перехода
+        static constexpr uint8_t ptGoPoint = 2;     // Точка перехода
+        static constexpr uint8_t ptGluePoint = 3;   // Контакт
+        static constexpr uint8_t ptLine = 4;        // Линия
+        static constexpr uint8_t ptText = 5;        // Текст
+        static constexpr uint8_t ptPolygon = 6;     // Полигон
+        static constexpr uint8_t ptEllipse = 7;     // Эллипс
+        static constexpr uint8_t ptRectangle = 8;   // Прямоугольник
+
+        static constexpr uint8_t ptDuga = 9;
+        // ptDuga: if BrushStyle=bsSolid then result:='Сектор' else result:='Дуга';
+
+        static constexpr uint8_t ptTeleupr = 10;     // Объект телеуправления
+        static constexpr uint8_t ptTeleizm = 11;     // Объект телеизмерения
+        static constexpr uint8_t ptSignal = 12;      // Режимная сигнализация
+        static constexpr uint8_t ptPicture = 13;     // Картинка
+        static constexpr uint8_t ptShape = 14;       // Градиент
     };
 
     // Структура, хранящая типы данных, используемых в схеме
@@ -93,113 +116,82 @@ namespace ssp {          // Scheme Sections Params
     struct schm {
         // uint8_t params_amount{18};
 
-        static constexpr uint8_t version_flag{1};
-        // int32_t version{0};
+        static constexpr uint8_t version_flag{1};   // int32_t version{0};
 
-        static constexpr uint8_t name_length_flag{2};
-        // int32_t name_length{0};
-        static constexpr uint8_t scheme_name_flag{3};
-        // std::string scheme_name;
+        static constexpr uint8_t name_length_flag{2};   // int32_t name_length{0};
+        static constexpr uint8_t scheme_name_flag{3};   // std::string scheme_name;
 
-        static constexpr uint8_t DBIP_length_flag{4};
-        // int32_t DBIP_length{0};
-        static constexpr uint8_t DBIP_flag{5};
-        // std::string DBIP;
+        static constexpr uint8_t DBIP_length_flag{4};   // int32_t DBIP_length{0};
+        static constexpr uint8_t DBIP_flag{5};          // std::string DBIP;
 
-        static constexpr uint8_t DBAlias_length_flag{6};
-        // int32_t DBAlias_length{0};
-        static constexpr uint8_t DBAlias_flag{7};
-        // std::string DBAlias;
+        static constexpr uint8_t DBAlias_length_flag{6};    // int32_t DBAlias_length{0};
+        static constexpr uint8_t DBAlias_flag{7};           // std::string DBAlias;
 
-        static constexpr uint8_t width_flag{8};
-        // int32_t width{0};
-        static constexpr uint8_t height_flag{9};
-        // int32_t height{0};
+        static constexpr uint8_t width_flag{8};     // int32_t width{0};
+        static constexpr uint8_t height_flag{9};    // int32_t height{0};
 
-        static constexpr uint8_t reserved_1_flag{10};
-        // int32_t reserved_1{0};
-        static constexpr uint8_t reserved_2_flag{11};
-        // int32_t reserved_2{0};
+        static constexpr uint8_t reserved_1_flag{10};   // int32_t reserved_1{0};
+        static constexpr uint8_t reserved_2_flag{11};   // int32_t reserved_2{0};
 
-        static constexpr uint8_t work_scale_flag{12};
-        // double work_scale{0};
+        static constexpr uint8_t work_scale_flag{12};   // double work_scale{0};
 
-        static constexpr uint8_t bg_color_flag{13};
-        // BGRColor bg_color;
-        static constexpr uint8_t net_color_flag{14};
-        // BGRColor net_color;
+        static constexpr uint8_t bg_color_flag{13};     // BGRColor bg_color;
+        static constexpr uint8_t net_color_flag{14};    // BGRColor net_color;
 
-        static constexpr uint8_t BitDepth_flag{15};
-        // bool BitDepth{false};
+        static constexpr uint8_t BitDepth_flag{15};     // bool BitDepth{false};
 
-        static constexpr uint8_t count_of_objects_flag{16};
-        // int32_t count_of_objects{0};
+        static constexpr uint8_t count_of_objects_flag{16}; // int32_t count_of_objects{0};
 
-        static constexpr uint8_t windowsSize_x_flag{17};
-        // int32_t windowsSize_x{0};
-        static constexpr uint8_t windowsSize_y_flag{18};
-        // int32_t windowsSize_y{0};
+        static constexpr uint8_t windowsSize_x_flag{17};    // int32_t windowsSize_x{0};
+        static constexpr uint8_t windowsSize_y_flag{18};    // int32_t windowsSize_y{0};
     };
 
     struct cach {
         // uint8_t params_amount{1};
 
-        static constexpr uint8_t cache_count_flag{1};
-        // int32_t cache_count{0};
+        static constexpr uint8_t cache_count_flag{1};   // int32_t cache_count{0};
     };
 
     struct link {
         // uint8_t params_amount{1};
 
-        static constexpr uint8_t links_count_flag{1};
-        // int32_t links_count{0};
+        static constexpr uint8_t links_count_flag{1};   // int32_t links_count{0};
     };
 
     struct sect {
         // uint8_t params_amount{2};
 
-        static constexpr uint8_t next_section_number_flag{1};
-        // int32_t next_section_number{0};
+        static constexpr uint8_t next_section_number_flag{1};   // int32_t next_section_number{0};
 
-        static constexpr uint8_t sect_count_flag{2};
-        // int32_t sect_count{0};
+        static constexpr uint8_t sect_count_flag{2};    // int32_t sect_count{0};
     };
 
     struct objs {
         // uint8_t params_amount{1};
 
-        static constexpr uint8_t objs_count_flag{1};
-        // int32_t objs_count{0};
+        static constexpr uint8_t objs_count_flag{1};    // int32_t objs_count{0};
     };
 
     struct extd {
         // uint8_t params_amount{1};
 
-        static constexpr uint8_t f_work_variable_flag{1};
-        // int32_t f_work_variable{0};
+        static constexpr uint8_t f_work_variable_flag{1};   // int32_t f_work_variable{0};
     };
 
     struct sch2 {
         // uint8_t params_amount{7};
 
-        static constexpr uint8_t window_size_X_flag{1};
-        // int32_t window_size_X{0};
-        static constexpr uint8_t window_size_Y_flag{2};
-        // int32_t window_size_Y{0};
+        static constexpr uint8_t window_size_X_flag{1};     // int32_t window_size_X{0};
+        static constexpr uint8_t window_size_Y_flag{2};     // int32_t window_size_Y{0};
 
-        static constexpr uint8_t tmpbool_flag{3};
-        // bool tmpbool{0};
+        static constexpr uint8_t tmpbool_flag{3};   // bool tmpbool{0};
 
-        static constexpr uint8_t MS_size_flag{4};
-        // int32_t MS_size{0};
+        static constexpr uint8_t MS_size_flag{4};   // int32_t MS_size{0};
 
-        static constexpr uint8_t back_bitmap_info_flag{5};
-        // int32_t back_bitmap_info{0};
+        static constexpr uint8_t back_bitmap_info_flag{5};  // int32_t back_bitmap_info{0};
 
-        static constexpr uint8_t pixels_per_inch_X_flag{6};
-        // int32_t pixels_per_inch_X{0};
-        static constexpr uint8_t pixels_per_inch_Y_flag{7};
-        // int32_t pixels_per_inch_Y{0};
+        static constexpr uint8_t pixels_per_inch_X_flag{6};     // int32_t pixels_per_inch_X{0};
+        static constexpr uint8_t pixels_per_inch_Y_flag{7};     // int32_t pixels_per_inch_Y{0};
     };
 
     struct font {

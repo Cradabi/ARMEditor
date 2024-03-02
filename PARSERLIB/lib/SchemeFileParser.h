@@ -51,7 +51,8 @@ private:
     char byte;                      // Переменная для работы с байтами
     char* buffer = new char[4096];  // Массив байт
 
-    SchemeObjectParser objectParser;    // Экземпляр парсера объектов схемы
+    SchemeObjectParser objectParser;        // Экземпляр парсера объектов схемы
+    static sce::SchemeObjectsTypes objects_types;  // Экземпляр структуры с типами объектов схемы
 
     // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<typename IntType>

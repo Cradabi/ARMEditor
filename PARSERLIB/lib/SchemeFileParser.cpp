@@ -424,18 +424,7 @@ void SchemeFileParser::ParseOBJECT() {
     uint32_t block_size;
 
     if (sections_stack.back().sect_name != "1")
-        // Пока не дошли до конца секции, считываем данные
-        while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
-            SchemeFile.get(byte);
-            // Если нашли флаг блока, открываем его
-            if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
-                // Получаем размер блока
-                block_size = GetBlockSize();
-                PrintBlockData(block_size);
-
-            } else if (byte == scheme_flags.section_flag)
-                EnterSection();
-        }
+        ParseUNKNOWN();
     else {
         SchemeFile.get(byte);
         // Получаем размер блока
@@ -453,8 +442,53 @@ void SchemeFileParser::ParseOBJECT() {
 
         SchemeFile.read(buffer, block_size);
 
-        if (static_cast<int>(buffer[616]) == 7)
-            objectParser.ParseELLIPS(buffer, *scheme_params, block_size);
+        switch (static_cast<uint8_t>(buffer[616])) {
+            case objects_types.ptNone:
+                objectParser.ParseNone(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptGoBtn:
+                objectParser.ParseGoBtn(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptGoPoint:
+                objectParser.ParseGoPoint(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptGluePoint:
+                objectParser.ParseGluePoint(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptLine:
+                objectParser.ParseLine(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptText:
+                objectParser.ParseText(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptPolygon:
+                objectParser.ParsePolygon(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptEllipse:
+                objectParser.ParseEllips(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptRectangle:
+                objectParser.ParseRectangle(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptDuga:
+                objectParser.ParseDuga(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptTeleupr:
+                objectParser.ParseTeleupr(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptTeleizm:
+                objectParser.ParseTeleizm(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptSignal:
+                objectParser.ParseSignal(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptPicture:
+                objectParser.ParsePicture(buffer, *scheme_params, block_size);
+                break;
+            case objects_types.ptShape:
+                objectParser.ParseShape(buffer, *scheme_params, block_size);
+                break;
+        }
 
     }
 
@@ -478,7 +512,7 @@ void SchemeFileParser::ParseSectionData() {
         ParseSCH2();
     else if (sections_stack.back().sect_name == "font")
         ParseUNKNOWN();     // TODO Заменить на ParseFONT
-    else if (sections_stack.size() > 3 and sections_stack[1].sect_name == "objs") {
+    else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "objs") {
         ParseOBJECT();
     } else
         ParseUNKNOWN();

@@ -1,4 +1,3 @@
-#include "SchemeObjectNS.h"
 #include "SchemeFileNS.h"
 
 #include <bitset>
@@ -8,12 +7,10 @@
 #pragma once
 
 class SchemeObjectParser {
-private:
-    char byte;      // Байт для работы с данными объекта
 
 public:
 
-    void ParseELLIPS(char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t& block_size) {
+    void ParseEllips(char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t& block_size) {
 
         uint32_t bytes_counter = 16;
 
@@ -102,5 +99,61 @@ public:
 
     }
 
+    void ParseNone(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseGoBtn(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseGoPoint(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseGluePoint(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseLine(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseText(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParsePolygon(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseRectangle(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseDuga(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        // ptDuga: if BrushStyle=bsSolid then result:='Сектор' else result:='Дуга'
+        ;
+    }
+
+    void ParseTeleupr(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseTeleizm(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseSignal(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParsePicture(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
+
+    void ParseShape(char* buffer, Scheme::SchemeParams scheme_params, uint32_t block_size) {
+        ;
+    }
 };
 
