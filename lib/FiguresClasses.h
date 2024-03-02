@@ -17,9 +17,8 @@ namespace FiguresClasses {
 
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
-        std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine,
-                                                  Qt::DashDotDotLine, Qt::DashDotDotLine, Qt::DashDotDotLine,
-                                                  Qt::DashDotDotLine, Qt::DashDotDotLine};
+        std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DotLine, Qt::DotLine, Qt::DotLine,
+                                                  Qt::DotLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine};
 
     public:
         Primitive();
@@ -1135,7 +1134,8 @@ namespace FiguresClasses {
 
         LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
                       const std::string &lib_name, const std::string &obj_name,
-                      const std::vector<std::vector<Primitive *>> &patterns, const std::string &help_text, bool show, bool show_help);
+                      const std::vector<std::vector<Primitive *>> &patterns, const std::string &help_text, bool show,
+                      bool show_help);
 
         void draw(QPainter &painter) override;
 
