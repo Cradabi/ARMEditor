@@ -443,51 +443,37 @@ void SchemeFileParser::ParseOBJECT() {
         SchemeFile.read(buffer, block_size);
 
         switch (static_cast<uint8_t>(buffer[616])) {
-            case objects_types.ptNone:
-                objectParser.ParseNone(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptGoBtn:
-                objectParser.ParseGoBtn(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptGoPoint:
-                objectParser.ParseGoPoint(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptGluePoint:
-                objectParser.ParseGluePoint(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptLine:
-                objectParser.ParseLine(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptText:
-                objectParser.ParseText(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptPolygon:
-                objectParser.ParsePolygon(buffer, *scheme_params, block_size);
-                break;
             case objects_types.ptEllipse:
                 objectParser.ParseEllips(buffer, *scheme_params, block_size);
                 break;
             case objects_types.ptRectangle:
                 objectParser.ParseRectangle(buffer, *scheme_params, block_size);
                 break;
-            case objects_types.ptDuga:
-                objectParser.ParseDuga(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptTeleupr:
-                objectParser.ParseTeleupr(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptTeleizm:
-                objectParser.ParseTeleizm(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptSignal:
-                objectParser.ParseSignal(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptPicture:
-                objectParser.ParsePicture(buffer, *scheme_params, block_size);
-                break;
-            case objects_types.ptShape:
-                objectParser.ParseShape(buffer, *scheme_params, block_size);
-                break;
+
+            default:
+                lae::WriteLog(LogsFile, "\nUnknown object\n");
+                lae::WriteLog(LogsFile, "BLOCK OPENED ");
+                lae::WriteLog(LogsFile, "block size: ");
+                lae::WriteLog(LogsFile, block_size);
+                lae::WriteLog(LogsFile, ' ');
+
+                std::bitset<8> print_byte;
+
+                uint32_t bytes_counter = 0;
+                while (bytes_counter < block_size) {
+                    print_byte = buffer[bytes_counter];
+                    ++bytes_counter;
+                    lae::WriteLog(LogsFile, print_byte);
+                    if (bytes_counter % 4 == 0) {
+                        lae::WriteLog(LogsFile, "\n");
+                    } else {
+                        lae::WriteLog(LogsFile, ' ');
+                    }
+
+                }
+
+                lae::WriteLog(LogsFile, "BLOCK CLOSED", true);
+
         }
 
     }

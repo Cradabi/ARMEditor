@@ -78,8 +78,8 @@ public:
 
         bytes_counter += 4;
 
-        uint8_t brush_style;
-        brush_style = static_cast<uint8_t>(buffer[bytes_counter++]);
+        bool brush_style;
+        brush_style = static_cast<bool>(buffer[bytes_counter++]);
 
         uint8_t line_style;
         line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -95,7 +95,7 @@ public:
                             " Эллипс ",
                             true,
                             {brush.red, brush.green, brush.blue},
-                            true));
+                            brush_style));
 
     }
 
@@ -195,8 +195,8 @@ public:
 
         bytes_counter += 4;
 
-        uint8_t brush_style;
-        brush_style = static_cast<uint8_t>(buffer[bytes_counter++]);
+        bool brush_style;
+        brush_style = static_cast<bool>(buffer[bytes_counter++]);
 
         uint8_t line_style;
         line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -211,7 +211,7 @@ public:
                               {pen.red, pen.green, pen.blue},
                               " Прямоугольник ", true, 0, 0,
                               {brush.red, brush.green, brush.blue},
-                              true));
+                              brush_style));
 
     }
 

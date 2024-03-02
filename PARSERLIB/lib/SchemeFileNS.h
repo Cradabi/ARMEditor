@@ -33,15 +33,16 @@ namespace sce {          // Scheme Const Expressions
         static constexpr uint8_t ptPolygon = 6;     // Полигон
         static constexpr uint8_t ptEllipse = 7;     // Эллипс
         static constexpr uint8_t ptRectangle = 8;   // Прямоугольник
+        static constexpr uint8_t ptSector = 9;
 
-        static constexpr uint8_t ptDuga = 9;
+        static constexpr uint8_t ptDuga = 10;
         // ptDuga: if BrushStyle=bsSolid then result:='Сектор' else result:='Дуга';
 
-        static constexpr uint8_t ptTeleupr = 10;     // Объект телеуправления
-        static constexpr uint8_t ptTeleizm = 11;     // Объект телеизмерения
-        static constexpr uint8_t ptSignal = 12;      // Режимная сигнализация
-        static constexpr uint8_t ptPicture = 13;     // Картинка
-        static constexpr uint8_t ptShape = 14;       // Градиент
+        static constexpr uint8_t ptTeleupr = 11;     // Объект телеуправления
+        static constexpr uint8_t ptTeleizm = 12;     // Объект телеизмерения
+        static constexpr uint8_t ptSignal = 13;      // Режимная сигнализация
+        static constexpr uint8_t ptPicture = 14;     // Картинка
+        static constexpr uint8_t ptShape = 15;       // Градиент
     };
 
     // Структура, хранящая типы данных, используемых в схеме
