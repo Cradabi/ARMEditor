@@ -16,7 +16,7 @@ int main() {
 
     SchemeFileParser NewParser;
 
-    NewParser.parse(L"..\\schemes_exp\\Мультищитовая3.схема", "..\\logs\\SchemeLogs.txt");
+    NewParser.parse(L"..\\schemes_exp\\Текст.схема", "..\\logs\\SchemeLogs.txt");
 
     return 0;
 }
