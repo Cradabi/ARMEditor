@@ -20,7 +20,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("../PARSERLIB/schemes_exp/Эллипс.схема",
+    parser.parse("../PARSERLIB/schemes_exp/mellips.схема",
                  "../PARSERLIB/logs/SchemeLogs.txt");
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);

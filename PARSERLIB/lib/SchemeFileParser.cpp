@@ -454,11 +454,19 @@ void SchemeFileParser::ParseOBJECT() {
 
         switch (PrType) {
             case objects_types.ptEllipse:
-                objectParser.ParseEllips(buffer, *scheme_params, block_size);
+                objectParser.ParseEllips(buffer, *scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptRectangle:
-                objectParser.ParseRectangle(buffer, *scheme_params, block_size);
+                objectParser.ParseRectangle(buffer, *scheme_params, block_size, id_pos);
                 break;
+            case objects_types.ptGoPoint:
+                objectParser.ParseGoPoint(buffer, *scheme_params, block_size, id_pos);
+            case objects_types.ptGoBtn:
+                objectParser.ParseGoBtn(buffer, *scheme_params, block_size, id_pos);
+            case objects_types.ptText:
+                objectParser.ParseText(buffer, *scheme_params, block_size, id_pos);
+            case objects_types.ptTeleupr:
+                objectParser.ParseTeleupr(buffer, *scheme_params, block_size, id_pos);
 
             default:
                 lae::WriteLog(LogsFile, "\nUnknown object\n");

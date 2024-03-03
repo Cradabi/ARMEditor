@@ -694,7 +694,7 @@ namespace FiguresClasses {
         bool italic_font = true;                                                     //флаг наклонности шрифта
         bool underlined_font = true;                                                 //флаг подчеркнутости шрифта
         bool crossed_font = false;                                                    //флаг зачеркнутости шрифта
-        bool auto_size_text = true;                                                  //авторазмер текста
+        bool auto_size_text = false;                                                  //авторазмер текста
         std::vector<int> font_color = {0, 0, 0};                                     //цвет шрифта
         std::vector<int> line_color = {0, 0, 0};
         std::vector<int> filling_color = {255, 255, 255};                                //цвет заливки

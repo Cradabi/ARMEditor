@@ -78,7 +78,7 @@ private:
     }
 
     int findSequence(char *buffer, std::string id) {
-        uint32_t id_num = stoi(id);
+        uint32_t id_num = 1;
         uint32_t res = 0;
 
         char sequence[9] = {0};
