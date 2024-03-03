@@ -440,9 +440,19 @@ void SchemeFileParser::ParseOBJECT() {
         // Получаем размер блока
         block_size = GetBlockSize();
 
+
+
         SchemeFile.read(buffer, block_size);
 
-        switch (static_cast<uint8_t>(buffer[616])) {
+        int id_pos = SchemeFileParser::findSequence(buffer, sections_stack.back().parrent_sect->sect_name);
+        int dots_count = GetSomeInt(0, 4, true, id_pos+8);
+        uint8_t PrType = static_cast<uint8_t>(buffer[id_pos+12+dots_count*8]);
+
+
+
+
+
+        switch (PrType) {
             case objects_types.ptEllipse:
                 objectParser.ParseEllips(buffer, *scheme_params, block_size);
                 break;
@@ -475,6 +485,7 @@ void SchemeFileParser::ParseOBJECT() {
                 lae::WriteLog(LogsFile, "BLOCK CLOSED", true);
 
         }
+
 
     }
 

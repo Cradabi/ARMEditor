@@ -36,27 +36,31 @@ private:
 
     // Структура секции
     struct Section {
-        Section* parrent_sect{nullptr};
+        Section *parrent_sect{nullptr};
 
         uint32_t sect_size{0};          // Размер секции
         uint32_t start_pos;             // Номер стартового байта секции
 
         std::string sect_name;          // Имя секции
 //      uint32_t sect_number{0};        // Номер секции (пустой, если есть имя)
+
+
+
+
     };
 
     // Стек открытых секций
     std::vector<Section> sections_stack;
 
     char byte;                      // Переменная для работы с байтами
-    char* buffer = new char[4096];  // Массив байт
+    char *buffer = new char[4096];  // Массив байт
 
     SchemeObjectParser objectParser;        // Экземпляр парсера объектов схемы
     static sce::SchemeObjectsTypes objects_types;  // Экземпляр структуры с типами объектов схемы
 
     // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<typename IntType>
-    IntType GetSomeInt(IntType some_int, uint8_t block_size, bool is_buffer_filled = false) {
+    IntType GetSomeInt(IntType some_int, uint8_t block_size, bool is_buffer_filled = false, uint32_t start_index = 0) {
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
@@ -64,13 +68,49 @@ private:
         }
 
         for (int8_t i = block_size - 1; i >= 0; --i) {
-            some_int |= static_cast<uint8_t>(buffer[i]);
+            some_int |= static_cast<uint8_t>(buffer[start_index + i]);
 
             if (i != 0)
                 some_int <<= 8;
         }
 
         return some_int;
+    }
+
+    int findSequence(char *buffer, std::string id) {
+        uint32_t id_num = stoi(id);
+        uint32_t res = 0;
+
+        char sequence[9] = {0};
+
+        for (int8_t i = 0; i < 4; ++i) {
+            sequence[i] = (id_num >> (8 * i)) & 0xFF;
+            sequence[i + 4] = (id_num >> (8 * i)) & 0xFF;
+        }
+        std::bitset<8> print_byte;
+        for (int i =0; i < 8; ++i){
+            print_byte = sequence[i];
+            std::cout << print_byte << ' ';
+        }
+        char *ptr = buffer;
+        int shift = 0;
+        while (true) {
+            if (*(ptr + shift) == sequence[0]) {
+                char *temp = ptr;
+                bool match = true;
+                for (int i = 1; i < 8; ++i) {
+                    if (*(temp + i + shift) != sequence[i]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    return shift;
+                }
+            }
+            ++shift;
+        }
+        return shift;
     }
 
     // Функция получения размера файла
@@ -173,7 +213,7 @@ private:
     uint32_t GetBlockSize();
 
     // Функция чтения информации из блока
-    void PrintBlockData(const uint32_t& block_size);
+    void PrintBlockData(const uint32_t &block_size);
 
     // Функции парса основных секций схемы
 
@@ -199,7 +239,7 @@ private:
     void ParseOBJECT();
 
     // Функция открытия рабочих файлов
-    bool OpenWorkFiles(const std::string& schemefile_path, const std::string& logfile_path) {
+    bool OpenWorkFiles(const std::string &schemefile_path, const std::string &logfile_path) {
         SchemeFile.open(schemefile_path, std::ios_base::binary);
         LogsFile.open(logfile_path);
 
@@ -223,15 +263,15 @@ private:
     }
 
 public:
-    SchemeFileParser(Scheme::SchemeParams& _scheme_params){
+    SchemeFileParser(Scheme::SchemeParams &_scheme_params) {
         scheme_params = &_scheme_params;
     }
 
     // Главная функция парсера схемы
-    virtual bool parse(const std::string& schemefile_path, const std::string& logfile_path);
+    virtual bool parse(const std::string &schemefile_path, const std::string &logfile_path);
 };
 
-bool SchemeFileParser::parse(const std::string& schemefile_path, const std::string& logfile_path) {
+bool SchemeFileParser::parse(const std::string &schemefile_path, const std::string &logfile_path) {
     if (!OpenWorkFiles(schemefile_path, logfile_path))
         return false;
 
