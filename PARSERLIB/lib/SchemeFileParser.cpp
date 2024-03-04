@@ -444,12 +444,9 @@ void SchemeFileParser::ParseOBJECT() {
 
         SchemeFile.read(buffer, block_size);
 
-        int id_pos = SchemeFileParser::findSequence(buffer, sections_stack.back().parrent_sect->sect_name);
+        int id_pos = findSequence(buffer, sections_stack.back().parrent_sect->sect_name);
         int dots_count = GetSomeInt(0, 4, true, id_pos+8);
         uint8_t PrType = static_cast<uint8_t>(buffer[id_pos+12+dots_count*8]);
-
-
-
 
 
         switch (PrType) {
@@ -465,9 +462,9 @@ void SchemeFileParser::ParseOBJECT() {
             case objects_types.ptGoBtn:
                 objectParser.ParseGoBtn(buffer, *scheme_params, block_size, id_pos);
                 break;
-//            case objects_types.ptText:
-//                objectParser.ParseText(buffer, *scheme_params, block_size, id_pos);
-//                break;
+            case objects_types.ptText:
+                objectParser.ParseText(buffer, *scheme_params, block_size, id_pos);
+                break;
             case objects_types.ptTeleupr:
                 objectParser.ParseTeleupr(buffer, *scheme_params, block_size, id_pos);
                 break;

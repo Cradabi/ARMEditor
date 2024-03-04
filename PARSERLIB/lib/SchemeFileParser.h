@@ -90,7 +90,6 @@ private:
         std::bitset<8> print_byte;
         for (int i =0; i < 8; ++i){
             print_byte = sequence[i];
-            std::cout << print_byte << ' ';
         }
         char *ptr = buffer;
         int shift = 0;

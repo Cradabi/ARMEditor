@@ -11,7 +11,7 @@ class SchemeObjectParser {
 private:
     // Шаблон получения числового значения из буффера (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<typename IntType>
-    IntType GetSomeInt(char *buffer, IntType some_int, uint8_t block_size, uint32_t start_index = 0) {
+    IntType GetSomeInt(char* buffer, IntType some_int, uint8_t block_size, uint32_t start_index = 0) {
 
         for (int8_t i = block_size - 1; i >= 0; --i) {
             some_int |= static_cast<uint8_t>(buffer[start_index + i]);
@@ -25,7 +25,7 @@ private:
 
 public:
 
-    void ParseEllips(char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t &block_size, int id_pos) {
+    void ParseEllips(char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t& block_size, int id_pos) {
 
         uint32_t bytes_counter = 16;
 
@@ -33,21 +33,21 @@ public:
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -108,32 +108,32 @@ public:
 
     }
 
-    void ParseNone(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseNone(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         ;
     }
 
-    void ParseGoBtn(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseGoBtn(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         uint32_t bytes_counter = 16;
 
         char tmp_center_x[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -186,21 +186,21 @@ public:
 
     }
 
-    void ParseGoPoint(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseGoPoint(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         uint32_t bytes_counter = 16;
 
         char tmp_center_x[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
 
         bytes_counter = id_pos + 4;
@@ -255,32 +255,32 @@ public:
                                     " Точка перехода ", true, 0));
     }
 
-    void ParseGluePoint(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseGluePoint(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         ;
     }
 
-    void ParseLine(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseLine(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         uint32_t bytes_counter = 16;
 
         char tmp_center_x[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -333,12 +333,13 @@ public:
         uint8_t start_arrow_style = static_cast<uint8_t> (buffer[bytes_counter]);
 
         scheme_params.objects_vector.push_back(
-                new Line((int)round(center_x + cord_x1), (int)round(center_y + cord_y1), (int)round(center_x + cord_x2), (int)round(center_y + cord_y2), "", "Линия",
+                new Line((int) round(center_x + cord_x1), (int) round(center_y + cord_y1),
+                         (int) round(center_x + cord_x2), (int) round(center_y + cord_y2), "", "Линия",
                          true,
                          line_style, 0, width, start_arrow_style, end_arrow_style, {pen.red, pen.green, pen.blue}));
     }
 
-    void ParseText(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseText(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
 
         uint32_t bytes_counter = 16;
 
@@ -346,21 +347,21 @@ public:
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -430,11 +431,11 @@ public:
         }
         bytes_counter += text_length;
 
-        bytes_counter += 5;
+        bytes_counter += 4;
 
         uint8_t font_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-        if (font_bool){
+        if (font_bool) {
             uint32_t font_size = GetSomeInt(buffer, 0, 4, bytes_counter);
 
             bytes_counter += 4;
@@ -458,8 +459,8 @@ public:
             font_color.green = static_cast<uint8_t>(buffer[bytes_counter++]);
             font_color.red = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-            font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
-            font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
+            uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
+            uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
             bytes_counter += 2; //MB цвет заливки
 
             uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -468,28 +469,29 @@ public:
 
             bytes_counter += 4;
 
-            uint32_t  font_height = GetSomeInt(buffer, 0, 4, bytes_counter);
+            uint32_t font_height = GetSomeInt(buffer, 0, 4, bytes_counter);
 
             bytes_counter += 4;
 
             uint32_t font_descent = GetSomeInt(buffer, 0, 4, bytes_counter);
-        }
 
-        scheme_params.objects_vector.push_back(
-                new Text(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                         (360 - (int) angle) % 360,
-                         text, " Текст ", line_style,
-                         {brush.red, brush.green, brush.blue},
-                         1, brush_style), font_name, font_size,
-                         {font_color.red, font_color.green, font_color.blue},
-                font_align_horz, font_align_vert, bold_bool, italic_font, underlined_font, 0, auto_size_text);
+            scheme_params.objects_vector.push_back(
+                    new Text((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2, half_y * 2,
+                             (360 - (int) angle) % 360,
+                             text, " Текст ", line_style,
+                             {brush.red, brush.green, brush.blue},
+                             1, brush_style, font_name, font_size,
+                             {font_color.red, font_color.green, font_color.blue},
+                             font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
+                             font_autosize));
+        }
     }
 
-    void ParsePolygon(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParsePolygon(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         ;
     }
 
-    void ParseRectangle(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseRectangle(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
 
         uint32_t bytes_counter = 16;
 
@@ -497,21 +499,21 @@ public:
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -577,28 +579,28 @@ public:
 
     }
 
-    void ParseDuga(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseDuga(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         uint32_t bytes_counter = 16;
 
         char tmp_center_x[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -666,7 +668,7 @@ public:
                         brush_style));
     }
 
-    void ParseTeleupr(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseTeleupr(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
 
         uint32_t bytes_counter = 16;
 
@@ -674,21 +676,21 @@ public:
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -758,37 +760,86 @@ public:
         }
         bytes_counter += text_length;
 
-        scheme_params.objects_vector.push_back(
-                new Telecontrol(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                                (360 - (int) angle) % 360,
-                                text, " Телеизмерение ", line_style,
-                                {brush.red, brush.green, brush.blue},
-                                1, brush_style));
+        bytes_counter += 4;
+
+        uint8_t font_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+        if (font_bool) {
+            uint32_t font_size = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t italic_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_name_length = GetSomeInt(buffer, 0, 4, bytes_counter);
+            bytes_counter += 4;
+            std::string font_name;
+            for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
+                font_name += buffer[i];
+            }
+            bytes_counter += font_name_length;
+
+            ssp::BGRColor font_color;
+            font_color.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
+            uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
+            bytes_counter += 2; //MB цвет заливки
+
+            uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_width = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_height = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_descent = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            scheme_params.objects_vector.push_back(
+                    new Telecontrol((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
+                                    half_y * 2,
+                                    (360 - (int) angle) % 360,
+                                    text, " Телеуправление ", line_style,
+                                    {brush.red, brush.green, brush.blue},
+                                    1, brush_style, font_name, font_size,
+                                    {font_color.red, font_color.green, font_color.blue},
+                                    font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
+                                    font_autosize));
+        }
 
     }
 
-    void ParseTeleizm(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseTeleizm(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         uint32_t bytes_counter = 16;
 
         char tmp_center_x[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -858,36 +909,85 @@ public:
         }
         bytes_counter += text_length;
 
-        scheme_params.objects_vector.push_back(
-                new Telemeasure(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                                (360 - (int) angle) % 360,
-                                text, " Телеизмерение ", line_style,
-                                {brush.red, brush.green, brush.blue},
-                                1, brush_style));
+        bytes_counter += 4;
+
+        uint8_t font_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+        if (font_bool) {
+            uint32_t font_size = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t italic_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_name_length = GetSomeInt(buffer, 0, 4, bytes_counter);
+            bytes_counter += 4;
+            std::string font_name;
+            for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
+                font_name += buffer[i];
+            }
+            bytes_counter += font_name_length;
+
+            ssp::BGRColor font_color;
+            font_color.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
+            uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
+            bytes_counter += 2; //MB цвет заливки
+
+            uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_width = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_height = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_descent = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            scheme_params.objects_vector.push_back(
+                    new Telemeasure((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
+                                    half_y * 2,
+                                    (360 - (int) angle) % 360,
+                                    text, " Телеизмерение ", line_style,
+                                    {brush.red, brush.green, brush.blue},
+                                    1, brush_style, font_name, font_size,
+                                    {font_color.red, font_color.green, font_color.blue},
+                                    font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
+                                    font_autosize));
+        }
     }
 
-    void ParseSignal(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseSignal(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         uint32_t bytes_counter = 16;
 
         char tmp_center_x[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_x[_byte] = buffer[bytes_counter + _byte];
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+        double center_x = *reinterpret_cast<double*>(tmp_center_x);
 
         bytes_counter += 24;
 
         char tmp_center_y[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+        double center_y = *reinterpret_cast<double*>(tmp_center_y);
 
         bytes_counter += 32;
 
         char tmp_angle[9];
         for (int8_t _byte = 0; _byte < 8; ++_byte)
             tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+        double angle = *reinterpret_cast<double*>(tmp_angle);
 
         bytes_counter = id_pos + 4;
 
@@ -957,19 +1057,68 @@ public:
         }
         bytes_counter += text_length;
 
-        scheme_params.objects_vector.push_back(
-                new Telesignalisation(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                                      (360 - (int) angle) % 360,
-                                      text, " Телеизмерение ", line_style,
-                                      {brush.red, brush.green, brush.blue},
-                                      1, brush_style));
+        bytes_counter += 4;
+
+        uint8_t font_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+        if (font_bool) {
+            uint32_t font_size = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t italic_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_name_length = GetSomeInt(buffer, 0, 4, bytes_counter);
+            bytes_counter += 4;
+            std::string font_name;
+            for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
+                font_name += buffer[i];
+            }
+            bytes_counter += font_name_length;
+
+            ssp::BGRColor font_color;
+            font_color.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
+            uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
+            bytes_counter += 2; //MB цвет заливки
+
+            uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_width = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_height = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_descent = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            scheme_params.objects_vector.push_back(
+                    new Telesignalisation((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
+                                    half_y * 2,
+                                    (360 - (int) angle) % 360,
+                                    text, " Телесигнализация ", line_style,
+                                    {brush.red, brush.green, brush.blue},
+                                    1, brush_style, font_name, font_size,
+                                    {font_color.red, font_color.green, font_color.blue},
+                                    font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
+                                    font_autosize));
+        }
     }
 
-    void ParsePicture(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParsePicture(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         ;
     }
 
-    void ParseShape(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
+    void ParseShape(char* buffer, Scheme::SchemeParams& scheme_params, uint32_t block_size, int id_pos) {
         ;
     }
 };
