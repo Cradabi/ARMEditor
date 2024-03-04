@@ -435,7 +435,7 @@ public:
         uint8_t font_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         if (font_bool){
-            uint32_t font_width = GetSomeInt(buffer, 0, 4, bytes_counter);
+            uint32_t font_size = GetSomeInt(buffer, 0, 4, bytes_counter);
 
             bytes_counter += 4;
 
@@ -445,17 +445,44 @@ public:
 
             uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
+            uint32_t font_name_length = GetSomeInt(buffer, 0, 4, bytes_counter);
+            bytes_counter += 4;
+            std::string font_name;
+            for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
+                font_name += buffer[i];
+            }
+            bytes_counter += font_name_length;
+
+            ssp::BGRColor font_color;
+            font_color.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.green = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_color.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
+            font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
+            bytes_counter += 2; //MB цвет заливки
+
+            uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
+
+            uint32_t font_width = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t  font_height = GetSomeInt(buffer, 0, 4, bytes_counter);
+
+            bytes_counter += 4;
+
+            uint32_t font_descent = GetSomeInt(buffer, 0, 4, bytes_counter);
         }
-
-
-
 
         scheme_params.objects_vector.push_back(
                 new Text(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
                          (360 - (int) angle) % 360,
                          text, " Текст ", line_style,
                          {brush.red, brush.green, brush.blue},
-                         1, brush_style));
+                         1, brush_style), font_name, font_size,
+                         {font_color.red, font_color.green, font_color.blue},
+                font_align_horz, font_align_vert, bold_bool, italic_font, underlined_font, 0, auto_size_text);
     }
 
     void ParsePolygon(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size, int id_pos) {
