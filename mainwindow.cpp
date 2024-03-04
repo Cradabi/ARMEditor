@@ -20,7 +20,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("../PARSERLIB/schemes_exp/mellips.схема",
+    parser.parse("../PARSERLIB/schemes_exp/Электро3.схема",
                  "../PARSERLIB/logs/SchemeLogs.txt");
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
@@ -37,9 +37,7 @@ MyWidget::MyWidget() {
     // painter->drawRect(15,15,100,100);
 
 
-    /*tmp_scheme_params.objects_vector.push_back(new LibraryObject(600, 300, 400, 250, 90, 0, 0, "huihui", "huihui2",
-                                                                 {{new Rectangle(-200, -50, 100, 100, 45, 10, 3, {255, 0, 0}, "", true)},
-                                                                  {new Line(-200, -125, 200, 150)}}, "", true, true));*/
+    //tmp_scheme_params.objects_vector.push_back(new Line(50, 50, 100, 100));
 
 
     Scheme scheme(tmp_scheme_params);

@@ -461,12 +461,34 @@ void SchemeFileParser::ParseOBJECT() {
                 break;
             case objects_types.ptGoPoint:
                 objectParser.ParseGoPoint(buffer, *scheme_params, block_size, id_pos);
+                break;
             case objects_types.ptGoBtn:
                 objectParser.ParseGoBtn(buffer, *scheme_params, block_size, id_pos);
-            case objects_types.ptText:
-                objectParser.ParseText(buffer, *scheme_params, block_size, id_pos);
+                break;
+//            case objects_types.ptText:
+//                objectParser.ParseText(buffer, *scheme_params, block_size, id_pos);
+//                break;
             case objects_types.ptTeleupr:
                 objectParser.ParseTeleupr(buffer, *scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptTeleizm:
+                objectParser.ParseTeleizm(buffer, *scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptSignal:
+                objectParser.ParseSignal(buffer, *scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptLine:
+                objectParser.ParseLine(buffer, *scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptPolygon:
+                objectParser.ParsePolygon(buffer, *scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptDuga:
+                objectParser.ParseDuga(buffer, *scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptPicture:
+                objectParser.ParsePicture(buffer, *scheme_params, block_size, id_pos);
+                break;
 
             default:
                 lae::WriteLog(LogsFile, "\nUnknown object\n");

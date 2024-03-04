@@ -122,6 +122,7 @@ void Line::draw(QPainter &painter) {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            break;
         }
         case 1: {
             painter.setPen(
@@ -180,6 +181,7 @@ void Line::draw(QPainter &painter) {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            break;
         case 1: {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
@@ -785,11 +787,11 @@ void Arc::draw(QPainter &painter) {
             painter.setBrush(filling_color);
             painter.drawPie(QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
-                            ((360 - this->get_end_angle()) % 360) * (-16));
+                            (360 - ((this->end_angle - this->start_angle) % 360)) * (-16));
         } else {
             painter.drawArc(QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
-                            ((360 - this->get_end_angle()) % 360) * (-16));
+                            (360 - ((this->end_angle - this->start_angle) % 360)) * (-16));
         }
     }
     painter.restore();
