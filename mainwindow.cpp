@@ -20,8 +20,9 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("../PARSERLIB/schemes_exp/Полигон.схема",
+    parser.parse("../PARSERLIB/schemes_exp/Полигон3.схема",
                  "../PARSERLIB/logs/SchemeLogs.txt");
+
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
 
