@@ -477,9 +477,9 @@ void SchemeFileParser::ParseOBJECT() {
             case objects_types.ptLine:
                 objectParser.ParseLine(buffer, *scheme_params, block_size, id_pos);
                 break;
-            case objects_types.ptPolygon:
-                objectParser.ParsePolygon(buffer, *scheme_params, block_size, id_pos);
-                break;
+//            case objects_types.ptPolygon:
+//                objectParser.ParsePolygon(buffer, *scheme_params, block_size, id_pos);
+//                break;
             case objects_types.ptDuga:
                 objectParser.ParseDuga(buffer, *scheme_params, block_size, id_pos);
                 break;
