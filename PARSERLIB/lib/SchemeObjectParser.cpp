@@ -231,7 +231,7 @@ void SchemeObjectParser::parseLine(const char* buffer, Scheme::SchemeParams& sch
     int32_t cord_y2;
     getSomeInt(buffer, cord_y2, 4, bytes_counter);
 
-    bytes_counter += 6;
+    bytes_counter += 2;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);

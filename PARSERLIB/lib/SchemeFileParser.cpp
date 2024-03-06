@@ -17,7 +17,7 @@ void SchemeFileParser::parseSchm() {
     ssp::BGRColor net_color;
     bool BitDepth{false};
 
-    char* tmp_work_scale = new char[9];
+    char *tmp_work_scale = new char[9];
 
     uint8_t data_counter = 0;
     uint32_t block_size;
@@ -96,7 +96,7 @@ void SchemeFileParser::parseSchm() {
                     break;
                 case schm_data.work_scale_flag:
                     SchemeFile.read(tmp_work_scale, block_size);
-                    work_scale = *reinterpret_cast<double*>(tmp_work_scale);
+                    work_scale = *reinterpret_cast<double *>(tmp_work_scale);
                     delete[] tmp_work_scale;
                     lae::WriteLog(LogsFile, "work_scale: ");
                     lae::WriteLog(LogsFile, work_scale, true);
@@ -444,7 +444,7 @@ void SchemeFileParser::parseObject() {
 
         int id_pos = findSequence(buffer, sections_stack.back().parrent_sect->sect_name);
         int dots_count = getSomeInt(0, 4, true, id_pos + 8);
-        uint8_t PrType = static_cast<uint8_t>(buffer[id_pos+12+dots_count*8]);
+        uint8_t PrType = static_cast<uint8_t>(buffer[id_pos + 12 + dots_count * 8]);
 
         switch (PrType) {
             case objects_types.ptEllipse:
@@ -580,7 +580,7 @@ uint32_t SchemeFileParser::getBlockSize() {
 }
 
 // Функция чтения информации из блока
-void SchemeFileParser::printBlockData(const uint32_t& block_size) {
+void SchemeFileParser::printBlockData(const uint32_t &block_size) {
 
     lae::WriteLog(LogsFile, "BLOCK OPENED ");
     lae::WriteLog(LogsFile, "block size: ");
