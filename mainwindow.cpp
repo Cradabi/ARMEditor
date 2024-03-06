@@ -20,7 +20,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    parser.parse("../PARSERLIB/schemes_exp/Полигон3.схема",
+    parser.parse("../PARSERLIB/schemes_exp/razultuvert2.схема",
                  "../PARSERLIB/logs/SchemeLogs.txt");
 
 
