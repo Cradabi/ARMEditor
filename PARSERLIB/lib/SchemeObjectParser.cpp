@@ -322,7 +322,7 @@ void SchemeObjectParser::parseText(const char* buffer, Scheme::SchemeParams& sch
 
         uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
         uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
-        bytes_counter += 2; //MB цвет заливки
+        bytes_counter += 1; //MB цвет заливки
 
         uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
 
