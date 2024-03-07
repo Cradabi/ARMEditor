@@ -123,59 +123,37 @@ SchemeObjectParser::parseGoPoint(const char* buffer, Scheme::SchemeParams& schem
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
-    char tmp_center_x[9];
-    for (int8_t _byte = 0; _byte < 8; ++_byte)
-        tmp_center_x[_byte] = buffer[bytes_counter + _byte];
+    double center_x;
+    getSomeFloat(buffer, center_x, 8, bytes_counter);
 
-    double center_x = *reinterpret_cast<double*>(tmp_center_x);
+    bytes_counter += 16;
 
-    bytes_counter += 24;
-
-    char tmp_center_y[9];
-    for (int8_t _byte = 0; _byte < 8; ++_byte)
-        tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-    double center_y = *reinterpret_cast<double*>(tmp_center_y);
+    double center_y;
+    getSomeFloat(buffer, center_y, 8, bytes_counter);
 
 
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
+    getSomeInt(buffer, id, 4, bytes_counter);
 
     bytes_counter += 12;
 
+    uint32_t half_x = 0;
+    getSomeInt(buffer, half_x, 4, bytes_counter);
+
+    bytes_counter += 8;
+
     uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_y, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
+    bytes_counter += 10;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);
 
     ssp::BGRColor brush;
     getColor(buffer, brush, bytes_counter);
-
-    bytes_counter += 4;
 
     scheme_params.objects_vector.push_back(
             new TransitionPoint(0, center_x - half_x, center_y - half_y,
@@ -210,14 +188,9 @@ void SchemeObjectParser::parseLine(const char* buffer, Scheme::SchemeParams& sch
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, id, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 8; //
+    bytes_counter += 4;
 
     int32_t cord_x1;
     getSomeInt(buffer, cord_x1, 4, bytes_counter);
@@ -313,13 +286,7 @@ void SchemeObjectParser::parseText(const char* buffer, Scheme::SchemeParams& sch
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        text_length |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            text_length <<= 8;
-    }
-    bytes_counter += 4;
+    getSomeInt(buffer, text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -401,14 +368,7 @@ SchemeObjectParser::parsePolygon(const char* buffer, Scheme::SchemeParams& schem
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 4;
+    getSomeInt(buffer, id, 4, bytes_counter);
 
     uint32_t amount_of_dots;
     getSomeInt(buffer, amount_of_dots, 4, bytes_counter);
@@ -453,13 +413,7 @@ SchemeObjectParser::parsePolygon(const char* buffer, Scheme::SchemeParams& schem
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        text_length |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            text_length <<= 8;
-    }
-    bytes_counter += 4;
+    getSomeInt(buffer, text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -498,34 +452,19 @@ SchemeObjectParser::parseRectangle(const char* buffer, Scheme::SchemeParams& sch
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
+    getSomeInt(buffer, id, 4, bytes_counter);
 
     bytes_counter += 12;
 
+    uint32_t half_x = 0;
+    getSomeInt(buffer, half_x, 4, bytes_counter);
+
+    bytes_counter += 8;
+
     uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_y, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
+    bytes_counter += 10;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);
@@ -575,24 +514,14 @@ void SchemeObjectParser::parseArc(const char* buffer, Scheme::SchemeParams& sche
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, id, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16; //
+    bytes_counter += 12;
 
     uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_x, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
-
-    bytes_counter += 20;
+    bytes_counter += 16;
 
     uint32_t half_y;
     getSomeInt(buffer, half_y, 4, bytes_counter);
@@ -655,34 +584,20 @@ SchemeObjectParser::parseTelecontrol(const char* buffer, Scheme::SchemeParams& s
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
+    getSomeInt(buffer, id, 4, bytes_counter);
 
     bytes_counter += 12;
 
+    uint32_t half_x = 0;
+    getSomeInt(buffer, half_x, 4, bytes_counter);
+
+
+    bytes_counter += 8;
+
     uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_y, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
+    bytes_counter += 10;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);
@@ -702,13 +617,8 @@ SchemeObjectParser::parseTelecontrol(const char* buffer, Scheme::SchemeParams& s
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        text_length |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, text_length, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            text_length <<= 8;
-    }
-    bytes_counter += 4;
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -792,34 +702,20 @@ SchemeObjectParser::parseTelemeasure(const char* buffer, Scheme::SchemeParams& s
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, id, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
 
     bytes_counter += 12;
 
+    uint32_t half_x = 0;
+    getSomeInt(buffer, half_x, 4, bytes_counter);
+
+    bytes_counter += 8;
+
     uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_y, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
+    bytes_counter += 10;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);
@@ -839,13 +735,7 @@ SchemeObjectParser::parseTelemeasure(const char* buffer, Scheme::SchemeParams& s
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        text_length |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            text_length <<= 8;
-    }
-    bytes_counter += 4;
+    getSomeInt(buffer, text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -928,34 +818,20 @@ SchemeObjectParser::parseSignal(const char* buffer, Scheme::SchemeParams& scheme
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
+    getSomeInt(buffer, id, 4, bytes_counter);
 
     bytes_counter += 12;
 
+    uint32_t half_x = 0;
+    getSomeInt(buffer, half_x, 4, bytes_counter);
+
+
+    bytes_counter += 8;
+
     uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_y, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
+    bytes_counter += 10;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);
@@ -975,13 +851,7 @@ SchemeObjectParser::parseSignal(const char* buffer, Scheme::SchemeParams& scheme
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        text_length |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            text_length <<= 8;
-    }
-    bytes_counter += 4;
+    getSomeInt(buffer, text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -1064,34 +934,20 @@ SchemeObjectParser::parsePicture(const char* buffer, Scheme::SchemeParams& schem
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        id |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            id <<= 8;
-    }
-
-    bytes_counter += 16;
-
-    uint32_t half_x = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_x |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            half_x <<= 8;
-    }
+    getSomeInt(buffer, id, 4, bytes_counter);
 
     bytes_counter += 12;
 
+    uint32_t half_x = 0;
+    getSomeInt(buffer, half_x, 4, bytes_counter);
+
+
+    bytes_counter += 8;
+
     uint32_t half_y = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        half_y |= static_cast<uint8_t>(buffer[i]);
+    getSomeInt(buffer, half_y, 4, bytes_counter);
 
-        if (i != bytes_counter)
-            half_y <<= 8;
-    }
-
-    bytes_counter += 14;
+    bytes_counter += 10;
 
     ssp::BGRColor pen;
     getColor(buffer, pen, bytes_counter);
@@ -1111,13 +967,7 @@ SchemeObjectParser::parsePicture(const char* buffer, Scheme::SchemeParams& schem
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-        text_length |= static_cast<uint8_t>(buffer[i]);
-
-        if (i != bytes_counter)
-            text_length <<= 8;
-    }
-    bytes_counter += 4;
+    getSomeInt(buffer, text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {

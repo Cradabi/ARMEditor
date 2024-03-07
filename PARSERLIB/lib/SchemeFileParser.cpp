@@ -442,7 +442,7 @@ void SchemeFileParser::parseObject() {
 
         SchemeFile.read(buffer, block_size);
 
-        int id_pos = findSequence(buffer, sections_stack.back().parrent_sect->sect_name);
+        int id_pos = findStartOfObject(buffer, sections_stack.back().parrent_sect->sect_name);
         int dots_count = getSomeInt(0, 4, true, id_pos + 8);
         uint8_t PrType = static_cast<uint8_t>(buffer[id_pos + 12 + dots_count * 8]);
 

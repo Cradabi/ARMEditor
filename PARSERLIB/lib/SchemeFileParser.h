@@ -73,20 +73,15 @@ private:
         return some_int;
     }
 
-    int findSequence(char* buffer, const std::string& id) {
+    //функция для поиска начала описания объекта внутри итерированной секции объекта номер 1
+    int findStartOfObject(char* buffer, const std::string& id) {
         uint32_t id_num = 1;
-        uint32_t res = 0;
 
         char sequence[9] = {0};
 
         for (int8_t i = 0; i < 4; ++i) {
             sequence[i] = (id_num >> (8 * i)) & 0xFF;
             sequence[i + 4] = (id_num >> (8 * i)) & 0xFF;
-        }
-
-        std::bitset<8> print_byte;
-        for (int i = 0; i < 8; ++i) {
-            print_byte = sequence[i];
         }
 
         char* ptr = buffer;
@@ -107,7 +102,6 @@ private:
             }
             ++shift;
         }
-        return shift;
     }
 
     // Функция получения размера файла
