@@ -41,6 +41,7 @@ private:
         start_index += float_size;
     }
 
+    //
     void getColor(const char* buffer, ssp::BGRColor& color, uint32_t& start_index, bool is_rgb = false) {
         if (is_rgb) {
             color.red = static_cast<uint8_t>(buffer[start_index++]);

@@ -23,6 +23,12 @@ void SchemeObjectParser::parseEllips(const char* buffer, Scheme::SchemeParams& s
     double angle;
     getSomeFloat(buffer, angle, 8, bytes_counter);
 
+    bytes_counter += 456;
+
+    bool reflection_posibility = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_verctical = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_horizantal = static_cast<bool>(buffer[bytes_counter]);
+
     bytes_counter = id_pos + 4;
 
     uint32_t id;
@@ -184,6 +190,12 @@ void SchemeObjectParser::parseLine(const char* buffer, Scheme::SchemeParams& sch
 
     double angle;
     getSomeFloat(buffer, angle, 8, bytes_counter);
+
+    bytes_counter += 456;
+
+    bool reflection_posibility = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_verctical = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_horizantal = static_cast<bool>(buffer[bytes_counter]);
 
     bytes_counter = id_pos + 4;
 
@@ -365,6 +377,12 @@ SchemeObjectParser::parsePolygon(const char* buffer, Scheme::SchemeParams& schem
     double angle;
     getSomeFloat(buffer, angle, 8, bytes_counter);
 
+    bytes_counter += 456;
+
+    bool reflection_posibility = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_verctical = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_horizantal = static_cast<bool>(buffer[bytes_counter]);
+
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
@@ -449,6 +467,12 @@ SchemeObjectParser::parseRectangle(const char* buffer, Scheme::SchemeParams& sch
     double angle;
     getSomeFloat(buffer, angle, 8, bytes_counter);
 
+    bytes_counter += 456;
+
+    bool reflection_posibility = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_verctical = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_horizantal = static_cast<bool>(buffer[bytes_counter]);
+
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
@@ -510,6 +534,12 @@ void SchemeObjectParser::parseArc(const char* buffer, Scheme::SchemeParams& sche
 
     double angle;
     getSomeFloat(buffer, angle, 8, bytes_counter);
+
+    bytes_counter += 456;
+
+    bool reflection_posibility = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_verctical = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_horizantal = static_cast<bool>(buffer[bytes_counter]);
 
     bytes_counter = id_pos + 4;
 
@@ -930,6 +960,12 @@ SchemeObjectParser::parsePicture(const char* buffer, Scheme::SchemeParams& schem
 
     double angle;
     getSomeFloat(buffer, angle, 8, bytes_counter);
+
+    bytes_counter += 456;
+
+    bool reflection_posibility = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_verctical = static_cast<bool>(buffer[bytes_counter++]);
+    bool reflection_horizantal = static_cast<bool>(buffer[bytes_counter]);
 
     bytes_counter = id_pos + 4;
 
