@@ -53,6 +53,8 @@ namespace FiguresClasses {
         bool italic_font = false;                //флаг наклонности шрифта
         bool underlined_font = false;            //флаг подчеркнутости шрифта
         bool crossed_font = false;               //флаг зачеркнутости шрифта
+        bool horizontal_mirror = false;
+        bool vertical_mirror = false;
 
         std::vector<std::string> style_arrow_list =
                 {"esNone", "esRoundArrow", "esSharpArrow", "esDot",
@@ -87,22 +89,22 @@ namespace FiguresClasses {
 
     public:
         //конструкторы класса линии получающие различные вводные
-        Line(int st_x, int st_y, int end_x, int end_y);
+        Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror);
 
         Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
              bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-             int end_style_arrow, const std::vector<int> &line_color);
+             int end_style_arrow, const std::vector<int> &line_color, int hor_mirror, int vert_mirror);
 
         Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
              bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
              int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
-             int font_size, const std::vector<int> &font_color);
+             int font_size, const std::vector<int> &font_color, int hor_mirror, int vert_mirror);
 
         Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
              bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
              int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
              int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
-             bool crossed_font);
+             bool crossed_font, int hor_mirror, int vert_mirror);
 
         void draw(QPainter &painter) override;
 
@@ -120,6 +122,10 @@ namespace FiguresClasses {
         void set_start_style_arrow(int st_arrow);
 
         void set_end_style_arrow(int end_arrow);
+
+        void set_hor_mirror(bool hor_mirror);
+
+        void set_vert_mirror(bool vert_mirror);
 
         void set_font_name(const std::string &fn_name);
 
@@ -169,6 +175,10 @@ namespace FiguresClasses {
         //возвращает y-координату центра
         int get_center_cord_y();
 
+        bool get_hor_mirror();
+
+        bool get_vert_mirror();
+
         int get_font_size();
 
         int get_start_style_arrow();
@@ -195,6 +205,8 @@ namespace FiguresClasses {
     class Rectangle : public Primitive {   //класс прямоугольника
     private:                             //показывать прямоугольник
         bool bool_show_filling = false;                     //показывать заливку
+        bool horizontal_mirror = false;
+        bool vertical_mirror = false;
         std::vector<int> line_color = {0, 0, 0};            //цвет линии
         std::vector<int> filling_color = {255, 255, 255};   //цвет заливки
 
@@ -224,14 +236,16 @@ namespace FiguresClasses {
 
     public:
         //конструкторы класса прямоугольника получающие различные вводные
-        Rectangle(int x, int y, int width, int height);
+        Rectangle(int x, int y, int width, int height, int hor_mirror, int vert_mirror);
 
         Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+                  const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int hor_mirror,
+                  int vert_mirror);
 
         Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
                   const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
-                  int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling);
+                  int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling,
+                  int hor_mirror, int vert_mirror);
 
         void draw(QPainter &painter) override;
 
@@ -252,6 +266,10 @@ namespace FiguresClasses {
         void set_style_gradient_filling(int st_gradient);
 
         void set_style_line(int st_line);
+
+        void set_hor_mirror(bool hor_mirror);
+
+        void set_vert_mirror(bool vert_mirror);
 
         //далее идут функции по выводу одноименных переменных класса прямоугольника
         int get_style_frame();
@@ -276,6 +294,10 @@ namespace FiguresClasses {
 
         int get_center_y();
 
+        bool get_hor_mirror();
+
+        bool get_vert_mirror();
+
         std::vector<int> get_line_color();
 
         std::vector<int> get_filling_color();
@@ -293,6 +315,8 @@ namespace FiguresClasses {
     class Ellipse : public Primitive { //класс эллипса
     protected:                                           //показывать эллипс
         bool bool_show_filling = false;                                   //показывать заливку
+        bool horizontal_mirror = false;
+        bool vertical_mirror = false;
         std::vector<int> line_color = {0, 0, 0};                          //цвет линии
         std::vector<int> filling_color = {255, 255, 255};                 //цвет заливки
         std::vector<std::string> style_line_list = {"psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4",
@@ -317,14 +341,15 @@ namespace FiguresClasses {
         //конструкторы класса эллипса получающие различные вводные
         Ellipse();
 
-        Ellipse(int x, int y, int width, int height, int angle);
+        Ellipse(int x, int y, int width, int height, int angle, int hor_mirror, int vert_mirror);
 
         Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+                const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int hor_mirror,
+                int vert_mirror);
 
         Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
-                const std::vector<int> &filling_color, bool bool_show_filling);
+                const std::vector<int> &filling_color, bool bool_show_filling, int hor_mirror, int vert_mirror);
 
         void
         change_center_cords(int x, int y, int width,
@@ -340,6 +365,10 @@ namespace FiguresClasses {
         void set_filling_color(const std::vector<int> &fil_col);
 
         void set_style_line(int st_line);
+
+        void set_hor_mirror(bool hor_mirror);
+
+        void set_vert_mirror(bool vert_mirror);
 
         //далее идут функции по выводу одноименных переменных класса Эллипс
         int get_style_line();
@@ -359,6 +388,10 @@ namespace FiguresClasses {
         int get_center_x();
 
         int get_center_y();
+
+        bool get_hor_mirror();
+
+        bool get_vert_mirror();
 
         std::vector<int> get_line_color();
 
@@ -382,14 +415,16 @@ namespace FiguresClasses {
         void draw(QPainter &painter) override;
 
         //конструкторы класса дуги получающие различные вводные
-        Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle);
+        Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int hor_mirror,
+            int vert_mirror);
 
         Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
-            const std::vector<int> &line_color, const std::string &help_text, bool bool_show);
+            const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int hor_mirror,
+            int vert_mirror);
 
         Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
             const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
-            const std::vector<int> &filling_color, bool bool_show_filling);
+            const std::vector<int> &filling_color, bool bool_show_filling, int hor_mirror, int vert_mirror);
 
         void set_arc_angles(int start_angle, int end_angle);
 
@@ -409,6 +444,8 @@ namespace FiguresClasses {
     class CrookedLine : public Primitive {//класс кривой линии
     protected:
         bool bool_show_filling = true;                         //показывать заливку
+        bool horizontal_mirror = false;
+        bool vertical_mirror = false;
 
         std::vector<int> line_color = {0, 0, 0};                //цвет линии
         std::vector<int> filling_color = {150, 0, 0};       //цвет заливки
@@ -434,11 +471,12 @@ namespace FiguresClasses {
         //конструкторы класса кривой линии получающие различные вводные
         CrookedLine();
 
-        CrookedLine(const std::vector<std::vector<int>> &points_vector);
+        CrookedLine(const std::vector<std::vector<int>> &points_vector, int hor_mirror, int vert_mirror);
 
         CrookedLine(const std::vector<std::vector<int>> &points_vector, int angle, int line_width, int style_line,
                     const std::string &help_text, const std::vector<int> &line_color,
-                    const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+                    const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
+                    int vert_mirror);
 
         void draw(QPainter &painter) override;
 
@@ -455,6 +493,10 @@ namespace FiguresClasses {
 
         void set_style_line(int st_line);
 
+        void set_hor_mirror(bool hor_mirror);
+
+        void set_vert_mirror(bool vert_mirror);
+
         //далее идут функции по выводу одноименных переменных класса кривой линии
         int get_style_line();
 
@@ -470,7 +512,11 @@ namespace FiguresClasses {
 
         int get_center_x();
 
-        int get_center_y();;
+        int get_center_y();
+
+        bool get_hor_mirror();
+
+        bool get_vert_mirror();
 
         int get_line_width();
 
@@ -495,12 +541,13 @@ namespace FiguresClasses {
 
     public:
         //конструкторы класса многоугольника получающие различные вводные
-        Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon);
+        Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int hor_mirror, int vert_mirror);
 
         Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int angle, int line_width,
                 int style_line,
                 const std::string &help_text, const std::vector<int> &line_color,
-                const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+                const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
+                int vert_mirror);
 
         void draw(QPainter &painter) override;
 
@@ -1115,6 +1162,9 @@ namespace FiguresClasses {
 
     class LibraryObject : public Primitive {
     private:
+        bool horizontal_mirror = false;
+        bool vertical_mirror = false;
+
         int x = 0;
         int y = 0;
         int width = 0;
@@ -1135,7 +1185,7 @@ namespace FiguresClasses {
         LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
                       const std::string &lib_name, const std::string &obj_name,
                       const std::vector<std::vector<Primitive *>> &patterns, const std::string &help_text, bool show,
-                      bool show_help);
+                      bool show_help, int hor_mirror, int vert_mirror);
 
         void draw(QPainter &painter) override;
 
@@ -1151,6 +1201,10 @@ namespace FiguresClasses {
 
         void set_patterns(const std::vector<std::vector<Primitive *>> &patterns);
 
+        void set_hor_mirror(bool hor_mirror);
+
+        void set_vert_mirror(bool vert_mirror);
+
         void add_pattern(const std::vector<Primitive *> pattern);
 
         int get_x();
@@ -1162,6 +1216,10 @@ namespace FiguresClasses {
         int get_height();
 
         int get_angle();
+
+        bool get_hor_mirror();
+
+        bool get_vert_mirror();
 
         int get_id();
 

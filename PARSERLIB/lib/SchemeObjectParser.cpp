@@ -1,11 +1,11 @@
 #include "SchemeObjectParser.h"
 
-void SchemeObjectParser::parseNone(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseNone(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
     ;
 }
 
-void SchemeObjectParser::parseEllips(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseEllips(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                      int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -36,12 +36,12 @@ void SchemeObjectParser::parseEllips(const char* buffer, Scheme::SchemeParams& s
 
     bytes_counter += 12;
 
-    uint32_t half_x;
+    int32_t half_x;
     getSomeInt(buffer, half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
-    uint32_t half_y;
+    int32_t half_y;
     getSomeInt(buffer, half_y, 4, bytes_counter);
 
     bytes_counter += 10;
@@ -64,19 +64,19 @@ void SchemeObjectParser::parseEllips(const char* buffer, Scheme::SchemeParams& s
     width = static_cast<uint8_t>(buffer[bytes_counter]);
 
     scheme_params.objects_vector.push_back(
-            new Ellipse(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
+            new Ellipse(center_x - abs(half_x), center_y - abs(half_y), abs(half_x) * 2, abs(half_y) * 2,
                         (360 - (int) angle) % 360,
                         width, line_style,
                         {pen.red, pen.green, pen.blue},
                         " Эллипс ",
                         true,
                         {brush.red, brush.green, brush.blue},
-                        brush_style));
+                        brush_style, 0, 0));
 
 }
 
 void
-SchemeObjectParser::parseGoBtn(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGoBtn(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -125,7 +125,7 @@ SchemeObjectParser::parseGoBtn(const char* buffer, Scheme::SchemeParams& scheme_
 }
 
 void
-SchemeObjectParser::parseGoPoint(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGoPoint(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -169,12 +169,12 @@ SchemeObjectParser::parseGoPoint(const char* buffer, Scheme::SchemeParams& schem
 }
 
 void
-SchemeObjectParser::parseGluePoint(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGluePoint(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
     ;
 }
 
-void SchemeObjectParser::parseLine(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseLine(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -242,10 +242,11 @@ void SchemeObjectParser::parseLine(const char* buffer, Scheme::SchemeParams& sch
             new Line((int) round(center_x + cord_x1), (int) round(center_y + cord_y1),
                      (int) round(center_x + cord_x2), (int) round(center_y + cord_y2), "", "Линия",
                      true,
-                     line_style, 0, width, start_arrow_style, end_arrow_style, {pen.red, pen.green, pen.blue}));
+                     line_style, 0, width, start_arrow_style, end_arrow_style, {pen.red, pen.green, pen.blue},
+                     0, 0));
 }
 
-void SchemeObjectParser::parseText(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -360,7 +361,7 @@ void SchemeObjectParser::parseText(const char* buffer, Scheme::SchemeParams& sch
 }
 
 void
-SchemeObjectParser::parsePolygon(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -445,11 +446,11 @@ SchemeObjectParser::parsePolygon(const char* buffer, Scheme::SchemeParams& schem
                         width, line_style, " Прямоугольник ",
                         {pen.red, pen.green, pen.blue},
                         {brush.red, brush.green, brush.blue},
-                        true, brush_style));
+                        true, brush_style, 0, 0));
 }
 
 void
-SchemeObjectParser::parseRectangle(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseRectangle(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -480,12 +481,12 @@ SchemeObjectParser::parseRectangle(const char* buffer, Scheme::SchemeParams& sch
 
     bytes_counter += 12;
 
-    uint32_t half_x = 0;
+    int32_t half_x = 0;
     getSomeInt(buffer, half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
-    uint32_t half_y = 0;
+    int32_t half_y = 0;
     getSomeInt(buffer, half_y, 4, bytes_counter);
 
     bytes_counter += 10;
@@ -508,17 +509,17 @@ SchemeObjectParser::parseRectangle(const char* buffer, Scheme::SchemeParams& sch
     width = static_cast<uint8_t>(buffer[bytes_counter]);
 
     scheme_params.objects_vector.push_back(
-            new Rectangle(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
+            new Rectangle(center_x - abs(half_x), center_y - abs(half_y), abs(half_x) * 2, abs(half_y) * 2,
                           (360 - (int) angle) % 360,
                           width, line_style,
                           {pen.red, pen.green, pen.blue},
                           " Прямоугольник ", true, 0, 0,
                           {brush.red, brush.green, brush.blue},
-                          brush_style));
+                          brush_style, 0, 0));
 
 }
 
-void SchemeObjectParser::parseArc(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseArc(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                   int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -548,18 +549,18 @@ void SchemeObjectParser::parseArc(const char* buffer, Scheme::SchemeParams& sche
 
     bytes_counter += 12;
 
-    uint32_t half_x = 0;
+    int32_t half_x = 0;
     getSomeInt(buffer, half_x, 4, bytes_counter);
 
     bytes_counter += 16;
 
-    uint32_t half_y;
+    int32_t half_y;
     getSomeInt(buffer, half_y, 4, bytes_counter);
 
-    uint32_t start_angle;
+    int32_t start_angle;
     getSomeInt(buffer, start_angle, 4, bytes_counter);
 
-    uint32_t end_angle;
+    int32_t end_angle;
     getSomeInt(buffer, end_angle, 4, bytes_counter);
 
     bytes_counter += 2;
@@ -582,18 +583,18 @@ void SchemeObjectParser::parseArc(const char* buffer, Scheme::SchemeParams& sche
     width = static_cast<uint8_t>(buffer[bytes_counter]);
 
     scheme_params.objects_vector.push_back(
-            new Arc(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
+            new Arc(center_x - abs(half_x), center_y - abs(half_y), abs(half_x) * 2, abs(half_y) * 2,
                     (360 - (int) angle) % 360, start_angle, end_angle,
                     width, line_style,
                     {pen.red, pen.green, pen.blue},
                     " Дуга ",
                     true,
                     {brush.red, brush.green, brush.blue},
-                    brush_style));
+                    brush_style, 0, 0));
 }
 
 void
-SchemeObjectParser::parseTelecontrol(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                      int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -712,7 +713,7 @@ SchemeObjectParser::parseTelecontrol(const char* buffer, Scheme::SchemeParams& s
 }
 
 void
-SchemeObjectParser::parseTelemeasure(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                      int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -828,7 +829,7 @@ SchemeObjectParser::parseTelemeasure(const char* buffer, Scheme::SchemeParams& s
 }
 
 void
-SchemeObjectParser::parseSignal(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                 int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -944,7 +945,7 @@ SchemeObjectParser::parseSignal(const char* buffer, Scheme::SchemeParams& scheme
 }
 
 void
-SchemeObjectParser::parsePicture(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parsePicture(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -1046,7 +1047,7 @@ SchemeObjectParser::parsePicture(const char* buffer, Scheme::SchemeParams& schem
 }
 
 void
-SchemeObjectParser::parseShape(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseShape(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                int id_pos) {
     ;
 }

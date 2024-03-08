@@ -20,7 +20,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    if (!parser.parse("../PARSERLIB/schemes_exp/Эллипс2.схема",
+    if (!parser.parse("../PARSERLIB/schemes_exp/auto2.схема",
                       "../PARSERLIB/logs/SchemeLogs.txt"))
         exit(1);
 
