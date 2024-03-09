@@ -3,8 +3,7 @@
 #include <tuple>
 
 
-
-std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_t &bytes_counter_temp){
+std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_t &bytes_counter_temp) {
 
     double center_x;
     getSomeFloat(center_x, 8, bytes_counter_temp);
@@ -22,7 +21,7 @@ std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_
     return std::make_tuple(center_x, center_y, angle);
 }
 
-std::tuple<bool, bool, bool> SchemeObjectParser::getReflections(uint32_t &bytes_counter_temp){
+std::tuple<bool, bool, bool> SchemeObjectParser::getReflections(uint32_t &bytes_counter_temp) {
     bytes_counter_temp += 456;
 
     bool reflection_posibility = static_cast<bool>(buffer[bytes_counter_temp++]);
@@ -33,7 +32,7 @@ std::tuple<bool, bool, bool> SchemeObjectParser::getReflections(uint32_t &bytes_
 
 }
 
-std::tuple<uint32_t, uint32_t, uint32_t> SchemeObjectParser::getIdAndHalves(uint32_t &bytes_counter_temp){
+std::tuple<uint32_t, uint32_t, uint32_t> SchemeObjectParser::getIdAndHalves(uint32_t &bytes_counter_temp) {
     uint32_t id;
     getSomeInt(id, 4, bytes_counter_temp);
 
@@ -50,7 +49,7 @@ std::tuple<uint32_t, uint32_t, uint32_t> SchemeObjectParser::getIdAndHalves(uint
     return std::make_tuple(id, half_x, half_y);
 }
 
-std::tuple<ssp::BGRColor, ssp::BGRColor> SchemeObjectParser::getColors(uint32_t &bytes_counter_temp){
+std::tuple<ssp::BGRColor, ssp::BGRColor> SchemeObjectParser::getColors(uint32_t &bytes_counter_temp) {
     ssp::BGRColor pen;
     getColor(pen, bytes_counter_temp);
 
@@ -60,7 +59,7 @@ std::tuple<ssp::BGRColor, ssp::BGRColor> SchemeObjectParser::getColors(uint32_t 
     return std::make_tuple(pen, brush);
 }
 
-std::tuple<bool, uint8_t, uint8_t> SchemeObjectParser::getStylesAndWidth(uint32_t &bytes_counter_temp){
+std::tuple<bool, uint8_t, uint8_t> SchemeObjectParser::getStylesAndWidth(uint32_t &bytes_counter_temp) {
     bool brush_style;
     brush_style = static_cast<bool>(buffer[bytes_counter_temp++]);
 
@@ -73,7 +72,7 @@ std::tuple<bool, uint8_t, uint8_t> SchemeObjectParser::getStylesAndWidth(uint32_
     return std::make_tuple(brush_style, line_style, width);
 }
 
-std::tuple<uint32_t, std::string> SchemeObjectParser::getText_(uint32_t &bytes_counter_temp){
+std::tuple<uint32_t, std::string> SchemeObjectParser::getText_(uint32_t &bytes_counter_temp) {
     uint32_t text_length = 0;
     getSomeInt(text_length, 4, bytes_counter_temp);
 
@@ -84,14 +83,15 @@ std::tuple<uint32_t, std::string> SchemeObjectParser::getText_(uint32_t &bytes_c
     bytes_counter_temp += text_length;
     return std::make_tuple(text_length, text);
 }
+
 void
 SchemeObjectParser::parseRectangle(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bool reflection_posibility, reflection_verctical, reflection_horizantal;
     std::tie(reflection_posibility, reflection_verctical, reflection_horizantal) = getReflections(bytes_counter);
@@ -128,8 +128,8 @@ void SchemeObjectParser::parseEllips(Scheme::SchemeParams &scheme_params, const 
 
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
 
     bool reflection_posibility, reflection_verctical, reflection_horizantal;
@@ -169,8 +169,8 @@ void SchemeObjectParser::parseText(Scheme::SchemeParams &scheme_params, const ui
 
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bytes_counter = id_pos + 4;
 
@@ -236,12 +236,12 @@ void SchemeObjectParser::parseText(Scheme::SchemeParams &scheme_params, const ui
         scheme_params.objects_vector.push_back(
                 new Text((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2, half_y * 2,
                          (360 - (int) angle) % 360,
-                         text, " Текст ", line_style,
+                         text, " Текст ", line_style, width,
                          {brush.red, brush.green, brush.blue},
                          1, brush_style, font_name, font_size,
                          {font_color.red, font_color.green, font_color.blue},
                          font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
-                         font_autosize));
+                         1));
     }
 }
 
@@ -250,8 +250,8 @@ SchemeObjectParser::parsePolygon(Scheme::SchemeParams &scheme_params, const uint
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bool reflection_posibility, reflection_verctical, reflection_horizantal;
     std::tie(reflection_posibility, reflection_verctical, reflection_horizantal) = getReflections(bytes_counter);
@@ -314,8 +314,8 @@ SchemeObjectParser::parseTelecontrol(Scheme::SchemeParams &scheme_params, const 
 
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bytes_counter = id_pos + 4;
 
@@ -382,12 +382,12 @@ SchemeObjectParser::parseTelecontrol(Scheme::SchemeParams &scheme_params, const 
                 new Telecontrol((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
                                 half_y * 2,
                                 (360 - (int) angle) % 360,
-                                text, " Телеуправление ", line_style,
+                                text, " Телеуправление ", line_style, width,
                                 {brush.red, brush.green, brush.blue},
                                 1, brush_style, font_name, font_size,
                                 {font_color.red, font_color.green, font_color.blue},
                                 font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
-                                font_autosize));
+                                1));
     }
 
 }
@@ -397,8 +397,8 @@ SchemeObjectParser::parseTelemeasure(Scheme::SchemeParams &scheme_params, const 
                                      int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bytes_counter = id_pos + 4;
 
@@ -465,12 +465,12 @@ SchemeObjectParser::parseTelemeasure(Scheme::SchemeParams &scheme_params, const 
                 new Telemeasure((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
                                 half_y * 2,
                                 (360 - (int) angle) % 360,
-                                text, " Телеизмерение ", line_style,
+                                text, " Телеизмерение ", line_style, width,
                                 {brush.red, brush.green, brush.blue},
                                 1, brush_style, font_name, font_size,
                                 {font_color.red, font_color.green, font_color.blue},
                                 font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
-                                font_autosize));
+                                1));
     }
 }
 
@@ -479,8 +479,8 @@ SchemeObjectParser::parseSignal(Scheme::SchemeParams &scheme_params, const uint3
                                 int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bytes_counter = id_pos + 4;
 
@@ -547,12 +547,12 @@ SchemeObjectParser::parseSignal(Scheme::SchemeParams &scheme_params, const uint3
                 new Telesignalisation((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
                                       half_y * 2,
                                       (360 - (int) angle) % 360,
-                                      text, " Телесигнализация ", line_style,
+                                      text, " Телесигнализация ", line_style, width,
                                       {brush.red, brush.green, brush.blue},
                                       1, brush_style, font_name, font_size,
                                       {font_color.red, font_color.green, font_color.blue},
                                       font_align_horz, font_align_vert, bold_bool, italic_bool, underlined_bool, 0,
-                                      font_autosize));
+                                      1));
     }
 }
 
@@ -561,8 +561,8 @@ SchemeObjectParser::parsePicture(Scheme::SchemeParams &scheme_params, const uint
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bool reflection_posibility, reflection_verctical, reflection_horizantal;
     std::tie(reflection_posibility, reflection_verctical, reflection_horizantal) = getReflections(bytes_counter);
@@ -621,8 +621,8 @@ void SchemeObjectParser::parseLine(Scheme::SchemeParams &scheme_params, const ui
                                    int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bool reflection_posibility, reflection_verctical, reflection_horizantal;
     std::tie(reflection_posibility, reflection_verctical, reflection_horizantal) = getReflections(bytes_counter);
@@ -675,8 +675,8 @@ void SchemeObjectParser::parseArc(Scheme::SchemeParams &scheme_params, const uin
                                   int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bool reflection_posibility, reflection_verctical, reflection_horizantal;
     std::tie(reflection_posibility, reflection_verctical, reflection_horizantal) = getReflections(bytes_counter);
@@ -729,8 +729,8 @@ SchemeObjectParser::parseGoBtn(Scheme::SchemeParams &scheme_params, const uint32
                                int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bytes_counter = id_pos + 4;
 
@@ -765,8 +765,8 @@ SchemeObjectParser::parseGoPoint(Scheme::SchemeParams &scheme_params, const uint
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
-    double center_x, center_y ,angle;
-    std::tie(center_x, center_y ,angle) = getCenterAndAngle(bytes_counter);
+    double center_x, center_y, angle;
+    std::tie(center_x, center_y, angle) = getCenterAndAngle(bytes_counter);
 
     bytes_counter = id_pos + 4;
 

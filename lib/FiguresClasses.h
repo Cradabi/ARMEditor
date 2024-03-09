@@ -780,10 +780,10 @@ namespace FiguresClasses {
         Text(int x, int y, int width, int height, const std::string &text);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+             int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+             int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
              const std::string &font_name, int font_size,
              const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
              bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
@@ -1001,11 +1001,11 @@ namespace FiguresClasses {
 
         Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
         Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
                     const std::string &font_name, int font_size,
                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                     bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
@@ -1032,12 +1032,12 @@ namespace FiguresClasses {
 
         Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
                           const std::string &help_text,
-                          int style_line, const std::vector<int> &filling_color, bool bool_show,
+                          int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
                           bool bool_show_filling);
 
         Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
                           const std::string &help_text,
-                          int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                          int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
                           const std::string &font_name, int font_size,
                           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
@@ -1066,11 +1066,11 @@ namespace FiguresClasses {
 
         Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
 
         Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
                     const std::string &font_name, int font_size,
                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
                     bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);

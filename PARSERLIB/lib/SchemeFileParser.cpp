@@ -502,8 +502,7 @@ void SchemeFileParser::parseObject() {
                 lae::WriteLog(LogsFile, "Unknown object", true);
                 lae::WriteLog(LogsFile, "BLOCK OPENED ");
                 lae::WriteLog(LogsFile, "block size: ");
-                lae::WriteLog(LogsFile, block_size);
-                lae::WriteLog(LogsFile, ' ');
+                lae::WriteLog(LogsFile, block_size, true);
 
                 std::bitset<8> print_byte;
 
@@ -586,8 +585,7 @@ void SchemeFileParser::printBlockData(const uint32_t &block_size) {
 
     lae::WriteLog(LogsFile, "BLOCK OPENED ");
     lae::WriteLog(LogsFile, "block size: ");
-    lae::WriteLog(LogsFile, block_size);
-    lae::WriteLog(LogsFile, ' ');
+    lae::WriteLog(LogsFile, block_size, true);
 
     std::bitset<8> print_byte;
 
