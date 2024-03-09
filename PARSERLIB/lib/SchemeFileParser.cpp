@@ -442,6 +442,8 @@ void SchemeFileParser::parseObject() {
 
         SchemeFile.read(buffer, block_size);
 
+        objectParser.set_buffer(buffer);
+
         int id_pos = findStartOfObject(buffer, sections_stack.back().parrent_sect->sect_name);
         int dots_count = getSomeInt(0, 4, true, id_pos + 8);
         uint8_t PrType = static_cast<uint8_t>(buffer[id_pos + 12 + dots_count * 8]);
@@ -449,51 +451,51 @@ void SchemeFileParser::parseObject() {
         switch (PrType) {
             case objects_types.ptEllipse:
                 lae::WriteLog(LogsFile, "\nptEllipse\n", true);
-                objectParser.parseEllips(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseEllips(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptRectangle:
                 lae::WriteLog(LogsFile, "\nptRectangle\n", true);
-                objectParser.parseRectangle(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseRectangle(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptGoPoint:
                 lae::WriteLog(LogsFile, "\nptGoPoint\n", true);
-                objectParser.parseGoPoint(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseGoPoint(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptGoBtn:
                 lae::WriteLog(LogsFile, "\nptGoBtn\n", true);
-                objectParser.parseGoBtn(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseGoBtn(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptText:
                 lae::WriteLog(LogsFile, "\nptText\n", true);
-                objectParser.parseText(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseText(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptTeleupr:
                 lae::WriteLog(LogsFile, "\nptTeleupr\n", true);
-                objectParser.parseTelecontrol(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseTelecontrol(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptTeleizm:
                 lae::WriteLog(LogsFile, "\nptTeleizm\n", true);
-                objectParser.parseTelemeasure(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseTelemeasure(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptSignal:
                 lae::WriteLog(LogsFile, "\nptSignal\n", true);
-                objectParser.parseSignal(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseSignal(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptLine:
                 lae::WriteLog(LogsFile, "\nptLine\n", true);
-                objectParser.parseLine(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseLine(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptPolygon:
                 lae::WriteLog(LogsFile, "\nptPolygon\n", true);
-                objectParser.parsePolygon(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parsePolygon(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptDuga:
                 lae::WriteLog(LogsFile, "\nptDuga\n", true);
-                objectParser.parseArc(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parseArc(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptPicture:
                 lae::WriteLog(LogsFile, "\nptPicture\n", true);
-                objectParser.parsePicture(buffer, *scheme_params, block_size, id_pos);
+                objectParser.parsePicture(*scheme_params, block_size, id_pos);
                 break;
 
             default:

@@ -1,27 +1,27 @@
 #include "SchemeObjectParser.h"
 
-void SchemeObjectParser::parseNone(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseNone(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
     ;
 }
 
-void SchemeObjectParser::parseEllips(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseEllips(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                      int id_pos) {
 
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter += 456;
 
@@ -32,25 +32,25 @@ void SchemeObjectParser::parseEllips(const char *buffer, Scheme::SchemeParams &s
     bytes_counter = id_pos + 4;
 
     uint32_t id;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     int32_t half_x;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
     int32_t half_y;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -76,45 +76,45 @@ void SchemeObjectParser::parseEllips(const char *buffer, Scheme::SchemeParams &s
 }
 
 void
-SchemeObjectParser::parseGoBtn(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGoBtn(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter = id_pos + 4;
 
     uint32_t id;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     uint32_t half_x;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
     uint32_t half_y;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     scheme_params.objects_vector.push_back(
             new TransitionButton(0, center_x - half_x, center_y - half_y,
@@ -125,41 +125,41 @@ SchemeObjectParser::parseGoBtn(const char *buffer, Scheme::SchemeParams &scheme_
 }
 
 void
-SchemeObjectParser::parseGoPoint(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGoPoint(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
 
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     uint32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
     uint32_t half_y = 0;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     scheme_params.objects_vector.push_back(
             new TransitionPoint(0, center_x - half_x, center_y - half_y,
@@ -169,27 +169,27 @@ SchemeObjectParser::parseGoPoint(const char *buffer, Scheme::SchemeParams &schem
 }
 
 void
-SchemeObjectParser::parseGluePoint(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGluePoint(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
     ;
 }
 
-void SchemeObjectParser::parseLine(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseLine(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter += 456;
 
@@ -200,26 +200,26 @@ void SchemeObjectParser::parseLine(const char *buffer, Scheme::SchemeParams &sch
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 4;
 
     int32_t cord_x1;
-    getSomeInt(buffer, cord_x1, 4, bytes_counter);
+    getSomeInt(cord_x1, 4, bytes_counter);
 
     int32_t cord_y1;
-    getSomeInt(buffer, cord_y1, 4, bytes_counter);
+    getSomeInt(cord_y1, 4, bytes_counter);
 
     int32_t cord_x2;
-    getSomeInt(buffer, cord_x2, 4, bytes_counter);
+    getSomeInt(cord_x2, 4, bytes_counter);
 
     int32_t cord_y2;
-    getSomeInt(buffer, cord_y2, 4, bytes_counter);
+    getSomeInt(cord_y2, 4, bytes_counter);
 
     bytes_counter += 2;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     bytes_counter += 7;
 
@@ -246,46 +246,46 @@ void SchemeObjectParser::parseLine(const char *buffer, Scheme::SchemeParams &sch
                      0, 0));
 }
 
-void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseText(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter = id_pos + 4;
 
     uint32_t id;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     uint32_t half_x;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
     uint32_t half_y;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -299,7 +299,7 @@ void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &sch
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    getSomeInt(buffer, text_length, 4, bytes_counter);
+    getSomeInt(text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -313,7 +313,7 @@ void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &sch
 
     if (font_bool) {
         uint32_t font_size;
-        getSomeInt(buffer, font_size, 4, bytes_counter);
+        getSomeInt(font_size, 4, bytes_counter);
 
         uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
@@ -322,7 +322,7 @@ void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &sch
         uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_name_length;
-        getSomeInt(buffer, font_name_length, 4, bytes_counter);
+        getSomeInt(font_name_length, 4, bytes_counter);
 
         std::string font_name;
         for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
@@ -331,7 +331,7 @@ void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &sch
         bytes_counter += font_name_length;
 
         ssp::BGRColor font_color;
-        getColor(buffer, font_color, bytes_counter);
+        getColor(font_color, bytes_counter);
 
         uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
         uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -340,13 +340,13 @@ void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &sch
         uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_width;
-        getSomeInt(buffer, font_width, 4, bytes_counter);
+        getSomeInt(font_width, 4, bytes_counter);
 
         uint32_t font_height;
-        getSomeInt(buffer, font_height, 4, bytes_counter);
+        getSomeInt(font_height, 4, bytes_counter);
 
         uint32_t font_descent;
-        getSomeInt(buffer, font_descent, 4, bytes_counter);
+        getSomeInt(font_descent, 4, bytes_counter);
 
         scheme_params.objects_vector.push_back(
                 new Text((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2, half_y * 2,
@@ -361,22 +361,22 @@ void SchemeObjectParser::parseText(const char *buffer, Scheme::SchemeParams &sch
 }
 
 void
-SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parsePolygon(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter += 456;
 
@@ -387,10 +387,10 @@ SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &schem
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     uint32_t amount_of_dots;
-    getSomeInt(buffer, amount_of_dots, 4, bytes_counter);
+    getSomeInt(amount_of_dots, 4, bytes_counter);
 
 
     bool end_polygon = false;
@@ -398,10 +398,10 @@ SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &schem
     for (int32_t i = 0; i < amount_of_dots; ++i) {
         std::vector<int> pair;
         int32_t x;
-        getSomeInt(buffer, x, 4, bytes_counter);
+        getSomeInt(x, 4, bytes_counter);
 
         int32_t y;
-        getSomeInt(buffer, y, 4, bytes_counter);
+        getSomeInt(y, 4, bytes_counter);
 
         if (i == amount_of_dots - 1 and center_x + x == coords[0][0] and center_y + y == coords[0][1]) {
             end_polygon = true;
@@ -415,10 +415,10 @@ SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &schem
     bytes_counter += 2;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -432,7 +432,7 @@ SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &schem
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    getSomeInt(buffer, text_length, 4, bytes_counter);
+    getSomeInt(text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -450,23 +450,23 @@ SchemeObjectParser::parsePolygon(const char *buffer, Scheme::SchemeParams &schem
 }
 
 void
-SchemeObjectParser::parseRectangle(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseRectangle(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter += 456;
 
@@ -477,25 +477,25 @@ SchemeObjectParser::parseRectangle(const char *buffer, Scheme::SchemeParams &sch
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     int32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
     int32_t half_y = 0;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -519,22 +519,22 @@ SchemeObjectParser::parseRectangle(const char *buffer, Scheme::SchemeParams &sch
 
 }
 
-void SchemeObjectParser::parseArc(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseArc(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                   int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter += 456;
 
@@ -545,31 +545,31 @@ void SchemeObjectParser::parseArc(const char *buffer, Scheme::SchemeParams &sche
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     int32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 16;
 
     int32_t half_y;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     int32_t start_angle;
-    getSomeInt(buffer, start_angle, 4, bytes_counter);
+    getSomeInt(start_angle, 4, bytes_counter);
 
     int32_t end_angle;
-    getSomeInt(buffer, end_angle, 4, bytes_counter);
+    getSomeInt(end_angle, 4, bytes_counter);
 
     bytes_counter += 2;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -594,47 +594,47 @@ void SchemeObjectParser::parseArc(const char *buffer, Scheme::SchemeParams &sche
 }
 
 void
-SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseTelecontrol(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                      int id_pos) {
 
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     uint32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
 
     bytes_counter += 8;
 
     uint32_t half_y = 0;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -648,7 +648,7 @@ SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &s
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    getSomeInt(buffer, text_length, 4, bytes_counter);
+    getSomeInt(text_length, 4, bytes_counter);
 
 
     std::string text;
@@ -663,7 +663,7 @@ SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &s
 
     if (font_bool) {
         uint32_t font_size;
-        getSomeInt(buffer, font_size, 4, bytes_counter);
+        getSomeInt(font_size, 4, bytes_counter);
 
         uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
@@ -672,7 +672,7 @@ SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &s
         uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_name_length;
-        getSomeInt(buffer, font_name_length, 4, bytes_counter);
+        getSomeInt(font_name_length, 4, bytes_counter);
 
         std::string font_name;
         for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
@@ -681,7 +681,7 @@ SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &s
         bytes_counter += font_name_length;
 
         ssp::BGRColor font_color;
-        getColor(buffer, font_color, bytes_counter);
+        getColor(font_color, bytes_counter);
 
         uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
         uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -690,13 +690,13 @@ SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &s
         uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_width;
-        getSomeInt(buffer, font_width, 4, bytes_counter);
+        getSomeInt(font_width, 4, bytes_counter);
 
         uint32_t font_height;
-        getSomeInt(buffer, font_height, 4, bytes_counter);
+        getSomeInt(font_height, 4, bytes_counter);
 
         uint32_t font_descent;
-        getSomeInt(buffer, font_descent, 4, bytes_counter);
+        getSomeInt(font_descent, 4, bytes_counter);
 
         scheme_params.objects_vector.push_back(
                 new Telecontrol((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
@@ -713,46 +713,46 @@ SchemeObjectParser::parseTelecontrol(const char *buffer, Scheme::SchemeParams &s
 }
 
 void
-SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseTelemeasure(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                      int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
 
     bytes_counter += 12;
 
     uint32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
     bytes_counter += 8;
 
     uint32_t half_y = 0;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -766,7 +766,7 @@ SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &s
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    getSomeInt(buffer, text_length, 4, bytes_counter);
+    getSomeInt(text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -780,7 +780,7 @@ SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &s
 
     if (font_bool) {
         uint32_t font_size;
-        getSomeInt(buffer, font_size, 4, bytes_counter);
+        getSomeInt(font_size, 4, bytes_counter);
 
         uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
@@ -789,7 +789,7 @@ SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &s
         uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_name_length;
-        getSomeInt(buffer, font_name_length, 4, bytes_counter);
+        getSomeInt(font_name_length, 4, bytes_counter);
 
         std::string font_name;
         for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
@@ -798,7 +798,7 @@ SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &s
         bytes_counter += font_name_length;
 
         ssp::BGRColor font_color;
-        getColor(buffer, font_color, bytes_counter);
+        getColor(font_color, bytes_counter);
 
         uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
         uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -807,13 +807,13 @@ SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &s
         uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_width;
-        getSomeInt(buffer, font_width, 4, bytes_counter);
+        getSomeInt(font_width, 4, bytes_counter);
 
         uint32_t font_height;
-        getSomeInt(buffer, font_height, 4, bytes_counter);
+        getSomeInt(font_height, 4, bytes_counter);
 
         uint32_t font_descent;
-        getSomeInt(buffer, font_descent, 4, bytes_counter);
+        getSomeInt(font_descent, 4, bytes_counter);
 
         scheme_params.objects_vector.push_back(
                 new Telemeasure((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
@@ -829,46 +829,46 @@ SchemeObjectParser::parseTelemeasure(const char *buffer, Scheme::SchemeParams &s
 }
 
 void
-SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseSignal(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                 int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat( center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     uint32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
 
     bytes_counter += 8;
 
     uint32_t half_y = 0;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -882,7 +882,7 @@ SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    getSomeInt(buffer, text_length, 4, bytes_counter);
+    getSomeInt(text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -896,7 +896,7 @@ SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme
 
     if (font_bool) {
         uint32_t font_size;
-        getSomeInt(buffer, font_size, 4, bytes_counter);
+        getSomeInt(font_size, 4, bytes_counter);
 
         uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
@@ -905,7 +905,7 @@ SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme
         uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_name_length;
-        getSomeInt(buffer, font_name_length, 4, bytes_counter);
+        getSomeInt(font_name_length, 4, bytes_counter);
 
         std::string font_name;
         for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
@@ -914,7 +914,7 @@ SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme
         bytes_counter += font_name_length;
 
         ssp::BGRColor font_color;
-        getColor(buffer, font_color, bytes_counter);
+        getColor(font_color, bytes_counter);
 
         uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
         uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
@@ -923,13 +923,13 @@ SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme
         uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
 
         uint32_t font_width;
-        getSomeInt(buffer, font_width, 4, bytes_counter);
+        getSomeInt(font_width, 4, bytes_counter);
 
         uint32_t font_height;
-        getSomeInt(buffer, font_height, 4, bytes_counter);
+        getSomeInt(font_height, 4, bytes_counter);
 
         uint32_t font_descent;
-        getSomeInt(buffer, font_descent, 4, bytes_counter);
+        getSomeInt(font_descent, 4, bytes_counter);
 
         scheme_params.objects_vector.push_back(
                 new Telesignalisation((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
@@ -945,22 +945,22 @@ SchemeObjectParser::parseSignal(const char *buffer, Scheme::SchemeParams &scheme
 }
 
 void
-SchemeObjectParser::parsePicture(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parsePicture(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
     double center_x;
-    getSomeFloat(buffer, center_x, 8, bytes_counter);
+    getSomeFloat(center_x, 8, bytes_counter);
 
     bytes_counter += 16;
 
     double center_y;
-    getSomeFloat(buffer, center_y, 8, bytes_counter);
+    getSomeFloat(center_y, 8, bytes_counter);
 
     bytes_counter += 24;
 
     double angle;
-    getSomeFloat(buffer, angle, 8, bytes_counter);
+    getSomeFloat(angle, 8, bytes_counter);
 
     bytes_counter += 456;
 
@@ -971,26 +971,26 @@ SchemeObjectParser::parsePicture(const char *buffer, Scheme::SchemeParams &schem
     bytes_counter = id_pos + 4;
 
     uint32_t id = 0;
-    getSomeInt(buffer, id, 4, bytes_counter);
+    getSomeInt(id, 4, bytes_counter);
 
     bytes_counter += 12;
 
     uint32_t half_x = 0;
-    getSomeInt(buffer, half_x, 4, bytes_counter);
+    getSomeInt(half_x, 4, bytes_counter);
 
 
     bytes_counter += 8;
 
     uint32_t half_y = 0;
-    getSomeInt(buffer, half_y, 4, bytes_counter);
+    getSomeInt(half_y, 4, bytes_counter);
 
     bytes_counter += 10;
 
     ssp::BGRColor pen;
-    getColor(buffer, pen, bytes_counter);
+    getColor(pen, bytes_counter);
 
     ssp::BGRColor brush;
-    getColor(buffer, brush, bytes_counter);
+    getColor(brush, bytes_counter);
 
     bytes_counter += 4;
 
@@ -1004,7 +1004,7 @@ SchemeObjectParser::parsePicture(const char *buffer, Scheme::SchemeParams &schem
     width = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t text_length = 0;
-    getSomeInt(buffer, text_length, 4, bytes_counter);
+    getSomeInt(text_length, 4, bytes_counter);
 
     std::string text;
     for (int i = bytes_counter; i < text_length + bytes_counter; ++i) {
@@ -1021,33 +1021,29 @@ SchemeObjectParser::parsePicture(const char *buffer, Scheme::SchemeParams &schem
     is_picture = static_cast<uint8_t>(buffer[bytes_counter++]);
 
     uint32_t width_of_picture;
-    getSomeInt(buffer, width_of_picture, 4, bytes_counter);
+    getSomeInt(width_of_picture, 4, bytes_counter);
 
     uint32_t height_of_picture;
-    getSomeInt(buffer, height_of_picture, 4, bytes_counter);
+    getSomeInt(height_of_picture, 4, bytes_counter);
 
     uint8_t bit_depth;
     bit_depth = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-    std::vector<std::vector<ssp::BGRColor>> bitmap;
     for (uint32_t x = 0; x < width_of_picture; ++x) {
-        std::vector<ssp::BGRColor> pixel_line;
-        bitmap.push_back(pixel_line);
         for (uint32_t y = 0; y < height_of_picture; ++y) {
             ssp::BGRColor pixel;
             pixel.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
             pixel.green = static_cast<uint8_t>(buffer[bytes_counter++]);
             pixel.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-            bitmap[x].push_back(pixel);
         }
         bytes_counter += 2;
     }
-    //TODO написать передачу картинки в кутэ
+
 
 }
 
 void
-SchemeObjectParser::parseShape(const char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseShape(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
                                int id_pos) {
     ;
 }

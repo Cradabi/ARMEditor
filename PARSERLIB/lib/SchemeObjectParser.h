@@ -9,9 +9,12 @@
 class SchemeObjectParser {
 
 private:
+
+    const char* buffer;
+
     // Шаблон получения целочисленного значения из буффера
     template<typename IntType>
-    void getSomeInt(const char* buffer, IntType& some_int, uint8_t int_size, uint32_t& start_index) {
+    void getSomeInt(IntType& some_int, uint8_t int_size, uint32_t& start_index) {
 
         some_int = 0;
 
@@ -27,7 +30,7 @@ private:
 
     // Шаблон получения числового значения с плавающей точкой из буффера
     template<typename FloatType>
-    void getSomeFloat(const char* buffer, FloatType& some_float, uint8_t float_size, uint32_t& start_index) {
+    void getSomeFloat(FloatType& some_float, uint8_t float_size, uint32_t& start_index) {
 
         char tmp_float[float_size + 1];
         for (int8_t _byte = 0; _byte < float_size; ++_byte)
@@ -42,7 +45,7 @@ private:
     }
 
     //
-    void getColor(const char* buffer, ssp::BGRColor& color, uint32_t& start_index, bool is_rgb = false) {
+    void getColor(ssp::BGRColor& color, uint32_t& start_index, bool is_rgb = false) {
         if (is_rgb) {
             color.red = static_cast<uint8_t>(buffer[start_index++]);
             color.green = static_cast<uint8_t>(buffer[start_index++]);
@@ -96,34 +99,38 @@ private:
 
 public:
 
-    void parseNone(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void set_buffer(const char* _buffer){
+        buffer = _buffer;
+    }
 
-    void parseEllips(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseNone(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseGoBtn(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseEllips(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseGoPoint(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseGoBtn(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseGluePoint(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseGoPoint(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseLine(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseGluePoint(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseText(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseLine(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parsePolygon(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseText(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseRectangle(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parsePolygon(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseArc(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseRectangle(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseTelecontrol(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseArc(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseTelemeasure(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseTelecontrol(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseSignal(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseTelemeasure(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parsePicture(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parseSignal(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parseShape(const char* buffer, Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parsePicture(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+
+    void parseShape(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 };
 
