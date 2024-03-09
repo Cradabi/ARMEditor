@@ -132,5 +132,17 @@ public:
     void parsePicture(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
     void parseShape(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+
+    std::tuple<double, double, double> getCenterAndAngle(uint32_t &bytes_counter_temp);
+
+    std::tuple<bool, bool, bool> getReflections(uint32_t &bytes_counter_temp);
+
+    std::tuple<uint32_t, uint32_t, uint32_t> getIdAndHalves(uint32_t &bytes_counter_temp);
+
+    std::tuple<ssp::BGRColor, ssp::BGRColor> getColors(uint32_t &bytes_counter_temp);
+
+    std::tuple<bool, uint8_t, uint8_t> getStylesAndWidth(uint32_t &bytes_counter_temp);
+
+    std::tuple<uint32_t, std::string> getText_(uint32_t &bytes_counter_temp);
 };
 
