@@ -1,4 +1,5 @@
 #include <cinttypes>
+#include <fstream>
 
 #ifdef WIN32    // Подключаем библиотеку, только если компиляция происхоидит в ос windows
 

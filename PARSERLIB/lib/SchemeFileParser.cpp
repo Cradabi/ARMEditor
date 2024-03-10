@@ -495,7 +495,7 @@ void SchemeFileParser::parseObject() {
                 break;
             case objects_types.ptPicture:
                 lae::WriteLog(LogsFile, "\nptPicture\n", true);
-                objectParser.parsePicture(*scheme_params, block_size, id_pos);
+                objectParser.parsePicture(*scheme_params, block_size, id_pos, sections_stack.back().parrent_sect->sect_name);
                 break;
 
             default:

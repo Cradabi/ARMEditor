@@ -3,7 +3,7 @@
 #include <tuple>
 
 
-std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_t &bytes_counter_temp) {
+std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_t& bytes_counter_temp) {
 
     double center_x;
     getSomeFloat(center_x, 8, bytes_counter_temp);
@@ -21,7 +21,7 @@ std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_
     return std::make_tuple(center_x, center_y, angle);
 }
 
-std::tuple<bool, bool, bool> SchemeObjectParser::getReflections(uint32_t &bytes_counter_temp) {
+std::tuple<bool, bool, bool> SchemeObjectParser::getReflections(uint32_t& bytes_counter_temp) {
     bytes_counter_temp += 456;
 
     bool reflection_posibility = static_cast<bool>(buffer[bytes_counter_temp++]);
@@ -32,7 +32,7 @@ std::tuple<bool, bool, bool> SchemeObjectParser::getReflections(uint32_t &bytes_
 
 }
 
-std::tuple<uint32_t, uint32_t, uint32_t> SchemeObjectParser::getIdAndHalves(uint32_t &bytes_counter_temp) {
+std::tuple<uint32_t, uint32_t, uint32_t> SchemeObjectParser::getIdAndHalves(uint32_t& bytes_counter_temp) {
     uint32_t id;
     getSomeInt(id, 4, bytes_counter_temp);
 
@@ -49,7 +49,7 @@ std::tuple<uint32_t, uint32_t, uint32_t> SchemeObjectParser::getIdAndHalves(uint
     return std::make_tuple(id, half_x, half_y);
 }
 
-std::tuple<ssp::BGRColor, ssp::BGRColor> SchemeObjectParser::getColors(uint32_t &bytes_counter_temp) {
+std::tuple<ssp::BGRColor, ssp::BGRColor> SchemeObjectParser::getColors(uint32_t& bytes_counter_temp) {
     ssp::BGRColor pen;
     getColor(pen, bytes_counter_temp);
 
@@ -59,7 +59,7 @@ std::tuple<ssp::BGRColor, ssp::BGRColor> SchemeObjectParser::getColors(uint32_t 
     return std::make_tuple(pen, brush);
 }
 
-std::tuple<bool, uint8_t, uint8_t> SchemeObjectParser::getStylesAndWidth(uint32_t &bytes_counter_temp) {
+std::tuple<bool, uint8_t, uint8_t> SchemeObjectParser::getStylesAndWidth(uint32_t& bytes_counter_temp) {
     bool brush_style;
     brush_style = static_cast<bool>(buffer[bytes_counter_temp++]);
 
@@ -72,7 +72,7 @@ std::tuple<bool, uint8_t, uint8_t> SchemeObjectParser::getStylesAndWidth(uint32_
     return std::make_tuple(brush_style, line_style, width);
 }
 
-std::tuple<uint32_t, std::string> SchemeObjectParser::getText_(uint32_t &bytes_counter_temp) {
+std::tuple<uint32_t, std::string> SchemeObjectParser::getText_(uint32_t& bytes_counter_temp) {
     uint32_t text_length = 0;
     getSomeInt(text_length, 4, bytes_counter_temp);
 
@@ -85,7 +85,7 @@ std::tuple<uint32_t, std::string> SchemeObjectParser::getText_(uint32_t &bytes_c
 }
 
 void
-SchemeObjectParser::parseRectangle(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseRectangle(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -123,7 +123,7 @@ SchemeObjectParser::parseRectangle(Scheme::SchemeParams &scheme_params, const ui
 
 }
 
-void SchemeObjectParser::parseEllips(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseEllips(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                      int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -164,7 +164,7 @@ void SchemeObjectParser::parseEllips(Scheme::SchemeParams &scheme_params, const 
 
 }
 
-void SchemeObjectParser::parseText(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseText(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                    int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -246,7 +246,7 @@ void SchemeObjectParser::parseText(Scheme::SchemeParams &scheme_params, const ui
 }
 
 void
-SchemeObjectParser::parsePolygon(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parsePolygon(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -309,7 +309,7 @@ SchemeObjectParser::parsePolygon(Scheme::SchemeParams &scheme_params, const uint
 }
 
 void
-SchemeObjectParser::parseTelecontrol(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseTelecontrol(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                      int id_pos) {
 
     uint32_t bytes_counter = 16;
@@ -393,7 +393,7 @@ SchemeObjectParser::parseTelecontrol(Scheme::SchemeParams &scheme_params, const 
 }
 
 void
-SchemeObjectParser::parseTelemeasure(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseTelemeasure(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                      int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -475,7 +475,7 @@ SchemeObjectParser::parseTelemeasure(Scheme::SchemeParams &scheme_params, const 
 }
 
 void
-SchemeObjectParser::parseSignal(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseSignal(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                 int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -557,8 +557,8 @@ SchemeObjectParser::parseSignal(Scheme::SchemeParams &scheme_params, const uint3
 }
 
 void
-SchemeObjectParser::parsePicture(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
-                                 int id_pos) {
+SchemeObjectParser::parsePicture(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos,
+                                 const std::string& obj_name) {
     uint32_t bytes_counter = 16;
 
     double center_x, center_y, angle;
@@ -604,20 +604,32 @@ SchemeObjectParser::parsePicture(Scheme::SchemeParams &scheme_params, const uint
     uint8_t bit_depth;
     bit_depth = static_cast<uint8_t>(buffer[bytes_counter++]);
 
-    for (uint32_t x = 0; x < width_of_picture; ++x) {
-        for (uint32_t y = 0; y < height_of_picture; ++y) {
+    std::vector<std::vector<ssp::BGRColor>> pixels(height_of_picture, std::vector<ssp::BGRColor>(width_of_picture));
+
+    for (uint32_t y = 0; y < height_of_picture; ++y) {
+        for (uint32_t x = 0; x < width_of_picture; ++x) {
             ssp::BGRColor pixel;
             pixel.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
             pixel.green = static_cast<uint8_t>(buffer[bytes_counter++]);
             pixel.red = static_cast<uint8_t>(buffer[bytes_counter++]);
+            pixels[y][x] = pixel;
         }
         bytes_counter += 2;
     }
 
+    BMP new_bmp;
+    new_bmp.makeBmp(obj_name, pixels);
+
+    scheme_params.objects_vector.push_back(
+            new Image((int) round(center_x - half_x), (int) round(center_y - half_y), half_x * 2,
+                                  half_y * 2, "../PARSERLIB/tmp_pictures/" + obj_name + ".bmp",
+                                  (360 - (int) angle) % 360,
+                                  width, line_style,{brush.red, brush.green, brush.blue},
+                                  " Картинка ", 1));
 
 }
 
-void SchemeObjectParser::parseLine(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseLine(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                    int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -671,7 +683,7 @@ void SchemeObjectParser::parseLine(Scheme::SchemeParams &scheme_params, const ui
                      0, 0));
 }
 
-void SchemeObjectParser::parseArc(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseArc(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                   int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -725,7 +737,7 @@ void SchemeObjectParser::parseArc(Scheme::SchemeParams &scheme_params, const uin
 }
 
 void
-SchemeObjectParser::parseGoBtn(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGoBtn(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -761,7 +773,7 @@ SchemeObjectParser::parseGoBtn(Scheme::SchemeParams &scheme_params, const uint32
 }
 
 void
-SchemeObjectParser::parseGoPoint(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGoPoint(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                  int id_pos) {
     uint32_t bytes_counter = 16;
 
@@ -786,18 +798,18 @@ SchemeObjectParser::parseGoPoint(Scheme::SchemeParams &scheme_params, const uint
 }
 
 void
-SchemeObjectParser::parseShape(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseShape(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                int id_pos) {
     ;
 }
 
 void
-SchemeObjectParser::parseGluePoint(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+SchemeObjectParser::parseGluePoint(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                    int id_pos) {
     ;
 }
 
-void SchemeObjectParser::parseNone(Scheme::SchemeParams &scheme_params, const uint32_t block_size,
+void SchemeObjectParser::parseNone(Scheme::SchemeParams& scheme_params, const uint32_t block_size,
                                    int id_pos) {
     ;
 }

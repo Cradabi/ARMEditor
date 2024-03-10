@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <locale>
 #include <bitset>
 #include <stack>
@@ -49,7 +48,7 @@ private:
     std::vector<Section> sections_stack;
 
     char byte;                      // Переменная для работы с байтами
-    char* buffer = new char[4096];  // Массив байт
+    char* buffer = new char[464340];  // Массив байт
 
     SchemeObjectParser objectParser;        // Экземпляр парсера объектов схемы
     static sce::SchemeObjectsTypes objects_types;  // Экземпляр структуры с типами объектов схемы

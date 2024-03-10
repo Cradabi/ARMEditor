@@ -1,6 +1,8 @@
-#include "SchemeFileNS.h"
 #include <cmath>
 #include <bitset>
+
+#include "SchemeFileNS.h"
+#include "PARSERLIB/lib/bmp/BMPFile.cpp"
 
 #include "lib/SchemeClass.cpp"
 
@@ -129,7 +131,8 @@ public:
 
     void parseSignal(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void parsePicture(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
+    void parsePicture(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos,
+                      const std::string& obj_name);
 
     void parseShape(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
