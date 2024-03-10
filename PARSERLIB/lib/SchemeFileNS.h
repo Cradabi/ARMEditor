@@ -1,4 +1,5 @@
 #include <cinttypes>
+#include <fstream>
 
 #ifdef WIN32    // Подключаем библиотеку, только если компиляция происхоидит в ос windows
 
@@ -33,41 +34,37 @@ namespace sce {          // Scheme Const Expressions
         static constexpr uint8_t ptPolygon = 6;     // Полигон
         static constexpr uint8_t ptEllipse = 7;     // Эллипс
         static constexpr uint8_t ptRectangle = 8;   // Прямоугольник
-        static constexpr uint8_t ptSector = 9;
-
-        static constexpr uint8_t ptDuga = 10;
-        // ptDuga: if BrushStyle=bsSolid then result:='Сектор' else result:='Дуга';
-
-        static constexpr uint8_t ptTeleupr = 11;     // Объект телеуправления
-        static constexpr uint8_t ptTeleizm = 12;     // Объект телеизмерения
-        static constexpr uint8_t ptSignal = 13;      // Режимная сигнализация
-        static constexpr uint8_t ptPicture = 14;     // Картинка
-        static constexpr uint8_t ptShape = 15;       // Градиент
+        static constexpr uint8_t ptDuga = 9;        // Дуга или сектор, в зависимости от наличия заливки
+        static constexpr uint8_t ptTeleupr = 10;    // Объект телеуправления
+        static constexpr uint8_t ptTeleizm = 11;    // Объект телеизмерения
+        static constexpr uint8_t ptSignal = 12;     // Режимная сигнализация
+        static constexpr uint8_t ptPicture = 13;    // Картинка
+        static constexpr uint8_t ptShape = 14;      // Градиент
     };
 
-    // Структура, хранящая типы данных, используемых в схеме
-    struct SchemeDataTypes {
-        static constexpr uint8_t dtUnknown = 0x00;      // Неизвестный тип данных, нужен для поиска ошибок
-
-        // Записи фиксированной длины
-        static constexpr uint8_t dtInteger = 0x01;       // rtInteger (Целое число)
-        static constexpr uint8_t dtFloat = 0x02;         // rtFloat (Вещественное число)
-        static constexpr uint8_t dtPoint = 0x03;         // rtPoint (Точка)
-        static constexpr uint8_t dtFont = 0x04;          // rtFont (Шрифт)
-        static constexpr uint8_t dtByte = 0x05;          // rtByte (Байт)
-        static constexpr uint8_t dtRectangle = 0x06;     // rtRect (Прямоугольник)
-
-        // Записи переменной длины
-        static constexpr uint8_t dtString = 0x0A;        // rtString (Строка)
-        static constexpr uint8_t dtList = 0x1E;          // rtList (Список)
-        static constexpr uint8_t dtObject = 0x64;        // rtObject (Объект)
-        static constexpr uint8_t dtRecord = 0x65;        // rtRecord (Запись)
-        static constexpr uint8_t dtElement = 0x66;       // rtElement (Элемент контейнера)
-        static constexpr uint8_t dtLibraryObject = 0x67; // (Библиотечный объект)
-        static constexpr uint8_t dtLibrary = 0x96;       // rtLibrary (Библиотека (без сигнатуры))
-        static constexpr uint8_t dtBitmap = 0xC8;        // rtBitmap (Bitmap graphic)
-        static constexpr uint8_t dtJPEGImage = 0xC9;     // rtJPEG (JPEG graphic)
-    };
+//    // Структура, хранящая типы данных, используемых в схеме
+//    struct SchemeDataTypes {
+//        static constexpr uint8_t dtUnknown = 0x00;      // Неизвестный тип данных, нужен для поиска ошибок
+//
+//        // Записи фиксированной длины
+//        static constexpr uint8_t dtInteger = 0x01;       // rtInteger (Целое число)
+//        static constexpr uint8_t dtFloat = 0x02;         // rtFloat (Вещественное число)
+//        static constexpr uint8_t dtPoint = 0x03;         // rtPoint (Точка)
+//        static constexpr uint8_t dtFont = 0x04;          // rtFont (Шрифт)
+//        static constexpr uint8_t dtByte = 0x05;          // rtByte (Байт)
+//        static constexpr uint8_t dtRectangle = 0x06;     // rtRect (Прямоугольник)
+//
+//        // Записи переменной длины
+//        static constexpr uint8_t dtString = 0x0A;        // rtString (Строка)
+//        static constexpr uint8_t dtList = 0x1E;          // rtList (Список)
+//        static constexpr uint8_t dtObject = 0x64;        // rtObject (Объект)
+//        static constexpr uint8_t dtRecord = 0x65;        // rtRecord (Запись)
+//        static constexpr uint8_t dtElement = 0x66;       // rtElement (Элемент контейнера)
+//        static constexpr uint8_t dtLibraryObject = 0x67; // (Библиотечный объект)
+//        static constexpr uint8_t dtLibrary = 0x96;       // rtLibrary (Библиотека (без сигнатуры))
+//        static constexpr uint8_t dtBitmap = 0xC8;        // rtBitmap (Bitmap graphic)
+//        static constexpr uint8_t dtJPEGImage = 0xC9;     // rtJPEG (JPEG graphic)
+//    };
 }
 
 // Пространство имен для функций, предназначенных для работы с логами и исключениями
@@ -111,6 +108,17 @@ namespace ssp {          // Scheme Sections Params
         uint8_t green{0};
         uint8_t red{0};
         uint8_t reserved{0};
+
+        // Метод возращающий rgb vector для дальнейшей обработки
+        std::vector<uint8_t> make_rgb_vector() {
+            std::vector<uint8_t> color(3, 0);
+            color[0] = red;
+            color[1] = green;
+            color[2] = blue;
+
+            return color;
+        }
+
     };
 
     // Структура параметров секции "schm", содержащая общую информацию о схеме
@@ -147,6 +155,7 @@ namespace ssp {          // Scheme Sections Params
         static constexpr uint8_t windowsSize_y_flag{18};    // int32_t windowsSize_y{0};
     };
 
+    // Структура параметров секции "cach", содержащая общую информацию о кешэ схемы
     struct cach {
         // uint8_t params_amount{1};
 
@@ -167,6 +176,7 @@ namespace ssp {          // Scheme Sections Params
         static constexpr uint8_t sect_count_flag{2};    // int32_t sect_count{0};
     };
 
+    // Структура параметров секции "objs", содержащая общую информацию об объектах схемы
     struct objs {
         // uint8_t params_amount{1};
 

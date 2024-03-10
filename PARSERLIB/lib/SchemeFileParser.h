@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <locale>
 #include <bitset>
 #include <stack>
@@ -15,8 +14,8 @@ private:
     std::ofstream LogsFile;         // Файл логов
     std::ifstream SchemeFile;       // Файл схемы
 
-    // Параметры схемы
-    Scheme::SchemeParams *scheme_params;
+    // Параметры схемы, экземпляр передаётся из-вне
+    Scheme::SchemeParams* scheme_params;
 
     // Структуры содержащие флаги параметров секций
 
@@ -32,7 +31,7 @@ private:
     uint64_t file_size;             // Размер файла схемы
 
     static sce::SchemeFlags scheme_flags;              // Флаги схемы
-    static sce::SchemeDataTypes scheme_data_types;     // Типы данных в схеме
+//    static sce::SchemeDataTypes scheme_data_types;     // Типы данных в схеме
 
     // Структура секции
     struct Section {
@@ -49,14 +48,14 @@ private:
     std::vector<Section> sections_stack;
 
     char byte;                      // Переменная для работы с байтами
-    char* buffer = new char[4096];  // Массив байт
+    char* buffer = new char[464340];  // Массив байт
 
     SchemeObjectParser objectParser;        // Экземпляр парсера объектов схемы
     static sce::SchemeObjectsTypes objects_types;  // Экземпляр структуры с типами объектов схемы
 
     // Шаблон получения числового значения из файла (some_int ОБЯЗАТЕЛЬНО должен иметь нулевое значение!)
     template<typename IntType>
-    IntType GetSomeInt(IntType some_int, uint8_t block_size, bool is_buffer_filled = false) {
+    IntType getSomeInt(IntType some_int, uint8_t block_size, bool is_buffer_filled = false, uint32_t start_index = 0) {
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
@@ -64,7 +63,7 @@ private:
         }
 
         for (int8_t i = block_size - 1; i >= 0; --i) {
-            some_int |= static_cast<uint8_t>(buffer[i]);
+            some_int |= static_cast<uint8_t>(buffer[start_index + i]);
 
             if (i != 0)
                 some_int <<= 8;
@@ -73,8 +72,39 @@ private:
         return some_int;
     }
 
+    //функция для поиска начала описания объекта внутри итерированной секции объекта номер 1
+    int findStartOfObject(char* buffer, const std::string& id) {
+        uint32_t id_num = 1;
+
+        char sequence[9] = {0};
+
+        for (int8_t i = 0; i < 4; ++i) {
+            sequence[i] = (id_num >> (8 * i)) & 0xFF;
+            sequence[i + 4] = (id_num >> (8 * i)) & 0xFF;
+        }
+
+        char* ptr = buffer;
+        int shift = 0;
+        while (true) {
+            if (*(ptr + shift) == sequence[0]) {
+                char* temp = ptr;
+                bool match = true;
+                for (int i = 1; i < 8; ++i) {
+                    if (*(temp + i + shift) != sequence[i]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    return shift;
+                }
+            }
+            ++shift;
+        }
+    }
+
     // Функция получения размера файла
-    void GetFileSize() {
+    void getFileSize() {
 
         SchemeFile.seekg(0, std::ios::end);    // Курсор ставится в конец файла
         file_size = SchemeFile.tellg();        // Записывается позиция курсора
@@ -92,7 +122,7 @@ private:
     }
 
     // Функция закрытия секции
-    void CloseSection() {
+    void closeSection() {
         // Если размер стека секция больше 1, то секция считается вложенной
         if (sections_stack.size() > 1) {
             for (uint16_t _section = 1; _section < sections_stack.size(); ++_section)
@@ -114,7 +144,7 @@ private:
     }
 
     // Функция чтения заголовка секции схемы
-    void EnterSection() {
+    void enterSection() {
         // Новый экземпляр структуры секции
         Section new_section;
 
@@ -130,7 +160,7 @@ private:
         lae::WriteLog(LogsFile, "SECTION OPENED ");
 
         // Считаем размер секции
-        new_section.sect_size = GetSomeInt(new_section.sect_size, 4);
+        new_section.sect_size = getSomeInt(new_section.sect_size, 4);
 
         // Находим имя или номер секции
         SchemeFile.read(buffer, 4);
@@ -144,7 +174,7 @@ private:
             // В противном случае, считаем, что это нумерованная секция
         } else {
             uint32_t tmp_section_name = 0;
-            new_section.sect_name = std::to_string(GetSomeInt(tmp_section_name, 4, true));
+            new_section.sect_name = std::to_string(getSomeInt(tmp_section_name, 4, true));
         }
 
         // Запоминаем стартовую позицию секции
@@ -163,43 +193,43 @@ private:
         lae::WriteLog(LogsFile, " section size: ");
         lae::WriteLog(LogsFile, sections_stack.back().sect_size, true);
 
-        ParseSectionData();
+        parseSectionData();
     }
 
     // Функция для парса информации секции
-    void ParseSectionData();
+    void parseSectionData();
 
     // Функция для получения размера блока
-    uint32_t GetBlockSize();
+    uint32_t getBlockSize();
 
     // Функция чтения информации из блока
-    void PrintBlockData(const uint32_t& block_size);
+    void printBlockData(const uint32_t& block_size);
 
     // Функции парса основных секций схемы
 
-    void ParseSCHM();
+    void parseSchm();
 
-    void ParseCASH();
+    void parseCash();
 
-    void ParseLINK();
+    void parseLink();
 
-    void ParseSECT();
+    void parseSect();
 
-    void ParseOBJS();
+    void parseObjs();
 
-    void ParseEXTD();
+    void parseExtd();
 
-    void ParseSCH2();
+    void parseSch2();
 
-    void ParseFONT();
+    void parseFont();
 
-    void ParseUNKNOWN();
+    void parseUnknown();
 
     // Функция парса параметров объекта схемы
-    void ParseOBJECT();
+    void parseObject();
 
     // Функция открытия рабочих файлов
-    bool OpenWorkFiles(const std::string& schemefile_path, const std::string& logfile_path) {
+    bool openWorkFiles(const std::string& schemefile_path, const std::string& logfile_path) {
         SchemeFile.open(schemefile_path, std::ios_base::binary);
         LogsFile.open(logfile_path);
 
@@ -216,14 +246,16 @@ private:
         }
 
         lae::PrintLog("Файлы схемы и логов успешно открыты", true, 2);
-        GetFileSize();
+        getFileSize();
 
         return true;
 
     }
 
 public:
-    SchemeFileParser(Scheme::SchemeParams& _scheme_params){
+    // Конутруктор класса, принимающий в себя параметры схемы,
+    // куда будет записываться полученная из файла информация
+    explicit SchemeFileParser(Scheme::SchemeParams& _scheme_params) {
         scheme_params = &_scheme_params;
     }
 
@@ -232,29 +264,31 @@ public:
 };
 
 bool SchemeFileParser::parse(const std::string& schemefile_path, const std::string& logfile_path) {
-    if (!OpenWorkFiles(schemefile_path, logfile_path))
+    if (!openWorkFiles(schemefile_path, logfile_path))
         return false;
 
     while (SchemeFile.get(byte)) {
         // Если дошли до границ открытой секции, закрываем её
         while (!sections_stack.empty() &&
                (SchemeFile.tellg() >= sections_stack.back().start_pos + sections_stack.back().sect_size)) {
-            CloseSection();
+            closeSection();
         }
 
         // Если обнаружили флаг секции, открываем её
         if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
 
     }
 
     // Если остались незакрытые секции, закрываем их
     while (!sections_stack.empty()) {
-        CloseSection();
+        closeSection();
     }
 
+    // Очищаем буффер
     delete[] buffer;
 
+    // Закрываем файлы
     SchemeFile.close();
     LogsFile.close();
 

@@ -1,0 +1,1 @@
+add_library(bmp_file BMPFile.cpp BMPFile.h)

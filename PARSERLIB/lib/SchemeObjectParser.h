@@ -1,6 +1,8 @@
-#include "SchemeFileNS.h"
-
+#include <cmath>
 #include <bitset>
+
+#include "SchemeFileNS.h"
+#include "PARSERLIB/lib/bmp/BMPFile.cpp"
 
 #include "lib/SchemeClass.cpp"
 
@@ -8,236 +10,142 @@
 
 class SchemeObjectParser {
 
+private:
+
+    const char* buffer;
+
+    // Шаблон получения целочисленного значения из буффера
+    template<typename IntType>
+    void getSomeInt(IntType& some_int, uint8_t int_size, uint32_t& start_index) {
+
+        some_int = 0;
+
+        for (int8_t i = int_size - 1; i >= 0; --i) {
+            some_int |= static_cast<uint8_t>(buffer[start_index + i]);
+
+            if (i != 0)
+                some_int <<= 8;
+        }
+
+        start_index += int_size;
+    }
+
+    // Шаблон получения числового значения с плавающей точкой из буффера
+    template<typename FloatType>
+    void getSomeFloat(FloatType& some_float, uint8_t float_size, uint32_t& start_index) {
+
+        char tmp_float[float_size + 1];
+        for (int8_t _byte = 0; _byte < float_size; ++_byte)
+            tmp_float[_byte] = buffer[start_index + _byte];
+
+        if (float_size <= 4)
+            some_float = *reinterpret_cast<float*>(tmp_float);
+        else
+            some_float = *reinterpret_cast<double*>(tmp_float);
+
+        start_index += float_size;
+    }
+
+    //
+    void getColor(ssp::BGRColor& color, uint32_t& start_index, bool is_rgb = false) {
+        if (is_rgb) {
+            color.red = static_cast<uint8_t>(buffer[start_index++]);
+            color.green = static_cast<uint8_t>(buffer[start_index++]);
+            color.blue = static_cast<uint8_t>(buffer[start_index++]);
+        } else {
+            color.blue = static_cast<uint8_t>(buffer[start_index++]);
+            color.green = static_cast<uint8_t>(buffer[start_index++]);
+            color.red = static_cast<uint8_t>(buffer[start_index++]);
+        }
+    }
+
+    // TODO Сделать типизированную функцию получения инфы о шрифте
+    // TODO В функцию передавать по ссылке все нужные переменные
+//    void getFontInfo(const char* buffer, uint32_t& bytes_counter, uint32_t& font_size, ...){
+//
+//        getSomeInt(buffer, font_size, 4, bytes_counter);
+//
+//        uint8_t bold_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+//
+//        uint8_t italic_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+//
+//        uint8_t underlined_bool = static_cast<uint8_t>(buffer[bytes_counter++]);
+//
+//        uint32_t font_name_length;
+//        getSomeInt(buffer, font_name_length, 4, bytes_counter);
+//
+//        std::string font_name;
+//        for (int i = bytes_counter; i < font_name_length + bytes_counter; ++i) {
+//            font_name += buffer[i];
+//        }
+//        bytes_counter += font_name_length;
+//
+//        ssp::BGRColor font_color;
+//        getColor(font_color);
+//
+//        uint8_t font_align_horz = static_cast<uint8_t>(buffer[bytes_counter++]);
+//        uint8_t font_align_vert = static_cast<uint8_t>(buffer[bytes_counter++]);
+//        bytes_counter += 2; //MB цвет заливки
+//
+//        uint8_t font_autosize = static_cast<uint8_t>(buffer[bytes_counter++]);
+//
+//        uint32_t font_width;
+//        getSomeInt(buffer, font_width, 4, bytes_counter);
+//
+//        uint32_t font_height;
+//        getSomeInt(buffer, font_height, 4, bytes_counter);
+//
+//        uint32_t font_descent;
+//        getSomeInt(buffer, font_descent, 4, bytes_counter);
+//    }
+
 public:
 
-    void ParseEllips(char *buffer, Scheme::SchemeParams &scheme_params, const uint32_t &block_size) {
-
-        uint32_t bytes_counter = 16;
-
-        char tmp_center_x[9];
-        for (int8_t _byte = 0; _byte < 8; ++_byte)
-            tmp_center_x[_byte] = buffer[bytes_counter + _byte];
-
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
-
-        bytes_counter += 24;
-
-        char tmp_center_y[9];
-        for (int8_t _byte = 0; _byte < 8; ++_byte)
-            tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
-
-        bytes_counter += 32;
-
-        char tmp_angle[9];
-        for (int8_t _byte = 0; _byte < 8; ++_byte)
-            tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
-
-        bytes_counter = 576;
-
-        uint32_t id = 0;
-        for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-            id |= static_cast<uint8_t>(buffer[i]);
-
-            if (i != bytes_counter)
-                id <<= 8;
-        }
-
-        bytes_counter += 16;
-
-        uint32_t half_x = 0;
-        for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-            half_x |= static_cast<uint8_t>(buffer[i]);
-
-            if (i != bytes_counter)
-                half_x <<= 8;
-        }
-
-        bytes_counter += 12;
-
-        uint32_t half_y = 0;
-        for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-            half_y |= static_cast<uint8_t>(buffer[i]);
-
-            if (i != bytes_counter)
-                half_y <<= 8;
-        }
-
-        bytes_counter += 14;
-
-        ssp::BGRColor pen;
-        pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-        pen.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-        pen.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-        ssp::BGRColor brush;
-        brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-        brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-        brush.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-        bytes_counter += 4;
-
-        bool brush_style;
-        brush_style = static_cast<bool>(buffer[bytes_counter++]);
-
-        uint8_t line_style;
-        line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-        uint8_t width;
-        width = static_cast<uint8_t>(buffer[bytes_counter]);
-
-        scheme_params.objects_vector.push_back(
-                new Ellipse(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                            (360 - (int) angle) % 360,
-                            width, line_style,
-                            {pen.red, pen.green, pen.blue},
-                            " Эллипс ",
-                            true,
-                            {brush.red, brush.green, brush.blue},
-                            brush_style));
-
+    void set_buffer(const char* _buffer){
+        buffer = _buffer;
     }
 
-    void ParseNone(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseNone(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParseGoBtn(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseEllips(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParseGoPoint(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseGoBtn(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParseGluePoint(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseGoPoint(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParseLine(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseGluePoint(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParseText(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseLine(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParsePolygon(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    void parseText(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-    void ParseRectangle(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
+    void parsePolygon(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        uint32_t bytes_counter = 16;
+    void parseRectangle(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        char tmp_center_x[9];
-        for (int8_t _byte = 0; _byte < 8; ++_byte)
-            tmp_center_x[_byte] = buffer[bytes_counter + _byte];
+    void parseArc(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        double center_x = *reinterpret_cast<double *>(tmp_center_x);
+    void parseTelecontrol(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        bytes_counter += 24;
+    void parseTelemeasure(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        char tmp_center_y[9];
-        for (int8_t _byte = 0; _byte < 8; ++_byte)
-            tmp_center_y[_byte] = buffer[bytes_counter + _byte];
-        double center_y = *reinterpret_cast<double *>(tmp_center_y);
+    void parseSignal(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        bytes_counter += 32;
+    void parsePicture(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos,
+                      const std::string& obj_name);
 
-        char tmp_angle[9];
-        for (int8_t _byte = 0; _byte < 8; ++_byte)
-            tmp_angle[_byte] = buffer[bytes_counter + _byte];
-        double angle = *reinterpret_cast<double *>(tmp_angle);
+    void parseShape(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);
 
-        bytes_counter = 576;
+    std::tuple<double, double, double> getCenterAndAngle(uint32_t &bytes_counter_temp);
 
-        uint32_t id = 0;
-        for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-            id |= static_cast<uint8_t>(buffer[i]);
+    std::tuple<bool, bool, bool> getReflections(uint32_t &bytes_counter_temp);
 
-            if (i != bytes_counter)
-                id <<= 8;
-        }
+    std::tuple<uint32_t, uint32_t, uint32_t> getIdAndHalves(uint32_t &bytes_counter_temp);
 
-        bytes_counter += 16;
+    std::tuple<ssp::BGRColor, ssp::BGRColor> getColors(uint32_t &bytes_counter_temp);
 
-        uint32_t half_x = 0;
-        for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-            half_x |= static_cast<uint8_t>(buffer[i]);
+    std::tuple<bool, uint8_t, uint8_t> getStylesAndWidth(uint32_t &bytes_counter_temp);
 
-            if (i != bytes_counter)
-                half_x <<= 8;
-        }
-
-        bytes_counter += 12;
-
-        uint32_t half_y = 0;
-        for (uint32_t i = bytes_counter + 3; i >= bytes_counter; --i) {
-            half_y |= static_cast<uint8_t>(buffer[i]);
-
-            if (i != bytes_counter)
-                half_y <<= 8;
-        }
-
-        bytes_counter += 14;
-
-        ssp::BGRColor pen;
-        pen.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-        pen.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-        pen.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-        ssp::BGRColor brush;
-        brush.blue = static_cast<uint8_t>(buffer[bytes_counter++]);
-        brush.green = static_cast<uint8_t>(buffer[bytes_counter++]);
-        brush.red = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-        bytes_counter += 4;
-
-        bool brush_style;
-        brush_style = static_cast<bool>(buffer[bytes_counter++]);
-
-        uint8_t line_style;
-        line_style = static_cast<uint8_t>(buffer[bytes_counter++]);
-
-        uint8_t width;
-        width = static_cast<uint8_t>(buffer[bytes_counter]);
-
-        scheme_params.objects_vector.push_back(
-                new Rectangle(center_x - half_x, center_y - half_y, half_x * 2, half_y * 2,
-                              (360 - (int) angle) % 360,
-                              width, line_style,
-                              {pen.red, pen.green, pen.blue},
-                              " Прямоугольник ", true, 0, 0,
-                              {brush.red, brush.green, brush.blue},
-                              brush_style));
-
-    }
-
-    void ParseDuga(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        // ptDuga: if BrushStyle=bsSolid then result:='Сектор' else result:='Дуга'
-        ;
-    }
-
-    void ParseTeleupr(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
-
-    void ParseTeleizm(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
-
-    void ParseSignal(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
-
-    void ParsePicture(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
-
-    void ParseShape(char *buffer, Scheme::SchemeParams &scheme_params, uint32_t block_size) {
-        ;
-    }
+    std::tuple<uint32_t, std::string> getText_(uint32_t &bytes_counter_temp);
 };
 

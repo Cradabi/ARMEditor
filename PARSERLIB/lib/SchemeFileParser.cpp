@@ -1,7 +1,7 @@
 #include "SchemeFileParser.h"
 
 
-void SchemeFileParser::ParseSCHM() {
+void SchemeFileParser::parseSchm() {
 
     int32_t reserved{0};
 
@@ -17,7 +17,7 @@ void SchemeFileParser::ParseSCHM() {
     ssp::BGRColor net_color;
     bool BitDepth{false};
 
-    char* tmp_work_scale = new char[9];
+    char *tmp_work_scale = new char[9];
 
     uint8_t data_counter = 0;
     uint32_t block_size;
@@ -29,18 +29,18 @@ void SchemeFileParser::ParseSCHM() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
             ++data_counter;
 
             switch (data_counter) {
                 case schm_data.version_flag:
-                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = getSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "Version: ");
                     lae::WriteLog(LogsFile, reserved, true);
                     reserved = 0;
                     break;
                 case schm_data.name_length_flag:
-                    name_length = GetSomeInt(name_length, block_size);
+                    name_length = getSomeInt(name_length, block_size);
                     break;
                 case schm_data.scheme_name_flag:
                     for (uint32_t digit = 0; digit < block_size; ++digit) {
@@ -51,7 +51,7 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, scheme_params->name_scheme, true);
                     break;
                 case schm_data.DBIP_length_flag:
-                    DBIP_length = GetSomeInt(DBIP_length, block_size);
+                    DBIP_length = getSomeInt(DBIP_length, block_size);
                     if (DBIP_length == 0)
                         ++data_counter;
                     break;
@@ -64,7 +64,7 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, scheme_params->name_bd, true);
                     break;
                 case schm_data.DBAlias_length_flag:
-                    DBAlias_length = GetSomeInt(DBAlias_length, block_size);
+                    DBAlias_length = getSomeInt(DBAlias_length, block_size);
                     if (DBAlias_length == 0)
                         ++data_counter;
                     break;
@@ -77,26 +77,26 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, scheme_params->server, true);
                     break;
                 case schm_data.width_flag:
-                    scheme_params->width = GetSomeInt(scheme_params->width, block_size);
+                    scheme_params->width = getSomeInt(scheme_params->width, block_size);
                     lae::WriteLog(LogsFile, "width: ");
                     lae::WriteLog(LogsFile, scheme_params->width, true);
                     break;
                 case schm_data.height_flag:
-                    scheme_params->height = GetSomeInt(scheme_params->height, block_size);
+                    scheme_params->height = getSomeInt(scheme_params->height, block_size);
                     lae::WriteLog(LogsFile, "height: ");
                     lae::WriteLog(LogsFile, scheme_params->height, true);
                     break;
                 case schm_data.reserved_1_flag:
-                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = getSomeInt(reserved, block_size);
                     reserved = 0;
                     break;
                 case schm_data.reserved_2_flag:
-                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = getSomeInt(reserved, block_size);
                     reserved = 0;
                     break;
                 case schm_data.work_scale_flag:
                     SchemeFile.read(tmp_work_scale, block_size);
-                    work_scale = *reinterpret_cast<double*>(tmp_work_scale);
+                    work_scale = *reinterpret_cast<double *>(tmp_work_scale);
                     delete[] tmp_work_scale;
                     lae::WriteLog(LogsFile, "work_scale: ");
                     lae::WriteLog(LogsFile, work_scale, true);
@@ -136,30 +136,30 @@ void SchemeFileParser::ParseSCHM() {
                     lae::WriteLog(LogsFile, BitDepth, true);
                     break;
                 case schm_data.count_of_objects_flag:
-                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = getSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "count_of_objects: ");
                     lae::WriteLog(LogsFile, reserved, true);
                     reserved = 0;
                     break;
                 case schm_data.windowsSize_x_flag:
-                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = getSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_x: ");
                     lae::WriteLog(LogsFile, reserved, true);
                     reserved = 0;
                     break;
                 case schm_data.windowsSize_y_flag:
-                    reserved = GetSomeInt(reserved, block_size);
+                    reserved = getSomeInt(reserved, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_y: ");
                     lae::WriteLog(LogsFile, reserved, true);
                     reserved = 0;
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseCASH() {
+void SchemeFileParser::parseCash() {
 
     int32_t cache_count{0};
 
@@ -173,26 +173,26 @@ void SchemeFileParser::ParseCASH() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
 
             switch (data_counter) {
                 case cash_data.cache_count_flag:
-                    cache_count = GetSomeInt(cache_count, block_size);
+                    cache_count = getSomeInt(cache_count, block_size);
                     ++data_counter;
 
                     lae::WriteLog(LogsFile, "cache_count: ");
                     lae::WriteLog(LogsFile, cache_count, true);
                     break;
                 default:
-                    PrintBlockData(block_size);
+                    printBlockData(block_size);
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseLINK() {
+void SchemeFileParser::parseLink() {
 
     int32_t links_count{0};
 
@@ -206,26 +206,26 @@ void SchemeFileParser::ParseLINK() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
 
             switch (data_counter) {
                 case link_data.links_count_flag:
-                    links_count = GetSomeInt(links_count, block_size);
+                    links_count = getSomeInt(links_count, block_size);
                     ++data_counter;
 
                     lae::WriteLog(LogsFile, "links_count: ");
                     lae::WriteLog(LogsFile, links_count, true);
                     break;
                 default:
-                    PrintBlockData(block_size);
+                    printBlockData(block_size);
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseSECT() {
+void SchemeFileParser::parseSect() {
 
     int32_t next_section_number{0};
     int32_t sect_count{0};
@@ -240,33 +240,33 @@ void SchemeFileParser::ParseSECT() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
 
             switch (data_counter) {
                 case sect_data.next_section_number_flag:
-                    next_section_number = GetSomeInt(next_section_number, block_size);
+                    next_section_number = getSomeInt(next_section_number, block_size);
                     ++data_counter;
 
                     lae::WriteLog(LogsFile, "next_section_number: ");
                     lae::WriteLog(LogsFile, next_section_number, true);
                     break;
                 case sect_data.sect_count_flag:
-                    sect_count = GetSomeInt(sect_count, block_size);
+                    sect_count = getSomeInt(sect_count, block_size);
                     ++data_counter;
 
                     lae::WriteLog(LogsFile, "sect_count: ");
                     lae::WriteLog(LogsFile, sect_count, true);
                     break;
                 default:
-                    PrintBlockData(block_size);
+                    printBlockData(block_size);
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseOBJS() {
+void SchemeFileParser::parseObjs() {
 
     int32_t objs_count{0};
 
@@ -280,26 +280,26 @@ void SchemeFileParser::ParseOBJS() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
 
             switch (data_counter) {
                 case objs_data.objs_count_flag:
-                    objs_count = GetSomeInt(objs_count, block_size);
+                    objs_count = getSomeInt(objs_count, block_size);
                     ++data_counter;
 
                     lae::WriteLog(LogsFile, "objs_count: ");
                     lae::WriteLog(LogsFile, objs_count, true);
                     break;
                 default:
-                    PrintBlockData(block_size);
+                    printBlockData(block_size);
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseEXTD() {
+void SchemeFileParser::parseExtd() {
 
     int32_t f_work_variable{0};
 
@@ -313,11 +313,11 @@ void SchemeFileParser::ParseEXTD() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
 
             switch (data_counter) {
                 case extd_data.f_work_variable_flag:
-                    f_work_variable = GetSomeInt(f_work_variable, block_size);
+                    f_work_variable = getSomeInt(f_work_variable, block_size);
                     ++data_counter;
 
                     lae::WriteLog(LogsFile, "f_work_variable: ");
@@ -325,11 +325,11 @@ void SchemeFileParser::ParseEXTD() {
                     break;
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseSCH2() {
+void SchemeFileParser::parseSch2() {
 
     int32_t window_size_X{0};
     int32_t window_size_Y{0};
@@ -348,17 +348,17 @@ void SchemeFileParser::ParseSCH2() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
             ++data_counter;
 
             switch (data_counter) {
                 case sch2_data.window_size_X_flag:
-                    window_size_X = GetSomeInt(window_size_X, block_size);
+                    window_size_X = getSomeInt(window_size_X, block_size);
                     lae::WriteLog(LogsFile, "window_size_X: ");
                     lae::WriteLog(LogsFile, window_size_X, true);
                     break;
                 case sch2_data.window_size_Y_flag:
-                    window_size_Y = GetSomeInt(window_size_Y, block_size);
+                    window_size_Y = getSomeInt(window_size_Y, block_size);
                     lae::WriteLog(LogsFile, "window_size_Y: ");
                     lae::WriteLog(LogsFile, window_size_Y, true);
                     break;
@@ -370,38 +370,38 @@ void SchemeFileParser::ParseSCH2() {
                     }
                     break;
                 case sch2_data.MS_size_flag:
-                    MS_size = GetSomeInt(MS_size, block_size);
+                    MS_size = getSomeInt(MS_size, block_size);
                     lae::WriteLog(LogsFile, "MS_size: ");
                     lae::WriteLog(LogsFile, MS_size, true);
                     break;
                 case sch2_data.back_bitmap_info_flag:
-                    back_bitmap_info = GetSomeInt(back_bitmap_info, block_size);
+                    back_bitmap_info = getSomeInt(back_bitmap_info, block_size);
                     lae::WriteLog(LogsFile, "back_bitmap_info: ");
                     lae::WriteLog(LogsFile, back_bitmap_info, true);
                     break;
                 case sch2_data.pixels_per_inch_X_flag:
-                    pixels_per_inch_X = GetSomeInt(pixels_per_inch_X, block_size);
+                    pixels_per_inch_X = getSomeInt(pixels_per_inch_X, block_size);
                     lae::WriteLog(LogsFile, "pixels_per_inch_X: ");
                     lae::WriteLog(LogsFile, pixels_per_inch_X, true);
                     break;
                 case sch2_data.pixels_per_inch_Y_flag:
-                    pixels_per_inch_Y = GetSomeInt(pixels_per_inch_Y, block_size);
+                    pixels_per_inch_Y = getSomeInt(pixels_per_inch_Y, block_size);
                     lae::WriteLog(LogsFile, "pixels_per_inch_Y: ");
                     lae::WriteLog(LogsFile, pixels_per_inch_Y, true);
                     break;
 
             }
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseFONT() {
+void SchemeFileParser::parseFont() {
     ;
 }
 
 
-void SchemeFileParser::ParseUNKNOWN() {
+void SchemeFileParser::parseUnknown() {
     // Пока не дошли до конца секции, считываем данные
     while (SchemeFile.tellg() < sections_stack.back().start_pos + sections_stack.back().sect_size) {
         SchemeFile.get(byte);
@@ -410,52 +410,99 @@ void SchemeFileParser::ParseUNKNOWN() {
         // Если нашли флаг блока, открываем его
         if ((static_cast<uint8_t>(byte) & scheme_flags.block_flag) == scheme_flags.block_flag) {
             // Получаем размер блока
-            block_size = GetBlockSize();
+            block_size = getBlockSize();
 
-            PrintBlockData(block_size);
+            printBlockData(block_size);
         } else if (byte == scheme_flags.section_flag)
-            EnterSection();
+            enterSection();
     }
 }
 
-void SchemeFileParser::ParseOBJECT() {
+void SchemeFileParser::parseObject() {
 
     uint8_t data_counter = 0;
     uint32_t block_size;
 
     if (sections_stack.back().sect_name != "1")
-        ParseUNKNOWN();
+        parseUnknown();
     else {
         SchemeFile.get(byte);
         // Получаем размер блока
-        block_size = GetBlockSize();
-        PrintBlockData(block_size);
+        block_size = getBlockSize();
+        printBlockData(block_size);
 
         SchemeFile.get(byte);
         // Получаем размер блока
-        block_size = GetBlockSize();
-        PrintBlockData(block_size);
+        block_size = getBlockSize();
+        printBlockData(block_size);
 
         SchemeFile.get(byte);
         // Получаем размер блока
-        block_size = GetBlockSize();
+        block_size = getBlockSize();
 
         SchemeFile.read(buffer, block_size);
 
-        switch (static_cast<uint8_t>(buffer[616])) {
+        objectParser.set_buffer(buffer);
+
+        int id_pos = findStartOfObject(buffer, sections_stack.back().parrent_sect->sect_name);
+        int dots_count = getSomeInt(0, 4, true, id_pos + 8);
+        uint8_t PrType = static_cast<uint8_t>(buffer[id_pos + 12 + dots_count * 8]);
+
+        switch (PrType) {
             case objects_types.ptEllipse:
-                objectParser.ParseEllips(buffer, *scheme_params, block_size);
+                lae::WriteLog(LogsFile, "\nptEllipse\n", true);
+                objectParser.parseEllips(*scheme_params, block_size, id_pos);
                 break;
             case objects_types.ptRectangle:
-                objectParser.ParseRectangle(buffer, *scheme_params, block_size);
+                lae::WriteLog(LogsFile, "\nptRectangle\n", true);
+                objectParser.parseRectangle(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptGoPoint:
+                lae::WriteLog(LogsFile, "\nptGoPoint\n", true);
+                objectParser.parseGoPoint(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptGoBtn:
+                lae::WriteLog(LogsFile, "\nptGoBtn\n", true);
+                objectParser.parseGoBtn(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptText:
+                lae::WriteLog(LogsFile, "\nptText\n", true);
+                objectParser.parseText(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptTeleupr:
+                lae::WriteLog(LogsFile, "\nptTeleupr\n", true);
+                objectParser.parseTelecontrol(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptTeleizm:
+                lae::WriteLog(LogsFile, "\nptTeleizm\n", true);
+                objectParser.parseTelemeasure(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptSignal:
+                lae::WriteLog(LogsFile, "\nptSignal\n", true);
+                objectParser.parseSignal(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptLine:
+                lae::WriteLog(LogsFile, "\nptLine\n", true);
+                objectParser.parseLine(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptPolygon:
+                lae::WriteLog(LogsFile, "\nptPolygon\n", true);
+                objectParser.parsePolygon(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptDuga:
+                lae::WriteLog(LogsFile, "\nptDuga\n", true);
+                objectParser.parseArc(*scheme_params, block_size, id_pos);
+                break;
+            case objects_types.ptPicture:
+                lae::WriteLog(LogsFile, "\nptPicture\n", true);
+                objectParser.parsePicture(*scheme_params, block_size, id_pos, sections_stack.back().parrent_sect->sect_name);
                 break;
 
             default:
-                lae::WriteLog(LogsFile, "\nUnknown object\n");
+                lae::WriteLog(LogsFile, "Unknown object", true);
                 lae::WriteLog(LogsFile, "BLOCK OPENED ");
                 lae::WriteLog(LogsFile, "block size: ");
-                lae::WriteLog(LogsFile, block_size);
-                lae::WriteLog(LogsFile, ' ');
+                lae::WriteLog(LogsFile, block_size, true);
 
                 std::bitset<8> print_byte;
 
@@ -476,37 +523,38 @@ void SchemeFileParser::ParseOBJECT() {
 
         }
 
+
     }
 
 }
 
 
-void SchemeFileParser::ParseSectionData() {
+void SchemeFileParser::parseSectionData() {
     if (sections_stack.back().sect_name == "schm")
-        ParseSCHM();
+        parseSchm();
     else if (sections_stack.back().sect_name == "cash")
-        ParseCASH();
+        parseCash();
     else if (sections_stack.back().sect_name == "link")
-        ParseLINK();
+        parseLink();
     else if (sections_stack.back().sect_name == "sect")
-        ParseSECT();
+        parseSect();
     else if (sections_stack.back().sect_name == "objs")
-        ParseOBJS();
+        parseObjs();
     else if (sections_stack.back().sect_name == "extd")
-        ParseEXTD();
+        parseExtd();
     else if (sections_stack.back().sect_name == "sch2")
-        ParseSCH2();
+        parseSch2();
     else if (sections_stack.back().sect_name == "font")
-        ParseUNKNOWN();     // TODO Заменить на ParseFONT
+        parseUnknown();     // TODO Заменить на ParseFONT
     else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "objs") {
-        ParseOBJECT();
+        parseObject();
     } else
-        ParseUNKNOWN();
+        parseUnknown();
 
 }
 
 // Функция чтения блока байтов в схеме
-uint32_t SchemeFileParser::GetBlockSize() {
+uint32_t SchemeFileParser::getBlockSize() {
     int8_t bytes_for_blocksize = 0;
     uint32_t block_size = 0;
 
@@ -526,19 +574,18 @@ uint32_t SchemeFileParser::GetBlockSize() {
                 bytes_for_blocksize = 4;
                 break;
         }
-        block_size = GetSomeInt(block_size, bytes_for_blocksize);
+        block_size = getSomeInt(block_size, bytes_for_blocksize);
     }
 
     return block_size;
 }
 
 // Функция чтения информации из блока
-void SchemeFileParser::PrintBlockData(const uint32_t& block_size) {
+void SchemeFileParser::printBlockData(const uint32_t &block_size) {
 
     lae::WriteLog(LogsFile, "BLOCK OPENED ");
     lae::WriteLog(LogsFile, "block size: ");
-    lae::WriteLog(LogsFile, block_size);
-    lae::WriteLog(LogsFile, ' ');
+    lae::WriteLog(LogsFile, block_size, true);
 
     std::bitset<8> print_byte;
 

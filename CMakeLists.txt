@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME}
 
 add_library(figures)
 add_library(parser)
+add_library(bmp_file)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 target_include_directories(${PROJECT_NAME} PUBLIC $ {PROJECT_SOURCE_DIR})
