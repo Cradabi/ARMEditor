@@ -1,10 +1,12 @@
 #include <cmath>
 #include <bitset>
 
+#include <tuple>
+#include "lib/SchemeClass.cpp"
 #include "SchemeFileNS.h"
 #include "PARSERLIB/lib/bmp/BMPFile.cpp"
 
-#include "lib/SchemeClass.cpp"
+#include "PARSERLIB/lib/BimBimBamBam.h"
 
 #pragma once
 
@@ -13,51 +15,6 @@ class SchemeObjectParser {
 private:
 
     const char* buffer;
-
-    // Шаблон получения целочисленного значения из буффера
-    template<typename IntType>
-    void getSomeInt(IntType& some_int, uint8_t int_size, uint32_t& start_index) {
-
-        some_int = 0;
-
-        for (int8_t i = int_size - 1; i >= 0; --i) {
-            some_int |= static_cast<uint8_t>(buffer[start_index + i]);
-
-            if (i != 0)
-                some_int <<= 8;
-        }
-
-        start_index += int_size;
-    }
-
-    // Шаблон получения числового значения с плавающей точкой из буффера
-    template<typename FloatType>
-    void getSomeFloat(FloatType& some_float, uint8_t float_size, uint32_t& start_index) {
-
-        char tmp_float[float_size + 1];
-        for (int8_t _byte = 0; _byte < float_size; ++_byte)
-            tmp_float[_byte] = buffer[start_index + _byte];
-
-        if (float_size <= 4)
-            some_float = *reinterpret_cast<float*>(tmp_float);
-        else
-            some_float = *reinterpret_cast<double*>(tmp_float);
-
-        start_index += float_size;
-    }
-
-    //
-    void getColor(ssp::BGRColor& color, uint32_t& start_index, bool is_rgb = false) {
-        if (is_rgb) {
-            color.red = static_cast<uint8_t>(buffer[start_index++]);
-            color.green = static_cast<uint8_t>(buffer[start_index++]);
-            color.blue = static_cast<uint8_t>(buffer[start_index++]);
-        } else {
-            color.blue = static_cast<uint8_t>(buffer[start_index++]);
-            color.green = static_cast<uint8_t>(buffer[start_index++]);
-            color.red = static_cast<uint8_t>(buffer[start_index++]);
-        }
-    }
 
     // TODO Сделать типизированную функцию получения инфы о шрифте
     // TODO В функцию передавать по ссылке все нужные переменные
@@ -103,6 +60,55 @@ public:
 
     void set_buffer(const char* _buffer){
         buffer = _buffer;
+    }
+
+    // Шаблон получения целочисленного значения из буффера
+    template<typename IntType>
+    void getSomeInt(IntType& some_int, uint8_t int_size, uint32_t& start_index) {
+
+
+
+        some_int = 0;
+
+        for (int8_t i = int_size - 1; i >= 0; --i) {
+            some_int |= static_cast<uint8_t>(buffer[start_index + i]);
+
+
+            if (i != 0)
+                some_int <<= 8;
+        }
+
+
+        start_index += int_size;
+    }
+
+    // Шаблон получения числового значения с плавающей точкой из буффера
+    template<typename FloatType>
+    void getSomeFloat(FloatType& some_float, uint8_t float_size, uint32_t& start_index) {
+
+        char tmp_float[float_size + 1];
+        for (int8_t _byte = 0; _byte < float_size; ++_byte)
+            tmp_float[_byte] = buffer[start_index + _byte];
+
+        if (float_size <= 4)
+            some_float = *reinterpret_cast<float*>(tmp_float);
+        else
+            some_float = *reinterpret_cast<double*>(tmp_float);
+
+        start_index += float_size;
+    }
+
+    //
+    void getColor(ssp::BGRColor& color, uint32_t& start_index, bool is_rgb = false) {
+        if (is_rgb) {
+            color.red = static_cast<uint8_t>(buffer[start_index++]);
+            color.green = static_cast<uint8_t>(buffer[start_index++]);
+            color.blue = static_cast<uint8_t>(buffer[start_index++]);
+        } else {
+            color.blue = static_cast<uint8_t>(buffer[start_index++]);
+            color.green = static_cast<uint8_t>(buffer[start_index++]);
+            color.red = static_cast<uint8_t>(buffer[start_index++]);
+        }
     }
 
     void parseNone(Scheme::SchemeParams& scheme_params, const uint32_t block_size, int id_pos);

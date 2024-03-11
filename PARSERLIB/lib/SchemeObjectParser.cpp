@@ -1,7 +1,5 @@
 #include "SchemeObjectParser.h"
 
-#include <tuple>
-
 
 std::tuple<double, double, double> SchemeObjectParser::getCenterAndAngle(uint32_t& bytes_counter_temp) {
 

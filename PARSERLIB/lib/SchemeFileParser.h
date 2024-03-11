@@ -11,8 +11,11 @@
 // Главный класс парсера схемы
 class SchemeFileParser {
 private:
+    std::ofstream CacheFile;        // Файл для временного хранения кеша объектов
     std::ofstream LogsFile;         // Файл логов
     std::ifstream SchemeFile;       // Файл схемы
+
+    static constexpr uint32_t VERY_IMPORTANT_VALUE = 1072693248;
 
     // Параметры схемы, экземпляр передаётся из-вне
     Scheme::SchemeParams* scheme_params;
@@ -109,8 +112,8 @@ private:
         SchemeFile.seekg(0, std::ios::end);    // Курсор ставится в конец файла
         file_size = SchemeFile.tellg();        // Записывается позиция курсора
 
-        SchemeFile.seekg(0, std::ios::beg);    // Курсор возвращается в начало файла
         SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+        SchemeFile.seekg(0, std::ios::beg);    // Курсор возвращается в начало файла
 
         lae::PrintLog("Размер файла схемы: ", false, 2);
         lae::PrintLog(file_size, false, 2);
@@ -227,6 +230,8 @@ private:
 
     // Функция парса параметров объекта схемы
     void parseObject();
+
+    void parseCashObject();
 
     // Функция открытия рабочих файлов
     bool openWorkFiles(const std::string& schemefile_path, const std::string& logfile_path) {

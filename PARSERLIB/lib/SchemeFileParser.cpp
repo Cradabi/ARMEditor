@@ -1,6 +1,5 @@
 #include "SchemeFileParser.h"
 
-
 void SchemeFileParser::parseSchm() {
 
     int32_t reserved{0};
@@ -418,6 +417,231 @@ void SchemeFileParser::parseUnknown() {
     }
 }
 
+void SchemeFileParser::parseCashObject() {
+
+    uint32_t block_size;
+
+    if (sections_stack.back().sect_name != "1")
+        parseUnknown();
+    else {
+        SchemeFile.get(byte);
+        // Получаем размер блока
+        block_size = getBlockSize();
+        printBlockData(block_size);
+
+        SchemeFile.get(byte);
+        // Получаем размер блока
+        block_size = getBlockSize();
+
+        uint32_t zatochka = 0;
+
+        SchemeFile.read(buffer, 64); //smth
+
+        SchemeFile.read(buffer, 8); //div
+
+        SchemeFile.read(buffer, 19); //smth
+
+        SchemeFile.read(buffer, 4);
+        std::bitset<8> byte_info;
+
+        objectParser.set_buffer(buffer);
+        uint32_t size_of_name;
+        objectParser.getSomeInt(size_of_name, 4, zatochka);
+        zatochka = 0;
+
+        std::string name_of_cach;
+
+        for (int i = 0; i < size_of_name; ++i) {
+            SchemeFile.get(byte);
+            name_of_cach += byte;
+        }
+
+//        SchemeFile.get(byte);
+//        byte_info = byte;
+//        std::cout << byte_info << '\n';
+
+        SchemeFile.read(buffer, 25);
+
+        SchemeFile.read(buffer, 416);
+
+        uint32_t start_of_object = SchemeFile.tellg();
+
+        SchemeFile.read(buffer, 1024);
+
+        uint32_t bytes_counter = 0;
+        objectParser.set_buffer(buffer);
+        uint32_t check;
+
+        while (true) {
+            objectParser.getSomeInt(check, 4, bytes_counter);
+            if (check <= 16 and check > 0) {
+                objectParser.getSomeInt(check, 4, bytes_counter);
+                if (check <= 32 and check > 0) {
+                    break;
+                } else {
+                    bytes_counter -= 7;
+                }
+            } else {
+                bytes_counter -= 3;
+            }
+        }
+
+        SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+        SchemeFile.seekg(start_of_object + bytes_counter - 8);
+
+        SchemeFile.read(buffer, 4);
+        objectParser.set_buffer(buffer);
+        uint32_t patterns_amount;
+        objectParser.getSomeInt(patterns_amount, 4, zatochka);
+        zatochka = 0;
+
+        SchemeFile.read(buffer, 4);
+        objectParser.set_buffer(buffer);
+        uint32_t objs_amount;
+        objectParser.getSomeInt(objs_amount, 4, zatochka);
+        zatochka = 0;
+
+        CacheFile.open("../PARSERLIB/cache/SchemeCache.ДаняБуцкий", std::ios_base::binary);
+
+        if (!CacheFile.is_open()) {
+            std::cout << "VIM VIM CLACS CLACS";
+            exit(0);
+        }
+
+        uint32_t end_of_object;
+        for (int i = 0; i < patterns_amount; ++i) {
+            for (int j = 0; j < objs_amount; ++j) {
+                start_of_object = SchemeFile.tellg(); //start_of_cach_object
+
+                SchemeFile.read(buffer, 1024);
+
+                objectParser.set_buffer(buffer);
+
+                bytes_counter = 0;
+                while (true) {
+                    objectParser.getSomeInt(check, 4, bytes_counter);
+                    if (check == 0) {
+                        objectParser.getSomeInt(check, 4, bytes_counter);
+                        if (check == VERY_IMPORTANT_VALUE) {
+                            break;
+                        } else {
+                            bytes_counter -= 7;
+                        }
+                    } else {
+                        bytes_counter -= 3;
+                    }
+                }
+
+
+                end_of_object = start_of_object + bytes_counter; //end_of_cach_object
+
+                SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+                SchemeFile.seekg(start_of_object); //start_of_cach_object
+
+                uint32_t object_size = end_of_object - start_of_object - 8;
+
+                SchemeFile.read(buffer, object_size);
+
+
+                CacheFile << object_size;
+
+                CacheFile.write(buffer, object_size);
+
+                CacheFile << "&";
+
+                SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+                SchemeFile.seekg(end_of_object);
+
+                SchemeFile.read(buffer, 1024);
+
+                objectParser.set_buffer(buffer);
+
+                bytes_counter = 0;
+                while (true) {
+                    objectParser.getSomeInt(check, 4, bytes_counter);
+                    if (check == 0) {
+                        objectParser.getSomeInt(check, 4, bytes_counter);
+                        if (check == VERY_IMPORTANT_VALUE) {
+                            break;
+                        } else {
+                            bytes_counter -= 7;
+                        }
+                    } else {
+                        bytes_counter -= 3;
+                    }
+                }
+
+                start_of_object = end_of_object;
+
+                end_of_object = start_of_object + bytes_counter;
+
+                SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+                SchemeFile.seekg(end_of_object);
+
+                SchemeFile.read(buffer, 1024);
+
+                objectParser.set_buffer(buffer);
+
+                bytes_counter = 0;
+                while (true) {
+                    objectParser.getSomeInt(check, 4, bytes_counter);
+                    if (check == 0) {
+                        objectParser.getSomeInt(check, 4, bytes_counter);
+                        if (check == VERY_IMPORTANT_VALUE) {
+                            break;
+                        } else {
+                            bytes_counter -= 7;
+                        }
+                    } else {
+                        bytes_counter -= 3;
+                    }
+                }
+
+                start_of_object = end_of_object;
+
+                end_of_object = start_of_object + bytes_counter;
+
+                SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+                SchemeFile.seekg(end_of_object);       // end_of_object
+
+                CacheFile << '\n';
+
+            }
+
+            SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+            SchemeFile.seekg(end_of_object);
+
+            SchemeFile.read(buffer, 1024);
+
+            objectParser.set_buffer(buffer);
+
+            bytes_counter = 0;
+            while (true) {
+                objectParser.getSomeInt(check, 4, bytes_counter);
+                if (check == 0) {
+                    objectParser.getSomeInt(check, 4, bytes_counter);
+                    if (check == VERY_IMPORTANT_VALUE) {
+                        break;
+                    } else {
+                        bytes_counter -= 7;
+                    }
+                } else {
+                    bytes_counter -= 3;
+                }
+            }
+            CacheFile << '\n';
+            start_of_object = end_of_object;
+
+            end_of_object = start_of_object + bytes_counter;
+
+            SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+            SchemeFile.seekg(end_of_object);       // end_of_object
+        }
+
+        CacheFile.close();
+    }
+}
+
 void SchemeFileParser::parseObject() {
 
     uint8_t data_counter = 0;
@@ -444,11 +668,16 @@ void SchemeFileParser::parseObject() {
 
         objectParser.set_buffer(buffer);
 
+
         int id_pos = findStartOfObject(buffer, sections_stack.back().parrent_sect->sect_name);
-        int dots_count = getSomeInt(0, 4, true, id_pos + 8);
-        uint8_t PrType = static_cast<uint8_t>(buffer[id_pos + 12 + dots_count * 8]);
+       int dots_count = getSomeInt(0, 4, true, id_pos + 8);
+       uint8_t PrType = static_cast<uint8_t>(buffer[id_pos + 12 + dots_count * 8]);
 
         switch (PrType) {
+            case objects_types.ptNone:
+                lae::WriteLog(LogsFile, "\nptMulti\n", true);
+                objectParser.parseNone(*scheme_params, block_size, id_pos);
+                break;
             case objects_types.ptEllipse:
                 lae::WriteLog(LogsFile, "\nptEllipse\n", true);
                 objectParser.parseEllips(*scheme_params, block_size, id_pos);
@@ -495,7 +724,8 @@ void SchemeFileParser::parseObject() {
                 break;
             case objects_types.ptPicture:
                 lae::WriteLog(LogsFile, "\nptPicture\n", true);
-                objectParser.parsePicture(*scheme_params, block_size, id_pos, sections_stack.back().parrent_sect->sect_name);
+                objectParser.parsePicture(*scheme_params, block_size, id_pos,
+                                          sections_stack.back().parrent_sect->sect_name);
                 break;
 
             default:
@@ -532,7 +762,7 @@ void SchemeFileParser::parseObject() {
 void SchemeFileParser::parseSectionData() {
     if (sections_stack.back().sect_name == "schm")
         parseSchm();
-    else if (sections_stack.back().sect_name == "cash")
+    else if (sections_stack.back().sect_name == "cach")
         parseCash();
     else if (sections_stack.back().sect_name == "link")
         parseLink();
@@ -546,11 +776,17 @@ void SchemeFileParser::parseSectionData() {
         parseSch2();
     else if (sections_stack.back().sect_name == "font")
         parseUnknown();     // TODO Заменить на ParseFONT
-    else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "objs") {
+    else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "objs")
         parseObject();
+    else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "cach") {
+        uint32_t cursor_pos = SchemeFile.tellg();
+        parseCashObject();
+        cursor_pos += sections_stack.back().sect_size;
+        SchemeFile.clear();                    // С файла сбрасываются возможные ошибки чтения
+        SchemeFile.seekg(cursor_pos);
+        cursor_pos = SchemeFile.tellg();
     } else
         parseUnknown();
-
 }
 
 // Функция чтения блока байтов в схеме
@@ -594,7 +830,7 @@ void SchemeFileParser::printBlockData(const uint32_t &block_size) {
         SchemeFile.get(byte);
         print_byte = byte;
         ++bytes_counter;
-        lae::WriteLog(LogsFile, print_byte);
+        lae::WriteLog(LogsFile, byte);
         if (bytes_counter % 4 == 0) {
             lae::WriteLog(LogsFile, "\n");
         } else {
