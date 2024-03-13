@@ -3,7 +3,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include "mywidget.h"
-#include "PARSERLIB/lib/SchemeFileParser.cpp"
+#include "parser lib/lib/SchemeFileParser.cpp"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QMenu>
@@ -20,10 +20,8 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    if (!parser.parse("../PARSERLIB/schemes_exp/10пикселей.схема",
-                      "../PARSERLIB/logs/SchemeLogs.txt"))
+    if (!parser.parse("../parser lib/schemes_exp/Электро3.схема"))
         exit(1);
-
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
 

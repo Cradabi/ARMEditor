@@ -23,7 +23,6 @@ add_executable(${PROJECT_NAME}
         mainwindow.h
         mywidget.h
         mainwindow.ui
-        PARSERLIB/lib/BimBimBamBam.h
 )
 
 
