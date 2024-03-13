@@ -134,32 +134,44 @@ private:
     void getMatrix(std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x,
                    bool is_buffer_filled = false) {
 
+        uint32_t bytes_counter = 0;
+
         some_matrix.resize(size_y);
         for (uint8_t y = 0; y < size_y; ++y) {
 
             some_matrix[y].resize(size_x);
             for (uint8_t x = 0; x < size_x; ++x) {
 
-                some_matrix[y][x] = getSomeFloat(some_matrix[y][x], is_buffer_filled);
+                some_matrix[y][x] = getSomeFloat(some_matrix[y][x], is_buffer_filled, bytes_counter);
+
+                if (is_buffer_filled)
+                    bytes_counter += 8;
 
             }
         }
 
     }
 
-    void getVector(std::vector<sop::Point>& some_vector, uint8_t vector_size, bool is_buffer_filled=false) {
+    void getVector(std::vector<sop::Point>& some_vector, uint8_t vector_size, bool is_buffer_filled = false) {
+
+        uint32_t bytes_counter = 0;
 
         some_vector.resize(vector_size);
         for (uint8_t _element = 0; _element < vector_size; ++_element) {
-            some_vector[_element].x = getSomeInt(some_vector[_element].x, is_buffer_filled);
-            some_vector[_element].y = getSomeInt(some_vector[_element].y, is_buffer_filled);
+            some_vector[_element].x = getSomeInt(some_vector[_element].x, is_buffer_filled, bytes_counter);
+            if (is_buffer_filled)
+                bytes_counter += 4;
+
+            some_vector[_element].y = getSomeInt(some_vector[_element].y, is_buffer_filled, bytes_counter);
+            if (is_buffer_filled)
+                bytes_counter += 4;
         }
 
     }
 
-    void getFont(sop::PrimitiveParams& primitive_params, bool is_buffer_filled = false);
+    void getFont(sop::PrimitiveParams& primitive_params, bool is_cache = false);
 
-    void getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath, bool is_buffer_filled = false);
+    void getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath, bool is_cache = false);
 
     void parseObject(int32_t lib_index);
 
@@ -172,6 +184,8 @@ private:
     void parseStructObject() {};
 
     void parseLibObject(sop::ObjectParams& object_params);
+
+    void writeFontInfo(const sop::PrimitiveParams& primitive_params);
 
     void writeObjectInfo(const sop::ObjectParams& object_params);
 

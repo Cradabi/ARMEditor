@@ -2,11 +2,15 @@
 
 void SchemeObjectParser::rewriteCacheObject(int32_t lib_index, int32_t cache_size) {
 
-    SchemeFile.read(buffer, cache_size);
-
     CacheFileOut.write((char*) &lib_index, types_sizes._32bits);
     CacheFileOut.write((char*) &cache_size, types_sizes._32bits);
-    CacheFileOut.write(buffer, cache_size);
+
+    uint32_t bytes_counter = 0;
+    while (bytes_counter < cache_size){
+        ++bytes_counter;
+        SchemeFile.read(buffer, types_sizes._8bits);
+        CacheFileOut.write(buffer, types_sizes._8bits);
+    }
 
     lae::WriteLog(LogsFile, "\nWatch lower in OBJS section ⇓ \n", true);
 
@@ -216,33 +220,37 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
     CacheFileIn.read(buffer, types_sizes._32bits);
     actual_object_params.glue_points_amount = getSomeInt(actual_object_params.animation_speed, true);
 
-    CacheFileIn.read(buffer, actual_object_params.glue_points_amount * types_sizes._32bits);
+    CacheFileIn.read(buffer, actual_object_params.glue_points_amount * types_sizes._32bits * 2);
     getVector(actual_object_params.glue_points_vector, actual_object_params.glue_points_amount, true);
 
     CacheFileIn.read(buffer, types_sizes._32bits);
     actual_object_params.states_amount = getSomeInt(actual_object_params.states_amount, true);
+    CacheFileIn.read(buffer, types_sizes._32bits);
     actual_object_params.primitives_in_state_amount = getSomeInt(actual_object_params.primitives_in_state_amount, true);
 
-    lae::WriteLog(LogsFile, "Lib object params:", true);
+    lae::WriteLog(LogsFile, "\nLIB OBJECT PARAMS:");
     writeObjectInfo(lib_object_params);
 
-    lae::WriteLog(LogsFile, "Actual object params:", true);
+    lae::WriteLog(LogsFile, "\nACTUAL OBJECT PARAMS:");
     writeObjectInfo(actual_object_params);
 
-    for (uint16_t _state = 0; _state < actual_object_params.states_amount; ++_state) {
-        for (uint16_t _primitive = 0; _primitive < actual_object_params.primitives_in_state_amount; ++_primitive) {
+    // TODO создание библиотечного объекта
+    // LibraryObject tmp_lib_object(data);
 
-            sop::PrimitiveParams primitive_params;
+    sop::PrimitiveParams primitive_params;
+    for (uint16_t _state = 0; _state < actual_object_params.states_amount; ++_state) {
+
+        for (uint16_t _primitive = 0; _primitive < actual_object_params.primitives_in_state_amount; ++_primitive) {
 
             CacheFileIn.read(buffer, types_sizes._32bits);
             primitive_params.points_amount = getSomeInt(primitive_params.points_amount, true);
-            CacheFileIn.read(buffer, primitive_params.points_amount * types_sizes._32bits);
+            CacheFileIn.read(buffer, primitive_params.points_amount * types_sizes._32bits * 2);
             getVector(primitive_params.points_vector, primitive_params.points_amount, true);
 
-            CacheFileIn.read(buffer, types_sizes._32bits);
+            CacheFileIn.read(buffer, types_sizes._8bits);
             primitive_params.primitive_type = getSomeInt(primitive_params.primitive_type, true);
 
-            CacheFileIn.read(buffer, types_sizes._32bits);
+            CacheFileIn.read(buffer, types_sizes._8bits);
             primitive_params.ti_style = getSomeInt(primitive_params.ti_style, true);
 
             CacheFileIn.read(buffer, 3);
@@ -280,6 +288,10 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
             CacheFileIn.read(buffer, types_sizes._8bits);
             primitive_params.is_font = getBool(true);
 
+            if (primitive_params.is_font) {
+                getFont(primitive_params, true);
+            }
+
             CacheFileIn.read(buffer, types_sizes._32bits);
             primitive_params.line_marker_amount = getSomeInt(primitive_params.line_marker_amount, true);
 
@@ -292,60 +304,79 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
             CacheFileIn.read(buffer, types_sizes._8bits);
             primitive_params.show = getBool(true);
 
-            if (primitive_params.is_font) {
-                getFont(primitive_params, true);
-            }
-
-            if (_primitive == actual_object_params.primitives_in_state_amount - 1) {
-
-                CacheFileIn.read(buffer, types_sizes._64bits);
-                primitive_params.koeff = getSomeFloat(primitive_params.koeff, true);
-
-                CacheFileIn.read(buffer, types_sizes._32bits);
-                primitive_params.caption_length = getSomeInt(primitive_params.caption_length, true);
-                CacheFileIn.read(buffer, primitive_params.caption_length);
-                getString(primitive_params.caption, primitive_params.caption_length, true);
-
-            }
-
             CacheFileIn.read(buffer, types_sizes._8bits);
             primitive_params.has_info_for_analysis = getBool(true);
 
-            switch (primitive_params.primitive_type) {
-                case objects_types.ptNone:
-                    lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
-                    break;
-                case objects_types.ptGoBtn:
-                    break;
-                case objects_types.ptGoPoint:
-                    break;
-                case objects_types.ptGluePoint:
-                    break;
-                case objects_types.ptLine:
-                    break;
-                case objects_types.ptPolygon:
-                    break;
-                case objects_types.ptEllipse:
-                    break;
-                case objects_types.ptRectangle:
-                    break;
-                case objects_types.ptDuga:
-                    break;
-                case objects_types.ptTeleupr:
-                    break;
-                case objects_types.ptTeleizm:
-                    break;
-                case objects_types.ptSignal:
-                    break;
-                case objects_types.ptShape:
-                    break;
-                default:
-                    lae::PrintLog("Парсер объектов: Неизвестный тип примитива\n");
-                    break;
+            // TODO switch для б. объектов
+            // Нужные структуры:
+            // lib_object_params лежит в OBJS обновляется только если есть другие объекты
+            // actual_object_params лежит в CACH
+            // primitive_params лежит в CACH обновляется с каждой итерацией, лежат подряд
+
+            if (_state == lib_object_params.state) {
+                switch (primitive_params.primitive_type) {
+                    case objects_types.ptNone:
+                        lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
+                        break;
+                    case objects_types.ptGoBtn:
+                        break;
+                    case objects_types.ptGoPoint:
+                        break;
+                    case objects_types.ptGluePoint:
+                        break;
+                    case objects_types.ptLine:
+                        break;
+                    case objects_types.ptText:
+                        break;
+                    case objects_types.ptPolygon:
+                        break;
+                    case objects_types.ptEllipse:
+                        // TODO Добавление примитива в либ. объект
+                        break;
+                    case objects_types.ptRectangle:
+                        break;
+                    case objects_types.ptDuga:
+                        break;
+                    case objects_types.ptTeleupr:
+                        break;
+                    case objects_types.ptTeleizm:
+                        break;
+                    case objects_types.ptSignal:
+                        break;
+                    case objects_types.ptPicture:
+                        break;
+                    case objects_types.ptPolyLine:
+                        break;
+                    case objects_types.ptShape:
+                        break;
+                    default:
+                        lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
+                        lae::PrintLog((int)primitive_params.primitive_type, true);
+                        break;
+                }
             }
+
             writePrimitiveParams(primitive_params);
+            primitive_params = {};
+
         }
+
+        CacheFileIn.read(buffer, types_sizes._64bits);
+        primitive_params.koeff = getSomeFloat(primitive_params.koeff, true);
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.caption_length = getSomeInt(primitive_params.caption_length, true);
+        CacheFileIn.read(buffer, primitive_params.caption_length);
+        getString(primitive_params.caption, primitive_params.caption_length, true);
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        actual_object_params.primitives_in_state_amount = getSomeInt(actual_object_params.primitives_in_state_amount,
+                                                                     true);
+
     }
+
+    // TODO добавление либ. объекта в вектор
+    // scheme_params->objects_vector.emplace_back(new LibraryObject(data));
 };
 
 void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
@@ -380,6 +411,9 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
     primitive_params.connect = getSomeInt(primitive_params.connect);
 
     primitive_params.is_font = getBool();
+    if (primitive_params.is_font) {
+        getFont(primitive_params);
+    }
 
     primitive_params.line_marker_amount = getSomeInt(primitive_params.line_marker_amount);
 
@@ -388,10 +422,6 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
     primitive_params.primitive_angle = getSomeFloat(primitive_params.primitive_angle);
 
     primitive_params.show = getBool();
-
-    if (primitive_params.is_font) {
-        getFont(primitive_params);
-    }
 
     primitive_params.is_picture = getBool();
 
@@ -406,6 +436,11 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
 
     primitive_params.has_info_for_analysis = getBool();
 
+    // TODO switch для примитивов
+    // Нужные структуры:
+    // object_params лежит в OBJS
+    // primitive_params лежит в OBJS
+
     switch (primitive_params.primitive_type) {
         case objects_types.ptNone:
             lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
@@ -418,9 +453,12 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
             break;
         case objects_types.ptLine:
             break;
+        case objects_types.ptText:
+            break;
         case objects_types.ptPolygon:
             break;
         case objects_types.ptEllipse:
+            // scheme_params->objects_vector.emplace_back(new Ellips(data));
             break;
         case objects_types.ptRectangle:
             break;
@@ -432,33 +470,111 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
             break;
         case objects_types.ptSignal:
             break;
+        case objects_types.ptPicture:
+            break;
+        case objects_types.ptPolyLine:
+            break;
         case objects_types.ptShape:
             break;
         default:
-            lae::PrintLog("Парсер объектов: Неизвестный тип примитива\n");
+            lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
+            lae::PrintLog((int)primitive_params.primitive_type, true);
             break;
     }
     writePrimitiveParams(primitive_params);
 }
 
-void SchemeObjectParser::getFont(sop::PrimitiveParams& primitive_params, bool is_buffer_filled) {
-    ;
+void SchemeObjectParser::getFont(sop::PrimitiveParams& primitive_params, bool is_cache) {
+    if (!is_cache) {
+        primitive_params.font.size = getSomeInt(primitive_params.font.size);
+
+        primitive_params.font.is_bold = getBool();
+        primitive_params.font.is_italic = getBool();
+        primitive_params.font.is_underlined = getBool();
+
+        primitive_params.font.name_length = getSomeInt(primitive_params.font.name_length);
+        getString(primitive_params.font.name, primitive_params.font.name_length);
+
+        getColor(primitive_params.font.color);
+
+        primitive_params.font.align_horizontal = getSomeInt(primitive_params.font.align_horizontal);
+        primitive_params.font.align_vertical = getSomeInt(primitive_params.font.align_vertical);
+
+        primitive_params.font.reserved = getSomeInt(primitive_params.font.reserved);
+
+        primitive_params.font.autosize = getBool();
+
+        primitive_params.font.width = getSomeInt(primitive_params.font.width);
+        primitive_params.font.height = getSomeInt(primitive_params.font.height);
+
+        primitive_params.font.descent = getSomeInt(primitive_params.font.descent);
+
+    } else {
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.font.size = getSomeInt(primitive_params.font.size, true);
+
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.is_bold = getBool(true);
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.is_italic = getBool(true);
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.is_underlined = getBool(true);
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.font.name_length = getSomeInt(primitive_params.font.name_length, true);
+        CacheFileIn.read(buffer, primitive_params.font.name_length);
+        getString(primitive_params.font.name, primitive_params.font.name_length, true);
+
+        CacheFileIn.read(buffer, 3);
+        getColor(primitive_params.font.color, true);
+
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.align_horizontal = getSomeInt(primitive_params.font.align_horizontal, true);
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.align_vertical = getSomeInt(primitive_params.font.align_vertical, true);
+
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.reserved = getSomeInt(primitive_params.font.reserved, true);
+
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.font.autosize = getBool(true);
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.font.width = getSomeInt(primitive_params.font.width, true);
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.font.height = getSomeInt(primitive_params.font.height, true);
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.font.descent = getSomeInt(primitive_params.font.descent, true);
+
+    }
 }
 
 void SchemeObjectParser::getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath,
-                                    bool is_buffer_filled) {
+                                    bool is_cache) {
     ++pictures_counter;
+
+    if (!is_cache) {
+        primitive_params.width_of_picture = getSomeInt(primitive_params.width_of_picture);
+
+        primitive_params.height_of_picture = getSomeInt(primitive_params.height_of_picture);
+
+        primitive_params.bit_depth = getSomeInt(primitive_params.bit_depth);
+    } else {
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.width_of_picture = getSomeInt(primitive_params.width_of_picture, true);
+
+        CacheFileIn.read(buffer, types_sizes._32bits);
+        primitive_params.height_of_picture = getSomeInt(primitive_params.height_of_picture, true);
+
+        CacheFileIn.read(buffer, types_sizes._8bits);
+        primitive_params.bit_depth = getSomeInt(primitive_params.bit_depth, true);
+    }
 
     bmp_filepath = std::to_string(pictures_counter);
 
     BMP bmp;
-
-    primitive_params.width_of_picture = getSomeInt(primitive_params.width_of_picture);
-
-    primitive_params.height_of_picture = getSomeInt(primitive_params.height_of_picture);
-
-    primitive_params.bit_depth = getSomeInt(primitive_params.bit_depth);
-
 
     primitive_params.pixmap.resize(primitive_params.height_of_picture,
                                    std::vector<sop::BGRColor>(primitive_params.width_of_picture));
@@ -467,14 +583,21 @@ void SchemeObjectParser::getPicture(sop::PrimitiveParams& primitive_params, std:
         for (uint32_t x = 0; x < primitive_params.width_of_picture; ++x) {
             sop::BGRColor pixel;
 
-            SchemeFile.read(buffer, 3);
+            if (!is_cache)
+                SchemeFile.read(buffer, 3);
+            else
+                CacheFileIn.read(buffer, 3);
 
             pixel.blue = static_cast<uint8_t>(buffer[0]);
             pixel.green = static_cast<uint8_t>(buffer[1]);
             pixel.red = static_cast<uint8_t>(buffer[2]);
             primitive_params.pixmap[y][x] = pixel;
         }
-        SchemeFile.read(buffer, 2);
+
+        if (!is_cache)
+            SchemeFile.read(buffer, 2);
+        else
+            CacheFileIn.read(buffer, 2);;
     }
 
     bmp.makeBmp(bmp_filepath, primitive_params.pixmap);
@@ -483,14 +606,18 @@ void SchemeObjectParser::getPicture(sop::PrimitiveParams& primitive_params, std:
 
 }
 
+
 void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params) {
+    lae::WriteLog(LogsFile, "\nOBJECT INFO", true);
+
     lae::WriteLog(LogsFile, "lib_index: ");
     lae::WriteLog(LogsFile, object_params.lib_index, true);
 
-    lae::WriteLog(LogsFile, "coord_matrix: ");
+    lae::WriteLog(LogsFile, "coord_matrix: ", true);
     for (int i = 0; i < object_params.coord_matrix.size(); i++) {
         for (int j = 0; j < object_params.coord_matrix[i].size(); j++) {
-            lae::WriteLog(LogsFile, object_params.coord_matrix[i][j], ' ');
+            lae::WriteLog(LogsFile, object_params.coord_matrix[i][j]);
+            lae::WriteLog(LogsFile, ' ');
         }
         lae::WriteLog(LogsFile, '\n');
     }
@@ -531,18 +658,20 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
     lae::WriteLog(LogsFile, "tag: ");
     lae::WriteLog(LogsFile, object_params.tag, true);
 
-    lae::WriteLog(LogsFile, "contur_real_matrix: ");
+    lae::WriteLog(LogsFile, "contur_real_matrix: ", true);
     for (int i = 0; i < object_params.contur_real_matrix.size(); i++) {
         for (int j = 0; j < object_params.contur_real_matrix[i].size(); j++) {
-            lae::WriteLog(LogsFile, object_params.contur_real_matrix[i][j], ' ');
+            lae::WriteLog(LogsFile, object_params.contur_real_matrix[i][j]);
+            lae::WriteLog(LogsFile, ' ');
         }
         lae::WriteLog(LogsFile, '\n');
     }
 
-    lae::WriteLog(LogsFile, "contur_frame_matrix: ");
+    lae::WriteLog(LogsFile, "contur_frame_matrix: ", true);
     for (int i = 0; i < object_params.contur_frame_matrix.size(); i++) {
         for (int j = 0; j < object_params.contur_frame_matrix[i].size(); j++) {
-            lae::WriteLog(LogsFile, object_params.contur_frame_matrix[i][j], ' ');
+            lae::WriteLog(LogsFile, object_params.contur_frame_matrix[i][j]);
+            lae::WriteLog(LogsFile, ' ');
         }
         lae::WriteLog(LogsFile, '\n');
     }
@@ -620,13 +749,15 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
 }
 
 void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primitive_params) {
+    lae::WriteLog(LogsFile, "\nPRIMITIVE PARAMS", true);
+
     lae::WriteLog(LogsFile, "points_amount: ");
     lae::WriteLog(LogsFile, primitive_params.points_amount, true);
 
-    lae::WriteLog(LogsFile, "points_vector: ");
+    lae::WriteLog(LogsFile, "points_vector: ", true);
     for (int i = 0; i < primitive_params.points_vector.size(); i++) {
         lae::WriteLog(LogsFile, primitive_params.points_vector[i].x);
-        lae::WriteLog(LogsFile, " ");
+        lae::WriteLog(LogsFile, ' ');
         lae::WriteLog(LogsFile, primitive_params.points_vector[i].y, true);
     }
 
@@ -653,7 +784,6 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
     lae::WriteLog(LogsFile, primitive_params.brush_color.blue, true);
 
     lae::WriteLog(LogsFile, "trans_color: ");
-    lae::WriteLog(LogsFile, primitive_params.trans_color, true);
     lae::WriteLog(LogsFile, "r: ");
     lae::WriteLog(LogsFile, primitive_params.trans_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
@@ -691,16 +821,20 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
     lae::WriteLog(LogsFile, "is_font: ");
     lae::WriteLog(LogsFile, primitive_params.is_font, true);
 
+    if (primitive_params.is_font)
+        writeFontInfo(primitive_params);
+
     lae::WriteLog(LogsFile, "connect: ");
     lae::WriteLog(LogsFile, primitive_params.connect, true);
 
     lae::WriteLog(LogsFile, "line_marker_amount: ");
     lae::WriteLog(LogsFile, primitive_params.line_marker_amount, true);
 
-    lae::WriteLog(LogsFile, "indentity_matrix: ");
+    lae::WriteLog(LogsFile, "indentity_matrix: ", true);
     for (int i = 0; i < primitive_params.indentity_matrix.size(); i++) {
         for (int j = 0; j < primitive_params.indentity_matrix[i].size(); j++) {
-            lae::WriteLog(LogsFile, primitive_params.indentity_matrix[i][j], ' ');
+            lae::WriteLog(LogsFile, primitive_params.indentity_matrix[i][j]);
+            lae::WriteLog(LogsFile, ' ');
         }
         lae::WriteLog(LogsFile, '\n');
     }
@@ -724,7 +858,7 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
     lae::WriteLog(LogsFile, primitive_params.bit_depth, true);
 
     lae::WriteLog(LogsFile, "pixmap: ");
-    lae::WriteLog(LogsFile, "он тут есть правда", true);
+    lae::WriteLog(LogsFile, "true", true);
 
     lae::WriteLog(LogsFile, "bmp_filepath: ");
     lae::WriteLog(LogsFile, primitive_params.bmp_filepath, true);
@@ -740,4 +874,52 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
 
     lae::WriteLog(LogsFile, "has_info_for_analysis: ");
     lae::WriteLog(LogsFile, primitive_params.has_info_for_analysis, true);
+}
+
+void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams& primitive_params) {
+    lae::WriteLog(LogsFile, "size: ");
+    lae::WriteLog(LogsFile, primitive_params.font.size, true);
+
+    lae::WriteLog(LogsFile, "is_bold: ");
+    lae::WriteLog(LogsFile, primitive_params.font.is_bold, true);
+
+    lae::WriteLog(LogsFile, "is_italic: ");
+    lae::WriteLog(LogsFile, primitive_params.font.is_italic, true);
+
+    lae::WriteLog(LogsFile, "is_underlined: ");
+    lae::WriteLog(LogsFile, primitive_params.font.is_underlined, true);
+
+    lae::WriteLog(LogsFile, "name_length: ");
+    lae::WriteLog(LogsFile, primitive_params.font.name_length, true);
+
+    lae::WriteLog(LogsFile, "name: ");
+    lae::WriteLog(LogsFile, primitive_params.font.name, true);
+    lae::WriteLog(LogsFile, "color: ", true);
+    lae::WriteLog(LogsFile, "r: ");
+    lae::WriteLog(LogsFile, primitive_params.font.color.red, true);
+    lae::WriteLog(LogsFile, "g: ");
+    lae::WriteLog(LogsFile, primitive_params.font.color.green, true);
+    lae::WriteLog(LogsFile, "b: ");
+    lae::WriteLog(LogsFile, primitive_params.font.color.blue, true);
+
+    lae::WriteLog(LogsFile, "align_horizontal: ");
+    lae::WriteLog(LogsFile, primitive_params.font.align_horizontal, true);
+
+    lae::WriteLog(LogsFile, "align_vertical: ");
+    lae::WriteLog(LogsFile, primitive_params.font.align_vertical, true);
+
+    lae::WriteLog(LogsFile, "reserved: ");
+    lae::WriteLog(LogsFile, primitive_params.font.reserved, true);
+
+    lae::WriteLog(LogsFile, "autosize: ");
+    lae::WriteLog(LogsFile, primitive_params.font.autosize, true);
+
+    lae::WriteLog(LogsFile, "width: ");
+    lae::WriteLog(LogsFile, primitive_params.font.width, true);
+
+    lae::WriteLog(LogsFile, "height: ");
+    lae::WriteLog(LogsFile, primitive_params.font.height, true);
+
+    lae::WriteLog(LogsFile, "descent: ");
+    lae::WriteLog(LogsFile, primitive_params.font.descent, true);
 }

@@ -46,7 +46,9 @@ namespace sce {          // Scheme Const Expressions
         static constexpr uint8_t ptTeleizm = 11;    // Объект телеизмерения
         static constexpr uint8_t ptSignal = 12;     // Режимная сигнализация
         static constexpr uint8_t ptPicture = 13;    // Картинка
-        static constexpr uint8_t ptShape = 14;      // Градиент
+        static constexpr uint8_t ptPolyLine = 14;    // Кривая
+        static constexpr uint8_t ptShape = 15;      // Градиент
+
     };
 
     // Структура параметров секции "schm", содержащая общую информацию о схеме
@@ -197,6 +199,8 @@ namespace lae {  // Logs And Exceptions
 // Пространство имен для структур, содержащих параметры объектов схемы
 namespace sop {          // Scheme Objects Params
 
+    //TODO сделать структуры для передачи в конструктор библиотечного объекта
+
     struct Point{
         int32_t x{0};
         int32_t y{0};
@@ -218,6 +222,31 @@ namespace sop {          // Scheme Objects Params
 
             return color;
         }
+    };
+
+    struct Font{
+        int32_t size{1};
+
+        bool is_bold{0};
+        bool is_italic{0};
+        bool is_underlined{0};
+
+        int32_t name_length{0};
+        std::string name = std::string();
+
+        BGRColor color;
+
+        uint8_t align_horizontal{0};
+        uint8_t align_vertical{0};
+
+        uint8_t reserved{0};
+
+        bool autosize{true};
+
+        int32_t width;
+        int32_t height;
+
+        int32_t descent;
     };
 
     struct ObjectParams {
@@ -311,6 +340,7 @@ namespace sop {          // Scheme Objects Params
         uint8_t style_frame{0};
 
         bool is_font{false};
+        Font font;
 
         uint8_t connect{0};
 

@@ -58,7 +58,7 @@ private:
 
     SchemeObjectParser objectParser = SchemeObjectParser();     // Экземпляр парсера объектов схемы
 
-    static sce::SchemePrimitiveTypes objects_types;   // Экземпляр структуры с типами объектов схемы
+    static sce::SchemePrimitiveTypes objects_types; // Экземпляр структуры с типами объектов схемы
     uint64_t objects_amount{0};                     // Кол-во объектов в схеме
 
     // Шаблон получения целочисленного значения из файла
