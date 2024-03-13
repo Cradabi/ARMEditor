@@ -270,6 +270,8 @@ namespace sop {          // Scheme Objects Params
         int32_t states_amount{1};
         int32_t primitives_in_state_amount{1};
 
+        bool has_info_for_analysis{false};
+
     };
 
     struct PrimitiveParams {

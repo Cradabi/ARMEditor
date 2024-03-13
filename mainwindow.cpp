@@ -20,8 +20,11 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    if (!parser.parse("../parser lib/schemes_exp/Электро3.схема"))
+    if (!parser.parse("../parser lib/schemes_exp/resulruniver.схема")){
         exit(1);
+    }
+
+    exit(999999999);
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
 

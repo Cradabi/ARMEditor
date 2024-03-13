@@ -156,9 +156,11 @@ private:
 
 //    void parseTextObject();
 
-    void parseStructObject();
+    void parseStructObject(){
 
-    void parseLibObject();
+    };
+
+    void parseLibObject(sop::ObjectParams& object_params);
 
 public:
 

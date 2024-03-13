@@ -15,8 +15,10 @@ void SchemeObjectParser::parseObject() {
     object_params.is_lib_object = getBool();
     object_params.is_struct_object = getBool();
 
-    object_params.name_length = getSomeInt(object_params.name_length, types_sizes._32bits);
-    getString(object_params.name, object_params.name_length);
+    if(!object_params.is_lib_object){
+        object_params.name_length = getSomeInt(object_params.name_length, types_sizes._32bits);
+        getString(object_params.name, object_params.name_length);
+    }
 
     object_params.hint_length = getSomeInt(object_params.hint_length, types_sizes._32bits);
     getString(object_params.hint, object_params.hint_length);
@@ -28,8 +30,11 @@ void SchemeObjectParser::parseObject() {
     getMatrix(object_params.contur_frame_matrix, 3, 9);
 
     object_params.reflection_possibility = getBool();
-    object_params.horizontal_reflection_mx = getBool();
-    object_params.vertical_reflection_my = getBool();
+    if(!object_params.is_lib_object){
+        object_params.horizontal_reflection_mx = getBool();
+        object_params.vertical_reflection_my = getBool();
+    }
+
 
     object_params.normal_state = getSomeInt(object_params.normal_state, types_sizes._32bits);
 
@@ -39,7 +44,10 @@ void SchemeObjectParser::parseObject() {
     object_params.object_type = getSomeInt(object_params.object_type, types_sizes._32bits);
 
     object_params.index = getSomeInt(object_params.index, types_sizes._32bits);
-    object_params.index_cache = getSomeInt(object_params.index_cache, types_sizes._32bits);
+
+    if(!object_params.is_lib_object){
+        object_params.index_cache = getSomeInt(object_params.index_cache, types_sizes._32bits);
+    }
 
     object_params.show = getBool();
 
@@ -53,23 +61,36 @@ void SchemeObjectParser::parseObject() {
 
     object_params.bgcolor_not_needed = getBool();
 
-    object_params.glue_points_amount = getSomeInt(object_params.animation_speed, types_sizes._32bits);
-    getVector(object_params.glue_points_vector, object_params.glue_points_amount);
+    if(object_params.is_lib_object){
+        object_params.horizontal_reflection_mx = getBool();
+        object_params.vertical_reflection_my = getBool();
+        object_params.has_info_for_analysis = getBool();
 
-    object_params.states_amount = getSomeInt(object_params.states_amount, types_sizes._32bits);
-    object_params.primitives_in_state_amount = getSomeInt(object_params.primitives_in_state_amount,
-                                                          types_sizes._32bits);
+    }
+
+    if(!object_params.is_lib_object){
+        object_params.glue_points_amount = getSomeInt(object_params.animation_speed, types_sizes._32bits);
+        getVector(object_params.glue_points_vector, object_params.glue_points_amount);
+
+        object_params.states_amount = getSomeInt(object_params.states_amount, types_sizes._32bits);
+        object_params.primitives_in_state_amount = getSomeInt(object_params.primitives_in_state_amount,
+                                                              types_sizes._32bits);
+    }
 
     if (object_params.is_struct_object)
         parseStructObject();
     else if (object_params.is_lib_object)
-        parseLibObject();
+        parseLibObject(object_params);
 //    else if (object_params.is_text_object)
 //        parseText();
     else
         parsePrimitive(object_params);
 
 }
+
+void SchemeObjectParser::parseLibObject(sop::ObjectParams& object_params){
+    ;
+};
 
 void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
 
