@@ -31,7 +31,7 @@ namespace sce {          // Scheme Const Expressions
     };
 
     // Структура, хранящая флаги типов объектов схем
-    struct SchemeObjectsTypes {
+    struct SchemePrimitiveTypes {
         static constexpr uint8_t ptNone = 0;        // Multi
         static constexpr uint8_t ptGoBtn = 1;       // Кнопка перехода
         static constexpr uint8_t ptGoPoint = 2;     // Точка перехода
@@ -222,7 +222,7 @@ namespace sop {          // Scheme Objects Params
 
     struct ObjectParams {
 
-        int32_t lib_index;
+        int32_t lib_index{0};
 
         std::vector<std::vector<double>> coord_matrix;
 
@@ -289,7 +289,7 @@ namespace sop {          // Scheme Objects Params
         int32_t points_amount{4};
         std::vector<Point> points_vector;
 
-        uint8_t primitive_type;
+        uint8_t primitive_type{0};
 
         uint8_t ti_style{0};
 
@@ -299,12 +299,11 @@ namespace sop {          // Scheme Objects Params
         BGRColor trans_color;
         bool is_transparent{false};
 
+        uint8_t brush_style{0};
+        uint8_t pen_style{0};
+        uint8_t pen_width{0};
 
-        uint8_t brush_style;
-        uint8_t pen_style;
-        uint8_t pen_width;
-
-        int32_t text_length;
+        int32_t text_length{0};
         std::string text;
 
         uint8_t style_end{0};
@@ -317,8 +316,6 @@ namespace sop {          // Scheme Objects Params
 
         int32_t line_marker_amount{0};
 
-        char reserved[3 + 1];
-
         std::vector<std::vector<double>> indentity_matrix;
 
         double primitive_angle{0};
@@ -326,10 +323,11 @@ namespace sop {          // Scheme Objects Params
         bool show{true};
 
         bool is_picture{false};
-        int32_t width_of_picture;
-        int32_t height_of_picture;
-        uint8_t bit_depth;
+        int32_t width_of_picture{0};
+        int32_t height_of_picture{0};
+        uint8_t bit_depth{0};
         std::vector<std::vector<BGRColor>> pixmap;
+        std::string bmp_filepath = std::string();
 
         double koeff;
 

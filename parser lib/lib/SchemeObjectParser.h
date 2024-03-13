@@ -16,7 +16,7 @@ private:
     Scheme::SchemeParams* scheme_params;
 
     static sce::TypesSizes types_sizes;
-    static sce::SchemeObjectsTypes objects_types;
+    static sce::SchemePrimitiveTypes objects_types;
 
     char byte;
 
@@ -26,7 +26,10 @@ private:
     std::ofstream LogsFile;        // Файл логов
     std::ifstream SchemeFile;      // Файл схемы
 
-    std::fstream CacheFile;       // Файл для временного хранения кеша объектов
+    const std::string cachefile_path = "../parser lib/cache/tmp.cache";
+    std::ofstream CacheFileOut;       // Файл для временного хранения кеша объектов
+    std::ifstream CacheFileIn;       // Файл для временного хранения кеша объектов
+    bool is_cache_open{false};
 
     static constexpr uint8_t int32_flag{0};
     static constexpr uint8_t float_flag{1};
@@ -66,8 +69,10 @@ private:
 
     // Шаблон получения целочисленного значения из файла
     template<typename IntType>
-    IntType getSomeInt(IntType some_int, const uint8_t int_size, const bool is_buffer_filled = false,
+    IntType getSomeInt(IntType some_int, const bool is_buffer_filled = false,
                        uint32_t start_index = 0) {
+
+        uint8_t int_size = sizeof(some_int);
 
         // Заменяем все байты числа на нулевые, чтобы битовый сдвиг работал корректно
         some_int = 0;
@@ -90,8 +95,10 @@ private:
 
     // Шаблон получения числового значения с плавающей точкой из буффера
     template<typename FloatType>
-    FloatType getSomeFloat(FloatType some_float, const uint8_t float_size, const bool is_buffer_filled = false,
+    FloatType getSomeFloat(FloatType some_float, const bool is_buffer_filled = false,
                            uint32_t start_index = 0) {
+
+        uint8_t float_size = sizeof(some_float);
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
@@ -124,7 +131,8 @@ private:
 
     }
 
-    void getMatrix(std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x) {
+    void getMatrix(std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x,
+                   bool is_buffer_filled = false) {
 
         some_matrix.resize(size_y);
         for (uint8_t y = 0; y < size_y; ++y) {
@@ -132,47 +140,48 @@ private:
             some_matrix[y].resize(size_x);
             for (uint8_t x = 0; x < size_x; ++x) {
 
-                some_matrix[y][x] = getSomeFloat(some_matrix[y][x], types_sizes._64bits);
+                some_matrix[y][x] = getSomeFloat(some_matrix[y][x], is_buffer_filled);
 
             }
         }
 
     }
 
-    void getVector(std::vector<sop::Point>& some_vector, uint8_t vector_size) {
+    void getVector(std::vector<sop::Point>& some_vector, uint8_t vector_size, bool is_buffer_filled=false) {
 
         some_vector.resize(vector_size);
         for (uint8_t _element = 0; _element < vector_size; ++_element) {
-            some_vector[_element].x = getSomeInt(some_vector[_element].x, 4);
-            some_vector[_element].y = getSomeInt(some_vector[_element].y, 4);
+            some_vector[_element].x = getSomeInt(some_vector[_element].x, is_buffer_filled);
+            some_vector[_element].y = getSomeInt(some_vector[_element].y, is_buffer_filled);
         }
 
     }
 
-    void getFont(sop::PrimitiveParams& primitive_params);
+    void getFont(sop::PrimitiveParams& primitive_params, bool is_buffer_filled = false);
 
-    void getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath);
+    void getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath, bool is_buffer_filled = false);
 
     void parseObject(int32_t lib_index);
 
-    void parseCacheObject(int32_t lib_index, int32_t cache_size);
+    void rewriteCacheObject(int32_t lib_index, int32_t cache_size);
 
     void parsePrimitive(sop::ObjectParams& object_params);
 
-//    void parseTextObject();
+//  void parseTextObject();
 
-    void parseStructObject(){
-            ;
-    };
+    void parseStructObject() {};
 
     void parseLibObject(sop::ObjectParams& object_params);
 
+    void writeObjectInfo(const sop::ObjectParams& object_params);
+
+    void writePrimitiveParams(const sop::PrimitiveParams& primitive_params);
+
     // Функция открытия рабочих файлов
     bool openWorkFiles(const std::string& schemefile_path, const std::string& logsfile_path) {
-        SchemeFile.open(schemefile_path, std::ios_base::binary | std::ios_base::app);
-        CacheFile.open("../parser lib/cache/tmp.cache", std::ios_base::binary | std::ios_base::app);
-        LogsFile.open(logsfile_path, std::ios_base::app);
 
+        SchemeFile.open(schemefile_path, std::ios_base::binary | std::ios_base::app);
+        LogsFile.open(logsfile_path, std::ios_base::app);
 
         if (!SchemeFile) {
             lae::PrintLog("Парсер объектов: Файл схемы не был открыт", true, 12);
@@ -190,29 +199,38 @@ private:
 
 public:
 
+    explicit SchemeObjectParser() {
+        CacheFileOut.open(cachefile_path, std::ofstream::out | std::ios_base::trunc);
+        CacheFileOut.close();
+    }
 
-    void set_scheme_params(Scheme::SchemeParams* _scheme_params){
+    void set_params(Scheme::SchemeParams* _scheme_params) {
         scheme_params = _scheme_params;
     }
 
     // Главная функция парса объектов
-    bool parse(uint32_t infile_cursor, const std::string& schemefile_path, const std::string& logsfile_path, int32_t lib_index, bool is_cache=false, int32_t cache_size=0) {
+    bool parse(uint32_t infile_cursor, const std::string& schemefile_path, const std::string& logsfile_path,
+               int32_t lib_index, bool is_cache = false, int32_t cache_size = 0) {
+
         if (!openWorkFiles(schemefile_path, logsfile_path)) {
             return false;
         }
 
         SchemeFile.clear();
         SchemeFile.seekg(infile_cursor);
-        if(!is_cache){
-            parseObject(lib_index);
 
+        if (!is_cache) {
+            parseObject(lib_index);
         } else {
-            parseCacheObject(lib_index, cache_size);
+            CacheFileOut.open(cachefile_path, std::ios_base::binary | std::ios_base::app);
+            rewriteCacheObject(lib_index, cache_size);
         }
 
         SchemeFile.close();
-        CacheFile.close();
+        CacheFileOut.close();
+        CacheFileIn.close();
         LogsFile.close();
+
         return true;
     }
 

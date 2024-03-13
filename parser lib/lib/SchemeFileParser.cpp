@@ -117,7 +117,7 @@ void SchemeFileParser::parseSchm() {
                     lae::WriteLog(LogsFile, NULL, true);
                     break;
                 case schm_data.windowsSize_y_flag:
-                     getSomeInt(0, block_size);
+                    getSomeInt(0, block_size);
                     lae::WriteLog(LogsFile, "windowsSize_y: ");
                     lae::WriteLog(LogsFile, NULL, true);
                     break;
@@ -407,12 +407,11 @@ void SchemeFileParser::parseCashObject() {
         objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, cache_index, true, cache_size);
 
         SchemeFile.open(schemefile_path, std::ios_base::binary);
+
         SchemeFile.clear();
-        SchemeFile.seekg(actual_cursor_pos);
+        SchemeFile.seekg(actual_cursor_pos + block_size);
 
         LogsFile.open(logsfile_path, std::ios_base::app);
-
-        printBlockData(block_size);
     }
 }
 
@@ -431,7 +430,7 @@ void SchemeFileParser::parseObject() {
         bool tmp_bool = static_cast<bool>(byte);
 
         int32_t lib_index = 0;
-        if(tmp_bool){
+        if (tmp_bool) {
             SchemeFile.get(byte);
             // Получаем размер блока
             block_size = getBlockSize();
@@ -455,13 +454,11 @@ void SchemeFileParser::parseObject() {
         objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, lib_index);
 
         SchemeFile.open(schemefile_path, std::ios_base::binary);
+
         SchemeFile.clear();
-        SchemeFile.seekg(actual_cursor_pos);
+        SchemeFile.seekg(actual_cursor_pos + block_size);
 
         LogsFile.open(logsfile_path, std::ios_base::app);
-
-        printBlockData(block_size);
-
     }
 
 }
@@ -520,8 +517,7 @@ uint32_t SchemeFileParser::getBlockSize() {
 }
 
 // Функция чтения информации из блока
-void SchemeFileParser::printBlockData(const uint32_t& block_size, const bool is_buffer_filled,
-                                      uint32_t start_index) {
+void SchemeFileParser::printBlockData(const uint32_t block_size) {
 
     lae::WriteLog(LogsFile, "BLOCK OPENED ");
     lae::WriteLog(LogsFile, "block size: ");
@@ -529,36 +525,22 @@ void SchemeFileParser::printBlockData(const uint32_t& block_size, const bool is_
 
     std::bitset<8> print_byte;
     uint32_t bytes_counter = 0;
-    if (is_buffer_filled) {
-        for (uint32_t _byte = start_index; start_index < block_size; ++_byte) {
-            byte = buffer[_byte];
-            ++bytes_counter;
 
-            print_byte = byte;
-            lae::WriteLog(LogsFile, print_byte);
+    while (bytes_counter < block_size) {
+        SchemeFile.get(byte);
+        ++bytes_counter;
 
-            if (bytes_counter % 4 == 0) {
-                lae::WriteLog(LogsFile, "\n");
-            } else {
-                lae::WriteLog(LogsFile, ' ');
-            }
+        print_byte = byte;
+        lae::WriteLog(LogsFile, print_byte);
+
+        if (bytes_counter % 4 == 0) {
+            lae::WriteLog(LogsFile, "\n");
+        } else {
+            lae::WriteLog(LogsFile, ' ');
         }
-    } else {
-        while (bytes_counter < block_size) {
-            SchemeFile.get(byte);
-            ++bytes_counter;
 
-            print_byte = byte;
-            lae::WriteLog(LogsFile, print_byte);
-
-            if (bytes_counter % 4 == 0) {
-                lae::WriteLog(LogsFile, "\n");
-            } else {
-                lae::WriteLog(LogsFile, ' ');
-            }
-
-        }
     }
+
 
     lae::WriteLog(LogsFile, "BLOCK CLOSED", true);
 

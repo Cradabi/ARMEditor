@@ -30,7 +30,7 @@ public:
 
         bmpInizialize(x_coords, y_coords);
 
-        std::ofstream bmp_fout("../parser lib/tmp_pictures/" + outputFile + ".bmp", std::ios_base::binary);
+        std::ofstream bmp_fout("../parser lib/cache/tmp_pictures/" + outputFile + ".bmp", std::ios_base::binary);
 
         bmp_fout.write((const char*) &file_header, sizeof(file_header));
         bmp_fout.write((const char*) &bmp_info_header, sizeof(bmp_info_header));

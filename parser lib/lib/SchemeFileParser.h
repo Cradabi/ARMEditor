@@ -56,9 +56,10 @@ private:
     static constexpr uint16_t buffer_size{4096};    // Фиксированный размер буфера
     char* buffer = new char[buffer_size];           // Буффер, для работы с байтами
 
-    SchemeObjectParser objectParser;                // Экземпляр парсера объектов схемы
-    static sce::SchemeObjectsTypes objects_types;   // Экземпляр структуры с типами объектов схемы
-    uint64_t objects_amount{0};                      // Кол-во объектов в схеме
+    SchemeObjectParser objectParser = SchemeObjectParser();     // Экземпляр парсера объектов схемы
+
+    static sce::SchemePrimitiveTypes objects_types;   // Экземпляр структуры с типами объектов схемы
+    uint64_t objects_amount{0};                     // Кол-во объектов в схеме
 
     // Шаблон получения целочисленного значения из файла
     template<typename IntType>
@@ -185,7 +186,7 @@ private:
     uint32_t getBlockSize();
 
     // Функция чтения информации из блока
-    void printBlockData(const uint32_t& block_size, const bool is_buffer_filled = false, uint32_t start_index = 0);
+    void printBlockData(const uint32_t block_size);
 
     // Функции парса основных секций схемы
 
@@ -220,8 +221,8 @@ private:
         uint8_t filename_size = filename_end_index - filename_start_index + 1;
 
         logsfile_path = "../parser lib/logs/"
-                       + schemefile_path.substr(filename_start_index, filename_size)
-                       + ".slog";
+                        + schemefile_path.substr(filename_start_index, filename_size)
+                        + ".log";
     }
 
     // Функция открытия рабочих файлов
@@ -259,7 +260,7 @@ public:
     }
 
     // Главная функция парсера схемы
-     bool parse(const std::string& schemefile_path);
+    bool parse(const std::string& schemefile_path);
 };
 
 bool SchemeFileParser::parse(const std::string& _schemefile_path) {
@@ -267,6 +268,8 @@ bool SchemeFileParser::parse(const std::string& _schemefile_path) {
 
     if (!openWorkFiles())
         return false;
+
+    objectParser.set_params(scheme_params);
 
     while (SchemeFile.get(byte)) {
         // Если дошли до границ открытой секции, закрываем её
