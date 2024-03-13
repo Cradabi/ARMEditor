@@ -196,6 +196,12 @@ namespace lae {  // Logs And Exceptions
 
 // Пространство имен для структур, содержащих параметры объектов схемы
 namespace sop {          // Scheme Objects Params
+
+    struct Point{
+        int32_t x{0};
+        int32_t y{0};
+    };
+
     // Структура, содержащая в себе информацию о цвете
     struct BGRColor {
         uint8_t blue{0};
@@ -216,7 +222,11 @@ namespace sop {          // Scheme Objects Params
 
     struct ObjectParams {
 
+        int32_t lib_index;
+
         std::vector<std::vector<double>> coord_matrix;
+
+        double angle{0};
 
         int32_t state{0};
 
@@ -265,7 +275,7 @@ namespace sop {          // Scheme Objects Params
         bool bgcolor_not_needed{true};
 
         int32_t glue_points_amount{0};
-        std::vector<int> glue_points_vector;
+        std::vector<Point> glue_points_vector;
 
         int32_t states_amount{1};
         int32_t primitives_in_state_amount{1};
@@ -277,7 +287,7 @@ namespace sop {          // Scheme Objects Params
     struct PrimitiveParams {
 
         int32_t points_amount{4};
-        std::vector<int> points_vector;
+        std::vector<Point> points_vector;
 
         uint8_t primitive_type;
 
@@ -286,13 +296,22 @@ namespace sop {          // Scheme Objects Params
         BGRColor pen_color;
         BGRColor brush_color;
 
+        BGRColor trans_color;
+        bool is_transparent{false};
+
+
+        uint8_t brush_style;
+        uint8_t pen_style;
         uint8_t pen_width;
+
         int32_t text_length;
         std::string text;
 
         uint8_t style_end{0};
         uint8_t style_start{0};
         uint8_t style_frame{0};
+
+        bool is_font{false};
 
         uint8_t connect{0};
 
@@ -301,6 +320,8 @@ namespace sop {          // Scheme Objects Params
         char reserved[3 + 1];
 
         std::vector<std::vector<double>> indentity_matrix;
+
+        double primitive_angle{0};
 
         bool show{true};
 
@@ -315,7 +336,7 @@ namespace sop {          // Scheme Objects Params
         int32_t caption_length{0};
         std::string caption = std::string();
 
-        bool has_info_for_analysis;
+        bool has_info_for_analysis{false};
 
     };
 

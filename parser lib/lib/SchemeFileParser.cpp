@@ -390,11 +390,28 @@ void SchemeFileParser::parseCashObject() {
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
-        printBlockData(block_size);
+        uint32_t cache_size;
+        cache_size = getSomeInt(cache_size, types_sizes._32bits);
 
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
+
+        int32_t actual_cursor_pos = SchemeFile.tellg();
+
+        SchemeFile.close();
+        LogsFile.close();
+
+        int32_t cache_index = std::stoi(sections_stack.back().parrent_sect->sect_name);
+
+        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, cache_index, true, cache_size);
+
+        SchemeFile.open(schemefile_path, std::ios_base::binary);
+        SchemeFile.clear();
+        SchemeFile.seekg(actual_cursor_pos);
+
+        LogsFile.open(logsfile_path, std::ios_base::app);
+
         printBlockData(block_size);
     }
 }
@@ -409,7 +426,17 @@ void SchemeFileParser::parseObject() {
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
-        printBlockData(block_size);
+
+        SchemeFile.get(byte);
+        bool tmp_bool = static_cast<bool>(byte);
+
+        int32_t lib_index = 0;
+        if(tmp_bool){
+            SchemeFile.get(byte);
+            // Получаем размер блока
+            block_size = getBlockSize();
+            lib_index = getSomeInt(lib_index, types_sizes._32bits);
+        }
 
         SchemeFile.get(byte);
         // Получаем размер блока
@@ -425,7 +452,7 @@ void SchemeFileParser::parseObject() {
         SchemeFile.close();
         LogsFile.close();
 
-        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path);
+        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, lib_index);
 
         SchemeFile.open(schemefile_path, std::ios_base::binary);
         SchemeFile.clear();

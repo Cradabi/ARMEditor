@@ -1,11 +1,27 @@
 #include "SchemeObjectParser.h"
 
-void SchemeObjectParser::parseObject() {
+void SchemeObjectParser::parseCacheObject(int32_t lib_index, int32_t cache_size) {
+    int32_t counter = 0;
+    CacheFile<<lib_index;
+    CacheFile<<cache_size;
+    while(counter < cache_size){
+        SchemeFile.get(byte);
+        CacheFile<<byte;
+        counter++;
+    }
+
+}
+
+
+void SchemeObjectParser::parseObject(int32_t lib_index) {
 
     sop::ObjectParams object_params;
 
+    object_params.lib_index = lib_index;
 
     getMatrix(object_params.coord_matrix, 3, 3);
+
+    object_params.angle = getSomeFloat(object_params.angle, types_sizes._64bits);
 
     object_params.state = getSomeInt(object_params.state, types_sizes._32bits);
 
@@ -89,7 +105,21 @@ void SchemeObjectParser::parseObject() {
 }
 
 void SchemeObjectParser::parseLibObject(sop::ObjectParams& object_params){
-    ;
+    CacheFile.clear();
+    CacheFile.seekg(0, std::ios_base::beg);
+    int32_t lib_id;
+    int32_t lib_size;
+    CacheFile>>lib_id;
+    CacheFile>>lib_size;
+    while (lib_id != object_params.lib_index) {
+        CacheFile.clear();
+        int32_t actual_cursor = CacheFile.tellg();
+        CacheFile.seekg(actual_cursor+lib_size, std::ios_base::beg);
+        CacheFile>>lib_id;
+        CacheFile>>lib_size;
+    }
+
+
 };
 
 void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
@@ -106,8 +136,14 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
 
     getColor(primitive_params.pen_color);
     getColor(primitive_params.brush_color);
+    getColor(primitive_params.trans_color);
 
+    primitive_params.is_transparent = getBool();
+
+    primitive_params.brush_style = getSomeInt(primitive_params.brush_style, types_sizes._8bits);
+    primitive_params.pen_style = getSomeInt(primitive_params.pen_style, types_sizes._8bits);
     primitive_params.pen_width = getSomeInt(primitive_params.pen_width, types_sizes._8bits);
+
     primitive_params.text_length = getSomeInt(primitive_params.text_length, types_sizes._32bits);
     getString(primitive_params.text, primitive_params.text_length);
 
@@ -117,19 +153,27 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
 
     primitive_params.connect = getSomeInt(primitive_params.connect, types_sizes._8bits);
 
+    primitive_params.is_font = getBool();
+
     primitive_params.line_marker_amount = getSomeInt(primitive_params.line_marker_amount, types_sizes._32bits);
 
-    SchemeFile.read(primitive_params.reserved, 3);
 
     getMatrix(primitive_params.indentity_matrix, 3, 3);
 
+    primitive_params.primitive_angle = getSomeFloat(primitive_params.primitive_angle, types_sizes._64bits);
+
     primitive_params.show = getBool();
+
+    if(primitive_params.is_font){
+        getFont(primitive_params);
+    }
 
     primitive_params.is_picture = getBool();
 
     std::string bmp_filepath = std::string();
-    if (primitive_params.is_picture)
+    if (primitive_params.is_picture){
         getPicture(primitive_params, bmp_filepath);
+    }
 
     primitive_params.koeff = getSomeFloat(primitive_params.koeff, types_sizes._64bits);
 
@@ -155,6 +199,10 @@ void SchemeObjectParser::parsePrimitive(sop::ObjectParams& object_params) {
             lae::PrintLog("Парсер объектов: Неизвестный тип примитива\n");
             break;
     }
+}
+
+void SchemeObjectParser::getFont(sop::PrimitiveParams &primitive_params) {
+    ;
 }
 
 void SchemeObjectParser::getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath) {

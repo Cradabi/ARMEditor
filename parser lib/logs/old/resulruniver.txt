@@ -585,7 +585,7 @@ BLOCK OPENED block size: 561
 00000000 :: HasTS (bool)  // Признак наличия у объекта ТС
 00000000 :: Invalid (bool) // Полная неисправность
 00000000 00000000 00000000 00000000 :: ObjectType (int32_t)
-00000001 00000000 00000000 00000000 :: Index (int32_t)
+00000001 00000000 00000000 00000000 :: Index (int32_t) (for lib objs)
 00000001 00000001 00000001 00000000 :: FVisible, FLeftButtonActive, FRightButtonActive, FSwapButtons (bools)
 00000000 :: FAnimated (bool)
 00000001 00000000 00000000 00000000 :: FAnimationSpeed (int32_t)

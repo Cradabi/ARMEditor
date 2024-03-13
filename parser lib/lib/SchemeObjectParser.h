@@ -26,7 +26,7 @@ private:
     std::ofstream LogsFile;        // Файл логов
     std::ifstream SchemeFile;      // Файл схемы
 
-    std::ofstream CacheFile;       // Файл для временного хранения кеша объектов
+    std::fstream CacheFile;       // Файл для временного хранения кеша объектов
 
     static constexpr uint8_t int32_flag{0};
     static constexpr uint8_t float_flag{1};
@@ -124,8 +124,6 @@ private:
 
     }
 
-    void parseObject();
-
     void getMatrix(std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x) {
 
         some_matrix.resize(size_y);
@@ -141,23 +139,30 @@ private:
 
     }
 
-    void getVector(std::vector<int>& some_vector, uint8_t vector_size) {
+    void getVector(std::vector<sop::Point>& some_vector, uint8_t vector_size) {
 
-        some_vector.resize(vector_size, 0);
+        some_vector.resize(vector_size);
         for (uint8_t _element = 0; _element < vector_size; ++_element) {
-            some_vector[_element] = getSomeInt(some_vector[_element], 4);
+            some_vector[_element].x = getSomeInt(some_vector[_element].x, 4);
+            some_vector[_element].y = getSomeInt(some_vector[_element].y, 4);
         }
 
     }
 
+    void getFont(sop::PrimitiveParams& primitive_params);
+
     void getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath);
+
+    void parseObject(int32_t lib_index);
+
+    void parseCacheObject(int32_t lib_index, int32_t cache_size);
 
     void parsePrimitive(sop::ObjectParams& object_params);
 
 //    void parseTextObject();
 
     void parseStructObject(){
-
+            ;
     };
 
     void parseLibObject(sop::ObjectParams& object_params);
@@ -165,8 +170,9 @@ private:
     // Функция открытия рабочих файлов
     bool openWorkFiles(const std::string& schemefile_path, const std::string& logsfile_path) {
         SchemeFile.open(schemefile_path, std::ios_base::binary | std::ios_base::app);
-
+        CacheFile.open("../parser lib/cache/tmp.cache", std::ios_base::binary | std::ios_base::app);
         LogsFile.open(logsfile_path, std::ios_base::app);
+
 
         if (!SchemeFile) {
             lae::PrintLog("Парсер объектов: Файл схемы не был открыт", true, 12);
@@ -184,23 +190,32 @@ private:
 
 public:
 
+
     void set_scheme_params(Scheme::SchemeParams* _scheme_params){
         scheme_params = _scheme_params;
     }
 
     // Главная функция парса объектов
-    bool parse(uint32_t infile_cursor, const std::string& schemefile_path, const std::string& logsfile_path) {
+    bool parse(uint32_t infile_cursor, const std::string& schemefile_path, const std::string& logsfile_path, int32_t lib_index, bool is_cache=false, int32_t cache_size=0) {
         if (!openWorkFiles(schemefile_path, logsfile_path)) {
             return false;
         }
 
         SchemeFile.clear();
         SchemeFile.seekg(infile_cursor);
+        if(!is_cache){
+            parseObject(lib_index);
 
-        parseObject();
+        } else {
+            parseCacheObject(lib_index, cache_size);
+        }
 
+        SchemeFile.close();
+        CacheFile.close();
+        LogsFile.close();
         return true;
     }
+
 
 };
 

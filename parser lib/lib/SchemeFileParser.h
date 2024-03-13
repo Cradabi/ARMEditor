@@ -259,7 +259,7 @@ public:
     }
 
     // Главная функция парсера схемы
-    virtual bool parse(const std::string& schemefile_path);
+     bool parse(const std::string& schemefile_path);
 };
 
 bool SchemeFileParser::parse(const std::string& _schemefile_path) {
