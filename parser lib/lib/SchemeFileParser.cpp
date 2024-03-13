@@ -419,6 +419,20 @@ void SchemeFileParser::parseObject() {
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
+
+        uint32_t actual_cursor_pos = SchemeFile.tellg();
+
+        SchemeFile.close();
+        LogsFile.close();
+
+        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path);
+
+        SchemeFile.open(schemefile_path, std::ios_base::binary);
+        SchemeFile.clear();
+        SchemeFile.seekg(actual_cursor_pos);
+
+        LogsFile.open(logsfile_path, std::ios_base::app);
+
         printBlockData(block_size);
 
     }

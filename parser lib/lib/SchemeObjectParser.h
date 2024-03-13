@@ -162,12 +162,6 @@ private:
 
     void parseLibObject(sop::ObjectParams& object_params);
 
-public:
-
-    void set_scheme_params(Scheme::SchemeParams* _scheme_params){
-        scheme_params = _scheme_params;
-    }
-
     // Функция открытия рабочих файлов
     bool openWorkFiles(const std::string& schemefile_path, const std::string& logsfile_path) {
         SchemeFile.open(schemefile_path, std::ios_base::binary | std::ios_base::app);
@@ -186,6 +180,12 @@ public:
 
         return true;
 
+    }
+
+public:
+
+    void set_scheme_params(Scheme::SchemeParams* _scheme_params){
+        scheme_params = _scheme_params;
     }
 
     // Главная функция парса объектов
