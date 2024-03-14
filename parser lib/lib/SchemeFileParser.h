@@ -63,24 +63,14 @@ private:
 
     // Шаблон получения целочисленного значения из файла
     template<typename IntType>
-    IntType getSomeInt(IntType some_int, const uint8_t int_size, const bool is_buffer_filled = false,
-                       uint32_t start_index = 0) {
-
-        // Заменяем все байты числа на нулевые, чтобы битовый сдвиг работал корректно
-        some_int = 0;
+    IntType getSomeInt(IntType some_int, const uint8_t int_size, const bool is_buffer_filled = false) {
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
             SchemeFile.read(buffer, int_size);
         }
 
-        // Идём по записанным в файл байтам в обратном порядке и доблявляем их в some_int
-        for (int8_t _byte = int_size - 1; _byte >= 0; --_byte) {
-            some_int |= static_cast<uint8_t>(buffer[start_index + _byte]);
-
-            if (_byte != 0)
-                some_int <<= 8;
-        }
+        some_int = *reinterpret_cast<IntType*>(buffer);
 
         return some_int;
     }

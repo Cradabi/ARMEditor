@@ -243,10 +243,10 @@ namespace sop {          // Scheme Objects Params
 
         bool autosize{true};
 
-        int32_t width;
-        int32_t height;
+        int32_t width{0};
+        int32_t height{0};
 
-        int32_t descent;
+        int32_t descent{0};
     };
 
     struct ObjectParams {
@@ -359,7 +359,7 @@ namespace sop {          // Scheme Objects Params
         std::vector<std::vector<BGRColor>> pixmap;
         std::string bmp_filepath = std::string();
 
-        double koeff;
+        double koeff{0};
 
         int32_t caption_length{0};
         std::string caption = std::string();

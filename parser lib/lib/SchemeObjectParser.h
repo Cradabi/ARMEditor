@@ -37,13 +37,13 @@ private:
 
     uint32_t pictures_counter{0};
 
-    bool getBool(const bool is_buffer_filled = false, uint32_t start_index = 0) {
+    bool getBool(std::ifstream& File, const bool is_buffer_filled = false, uint32_t start_index = 0) {
 
         bool some_bool;
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
-            SchemeFile.read(buffer, 1);
+            File.read(buffer, 1);
         }
 
         some_bool = static_cast<bool>(buffer[start_index]);
@@ -51,90 +51,75 @@ private:
         return some_bool;
     }
 
-    void getString(std::string& some_string, uint32_t string_size,
-                   const bool is_buffer_filled = false, uint32_t start_index = 0) {
+    void getString(std::ifstream& File, std::string& some_string, uint32_t string_size,
+                   const bool is_buffer_filled = false) {
 
         some_string = std::string();
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
-            SchemeFile.read(buffer, string_size);
+            File.read(buffer, string_size);
         }
 
         for (uint32_t _byte = 0; _byte < string_size; ++_byte) {
-            some_string += buffer[start_index + _byte];
+            some_string += buffer[_byte];
         }
 
     }
 
     // Шаблон получения целочисленного значения из файла
     template<typename IntType>
-    IntType getSomeInt(IntType some_int, const bool is_buffer_filled = false,
-                       uint32_t start_index = 0) {
+    IntType getSomeInt(std::ifstream& File, IntType some_int, const bool is_buffer_filled = false) {
 
+        // Вычисляем размер необходимого целочисленного типа данных
         uint8_t int_size = sizeof(some_int);
-
-        // Заменяем все байты числа на нулевые, чтобы битовый сдвиг работал корректно
-        some_int = 0;
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
-            SchemeFile.read(buffer, int_size);
+            File.read(buffer, int_size);
         }
 
-        // Идём по записанным в файл байтам в обратном порядке и доблявляем их в some_int
-        for (int8_t _byte = int_size - 1; _byte >= 0; --_byte) {
-            some_int |= static_cast<uint8_t>(buffer[start_index + _byte]);
-
-            if (_byte != 0)
-                some_int <<= 8;
-        }
+        some_int = *reinterpret_cast<IntType*>(buffer);
 
         return some_int;
     }
 
     // Шаблон получения числового значения с плавающей точкой из буффера
     template<typename FloatType>
-    FloatType getSomeFloat(FloatType some_float, const bool is_buffer_filled = false,
-                           uint32_t start_index = 0) {
+    FloatType getSomeFloat(std::ifstream& File, FloatType some_float, const bool is_buffer_filled = false) {
 
         uint8_t float_size = sizeof(some_float);
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
-            SchemeFile.read(buffer, float_size);
+            File.read(buffer, float_size);
         }
 
-        char tmp_float[float_size + 1];
-        for (int8_t _byte = 0; _byte < float_size; ++_byte)
-            tmp_float[_byte] = buffer[start_index + _byte];
-
-        if (float_size <= types_sizes._32bits)
-            some_float = *reinterpret_cast<float*>(tmp_float);
-        else
-            some_float = *reinterpret_cast<double*>(tmp_float);
+        if (float_size == types_sizes._32bits) {
+            some_float = *reinterpret_cast<float*>(buffer);
+        } else if (float_size == types_sizes._64bits) {
+            some_float = *reinterpret_cast<double*>(buffer);
+        }
 
         return some_float;
     }
 
     // Функция получения цвета
-    void getColor(sop::BGRColor& color, const bool is_buffer_filled = false, uint32_t start_index = 0) {
+    void getColor(std::ifstream& File, sop::BGRColor& color, const bool is_buffer_filled = false) {
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
-            SchemeFile.read(buffer, 3);
+            File.read(buffer, 3);
         }
 
-        color.blue = static_cast<uint8_t>(buffer[start_index++]);
-        color.green = static_cast<uint8_t>(buffer[start_index++]);
-        color.red = static_cast<uint8_t>(buffer[start_index]);
+        color.blue = static_cast<uint8_t>(buffer[0]);
+        color.green = static_cast<uint8_t>(buffer[1]);
+        color.red = static_cast<uint8_t>(buffer[2]);
 
     }
 
-    void getMatrix(std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x,
+    void getMatrix(std::ifstream& File, std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x,
                    bool is_buffer_filled = false) {
-
-        uint32_t bytes_counter = 0;
 
         some_matrix.resize(size_y);
         for (uint8_t y = 0; y < size_y; ++y) {
@@ -142,46 +127,45 @@ private:
             some_matrix[y].resize(size_x);
             for (uint8_t x = 0; x < size_x; ++x) {
 
-                some_matrix[y][x] = getSomeFloat(some_matrix[y][x], is_buffer_filled, bytes_counter);
-
-                if (is_buffer_filled)
-                    bytes_counter += 8;
+                some_matrix[y][x] = getSomeFloat(File, some_matrix[y][x], is_buffer_filled);
 
             }
         }
 
     }
 
-    void getVector(std::vector<sop::Point>& some_vector, uint8_t vector_size, bool is_buffer_filled = false) {
-
-        uint32_t bytes_counter = 0;
+    void getVector(std::ifstream& File, std::vector<sop::Point>& some_vector, uint8_t vector_size,
+                   bool is_buffer_filled = false) {
 
         some_vector.resize(vector_size);
         for (uint8_t _element = 0; _element < vector_size; ++_element) {
-            some_vector[_element].x = getSomeInt(some_vector[_element].x, is_buffer_filled, bytes_counter);
-            if (is_buffer_filled)
-                bytes_counter += 4;
+            some_vector[_element].x = getSomeInt(File, some_vector[_element].x, is_buffer_filled);
 
-            some_vector[_element].y = getSomeInt(some_vector[_element].y, is_buffer_filled, bytes_counter);
-            if (is_buffer_filled)
-                bytes_counter += 4;
+            some_vector[_element].y = getSomeInt(File, some_vector[_element].y, is_buffer_filled);
+
         }
 
     }
 
-    void getFont(sop::PrimitiveParams& primitive_params, bool is_cache = false);
+    void getFont(std::ifstream& File, sop::PrimitiveParams& primitive_params);
 
-    void getPicture(sop::PrimitiveParams& primitive_params, std::string& bmp_filepath, bool is_cache = false);
+    void getPicture(std::ifstream& File, sop::PrimitiveParams& primitive_params, std::string& bmp_filepath);
 
-    void parseObject(int32_t lib_index);
+    void parseObject(std::ifstream& File, int32_t lib_index);
+
+    void getButtonsInfo(std::ifstream& File, sop::ObjectParams& object_params);
+
+    void getAnimationInfo(std::ifstream& File, sop::ObjectParams& object_params);
 
     void rewriteCacheObject(int32_t lib_index, int32_t cache_size);
 
-    void parsePrimitive(sop::ObjectParams& object_params);
+    void parsePrimitiveCommonFields(std::ifstream& File, sop::PrimitiveParams& primitive_params);
+
+    void parsePrimitive(std::ifstream& File, sop::ObjectParams& object_params);
 
 //  void parseTextObject();
 
-    void parseStructObject() {};
+//  void parseStructObject() {};
 
     void parseLibObject(sop::ObjectParams& object_params);
 
@@ -234,7 +218,7 @@ public:
         SchemeFile.seekg(infile_cursor);
 
         if (!is_cache) {
-            parseObject(lib_index);
+            parseObject(SchemeFile, lib_index);
         } else {
             CacheFileOut.open(cachefile_path, std::ios_base::binary | std::ios_base::app);
             rewriteCacheObject(lib_index, cache_size);

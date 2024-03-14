@@ -20,7 +20,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    if (!parser.parse("../parser lib/schemes_exp/Мультищитовая3.схема")){
+    if (!parser.parse("../parser lib/schemes_exp/набор элементов.схема")) {
         exit(1);
     }
 
