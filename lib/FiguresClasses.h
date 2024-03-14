@@ -15,8 +15,8 @@ namespace FiguresClasses {
         std::string type_object = "";
         std::string help_text = "";
 
-        std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignVCenter, Qt::AlignBottom};
-        std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignHCenter, Qt::AlignRight};
+        std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignBottom, Qt::AlignVCenter};
+        std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignRight, Qt::AlignHCenter};
         std::vector<Qt::PenStyle> style_vector = {Qt::NoPen, Qt::SolidLine, Qt::DotLine, Qt::DotLine, Qt::DotLine,
                                                   Qt::DotLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine};
 
@@ -780,13 +780,16 @@ namespace FiguresClasses {
         Text(int x, int y, int width, int height, const std::string &text);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+             int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+             bool bool_show_filling);
 
         Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-             int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+             int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+             bool bool_show_filling,
              const std::string &font_name, int font_size,
              const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-             bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+             bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+             const std::vector<int> &pen_color);
 
         void draw(QPainter &painter) override;
 
@@ -1001,14 +1004,17 @@ namespace FiguresClasses {
 
         Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+                    bool bool_show_filling);
 
         Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+                    bool bool_show_filling,
                     const std::string &font_name, int font_size,
                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+                    const std::vector<int> &pen_color);
 
         void draw(QPainter &painter) override;
 
@@ -1037,10 +1043,12 @@ namespace FiguresClasses {
 
         Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
                           const std::string &help_text,
-                          int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                          int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+                          bool bool_show_filling,
                           const std::string &font_name, int font_size,
                           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+                          const std::vector<int> &pen_color);
 
         void draw(QPainter &painter) override;
 
@@ -1066,14 +1074,17 @@ namespace FiguresClasses {
 
         Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling);
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+                    bool bool_show_filling);
 
         Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
                     const std::string &help_text,
-                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling,
+                    int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+                    bool bool_show_filling,
                     const std::string &font_name, int font_size,
                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text);
+                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+                    const std::vector<int> &pen_color);
 
         void draw(QPainter &painter) override;
 

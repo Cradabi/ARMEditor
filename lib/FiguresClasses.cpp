@@ -1531,7 +1531,8 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string &te
            bool bool_show_filling,
            const std::string &font_name, int font_size,
            const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text) : Primitive::Primitive() {
+           bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+           const std::vector<int> &pen_color) : Primitive::Primitive() {
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1551,6 +1552,7 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string &te
     this->auto_size_text = auto_size_text;
     this->type_object = "Текст";
     this->line_width = line_width;
+    this->line_color = pen_color;
     change_center_cords(x, y, width, height);
 }
 
@@ -1566,9 +1568,9 @@ void Text::draw(QPainter &painter) {
         QFontMetrics fm(text_font);
         int pxwidth = fm.width(this->get_text().c_str());
         int pxheight = fm.height();
-        this->change_center_cords(this->get_x() - this->get_line_width() / 2,
-                                  this->get_y() - this->get_line_width() / 2, pxwidth + this->get_line_width(),
-                                  pxheight + this->get_line_width());
+        this->change_center_cords(this->get_x(),
+                                  this->get_y(), pxwidth,
+                                  pxheight);
     }
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
@@ -1864,6 +1866,7 @@ void Image::draw(QPainter &painter) {
         QRect target(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                      this->get_height());
         QRect source(0, 0, 0, 0);
+        std::cout << this->get_image_path().c_str() << "\n";
         QPixmap pixmap(this->get_image_path().c_str());
         painter.drawPixmap(target, pixmap, source);
     }
@@ -2009,7 +2012,8 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
                          bool bool_show_filling,
                          const std::string &font_name, int font_size,
                          const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-                         bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
+                         bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+                         const std::vector<int> &pen_color)
         : Text::Text() {
     this->angle = angle;
     this->text = text;
@@ -2030,6 +2034,7 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
     this->auto_size_text = auto_size_text;
     this->type_object = "Телеконтроль";
     this->line_width = line_width;
+    this->line_color = pen_color;
     change_center_cords(x, y, width, height);
 }
 
@@ -2045,9 +2050,9 @@ void Telecontrol::draw(QPainter &painter) {
         QFontMetrics fm(text_font);
         int pxwidth = fm.width(this->get_text().c_str());
         int pxheight = fm.height();
-        this->change_center_cords(this->get_x() - this->get_line_width() / 2,
-                                  this->get_y() - this->get_line_width() / 2, pxwidth + this->get_line_width(),
-                                  pxheight + this->get_line_width());
+        this->change_center_cords(this->get_x(),
+                                  this->get_y(), pxwidth,
+                                  pxheight);
     }
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
@@ -2122,7 +2127,8 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
                                      bool bool_show_filling,
                                      const std::string &font_name, int font_size,
                                      const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-                                     bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
+                                     bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+                                     const std::vector<int> &pen_color)
         : Text::Text() {
     this->angle = angle;
     this->text = text;
@@ -2143,6 +2149,7 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
     this->auto_size_text = auto_size_text;
     this->type_object = "Телесигнализация";
     this->line_width = line_width;
+    this->line_color = pen_color;
     change_center_cords(x, y, width, height);
 }
 
@@ -2158,9 +2165,9 @@ void Telesignalisation::draw(QPainter &painter) {
         QFontMetrics fm(text_font);
         int pxwidth = fm.width(this->get_text().c_str());
         int pxheight = fm.height();
-        this->change_center_cords(this->get_x() - this->get_line_width() / 2,
-                                  this->get_y() - this->get_line_width() / 2, pxwidth + this->get_line_width(),
-                                  pxheight + this->get_line_width());
+        this->change_center_cords(this->get_x(),
+                                  this->get_y(), pxwidth,
+                                  pxheight);
     }
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
@@ -2234,7 +2241,8 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
                          bool bool_show_filling,
                          const std::string &font_name, int font_size,
                          const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
-                         bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
+                         bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
+                         const std::vector<int> &pen_color)
         : Text::Text() {
     this->angle = angle;
     this->text = text;
@@ -2255,6 +2263,7 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     this->auto_size_text = auto_size_text;
     this->type_object = "Телеизмерение";
     this->line_width = line_width;
+    this->line_color = pen_color;
     change_center_cords(x, y, width, height);
 }
 
@@ -2270,9 +2279,9 @@ void Telemeasure::draw(QPainter &painter) {
         QFontMetrics fm(text_font);
         int pxwidth = fm.width(this->get_text().c_str());
         int pxheight = fm.height();
-        this->change_center_cords(this->get_x() - this->get_line_width() / 2,
-                                  this->get_y() - this->get_line_width() / 2, pxwidth + this->get_line_width(),
-                                  pxheight + this->get_line_width());
+        this->change_center_cords(this->get_x(),
+                                  this->get_y(), pxwidth,
+                                  pxheight);
     }
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
