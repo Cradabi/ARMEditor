@@ -48,16 +48,18 @@ bool Primitive::get_show() {
 
 
 //конструкторы класса линии получающие различные вводные
-Line::Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror) : Primitive::Primitive() {
+Line::Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror, int angle)
+        : Primitive::Primitive() {
     this->type_object = "Линия";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
+    this->angle = angle;
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
 Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int> &line_color, int hor_mirror, int vert_mirror)
+           int end_style_arrow, const std::vector<int> &line_color, int hor_mirror, int vert_mirror, int angle)
         : Primitive::Primitive() {
     this->text = text;
     this->help_text = help_text;
@@ -71,13 +73,14 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
     this->type_object = "Линия";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
+    this->angle = angle;
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
 Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
            int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
-           int font_size, const std::vector<int> &font_color, int hor_mirror, int vert_mirror)
+           int font_size, const std::vector<int> &font_color, int hor_mirror, int vert_mirror, int angle)
         : Primitive::Primitive() {
     this->text = text;
     this->help_text = help_text;
@@ -94,6 +97,7 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
     this->type_object = "Линия";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
+    this->angle = angle;
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
@@ -101,7 +105,7 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
            int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
            int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
-           bool crossed_font, int hor_mirror, int vert_mirror) : Primitive::Primitive() {
+           bool crossed_font, int hor_mirror, int vert_mirror, int angle) : Primitive::Primitive() {
     this->text = text;
     this->help_text = help_text;
     this->bool_show = bool_show;
@@ -121,17 +125,24 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
     this->type_object = "Линия";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
+    this->angle = angle;
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
 void Line::draw(QPainter &painter) {
+    painter.save();
+    painter.translate(this->get_center_cord_x(), this->get_center_cord_y());
+    painter.rotate( this->angle);
     QColor color_line = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
-    QLineF linef(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+    QLineF linef(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                 this->get_end_x() - this->get_center_cord_x(), this->get_end_y() - this->get_center_cord_y());
     switch (this->get_start_style_arrow()) {
         case 0: {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             break;
         }
         case 1: {
@@ -139,9 +150,12 @@ void Line::draw(QPainter &painter) {
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             painter.save();
-            painter.translate(this->get_st_x(), this->get_st_y());
+            painter.translate(this->get_st_x() - this->get_center_cord_x(),
+                              this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
             painter.rotate(20);
             painter.drawLine(0, 0, this->get_line_width() * 3, 0);
@@ -153,9 +167,12 @@ void Line::draw(QPainter &painter) {
         case 2: {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             painter.save();
-            painter.translate(this->get_st_x(), this->get_st_y());
+            painter.translate(this->get_st_x() - this->get_center_cord_x(),
+                              this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
             QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
                                   QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
@@ -166,18 +183,23 @@ void Line::draw(QPainter &painter) {
         case 3: {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
-            painter.drawEllipse(this->get_st_x() - this->get_line_width() / 2,
-                                this->get_st_y() - this->get_line_width() / 2,
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
+            painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
                                 this->get_line_width(), this->get_line_width());
         }
             break;
         case 4: {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             painter.save();
-            painter.translate(this->get_st_x(), this->get_st_y());
+            painter.translate(this->get_st_x() - this->get_center_cord_x(),
+                              this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
             QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
                                   QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
@@ -190,14 +212,19 @@ void Line::draw(QPainter &painter) {
         case 0:
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             break;
         case 1: {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             painter.save();
-            painter.translate(this->get_end_x(), this->get_end_y());
+            painter.translate(this->get_end_x() - this->get_center_cord_x(),
+                              this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
             painter.rotate(20);
             painter.drawLine(0, 0, this->get_line_width() * 3, 0);
@@ -209,9 +236,12 @@ void Line::draw(QPainter &painter) {
         case 2: {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             painter.save();
-            painter.translate(this->get_end_x(), this->get_end_y());
+            painter.translate(this->get_end_x() - this->get_center_cord_x(),
+                              this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
             QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
                                   QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
@@ -222,17 +252,22 @@ void Line::draw(QPainter &painter) {
         case 3:
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
-            painter.drawEllipse(this->get_end_x() - this->get_line_width() / 2,
-                                this->get_end_y() - this->get_line_width() / 2,
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
+            painter.drawEllipse(this->get_end_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                this->get_end_y() - this->get_center_cord_y() - this->get_line_width() / 2,
                                 this->get_line_width(), this->get_line_width());
             break;
         case 4: {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
-            painter.drawLine(this->get_st_x(), this->get_st_y(), this->get_end_x(), this->get_end_y());
+            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                             this->get_end_x() - this->get_center_cord_x(),
+                             this->get_end_y() - this->get_center_cord_y());
             painter.save();
-            painter.translate(this->get_end_x(), this->get_end_y());
+            painter.translate(this->get_end_x() - this->get_center_cord_x(),
+                              this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
             QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
                                   QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
@@ -242,6 +277,7 @@ void Line::draw(QPainter &painter) {
             break;
 
     }
+    painter.restore();
 }
 
 //меняет координаты начала, конца, центра линии

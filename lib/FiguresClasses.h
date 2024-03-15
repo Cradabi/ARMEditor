@@ -74,6 +74,7 @@ namespace FiguresClasses {
         int end_y = 0;                           //координата y конечной точки
         int center_x = 0;                        //координата x центральной точки
         int center_y = 0;                        //координата y центральной точки
+        int angle = 0;
 
         int font_size = 14;                      //размер шрифта
         int number_of_text = 0;                  //количество текстовых вставок
@@ -89,22 +90,22 @@ namespace FiguresClasses {
 
     public:
         //конструкторы класса линии получающие различные вводные
-        Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror);
+        Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror, int angle);
 
         Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
              bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-             int end_style_arrow, const std::vector<int> &line_color, int hor_mirror, int vert_mirror);
+             int end_style_arrow, const std::vector<int> &line_color, int hor_mirror, int vert_mirror, int angle);
 
         Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
              bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
              int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
-             int font_size, const std::vector<int> &font_color, int hor_mirror, int vert_mirror);
+             int font_size, const std::vector<int> &font_color, int hor_mirror, int vert_mirror, int angle);
 
         Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
              bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
              int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
              int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
-             bool crossed_font, int hor_mirror, int vert_mirror);
+             bool crossed_font, int hor_mirror, int vert_mirror, int angle);
 
         void draw(QPainter &painter) override;
 

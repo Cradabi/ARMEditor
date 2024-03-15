@@ -20,7 +20,7 @@ MyWidget::MyWidget() {
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    if (!parser.parse("../parser lib/schemes_exp/Изображение2.схема")) {
+    if (!parser.parse("../parser lib/schemes_exp/Мультищитовая3.схема")) {
         exit(1);
     }
 
@@ -38,7 +38,7 @@ MyWidget::MyWidget() {
     // painter->drawRect(15,15,100,100);
 
 
-    //tmp_scheme_params.objects_vector.push_back(new Line(50, 50, 100, 100));
+    //tmp_scheme_params.objects_vector.push_back(new Line(3000, 500, 3248, 692, 0, 0, 142));
 
 
     Scheme scheme(tmp_scheme_params);

@@ -236,6 +236,7 @@ namespace sop {          // Scheme Objects Params
 
         BGRColor color;
 
+        //TODO сдвинуть резурвед наеврх перед alignment
         uint8_t align_horizontal{0};
         uint8_t align_vertical{0};
 
