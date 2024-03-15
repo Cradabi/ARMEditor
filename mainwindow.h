@@ -5,6 +5,10 @@
 #include <QVBoxLayout>
 #include <QGuiApplication>
 #include <QDesktopWidget>
+#include <QTextCodec>
+
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

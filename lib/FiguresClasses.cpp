@@ -1387,7 +1387,7 @@ void TransitionButton::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(tr_b_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], this->get_text().c_str());
+                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -1629,7 +1629,7 @@ void Text::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], this->get_text().c_str());
+                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -2111,7 +2111,7 @@ void Telecontrol::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], this->get_text().c_str());
+                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -2226,7 +2226,7 @@ void Telesignalisation::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], this->get_text().c_str());
+                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -2340,7 +2340,7 @@ void Telemeasure::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], this->get_text().c_str());
+                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
