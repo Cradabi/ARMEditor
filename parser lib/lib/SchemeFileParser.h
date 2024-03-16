@@ -249,6 +249,10 @@ public:
         scheme_params = &_scheme_params;
     }
 
+    ~SchemeFileParser(){
+        delete[] buffer;
+    }
+
     // Главная функция парсера схемы
     bool parse(const std::string& schemefile_path);
 };
@@ -278,9 +282,6 @@ bool SchemeFileParser::parse(const std::string& _schemefile_path) {
     while (!sections_stack.empty()) {
         closeSection();
     }
-
-    // Очищаем буффер
-    delete[] buffer;
 
     // Закрываем файлы
     SchemeFile.close();

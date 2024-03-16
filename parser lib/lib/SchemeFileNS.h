@@ -329,7 +329,7 @@ namespace sop {          // Scheme Objects Params
         BGRColor trans_color;
         bool is_transparent{false};
 
-        uint8_t brush_style{0};
+        bool brush_style{0};
         uint8_t pen_style{0};
         uint8_t pen_width{0};
 

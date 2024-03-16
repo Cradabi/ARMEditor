@@ -20,6 +20,7 @@ private:
 
     char byte;
 
+    // TODO написать delete[] buffer;
     static constexpr uint16_t buffer_size{4096};    // Фиксированный размер буфера
     char* buffer = new char[buffer_size];           // Буффер, для работы с байтами
 
@@ -112,10 +113,11 @@ private:
             File.read(buffer, 3);
         }
 
-        color.blue = static_cast<uint8_t>(buffer[0]);
-        color.green = static_cast<uint8_t>(buffer[1]);
-        color.red = static_cast<uint8_t>(buffer[2]);
+        std::bitset<8> print_byte;
 
+        color.blue = static_cast<uint8_t>(buffer[0]);
+        color.green = static_cast<uint8_t >(buffer[1]);
+        color.red = static_cast<uint8_t >(buffer[2]);
     }
 
     void getMatrix(std::ifstream& File, std::vector<std::vector<double>>& some_matrix, uint8_t size_y, uint8_t size_x,

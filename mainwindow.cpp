@@ -30,7 +30,7 @@ MyWidget::MyWidget() {
     layout->addWidget(view);
 
     QPixmap pix(tmp_scheme_params.width, tmp_scheme_params.height);
-    pix.fill(Qt::white);
+    pix.fill(Qt::lightGray);
 
     QPainter *painter = new QPainter(&pix);
 
