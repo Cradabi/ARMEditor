@@ -132,7 +132,7 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
 void Line::draw(QPainter &painter) {
     painter.save();
     painter.translate(this->get_center_cord_x(), this->get_center_cord_y());
-    painter.rotate( this->angle);
+    painter.rotate(this->angle);
     QColor color_line = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
     QLineF linef(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                  this->get_end_x() - this->get_center_cord_x(), this->get_end_y() - this->get_center_cord_y());
@@ -977,7 +977,6 @@ CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector, int
 void CrookedLine::draw(QPainter &painter) {
     //начинаем отрисовку кривой
     painter.save();
-    painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show()) {
         if (this->get_show_filling()) {
@@ -991,8 +990,8 @@ void CrookedLine::draw(QPainter &painter) {
                      Qt::RoundJoin));
         QPoint qpoints[this->get_points().size()];
         for (int i = 0; i < this->get_points().size(); i++) {
-            qpoints[i] = QPoint(this->get_points()[i][0] - this->get_center_x(),
-                                this->get_points()[i][1] - this->get_center_y());
+            qpoints[i] = QPoint(this->get_points()[i][0],
+                                this->get_points()[i][1]);
         }
         painter.drawPolyline(qpoints, this->get_points().size());
     }
@@ -1159,7 +1158,6 @@ Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_po
 void Polygon::draw(QPainter &painter) {
     //начинаем отрисовку полигона
     painter.save();
-    painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show()) {
         if (this->get_show_filling()) {
@@ -1172,8 +1170,8 @@ void Polygon::draw(QPainter &painter) {
                             Qt::RoundJoin));
         QPoint qpoints[this->get_points().size()];
         for (int i = 0; i < this->get_points().size(); i++) {
-            qpoints[i] = QPoint(this->get_points()[i][0] - this->get_center_x(),
-                                this->get_points()[i][1] - this->get_center_y());
+            qpoints[i] = QPoint(this->get_points()[i][0],
+                                this->get_points()[i][1]);
         }
         if (this->get_end_polygon()) {
             painter.drawPolygon(qpoints, this->get_points().size());
@@ -1387,7 +1385,8 @@ void TransitionButton::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(tr_b_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+                               v_alignment_vector[this->get_vAlignment()],
+                         QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -1629,7 +1628,8 @@ void Text::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+                               v_alignment_vector[this->get_vAlignment()],
+                         QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -1902,7 +1902,6 @@ void Image::draw(QPainter &painter) {
         QRect target(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                      this->get_height());
         QRect source(0, 0, 0, 0);
-        std::cout << this->get_image_path().c_str() << "\n";
         QPixmap pixmap(this->get_image_path().c_str());
         painter.drawPixmap(target, pixmap, source);
     }
@@ -2111,7 +2110,8 @@ void Telecontrol::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+                               v_alignment_vector[this->get_vAlignment()],
+                         QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -2226,7 +2226,8 @@ void Telesignalisation::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+                               v_alignment_vector[this->get_vAlignment()],
+                         QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
@@ -2340,7 +2341,8 @@ void Telemeasure::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()], QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+                               v_alignment_vector[this->get_vAlignment()],
+                         QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
