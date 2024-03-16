@@ -328,12 +328,6 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                     break;
                 case objects_types.ptPolygon:
                     for (int i = 0; i < primitive_params.points_amount; i++) {
-                        std::cout << (int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                 primitive_params.points_vector[i].x * scale *
-                                                 primitive_params.indentity_matrix[0][0]) << " "
-                                  << (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                 primitive_params.points_vector[i].y * scale *
-                                                 primitive_params.indentity_matrix[1][1]) << '\n';
                         if ((i + 1) == primitive_params.points_amount) {
                             if (((int) round(primitive_params.points_vector[0].x * scale) ==
                                  points[0][0]) &&
@@ -362,7 +356,6 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                                           primitive_params.indentity_matrix[1][1])});
                         }
                     }
-                    std::cout << "\n";
                     scheme_params->objects_vector.emplace_back(
                             new Polygon(points, polygon_end, (int) (360 - primitive_params.primitive_angle) % 360,
                                         primitive_params.pen_width, primitive_params.pen_style, "",
@@ -748,45 +741,22 @@ void SchemeObjectParser::parsePrimitive(std::ifstream &File, sop::ObjectParams &
                                primitive_params.pen_color.blue}));
             break;
         case objects_types.ptLine:
-
-            if (object_params.coord_matrix[0][1] >= -1) {
-                scheme_params->objects_vector.emplace_back(
-                        new Line(object_params.coord_matrix[0][2] +
-                                 (int) round(primitive_params.points_vector[0].x),
-                                 object_params.coord_matrix[1][2] +
-                                 (int) round(
-                                         primitive_params.points_vector[0].y),
-                                 object_params.coord_matrix[0][2] +
-                                 (int) round(primitive_params.points_vector[1].x),
-                                 object_params.coord_matrix[1][2] +
-                                 (int) round(
-                                         primitive_params.points_vector[1].y),
-                                 primitive_params.text, object_params.hint, object_params.show,
-                                 primitive_params.pen_style, 0, primitive_params.pen_width,
-                                 primitive_params.style_start,
-                                 primitive_params.style_end,
-                                 {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                  primitive_params.pen_color.blue}, object_params.horizontal_reflection_mx,
-                                 object_params.vertical_reflection_my, object_params.angle));
-            } else {
-                scheme_params->objects_vector.emplace_back(
-                        new Line(object_params.coord_matrix[0][2] +
-                                 (int) round(primitive_params.points_vector[0].x),
-                                 object_params.coord_matrix[1][2] +
-                                 (int) round(primitive_params.points_vector[0].y),
-                                 object_params.coord_matrix[0][2] +
-                                 (int) round(primitive_params.points_vector[1].x),
-                                 object_params.coord_matrix[1][2] +
-                                 (int) round(primitive_params.points_vector[1].y),
-                                 primitive_params.text, object_params.hint, object_params.show,
-                                 primitive_params.pen_style, 0, primitive_params.pen_width,
-                                 primitive_params.style_start,
-                                 primitive_params.style_end,
-                                 {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                  primitive_params.pen_color.blue}, object_params.horizontal_reflection_mx,
-                                 object_params.vertical_reflection_my, object_params.angle));
-            }
-
+            scheme_params->objects_vector.emplace_back(
+                    new Line((int) round(object_params.coord_matrix[0][2] +
+                                         primitive_params.points_vector[0].x * object_params.coord_matrix[0][0]),
+                             (int) round(object_params.coord_matrix[1][2] +
+                                         primitive_params.points_vector[0].y * object_params.coord_matrix[0][0]),
+                             (int) round(object_params.coord_matrix[0][2] +
+                                         primitive_params.points_vector[1].x * object_params.coord_matrix[0][0]),
+                             (int) round(object_params.coord_matrix[1][2] +
+                                         primitive_params.points_vector[1].y * object_params.coord_matrix[0][0]),
+                             primitive_params.text, object_params.hint, object_params.show,
+                             primitive_params.pen_style, 0, primitive_params.pen_width,
+                             primitive_params.style_start,
+                             primitive_params.style_end,
+                             {primitive_params.pen_color.red, primitive_params.pen_color.green,
+                              primitive_params.pen_color.blue}, object_params.horizontal_reflection_mx,
+                             object_params.vertical_reflection_my, object_params.angle));
             break;
         case objects_types.ptText:
             scheme_params->objects_vector.emplace_back(
