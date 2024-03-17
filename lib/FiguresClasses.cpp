@@ -1616,11 +1616,16 @@ void Text::draw(QPainter &painter) {
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
         }
-        QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
-        painter.setPen(QPen(color_rect, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
-                            Qt::RoundJoin));
-        painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
-                         this->get_height());
+//        QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
+//        QPen pen;
+//        pen.setStyle(style_vector[this->get_style_line()]);
+//        pen.setWidth(this->get_line_width());
+//        pen.setCapStyle(Qt::RoundCap);
+//        pen.setJoinStyle(Qt::RoundJoin);
+//        painter.setPen(pen);
+//         pen.setColor(color_rect);
+//        painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
+//                         this->get_height());
         QRect rect = QRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(),
                            this->get_width(),
                            this->get_height());
