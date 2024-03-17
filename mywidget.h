@@ -2,6 +2,8 @@
 
 #pragma once
 
+
+
 class MyWidget : public QFrame {
 Q_OBJECT
 public:
