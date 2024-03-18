@@ -727,6 +727,10 @@ void Ellipse::draw(QPainter &painter) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
             painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
         }
         painter.setPen(QPen(color_el, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
                             Qt::RoundJoin));
@@ -1168,6 +1172,10 @@ void Polygon::draw(QPainter &painter) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
             painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
         }
         QColor color_poly = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
         painter.setPen(QPen(color_poly, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
@@ -1223,6 +1231,10 @@ void TransitionPoint::draw(QPainter &painter) {
         if (this->get_show_filling()) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
         }
@@ -1375,6 +1387,10 @@ void TransitionButton::draw(QPainter &painter) {
         if (this->get_show_filling()) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
         }
@@ -2110,6 +2126,10 @@ void Telecontrol::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
         }
         QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
         painter.setPen(QPen(color_rect, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
@@ -2226,6 +2246,10 @@ void Telesignalisation::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
         }
         QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
         painter.setPen(QPen(color_rect, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
@@ -2339,6 +2363,10 @@ void Telemeasure::draw(QPainter &painter) {
         if (this->get_show_filling()) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
+        }else{
+            QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
         }
