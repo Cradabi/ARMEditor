@@ -41,5 +41,7 @@ private slots:
     void slot_change_panel_visibility();
 
     void resizeEvent(QResizeEvent* event);
+
+    void slot_open_file_manager();
 };
 #endif // MAINWINDOW_H

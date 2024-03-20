@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QMenu>
+#include <QFileDialog>
 
 int counter = 0;
 
@@ -155,6 +156,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
     connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));
+    connect(ui->action_open, SIGNAL(triggered(bool)), this, SLOT(slot_open_file_manager()));
 
     //connect(ui->menu_file, SIGNAL(hovered()), this, SLOT(slot_menu_hover()));
 
@@ -189,3 +191,11 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
                                        50); // Почему то центральный виджет (главный контейнер) обрезает все содержимое в самом низу
     ui->verticalLayoutWidget->setGeometry(rect);
 }
+
+void MainWindow::slot_open_file_manager(){
+    QString fileName = QFileDialog::getOpenFileName(this, ("Выберите файл .схема"),
+                                                    "..",
+                                                    ("*.схема"));
+    std::string filepath = fileName.toStdString();
+}
+
