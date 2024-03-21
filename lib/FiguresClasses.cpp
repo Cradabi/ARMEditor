@@ -148,8 +148,6 @@ void Line::draw(QPainter &painter) {
         case 1: {
             painter.setPen(
                     QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
@@ -157,10 +155,17 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_st_x() - this->get_center_cord_x(),
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
-            painter.rotate(20);
-            painter.drawLine(0, 0, this->get_line_width() * 3, 0);
-            painter.rotate(-40);
-            painter.drawLine(0, 0, this->get_line_width() * 3, 0);
+            if (this->get_line_width() == 1) {
+                painter.rotate(15);
+                painter.drawLine(0, 0, this->get_line_width() * 10, 0);
+                painter.rotate(-30);
+                painter.drawLine(0, 0, this->get_line_width() * 10, 0);
+            } else {
+                painter.rotate(15);
+                painter.drawLine(0, 0, this->get_line_width() * 5, 0);
+                painter.rotate(-30);
+                painter.drawLine(0, 0, this->get_line_width() * 5, 0);
+            }
             painter.restore();
         }
             break;
@@ -174,9 +179,16 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_st_x() - this->get_center_cord_x(),
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
-            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
-                                  QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
-            painter.drawPolygon(qpoints1, 3);
+            painter.setBrush(color_line);
+            if (this->get_line_width() == 1) {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 6, this->get_line_width() / 2),
+                                      QPoint(this->get_line_width() * 6, (-1) * (this->get_line_width() / 2))};
+                painter.drawPolygon(qpoints1, 3);
+            } else {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
+                                      QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
+                painter.drawPolygon(qpoints1, 3);
+            }
             painter.restore();
         }
             break;
@@ -186,9 +198,17 @@ void Line::draw(QPainter &painter) {
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
-            painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
-                                this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
-                                this->get_line_width(), this->get_line_width());
+            painter.setBrush(color_line);
+            if (this->get_line_width() == 1) {
+                painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                    this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
+                                    this->get_line_width() * 2, this->get_line_width() * 2);
+            } else {
+                painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                    this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
+                                    this->get_line_width(), this->get_line_width());
+            }
+
         }
             break;
         case 4: {
@@ -201,9 +221,17 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_st_x() - this->get_center_cord_x(),
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
-            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
-                                  QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
-            painter.drawPolygon(qpoints1, 3);
+            painter.setBrush(color_line);
+            if (this->get_line_width() == 1) {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() * 3),
+                                      QPoint(this->get_line_width() * 3, (-3) * (this->get_line_width()))};
+                painter.drawPolygon(qpoints1, 3);
+            } else {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
+                                      QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
+                painter.drawPolygon(qpoints1, 3);
+            }
+
             painter.restore();
         }
             break;
@@ -226,10 +254,18 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_end_x() - this->get_center_cord_x(),
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
-            painter.rotate(20);
-            painter.drawLine(0, 0, this->get_line_width() * 3, 0);
-            painter.rotate(-40);
-            painter.drawLine(0, 0, this->get_line_width() * 3, 0);
+            if (this->get_line_width() == 1) {
+                painter.rotate(15);
+                painter.drawLine(0, 0, this->get_line_width() * 10, 0);
+                painter.rotate(-30);
+                painter.drawLine(0, 0, this->get_line_width() * 10, 0);
+            } else {
+                painter.rotate(15);
+                painter.drawLine(0, 0, this->get_line_width() * 5, 0);
+                painter.rotate(-30);
+                painter.drawLine(0, 0, this->get_line_width() * 5, 0);
+            }
+
             painter.restore();
         }
             break;
@@ -243,9 +279,16 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_end_x() - this->get_center_cord_x(),
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
-            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
-                                  QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
-            painter.drawPolygon(qpoints1, 3);
+            painter.setBrush(color_line);
+            if (this->get_line_width() == 1) {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 6, this->get_line_width() / 2),
+                                      QPoint(this->get_line_width() * 6, (-1) * (this->get_line_width() / 2))};
+                painter.drawPolygon(qpoints1, 3);
+            } else {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
+                                      QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
+                painter.drawPolygon(qpoints1, 3);
+            }
             painter.restore();
         }
             break;
@@ -255,9 +298,16 @@ void Line::draw(QPainter &painter) {
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
-            painter.drawEllipse(this->get_end_x() - this->get_center_cord_x() - this->get_line_width() / 2,
-                                this->get_end_y() - this->get_center_cord_y() - this->get_line_width() / 2,
-                                this->get_line_width(), this->get_line_width());
+            painter.setBrush(color_line);
+            if (this->get_line_width() == 1) {
+                painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                    this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
+                                    this->get_line_width() * 2, this->get_line_width() * 2);
+            } else {
+                painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                    this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
+                                    this->get_line_width(), this->get_line_width());
+            }
             break;
         case 4: {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
@@ -269,9 +319,16 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_end_x() - this->get_center_cord_x(),
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
-            QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
-                                  QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
-            painter.drawPolygon(qpoints1, 3);
+            painter.setBrush(color_line);
+            if (this->get_line_width() == 1) {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() * 3),
+                                      QPoint(this->get_line_width() * 3, (-3) * (this->get_line_width()))};
+                painter.drawPolygon(qpoints1, 3);
+            } else {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
+                                      QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
+                painter.drawPolygon(qpoints1, 3);
+            }
             painter.restore();
         }
             break;
@@ -727,7 +784,7 @@ void Ellipse::draw(QPainter &painter) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1172,7 +1229,7 @@ void Polygon::draw(QPainter &painter) {
             QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
                                     this->get_filling_color()[2]};
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1233,7 +1290,7 @@ void TransitionPoint::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1389,7 +1446,7 @@ void TransitionButton::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1647,7 +1704,7 @@ void Text::draw(QPainter &painter) {
         pen.setCapStyle(Qt::RoundCap);
         pen.setJoinStyle(Qt::RoundJoin);
         painter.setPen(pen);
-         pen.setColor(color_rect);
+        pen.setColor(color_rect);
         painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                          this->get_height());
         QRect rect = QRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(),
@@ -2126,7 +2183,7 @@ void Telecontrol::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -2246,7 +2303,7 @@ void Telesignalisation::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -2365,7 +2422,7 @@ void Telemeasure::draw(QPainter &painter) {
                                     this->get_filling_color()[2]};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        }else{
+        } else {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
