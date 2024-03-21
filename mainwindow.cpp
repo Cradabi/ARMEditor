@@ -12,16 +12,16 @@
 int counter = 0;
 
 MyWidget::MyWidget() {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    QGraphicsView *view = new QGraphicsView(scene);
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->layout = new QVBoxLayout(this);
+    this->scene = new QGraphicsScene(this);
+    this->view = new QGraphicsView(scene);
+    this->view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
-    if (!parser.parse("../parser lib/schemes_exp/Мультищитовая3.схема")) {
+    if (!parser.parse("../parser lib/schemes_exp/emptyscheme.схема")) {
         exit(1);
     }
 
@@ -145,11 +145,45 @@ void MyWidget::paintEvent(QPaintEvent* event) {
     std::cout << ++counter << '\n';
 } */
 
+void MyWidget::draw_new_scheme(const std::string &filepath) {
+    std::cout << 1 << '\n';
+    Scheme::SchemeParams tmp_scheme_params;
+
+    SchemeFileParser parser(tmp_scheme_params);
+    if (!parser.parse(filepath)) {
+        exit(1);
+    }
+
+    this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
+
+    view->resize(tmp_scheme_params.width, tmp_scheme_params.height);
+    layout->addWidget(view);
+
+    QPixmap pix(tmp_scheme_params.width, tmp_scheme_params.height);
+    pix.fill(Qt::lightGray);
+
+    QPainter *painter = new QPainter(&pix);
+
+    //painter->setPen(QColor(255, 34, 255, 255));
+    // painter->drawRect(15,15,100,100);
+
+
+    //tmp_scheme_params.objects_vector.push_back(new Line(3000, 500, 3248, 692, 0, 0, 142));
+
+
+    Scheme scheme(tmp_scheme_params);
+    std::string text2 = "";
+    std::vector<int> col2 = {255, 0, 0};
+    scheme.draw_scheme(*painter);
+    delete painter;
+    scene->addPixmap(pix);
+}
+
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    MyWidget *widget = new MyWidget();
+    this->widget = new MyWidget();
     ui->scrollArea->setWidget(widget);
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
@@ -192,10 +226,12 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
     ui->verticalLayoutWidget->setGeometry(rect);
 }
 
-void MainWindow::slot_open_file_manager(){
+void MainWindow::slot_open_file_manager() {
     QString fileName = QFileDialog::getOpenFileName(this, ("Выберите файл .схема"),
                                                     "..",
                                                     ("*.схема"));
     std::string filepath = fileName.toStdString();
+    std::cout << filepath << '\n';
+    this->widget->draw_new_scheme(filepath);
 }
 

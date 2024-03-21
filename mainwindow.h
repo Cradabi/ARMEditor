@@ -6,6 +6,7 @@
 #include <QGuiApplication>
 #include <QDesktopWidget>
 #include <QTextCodec>
+#include "mywidget.h"
 
 
 
@@ -19,6 +20,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    MyWidget *widget;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
