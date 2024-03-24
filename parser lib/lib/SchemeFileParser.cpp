@@ -83,23 +83,29 @@ void SchemeFileParser::parseSchm() {
                     break;
                 case schm_data.bg_color_flag:
                     SchemeFile.read(buffer, block_size);
+                    scheme_params->bgColor.blue = static_cast<uint8_t>(buffer[0]);
+                    scheme_params->bgColor.green = static_cast<uint8_t>(buffer[1]);
+                    scheme_params->bgColor.red = static_cast<uint8_t>(buffer[2]);
                     lae::WriteLog(LogsFile, "bg_color: ");
                     lae::WriteLog(LogsFile, "b: ");
-                    lae::WriteLog(LogsFile, NULL);
+                    lae::WriteLog(LogsFile, (int)scheme_params->bgColor.blue);
                     lae::WriteLog(LogsFile, " g: ");
-                    lae::WriteLog(LogsFile, NULL);
+                    lae::WriteLog(LogsFile, (int)scheme_params->bgColor.green);
                     lae::WriteLog(LogsFile, " r: ");
-                    lae::WriteLog(LogsFile, NULL, true);
+                    lae::WriteLog(LogsFile, (int)scheme_params->bgColor.red, true);
                     break;
                 case schm_data.net_color_flag:
                     SchemeFile.read(buffer, block_size);
-                    lae::WriteLog(LogsFile, "net_color: ");
+                    scheme_params->setColor.blue = static_cast<uint8_t>(buffer[0]);
+                    scheme_params->setColor.green = static_cast<uint8_t>(buffer[1]);
+                    scheme_params->setColor.red = static_cast<uint8_t>(buffer[2]);
+                    lae::WriteLog(LogsFile, "setColor: ");
                     lae::WriteLog(LogsFile, "b: ");
-                    lae::WriteLog(LogsFile, NULL);
+                    lae::WriteLog(LogsFile, (int)scheme_params->setColor.blue);
                     lae::WriteLog(LogsFile, " g: ");
-                    lae::WriteLog(LogsFile, NULL);
+                    lae::WriteLog(LogsFile, (int)scheme_params->setColor.green);
                     lae::WriteLog(LogsFile, " r: ");
-                    lae::WriteLog(LogsFile, NULL, true);
+                    lae::WriteLog(LogsFile, (int)scheme_params->setColor.red, true);
                     break;
                 case schm_data.BitDepth_flag:
                     SchemeFile.get(byte);

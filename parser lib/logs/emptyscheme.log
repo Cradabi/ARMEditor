@@ -9,8 +9,8 @@ DBIP: 127.0.0.1
 width: 15360
 height: 1200
 work_scale: 0
-bg_color: b: 0 g: 0 r: 0
-net_color: b: 0 g: 0 r: 0
+bg_color: b: 255 g: 255 r: 255
+setColor: b: 192 g: 192 r: 192
 BitDepth: 0
 count_of_objects: 4607182418800017408
 windowsSize_x: 0

@@ -20,9 +20,8 @@ private:
 
     char byte;
 
-    // TODO написать delete[] buffer;
     static constexpr uint16_t buffer_size{4096};    // Фиксированный размер буфера
-    char* buffer = new char[buffer_size];           // Буффер, для работы с байтами
+    char buffer[buffer_size];                       // Буффер, для работы с байтами
 
     std::ofstream LogsFile;        // Файл логов
     std::ifstream SchemeFile;      // Файл схемы

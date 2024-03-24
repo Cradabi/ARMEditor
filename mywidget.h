@@ -8,13 +8,19 @@
 class MyWidget : public QFrame {
 Q_OBJECT
 public:
-    QVBoxLayout *layout;
-    QGraphicsScene *scene;
-    QGraphicsView *view;
+    QVBoxLayout* layout;
+    QGraphicsScene* scene;
+    QGraphicsView* view;
 
     MyWidget();
 
-    void draw_new_scheme(const std::string &filepath);
+    ~MyWidget(){
+        delete layout;
+        delete scene;
+        delete view;
+    };
+
+    void draw_new_scheme(const std::string& filepath);
 
 private:
     //void paintEvent(QPaintEvent* event);

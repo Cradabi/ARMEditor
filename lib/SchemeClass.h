@@ -6,6 +6,12 @@
 class Scheme {
 public:
 
+    struct Color{
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
+    };
+
     struct SchemeParams {
         int width{0};
         int height{0};
@@ -16,13 +22,16 @@ public:
         int objects_amount{0};
         int groups_amount{0};
 
+        Color bgColor;
+        Color setColor;
+
         std::string name_scheme = std::string();    // Конструктор пустой строки ("")
         std::string file_path = std::string();
         std::string name_bd = std::string();
         std::string server = std::string();
 
         std::vector<FiguresClasses::Primitive *> objects_vector;
-        FiguresClasses::Set set_object = Set(1, 1, 1, 128, 128, 64, 64, 16, 16, 1, {200, 200, 200});
+        FiguresClasses::Set set_object;
     };
 
 private:
@@ -36,6 +45,7 @@ public:
     // Конструктор схемы с заданными параметрами
     Scheme(const SchemeParams &input_params) {
         actual_params = input_params;
+        actual_params.set_object = Set(1, 1, 1, 128, 128, 64, 64, 16, 16, 1, {actual_params.setColor.red, actual_params.setColor.green, actual_params.setColor.blue});
     }
 
     ~Scheme();
