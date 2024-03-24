@@ -180,15 +180,15 @@ void Line::draw(QPainter &painter) {
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
             painter.setBrush(color_line);
-            if (this->get_line_width() == 1) {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 6, this->get_line_width() / 2),
-                                      QPoint(this->get_line_width() * 6, (-1) * (this->get_line_width() / 2))};
-                painter.drawPolygon(qpoints1, 3);
-            } else {
+            if (this->get_line_width() * 3 >= 10 && this->get_line_width() / 2 >= 4) {
                 QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
                                       QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
                 painter.drawPolygon(qpoints1, 3);
+            } else {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(10, 4), QPoint(10, -4)};
+                painter.drawPolygon(qpoints1, 3);
             }
+
             painter.restore();
         }
             break;
@@ -280,13 +280,12 @@ void Line::draw(QPainter &painter) {
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
             painter.setBrush(color_line);
-            if (this->get_line_width() == 1) {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 6, this->get_line_width() / 2),
-                                      QPoint(this->get_line_width() * 6, (-1) * (this->get_line_width() / 2))};
-                painter.drawPolygon(qpoints1, 3);
-            } else {
+            if (this->get_line_width() * 3 >= 10 && this->get_line_width() / 2 >= 4) {
                 QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
                                       QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
+                painter.drawPolygon(qpoints1, 3);
+            } else {
+                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(10, 4), QPoint(10, -4)};
                 painter.drawPolygon(qpoints1, 3);
             }
             painter.restore();
