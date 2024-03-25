@@ -200,6 +200,7 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
     sop::PrimitiveParams primitive_params;
     std::vector<std::vector<Primitive *>> patterns;
     double scale = lib_object_params.coord_matrix[0][0];
+    std::cout << scale << '\n';
     for (uint16_t _state = 0; _state < actual_object_params.states_amount; ++_state) {
         std::vector<Primitive *> primitives_in_pattern = {};
 //        for (int w = 0; w < actual_object_params.glue_points_amount; w++) {
@@ -299,7 +300,6 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                       primitive_params.pen_color.blue}, 0, 0, primitive_params.primitive_angle));
                     break;
                 case objects_types.ptText:
-
                     primitives_in_pattern.push_back(
                             new Text((int) round(primitive_params.indentity_matrix[0][2] * scale +
                                                  primitive_params.points_vector[0].x * scale *
@@ -319,7 +319,7 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                       primitive_params.brush_color.green,
                                       primitive_params.brush_color.blue}, primitive_params.show,
                                      primitive_params.brush_style,
-                                     primitive_params.font.name, primitive_params.font.size,
+                                     primitive_params.font.name, (int) round(primitive_params.font.size * scale),
                                      {primitive_params.font.color.red, primitive_params.font.color.green,
                                       primitive_params.font.color.blue}, primitive_params.font.align_vertical,
                                      primitive_params.font.reserved, primitive_params.font.is_bold,
@@ -459,7 +459,7 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                              primitive_params.brush_color.green,
                                              primitive_params.brush_color.blue}, primitive_params.show,
                                             primitive_params.brush_style,
-                                            primitive_params.font.name, primitive_params.font.size,
+                                            primitive_params.font.name, (int) round(primitive_params.font.size * scale),
                                             {primitive_params.font.color.red, primitive_params.font.color.green,
                                              primitive_params.font.color.blue},
                                             primitive_params.font.align_vertical,
@@ -490,7 +490,7 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                              primitive_params.brush_color.green,
                                              primitive_params.brush_color.blue}, primitive_params.show,
                                             primitive_params.brush_style,
-                                            primitive_params.font.name, primitive_params.font.size,
+                                            primitive_params.font.name, (int) round(primitive_params.font.size * scale),
                                             {primitive_params.font.color.red, primitive_params.font.color.green,
                                              primitive_params.font.color.blue},
                                             primitive_params.font.align_vertical,
@@ -521,7 +521,8 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                                    primitive_params.brush_color.green,
                                                    primitive_params.brush_color.blue}, primitive_params.show,
                                                   primitive_params.brush_style,
-                                                  primitive_params.font.name, primitive_params.font.size,
+                                                  primitive_params.font.name,
+                                                  (int) round(primitive_params.font.size * scale),
                                                   {primitive_params.font.color.red,
                                                    primitive_params.font.color.green,
                                                    primitive_params.font.color.blue},
@@ -1227,46 +1228,46 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams &primit
     }
 
     lae::WriteLog(LogsFile, "primitive_type: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.primitive_type, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.primitive_type, true);
 
     lae::WriteLog(LogsFile, "ti_style: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.ti_style, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.ti_style, true);
 
     lae::WriteLog(LogsFile, "pen_color: ", true);
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.pen_color.red, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.pen_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.pen_color.green, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.pen_color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.pen_color.blue, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.pen_color.blue, true);
 
     lae::WriteLog(LogsFile, "brush_color: ", true);
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.brush_color.red, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.brush_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.brush_color.green, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.brush_color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.brush_color.blue, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.brush_color.blue, true);
 
     lae::WriteLog(LogsFile, "trans_color: ");
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.trans_color.red, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.trans_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.trans_color.green, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.trans_color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.trans_color.blue, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.trans_color.blue, true);
 
     lae::WriteLog(LogsFile, "is_transparent: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.is_transparent, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.is_transparent, true);
 
     lae::WriteLog(LogsFile, "brush_style: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.brush_style, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.brush_style, true);
 
     lae::WriteLog(LogsFile, "pen_style: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.pen_style, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.pen_style, true);
 
     lae::WriteLog(LogsFile, "pen_width: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.pen_width, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.pen_width, true);
 
     lae::WriteLog(LogsFile, "text_length: ");
     lae::WriteLog(LogsFile, primitive_params.text_length, true);
@@ -1368,10 +1369,10 @@ void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams &primitive_par
     lae::WriteLog(LogsFile, (int) primitive_params.font.color.blue, true);
 
     lae::WriteLog(LogsFile, "align_horizontal: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.font.align_horizontal, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.font.align_horizontal, true);
 
     lae::WriteLog(LogsFile, "align_vertical: ");
-    lae::WriteLog(LogsFile, (int)primitive_params.font.align_vertical, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.font.align_vertical, true);
 
     lae::WriteLog(LogsFile, "reserved: ");
     lae::WriteLog(LogsFile, primitive_params.font.reserved, true);
