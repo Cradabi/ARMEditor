@@ -1,0 +1,10 @@
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/ARM.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/figures.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/parser.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/bmp_file.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/edit_cache.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/rebuild_cache.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/ARM_autogen.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/figures_autogen.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/parser_autogen.dir
+/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/bmp_file_autogen.dir

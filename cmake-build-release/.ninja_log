@@ -1,0 +1,17 @@
+# ninja log v5
+1	243	0	ARM_autogen/mocs_compilation.cpp	c11bdad77f6da42a
+1	243	0	/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/ARM_autogen	c11bdad77f6da42a
+243	2732	1711439481315976360	CMakeFiles/ARM.dir/main.cpp.o	2b0db7d425b1342f
+1	243	0	CMakeFiles/ARM_autogen	c11bdad77f6da42a
+1	243	0	ARM_autogen/include/ui_mainwindow.h	c11bdad77f6da42a
+1	243	0	/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/ARM_autogen/include/ui_mainwindow.h	c11bdad77f6da42a
+1	243	0	/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/ARM_autogen/mocs_compilation.cpp	c11bdad77f6da42a
+9707	10069	1711439488651976260	ARM	493574df1084c7a0
+246	9706	1711439488291976265	CMakeFiles/ARM.dir/mainwindow.cpp.o	fef61e288a0395d0
+243	2751	1711439481335976359	CMakeFiles/ARM.dir/ARM_autogen/mocs_compilation.cpp.o	cbebd637122847ce
+2	9	0	CMakeFiles/ARM_autogen	c11bdad77f6da42a
+2	9	0	ARM_autogen/mocs_compilation.cpp	c11bdad77f6da42a
+2	9	0	ARM_autogen/include/ui_mainwindow.h	c11bdad77f6da42a
+2	9	0	/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/CMakeFiles/ARM_autogen	c11bdad77f6da42a
+2	9	0	/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/ARM_autogen/mocs_compilation.cpp	c11bdad77f6da42a
+2	9	0	/home/chekhov/Документы/GitHub/ARMEditor/cmake-build-release/ARM_autogen/include/ui_mainwindow.h	c11bdad77f6da42a
