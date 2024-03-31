@@ -51,6 +51,10 @@ private:
     // Стек открытых секций
     std::vector<Section> sections_stack;
 
+    const std::string file_format{"схема"};
+
+    bool check_scheme_version = false;
+
     char byte;      // Переменная для работы с байтами
 
     static constexpr uint16_t buffer_size{4096};    // Фиксированный размер буфера
@@ -65,9 +69,18 @@ private:
     template<typename IntType>
     IntType getSomeInt(IntType some_int, const uint8_t int_size, const bool is_buffer_filled = false) {
 
+
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
             SchemeFile.read(buffer, int_size);
+        }
+        if (int_size == 1){
+            buffer[1] = 0;
+            buffer[2] = 0;
+            buffer[3] = 0;
+        } else if (int_size == 2){
+            buffer[2] = 0;
+            buffer[3] = 0;
         }
 
         some_int = *reinterpret_cast<IntType*>(buffer);
@@ -116,7 +129,7 @@ private:
     }
 
     // Функция чтения заголовка секции схемы
-    void enterSection() {
+    bool enterSection() {
         // Новый экземпляр структуры секции
         Section new_section;
 
@@ -149,6 +162,14 @@ private:
             new_section.sect_name = std::to_string(getSomeInt(tmp_section_name, 4, true));
         }
 
+        if(!check_scheme_version){
+            if (new_section.sect_name != "ARM "){
+                lae::PrintLog("Старая версия схемы", true);
+                return false;
+            }
+            check_scheme_version = true;
+        }
+
         // Запоминаем стартовую позицию секции
         new_section.start_pos = SchemeFile.tellg();
 
@@ -167,6 +188,7 @@ private:
 
         // Вызываем функцию парса содержимого секции
         parseSectionData();
+        return true;
     }
 
     // Функция для парса информации секции
@@ -234,7 +256,7 @@ private:
             return false;
         }
 
-        lae::PrintLog("Парсер схемы: Файлы схемы и логов успешно открыты", true, 2);
+        lae::PrintLog("Парсер схемы: Файлы схемы и логов открыты", true, 2);
 
         getFileSize();
 
@@ -258,6 +280,13 @@ public:
 };
 
 bool SchemeFileParser::parse(const std::string& _schemefile_path) {
+
+    size_t filename_end_index = _schemefile_path.rfind('.')+1;
+    std::string file_format_check_string = _schemefile_path.substr(filename_end_index);
+    if (file_format_check_string != file_format){
+        lae::PrintLog("Неправильный формат файла", true);
+        return false;
+    }
     schemefile_path = _schemefile_path;
 
     if (!openWorkFiles())
@@ -273,8 +302,12 @@ bool SchemeFileParser::parse(const std::string& _schemefile_path) {
         }
 
         // Если обнаружили флаг секции, открываем её
-        if (byte == scheme_flags.section_flag)
-            enterSection();
+        if (byte == scheme_flags.section_flag){
+            if (!enterSection()){
+                return false;
+            }
+        }
+
 
     }
 

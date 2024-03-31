@@ -24,7 +24,7 @@ void MyWidget::draw_new_scheme(const std::string& filepath) {
 
     SchemeFileParser parser(tmp_scheme_params);
     if (!parser.parse(filepath)) {
-        exit(1);
+        parser.parse("../parser lib/schemes_exp/emptyscheme.схема");
     }
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
