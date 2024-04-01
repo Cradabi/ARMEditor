@@ -1668,21 +1668,29 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string &te
 }
 
 void Text::draw(QPainter &painter) {
-    //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
     text_font.setUnderline(this->get_underlined_font());
-    text_font.setStrikeOut(this->get_crossed_font());
-    if (this->get_auto_size_text()) {
-        QFontMetrics fm(text_font);
-        int pxwidth = fm.width(this->get_text().c_str());
-        int pxheight = fm.height();
-        this->change_center_cords(this->get_x(),
+    QFontMetrics fm(text_font);
+    QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+    int pxwidth = fm.horizontalAdvance(text_to_measure);
+    int pxheight = fm.height();
+    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
+                                  this->get_center_y() - pxheight / 2, pxwidth,
+                                  pxheight);
+    } else if (pxwidth > this->get_width()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
+                                  this->get_height());
+    } else if (pxheight > this->get_height()) {
+        this->change_center_cords(this->get_x(),
+                                  this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
     }
+
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show()) {
@@ -2159,21 +2167,29 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
 }
 
 void Telecontrol::draw(QPainter &painter) {
-    //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
     text_font.setUnderline(this->get_underlined_font());
-    text_font.setStrikeOut(this->get_crossed_font());
-    if (this->get_auto_size_text()) {
-        QFontMetrics fm(text_font);
-        int pxwidth = fm.width(this->get_text().c_str());
-        int pxheight = fm.height();
-        this->change_center_cords(this->get_x(),
+    QFontMetrics fm(text_font);
+    QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+    int pxwidth = fm.horizontalAdvance(text_to_measure);
+    int pxheight = fm.height();
+    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
+                                  this->get_center_y() - pxheight / 2, pxwidth,
+                                  pxheight);
+    } else if (pxwidth > this->get_width()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
+                                  this->get_height());
+    } else if (pxheight > this->get_height()) {
+        this->change_center_cords(this->get_x(),
+                                  this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
     }
+
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show()) {
@@ -2188,8 +2204,13 @@ void Telecontrol::draw(QPainter &painter) {
             painter.setBrush(filling_color);
         }
         QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
-        painter.setPen(QPen(color_rect, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
-                            Qt::RoundJoin));
+        QPen pen;
+        pen.setStyle(style_vector[this->get_style_line()]);
+        pen.setWidth(this->get_line_width());
+        pen.setCapStyle(Qt::RoundCap);
+        pen.setJoinStyle(Qt::RoundJoin);
+        painter.setPen(pen);
+        pen.setColor(color_rect);
         painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                          this->get_height());
         QRect rect = QRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(),
@@ -2279,21 +2300,29 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
 }
 
 void Telesignalisation::draw(QPainter &painter) {
-    //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
     text_font.setUnderline(this->get_underlined_font());
-    text_font.setStrikeOut(this->get_crossed_font());
-    if (this->get_auto_size_text()) {
-        QFontMetrics fm(text_font);
-        int pxwidth = fm.width(this->get_text().c_str());
-        int pxheight = fm.height();
-        this->change_center_cords(this->get_x(),
+    QFontMetrics fm(text_font);
+    QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+    int pxwidth = fm.horizontalAdvance(text_to_measure);
+    int pxheight = fm.height();
+    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
+                                  this->get_center_y() - pxheight / 2, pxwidth,
+                                  pxheight);
+    } else if (pxwidth > this->get_width()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
+                                  this->get_height());
+    } else if (pxheight > this->get_height()) {
+        this->change_center_cords(this->get_x(),
+                                  this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
     }
+
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show()) {
@@ -2308,8 +2337,13 @@ void Telesignalisation::draw(QPainter &painter) {
             painter.setBrush(filling_color);
         }
         QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
-        painter.setPen(QPen(color_rect, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
-                            Qt::RoundJoin));
+        QPen pen;
+        pen.setStyle(style_vector[this->get_style_line()]);
+        pen.setWidth(this->get_line_width());
+        pen.setCapStyle(Qt::RoundCap);
+        pen.setJoinStyle(Qt::RoundJoin);
+        painter.setPen(pen);
+        pen.setColor(color_rect);
         painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                          this->get_height());
         QRect rect = QRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(),
@@ -2398,21 +2432,29 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
 }
 
 void Telemeasure::draw(QPainter &painter) {
-    //начало отрисовки текста
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
     text_font.setUnderline(this->get_underlined_font());
-    text_font.setStrikeOut(this->get_crossed_font());
-    if (this->get_auto_size_text()) {
-        QFontMetrics fm(text_font);
-        int pxwidth = fm.width(this->get_text().c_str());
-        int pxheight = fm.height();
-        this->change_center_cords(this->get_x(),
+    QFontMetrics fm(text_font);
+    QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
+    int pxwidth = fm.horizontalAdvance(text_to_measure);
+    int pxheight = fm.height();
+    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
+                                  this->get_center_y() - pxheight / 2, pxwidth,
+                                  pxheight);
+    } else if (pxwidth > this->get_width()) {
+        this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
+                                  this->get_height());
+    } else if (pxheight > this->get_height()) {
+        this->change_center_cords(this->get_x(),
+                                  this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
     }
+
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show()) {
@@ -2427,8 +2469,13 @@ void Telemeasure::draw(QPainter &painter) {
             painter.setBrush(filling_color);
         }
         QColor color_rect = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
-        painter.setPen(QPen(color_rect, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
-                            Qt::RoundJoin));
+        QPen pen;
+        pen.setStyle(style_vector[this->get_style_line()]);
+        pen.setWidth(this->get_line_width());
+        pen.setCapStyle(Qt::RoundCap);
+        pen.setJoinStyle(Qt::RoundJoin);
+        painter.setPen(pen);
+        pen.setColor(color_rect);
         painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                          this->get_height());
         QRect rect = QRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(),
