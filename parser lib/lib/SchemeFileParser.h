@@ -164,7 +164,8 @@ private:
 
         if(!check_scheme_version){
             if (new_section.sect_name != "ARM "){
-                lae::PrintLog("Старая версия схемы", true);
+                lae::PrintLog("Старая версия схемы", true, 12);
+                lae::PrintLog("Открываю пустую схему", true, 12);
                 return false;
             }
             check_scheme_version = true;
