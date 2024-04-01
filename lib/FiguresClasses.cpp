@@ -6,7 +6,7 @@ using namespace FiguresClasses;
 Primitive::Primitive() {}
 
 void Primitive::draw(QPainter &painter) {
-    std::cout << 1 << "\n";
+    ;
 }
 
 void Primitive::set_help_text(const std::string &help) {

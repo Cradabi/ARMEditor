@@ -79,6 +79,7 @@ private:
             File.read(buffer, int_size);
         }
 
+
         some_int = *reinterpret_cast<IntType*>(buffer);
 
         return some_int;

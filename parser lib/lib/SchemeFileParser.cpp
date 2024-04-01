@@ -431,11 +431,15 @@ void SchemeFileParser::parseObject() {
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
+        int32_t lib_index = 0;
 
+        if(block_size!=1){
+            SchemeFile.seekg(sections_stack.back().start_pos+sections_stack.back().sect_size);
+            return;
+        }
         SchemeFile.get(byte);
         bool tmp_bool = static_cast<bool>(byte);
 
-        int32_t lib_index = 0;
         if (tmp_bool) {
             SchemeFile.get(byte);
             // Получаем размер блока
@@ -446,6 +450,10 @@ void SchemeFileParser::parseObject() {
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
+
+
+
+
         printBlockData(block_size);
 
         SchemeFile.get(byte);
@@ -485,8 +493,8 @@ void SchemeFileParser::parseSectionData() {
         parseExtd();
     else if (sections_stack.back().sect_name == "sch2")
         parseSch2();
-//    else if (sections_stack.back().sect_name == "font")
-//        parseFont();
+    else if (sections_stack.back().sect_name == "font")
+        parseUnknown();
     else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "objs")
         parseObject();
     else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "cach") {
@@ -497,12 +505,15 @@ void SchemeFileParser::parseSectionData() {
 
 // Функция чтения блока байтов в схеме
 uint32_t SchemeFileParser::getBlockSize() {
+
+
     int8_t bytes_for_blocksize = 0;
     uint32_t block_size = 0;
 
     // По признаку блока определяем его размер
-    if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit)
+    if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit){
         block_size |= (static_cast<uint8_t>(byte) & 0b00111111);
+    }
     else {
         // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
         switch (static_cast<uint8_t>(byte)) {
@@ -513,6 +524,9 @@ uint32_t SchemeFileParser::getBlockSize() {
                 bytes_for_blocksize = 2;
                 break;
             case scheme_flags.size_32_bit:
+                bytes_for_blocksize = 4;
+                break;
+            default:
                 bytes_for_blocksize = 4;
                 break;
         }

@@ -200,7 +200,6 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
     sop::PrimitiveParams primitive_params;
     std::vector<std::vector<Primitive *>> patterns;
     double scale = lib_object_params.coord_matrix[0][0];
-    std::cout << scale << '\n';
     for (uint16_t _state = 0; _state < actual_object_params.states_amount; ++_state) {
         std::vector<Primitive *> primitives_in_pattern = {};
 //        for (int w = 0; w < actual_object_params.glue_points_amount; w++) {
@@ -582,6 +581,29 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams &lib_object_params) {
                                             0, 0));
                     break;
                 case objects_types.ptShape:
+                    primitives_in_pattern.push_back(
+                            new Rectangle((int) round(primitive_params.indentity_matrix[0][2] * scale +
+                                                      primitive_params.points_vector[0].x * scale *
+                                                      primitive_params.indentity_matrix[0][0]),
+                                          (int) round(primitive_params.indentity_matrix[1][2] * scale +
+                                                      primitive_params.points_vector[0].y * scale *
+                                                      primitive_params.indentity_matrix[1][1]),
+                                          (int) round((primitive_params.points_vector[2].x * scale *
+                                                       primitive_params.indentity_matrix[0][0] -
+                                                       primitive_params.points_vector[0].x * scale *
+                                                       primitive_params.indentity_matrix[0][0])),
+                                          (int) round((primitive_params.points_vector[2].y * scale *
+                                                       primitive_params.indentity_matrix[1][1] -
+                                                       primitive_params.points_vector[0].y * scale *
+                                                       primitive_params.indentity_matrix[1][1])),
+                                          (int) (360 - primitive_params.primitive_angle) % 360,
+                                          primitive_params.pen_width, primitive_params.pen_style,
+                                          {primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                           primitive_params.pen_color.blue}, "", primitive_params.show,
+                                          0, 0,
+                                          {primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                           primitive_params.brush_color.blue}, primitive_params.brush_style,
+                                          0, 0));
                     break;
                 default:
                     lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
@@ -1000,6 +1022,22 @@ void SchemeObjectParser::parsePrimitive(std::ifstream &File, sop::ObjectParams &
                                     object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
             break;
         case objects_types.ptShape:
+            scheme_params->objects_vector.emplace_back(
+                    new Rectangle(object_params.coord_matrix[0][2] - abs((int) round(
+                                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                                  object_params.coord_matrix[1][2] - abs((int) round(
+                                          primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                                  abs((int) round(
+                                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                                  abs((int) round(
+                                          primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                                  (int) (360 - object_params.angle) % 360,
+                                  primitive_params.pen_width, primitive_params.pen_style,
+                                  {primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                   primitive_params.pen_color.blue}, object_params.hint, object_params.show, 0, 0,
+                                  {primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                   primitive_params.brush_color.blue}, primitive_params.brush_style,
+                                  object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
             break;
         default:
             lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
@@ -1051,7 +1089,8 @@ SchemeObjectParser::getPicture(std::ifstream &File, sop::PrimitiveParams &primit
 
     primitive_params.pixmap.resize(primitive_params.height_of_picture,
                                    std::vector<sop::BGRColor>(primitive_params.width_of_picture));
-
+    int picture_slide = (primitive_params.width_of_picture * 3) % 4;
+    picture_slide == 3 ? picture_slide = 1 : picture_slide = picture_slide;
     for (uint32_t y = 0; y < primitive_params.height_of_picture; ++y) {
         for (uint32_t x = 0; x < primitive_params.width_of_picture; ++x) {
             sop::BGRColor pixel;
@@ -1064,7 +1103,7 @@ SchemeObjectParser::getPicture(std::ifstream &File, sop::PrimitiveParams &primit
             primitive_params.pixmap[y][x] = pixel;
         }
 
-        File.read(buffer, 2);;
+        File.read(buffer, picture_slide);
     }
 
     bmp.makeBmp(bmp_filepath, primitive_params.pixmap);
@@ -1321,7 +1360,7 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams &primit
     lae::WriteLog(LogsFile, primitive_params.height_of_picture, true);
 
     lae::WriteLog(LogsFile, "bit_depth: ");
-    lae::WriteLog(LogsFile, primitive_params.bit_depth, true);
+    lae::WriteLog(LogsFile, (int) primitive_params.bit_depth, true);
 
     lae::WriteLog(LogsFile, "pixmap: ");
     lae::WriteLog(LogsFile, "true", true);
