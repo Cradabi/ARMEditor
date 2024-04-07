@@ -971,11 +971,14 @@ void Arc::draw(QPainter &painter) {
             painter.setBrush(filling_color);
             painter.drawPie(QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
-                            (360 - ((this->end_angle - this->start_angle) % 360)) * (-16));
+                            ((360 - (this->end_angle - this->start_angle)) % 360) * (-16));
         } else {
+            QColor filling_color = {Qt::transparent};
+            painter.setPen(filling_color);
+            painter.setBrush(filling_color);
             painter.drawArc(QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
-                            (360 - ((this->end_angle - this->start_angle) % 360)) * (-16));
+                            ((360 - (this->end_angle - this->start_angle)) % 360) * (-16));
         }
     }
     painter.restore();
