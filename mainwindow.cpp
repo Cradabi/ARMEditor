@@ -19,7 +19,17 @@ MyWidget::MyWidget() {
     draw_new_scheme("../parser lib/schemes_exp/emptyscheme.схема");
 }
 
-void MyWidget::draw_new_scheme(const std::string& filepath) {
+void MyWidget::draw_new_scheme(const std::string &filepath) {
+    delete layout;
+    delete scene;
+    delete view;
+
+    layout = new QVBoxLayout(this);
+    scene = new QGraphicsScene(this);
+    view = new QGraphicsView(scene);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    
     Scheme::SchemeParams tmp_scheme_params;
 
     SchemeFileParser parser(tmp_scheme_params);
@@ -36,7 +46,7 @@ void MyWidget::draw_new_scheme(const std::string& filepath) {
     QColor bgColor = {tmp_scheme_params.bgColor.red, tmp_scheme_params.bgColor.green, tmp_scheme_params.bgColor.blue};
     pix.fill(bgColor);
 
-    QPainter* painter = new QPainter(&pix);
+    QPainter *painter = new QPainter(&pix);
 
     Scheme scheme(tmp_scheme_params);
     scheme.draw_scheme(*painter);
@@ -44,7 +54,7 @@ void MyWidget::draw_new_scheme(const std::string& filepath) {
     scene->addPixmap(pix);
 }
 
-MainWindow::MainWindow(QWidget* parent)
+MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
@@ -83,7 +93,7 @@ void MainWindow::slot_change_panel_visibility() {
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event) {
+void MainWindow::resizeEvent(QResizeEvent *event) {
     int px_width = this->width();
     int px_height = this->height();
     QRect rect = QRect(0, 0, px_width, px_height -
