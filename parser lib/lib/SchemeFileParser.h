@@ -68,10 +68,14 @@ private:
     static sce::SchemePrimitiveTypes objects_types; // Экземпляр структуры с типами объектов схемы
     uint64_t objects_amount{0};                     // Кол-во объектов в схеме
 
+    int32_t actual_nesting_level{1};
+    bool is_object{true};
+
     // Шаблон получения целочисленного значения из файла
     template<typename IntType>
     IntType getSomeInt(IntType some_int, const uint8_t int_size, const bool is_buffer_filled = false) {
 
+        some_int = 0;
 
         // Если буффер не заполнен, то заполняем его
         if (!is_buffer_filled) {
@@ -222,6 +226,8 @@ private:
     void parseFont();
 
     void parseUnknown();
+
+    void parseObjectInfo();
 
     // Функция парса параметров объекта схемы
     void parseObject();

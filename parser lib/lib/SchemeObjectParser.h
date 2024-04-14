@@ -37,6 +37,8 @@ private:
 
     uint32_t pictures_counter{0};
 
+    std::vector<FiguresClasses::Primitive*> group_objects_vector;
+
     bool getBool(std::ifstream& File, const bool is_buffer_filled = false, uint32_t start_index = 0) {
 
         bool some_bool;
@@ -153,7 +155,9 @@ private:
 
     void getPicture(std::ifstream& File, sop::PrimitiveParams& primitive_params, std::string& bmp_filepath);
 
-    void parseObject(std::ifstream& File, int32_t lib_index);
+    void parseObject(std::ifstream& File, int32_t lib_index, int32_t nesting_level);
+
+    void parseGroup(std::ifstream& File, int32_t nesting_level);
 
     void getButtonsInfo(std::ifstream& File, sop::ObjectParams& object_params);
 
@@ -210,7 +214,8 @@ public:
 
     // Главная функция парса объектов
     bool parse(uint32_t infile_cursor, const std::string& schemefile_path, const std::string& logsfile_path,
-               int32_t lib_index, bool is_cache = false, int32_t cache_size = 0) {
+               int32_t lib_index, bool is_object = false, int32_t nasting_level = 1, bool is_cache = false,
+               int32_t cache_size = 0) {
 
         if (!openWorkFiles(schemefile_path, logsfile_path)) {
             return false;
@@ -220,7 +225,11 @@ public:
         SchemeFile.seekg(infile_cursor);
 
         if (!is_cache) {
-            parseObject(SchemeFile, lib_index);
+            if (!is_object) {
+                parseGroup(SchemeFile, nasting_level);
+            } else {
+                parseObject(SchemeFile, lib_index, nasting_level);
+            }
         } else {
             CacheFileOut.open(cachefile_path, std::ios_base::binary | std::ios_base::app);
             rewriteCacheObject(lib_index, cache_size);

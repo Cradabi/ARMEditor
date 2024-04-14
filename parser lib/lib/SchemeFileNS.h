@@ -252,13 +252,15 @@ namespace sop {          // Scheme Objects Params
 
     struct ObjectParams {
 
+        bool is_group_object{false};
+
         int32_t lib_index{0};
 
-        std::vector<std::vector<double>> coord_matrix;
+        std::vector<std::vector<double>> coord_matrix;      // Есть в группе
 
-        double angle{0};
+        double angle{0};        // Есть в группе
 
-        int32_t state{0};
+        int32_t state{0};       // Есть в группе
 
         int32_t hard_id{0};
 
@@ -275,8 +277,8 @@ namespace sop {          // Scheme Objects Params
 
         int32_t tag{0};
 
-        std::vector<std::vector<double>> contur_real_matrix;
-        std::vector<std::vector<double>> contur_frame_matrix;
+        std::vector<std::vector<double>> contur_real_matrix;        // Есть в группе
+        std::vector<std::vector<double>> contur_frame_matrix;       // Есть в группе
 
         bool reflection_possibility{false};
         bool horizontal_reflection_mx{false};
@@ -289,7 +291,7 @@ namespace sop {          // Scheme Objects Params
 
         int32_t object_type{0};
 
-        int32_t index{0};
+        int32_t index{0};       // Есть в группе
         int32_t index_cache{0};
 
         bool show{true};

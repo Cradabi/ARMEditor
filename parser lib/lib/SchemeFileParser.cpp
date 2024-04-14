@@ -88,11 +88,11 @@ void SchemeFileParser::parseSchm() {
                     scheme_params->bgColor.red = static_cast<uint8_t>(buffer[2]);
                     lae::WriteLog(LogsFile, "bg_color: ");
                     lae::WriteLog(LogsFile, "b: ");
-                    lae::WriteLog(LogsFile, (int)scheme_params->bgColor.blue);
+                    lae::WriteLog(LogsFile, (int) scheme_params->bgColor.blue);
                     lae::WriteLog(LogsFile, " g: ");
-                    lae::WriteLog(LogsFile, (int)scheme_params->bgColor.green);
+                    lae::WriteLog(LogsFile, (int) scheme_params->bgColor.green);
                     lae::WriteLog(LogsFile, " r: ");
-                    lae::WriteLog(LogsFile, (int)scheme_params->bgColor.red, true);
+                    lae::WriteLog(LogsFile, (int) scheme_params->bgColor.red, true);
                     break;
                 case schm_data.net_color_flag:
                     SchemeFile.read(buffer, block_size);
@@ -101,11 +101,11 @@ void SchemeFileParser::parseSchm() {
                     scheme_params->setColor.red = static_cast<uint8_t>(buffer[2]);
                     lae::WriteLog(LogsFile, "setColor: ");
                     lae::WriteLog(LogsFile, "b: ");
-                    lae::WriteLog(LogsFile, (int)scheme_params->setColor.blue);
+                    lae::WriteLog(LogsFile, (int) scheme_params->setColor.blue);
                     lae::WriteLog(LogsFile, " g: ");
-                    lae::WriteLog(LogsFile, (int)scheme_params->setColor.green);
+                    lae::WriteLog(LogsFile, (int) scheme_params->setColor.green);
                     lae::WriteLog(LogsFile, " r: ");
-                    lae::WriteLog(LogsFile, (int)scheme_params->setColor.red, true);
+                    lae::WriteLog(LogsFile, (int) scheme_params->setColor.red, true);
                     break;
                 case schm_data.BitDepth_flag:
                     SchemeFile.get(byte);
@@ -410,7 +410,7 @@ void SchemeFileParser::parseCashObject() {
 
         int32_t cache_index = std::stoi(sections_stack.back().parrent_sect->sect_name);
 
-        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, cache_index, true, cache_size);
+        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, cache_index, false, 1, true, cache_size);
 
         SchemeFile.open(schemefile_path, std::ios_base::binary);
 
@@ -421,6 +421,36 @@ void SchemeFileParser::parseCashObject() {
     }
 }
 
+void SchemeFileParser::parseObjectInfo() {
+    uint32_t block_size;
+
+    SchemeFile.get(byte);
+    block_size = getBlockSize();
+
+    SchemeFile.get(byte);
+
+    is_object = static_cast<bool>(byte);
+
+    SchemeFile.get(byte);
+    block_size = getBlockSize();
+
+    actual_nesting_level = getSomeInt(actual_nesting_level, block_size);
+
+    SchemeFile.get(byte);
+    block_size = getBlockSize();
+
+    printBlockData(block_size);
+
+    SchemeFile.get(byte);
+    block_size = getBlockSize();
+
+    printBlockData(block_size);
+
+    SchemeFile.get(byte);
+    enterSection();
+
+}
+
 void SchemeFileParser::parseObject() {
 
     uint32_t block_size;
@@ -428,31 +458,27 @@ void SchemeFileParser::parseObject() {
     if (sections_stack.back().sect_name != "1")
         parseUnknown();
     else {
+
         SchemeFile.get(byte);
         // Получаем размер блока
         block_size = getBlockSize();
         int32_t lib_index = 0;
 
-        if(block_size!=1){
-            SchemeFile.seekg(sections_stack.back().start_pos+sections_stack.back().sect_size);
-            return;
-        }
-        SchemeFile.get(byte);
-        bool tmp_bool = static_cast<bool>(byte);
+        if (block_size == 1) {
+            SchemeFile.get(byte);
+            bool tmp_bool = static_cast<bool>(byte);
 
-        if (tmp_bool) {
+            if (tmp_bool) {
+                SchemeFile.get(byte);
+                // Получаем размер блока
+                block_size = getBlockSize();
+                lib_index = getSomeInt(lib_index, types_sizes._32bits);
+            }
+
             SchemeFile.get(byte);
             // Получаем размер блока
             block_size = getBlockSize();
-            lib_index = getSomeInt(lib_index, types_sizes._32bits);
         }
-
-        SchemeFile.get(byte);
-        // Получаем размер блока
-        block_size = getBlockSize();
-
-
-
 
         printBlockData(block_size);
 
@@ -465,7 +491,10 @@ void SchemeFileParser::parseObject() {
         SchemeFile.close();
         LogsFile.close();
 
-        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, lib_index);
+        objectParser.parse(actual_cursor_pos, schemefile_path, logsfile_path, lib_index, is_object,
+                           actual_nesting_level);
+        actual_nesting_level = 1;
+        is_object = true;
 
         SchemeFile.open(schemefile_path, std::ios_base::binary);
 
@@ -495,11 +524,13 @@ void SchemeFileParser::parseSectionData() {
         parseSch2();
     else if (sections_stack.back().sect_name == "font")
         parseUnknown();
+    else if (sections_stack.size() == 3 and sections_stack[1].sect_name == "objs")
+        parseObjectInfo();
     else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "objs")
         parseObject();
-    else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "cach") {
+    else if (sections_stack.size() == 4 and sections_stack[1].sect_name == "cach")
         parseCashObject();
-    } else
+    else
         parseUnknown();
 }
 
@@ -511,10 +542,9 @@ uint32_t SchemeFileParser::getBlockSize() {
     uint32_t block_size = 0;
 
     // По признаку блока определяем его размер
-    if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit){
+    if ((static_cast<uint8_t>(byte) & scheme_flags.size_6_bit) == scheme_flags.size_6_bit) {
         block_size |= (static_cast<uint8_t>(byte) & 0b00111111);
-    }
-    else {
+    } else {
         // Если размер блока не уместился в 6 бит, берём его исходя из нужного признака
         switch (static_cast<uint8_t>(byte)) {
             case scheme_flags.size_8_bit:
