@@ -3,6 +3,9 @@
 #include <bitset>
 #include <stack>
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #include "SchemeObjectParser.cpp"
 
 #pragma once    // Сообщаем препроцессору, что данный заголовочный файл может быть подключен только 1 раз
@@ -74,11 +77,11 @@ private:
         if (!is_buffer_filled) {
             SchemeFile.read(buffer, int_size);
         }
-        if (int_size == 1){
+        if (int_size == 1) {
             buffer[1] = 0;
             buffer[2] = 0;
             buffer[3] = 0;
-        } else if (int_size == 2){
+        } else if (int_size == 2) {
             buffer[2] = 0;
             buffer[3] = 0;
         }
@@ -162,9 +165,9 @@ private:
             new_section.sect_name = std::to_string(getSomeInt(tmp_section_name, 4, true));
         }
 
-        if(!check_scheme_version){
-            if (new_section.sect_name != "ARM "){
-                lae::PrintLog("Старая версия схемы", true);
+        if (!check_scheme_version) {
+            if (new_section.sect_name != "ARM ") {
+                lae::PrintLog("Парсер схемы: Старая версия схемы", true);
                 return false;
             }
             check_scheme_version = true;
@@ -232,7 +235,22 @@ private:
 
         uint8_t filename_size = filename_end_index - filename_start_index + 1;
 
-        logsfile_path = "../parser lib/logs/"
+        // Get the current time
+        std::time_t now = std::time(0);
+
+        // Convert the current time to a tm struct
+        std::tm* timeinfo = std::localtime(&now);
+
+        std::string date;
+        date += std::to_string(timeinfo->tm_year + 1900) + "-";
+        date += std::to_string(timeinfo->tm_mon + 1) + "-";
+        date += std::to_string(timeinfo->tm_mday);
+
+        std::string dir_name = "../parser lib/logs/" + date;
+
+        mkdir(dir_name.c_str(), 0777);
+
+        logsfile_path = dir_name + '/'
                         + schemefile_path.substr(filename_start_index, filename_size)
                         + ".log";
     }
@@ -271,7 +289,7 @@ public:
         scheme_params = &_scheme_params;
     }
 
-    ~SchemeFileParser(){
+    ~SchemeFileParser() {
         delete[] buffer;
     }
 
@@ -281,9 +299,9 @@ public:
 
 bool SchemeFileParser::parse(const std::string& _schemefile_path) {
 
-    size_t filename_end_index = _schemefile_path.rfind('.')+1;
+    size_t filename_end_index = _schemefile_path.rfind('.') + 1;
     std::string file_format_check_string = _schemefile_path.substr(filename_end_index);
-    if (file_format_check_string != file_format){
+    if (file_format_check_string != file_format) {
         lae::PrintLog("Неправильный формат файла", true);
         return false;
     }
@@ -302,8 +320,8 @@ bool SchemeFileParser::parse(const std::string& _schemefile_path) {
         }
 
         // Если обнаружили флаг секции, открываем её
-        if (byte == scheme_flags.section_flag){
-            if (!enterSection()){
+        if (byte == scheme_flags.section_flag) {
+            if (!enterSection()) {
                 return false;
             }
         }
