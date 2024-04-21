@@ -16,6 +16,7 @@ namespace FiguresClasses {
         std::string help_text = "";
         std::string library_name = "";
         std::string object_name = "";
+        std::string text = "";
 
         int condition = 0;
 
@@ -52,6 +53,8 @@ namespace FiguresClasses {
         std::string get_object_name();
 
         void set_condition(int cond);
+
+        void set_text(const std::string &text);
 
     };
 
@@ -766,7 +769,7 @@ namespace FiguresClasses {
                                                     "psDot6",
                                                     "psDash1", "psDash2"};            //список названий стилей линий
 
-        std::string text = "";                                                        //текст кнопки
+
         std::string font_name = "Arial";                                              //имя шрифта                                                 //текст подсказки
 
         int hAlignment = 1;                                                           //номер горизонтального выравнивания
@@ -835,8 +838,6 @@ namespace FiguresClasses {
                  bool underlined_font, bool crossed_font);
 
         void set_auto_size_text(bool auto_size);
-
-        void set_text(const std::string &text);
 
         void set_font_name(const std::string &font_name);
 

@@ -12,7 +12,7 @@ pqxx::result connection_to_db() {
 
             // Выполнение SQL-запроса
             pqxx::work txn(conn);
-            pqxx::result result = txn.exec("SELECT name, current_state FROM objects");
+            pqxx::result result = txn.exec("SELECT name, current_state, current_value FROM objects");
             txn.commit();
             conn.disconnect();
             return result;

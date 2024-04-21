@@ -47,6 +47,24 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
                     object->set_condition(row.at(1).num());
                 }
             }
+        } else if (object->get_type_object() == "Телеизмерение"){
+            for (const auto &row : db_request_result) {
+                if(row.at(0).c_str() == QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().substr(0, object->get_help_text().rfind('(')-1).c_str())){
+                    object->set_text(row.at(2).c_str());
+                }
+            }
+        } else if (object->get_type_object() == "Телеконтроль"){
+            for (const auto &row : db_request_result) {
+                if(row.at(0).c_str() == QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().substr(0, object->get_help_text().rfind('(')-1).c_str())){
+                    object->set_text(row.at(2).c_str());
+                }
+            }
+        } else if (object->get_type_object() == "Телесигнализация"){
+            for (const auto &row : db_request_result) {
+                if(row.at(0).c_str() == QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().substr(0, object->get_help_text().rfind('(')-1).c_str())){
+                    object->set_text(row.at(2).c_str());
+                }
+            }
         }
     }
 

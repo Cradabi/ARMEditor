@@ -64,6 +64,10 @@ void Primitive::set_condition(int cond) {
     condition = cond;
 }
 
+void Primitive::set_text(const std::string &text) {
+    this->text = text;
+}
+
 
 //конструкторы класса линии получающие различные вводные
 Line::Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror, int angle)
@@ -1818,10 +1822,6 @@ Text::set_font(const std::string &font_name, int font_size, const std::vector<in
 
 void Text::set_auto_size_text(bool auto_size) {
     this->auto_size_text = auto_size;
-}
-
-void Text::set_text(const std::string &text) {
-    this->text = text;
 }
 
 void Text::set_font_name(const std::string &font_name) {
