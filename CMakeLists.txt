@@ -17,6 +17,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
+find_package(PkgConfig)
+pkg_check_modules(PC_LIBPQXX REQUIRED libpqxx)
+
 add_executable(${PROJECT_NAME}
         main.cpp
         mainwindow.cpp
@@ -29,6 +32,8 @@ add_executable(${PROJECT_NAME}
 add_library(figures)
 add_library(parser)
 add_library(bmp_file)
+add_library(db)
 
+target_link_libraries(${PROJECT_NAME} PRIVATE pqxx)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 target_include_directories(${PROJECT_NAME} PUBLIC $ {PROJECT_SOURCE_DIR})

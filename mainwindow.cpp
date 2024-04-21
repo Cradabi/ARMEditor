@@ -8,6 +8,7 @@
 #include <QGraphicsView>
 #include <QMenu>
 #include <QFileDialog>
+#include "db lib/db_connection.cpp"
 
 MyWidget::MyWidget() {
     layout = new QVBoxLayout(this);
@@ -32,9 +33,21 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
     
     Scheme::SchemeParams tmp_scheme_params;
 
+
+
     SchemeFileParser parser(tmp_scheme_params);
     if (!parser.parse(filepath)) {
         parser.parse("../parser lib/schemes_exp/emptyscheme.схема");
+    }
+    pqxx::result db_request_result = connection_to_db();
+    for (auto object: tmp_scheme_params.objects_vector){
+        if (object->get_type_object() == "Библиотечный объект"){
+            for (const auto &row : db_request_result) {
+                if(row.at(0).c_str() == QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().substr(0, object->get_help_text().rfind('(')-1).c_str())){
+                    object->set_condition(row.at(1).num());
+                }
+            }
+        }
     }
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);

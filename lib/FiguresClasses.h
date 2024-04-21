@@ -14,6 +14,10 @@ namespace FiguresClasses {
 
         std::string type_object = "";
         std::string help_text = "";
+        std::string library_name = "";
+        std::string object_name = "";
+
+        int condition = 0;
 
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignBottom, Qt::AlignVCenter};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignRight, Qt::AlignHCenter};
@@ -42,6 +46,12 @@ namespace FiguresClasses {
         bool get_show_help();
 
         bool get_show();
+
+        std::string get_library_name();
+
+        std::string get_object_name();
+
+        void set_condition(int cond);
 
     };
 
@@ -1185,7 +1195,6 @@ namespace FiguresClasses {
         int center_y = 0;
         int angle = 0;
         int id = 0;
-        int condition = 0;
 
         std::string library_name;
         std::string object_name;
@@ -1204,8 +1213,6 @@ namespace FiguresClasses {
         void change_center_cords(int x, int y, int width, int height);
 
         void set_angle(int angle);
-
-        void set_condition(int cond);
 
         void set_library_name(const std::string &lib_name);
 
@@ -1237,11 +1244,9 @@ namespace FiguresClasses {
 
         int get_condition();
 
-        std::string get_library_name();
-
-        std::string get_object_name();
-
         std::vector<std::vector<Primitive *>> get_patterns();
+
+
     };
 }
 

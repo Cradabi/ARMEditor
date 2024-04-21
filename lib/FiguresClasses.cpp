@@ -46,6 +46,24 @@ bool Primitive::get_show() {
     return this->bool_show;
 }
 
+std::string Primitive::get_library_name() {
+    if(type_object == "Библиотечный объект"){
+        return library_name;
+    }
+    return "Не библиотечный объект";
+}
+
+std::string Primitive::get_object_name() {
+    if(type_object == "Библиотечный объект"){
+        return object_name;
+    }
+    return "Не библиотечный объект";
+}
+
+void Primitive::set_condition(int cond) {
+    condition = cond;
+}
+
 
 //конструкторы класса линии получающие различные вводные
 Line::Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror, int angle)
@@ -2658,8 +2676,8 @@ LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int
     this->angle = angle;
     this->id = id;
     this->condition = condition;
-    library_name = lib_name;
-    object_name = obj_name;
+    this->library_name = lib_name;
+    this->object_name = obj_name;
     this->patterns = patterns;
     this->help_text = help_text;
     this->bool_show = show;
@@ -2694,10 +2712,6 @@ void LibraryObject::change_center_cords(int x, int y, int width, int height) {
 
 void LibraryObject::set_angle(int angle) {
     this->angle = angle;
-}
-
-void LibraryObject::set_condition(int cond) {
-    condition = cond;
 }
 
 void LibraryObject::set_library_name(const std::string &lib_name) {
@@ -2758,14 +2772,6 @@ int LibraryObject::get_id() {
 
 int LibraryObject::get_condition() {
     return condition;
-}
-
-std::string LibraryObject::get_library_name() {
-    return library_name;
-}
-
-std::string LibraryObject::get_object_name() {
-    return object_name;
 }
 
 std::vector<std::vector<Primitive *>> LibraryObject::get_patterns() {
