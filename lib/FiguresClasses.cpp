@@ -3,75 +3,110 @@
 
 using namespace FiguresClasses;
 
-Primitive::Primitive() {}
+Primitive::Primitive()
+{
+}
 
-void Primitive::draw(QPainter &painter) {
+void Primitive::draw(QPainter& painter)
+{
     ;
 }
 
-void Primitive::set_help_text(const std::string &help) {
+void Primitive::set_help_text(const std::string& help)
+{
     this->help_text = help;
 }
 
-std::string Primitive::get_type_object() {
+std::string Primitive::get_type_object()
+{
     return this->type_object;
 }
 
-std::string Primitive::get_help_text() {
+std::string Primitive::get_help_text()
+{
     return this->help_text;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
-void Primitive::show_help() {
+void Primitive::show_help()
+{
     this->bool_show_help = true;
 }
 
-void Primitive::show() {
+void Primitive::show()
+{
     this->bool_show = true;
 }
 
-void Primitive::hide_help() {
+void Primitive::hide_help()
+{
     this->bool_show_help = false;
 }
 
-void Primitive::hide() {
+void Primitive::hide()
+{
     this->bool_show = false;
 }
 
-bool Primitive::get_show_help() {
+bool Primitive::get_show_help()
+{
     return this->bool_show_help;
 }
 
-bool Primitive::get_show() {
+bool Primitive::get_show()
+{
     return this->bool_show;
 }
 
-std::string Primitive::get_library_name() {
-    if(type_object == "Библиотечный объект"){
+int Primitive::get_id()
+{
+    if (type_object == "Библиотечный объект" || type_object == "Телеизмерение" || type_object == "Телеуправление" ||
+        type_object == "Телесигнализация")
+    {
+        return this->id;
+    }
+    return 0;
+}
+
+void Primitive::set_id(int id_c)
+{
+    this->id = id_c;
+}
+
+
+std::string Primitive::get_library_name()
+{
+    if (type_object == "Библиотечный объект")
+    {
         return library_name;
     }
     return "Не библиотечный объект";
 }
 
-std::string Primitive::get_object_name() {
-    if(type_object == "Библиотечный объект"){
+std::string Primitive::get_object_name()
+{
+    if (type_object == "Библиотечный объект")
+    {
         return object_name;
     }
     return "Не библиотечный объект";
 }
 
-void Primitive::set_condition(int cond) {
+void Primitive::set_condition(int cond)
+{
     condition = cond;
 }
 
-void Primitive::set_text(const std::string &text) {
+void Primitive::set_text(const std::string& text)
+{
     this->text = text;
 }
 
 
 //конструкторы класса линии получающие различные вводные
 Line::Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mirror, int angle)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->type_object = "Линия";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
@@ -79,10 +114,11 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, int hor_mirror, int vert_mi
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, const std::string& help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int> &line_color, int hor_mirror, int vert_mirror, int angle)
-        : Primitive::Primitive() {
+           int end_style_arrow, const std::vector<int>& line_color, int hor_mirror, int vert_mirror, int angle)
+    : Primitive::Primitive()
+{
     this->text = text;
     this->help_text = help_text;
     this->bool_show = bool_show;
@@ -99,11 +135,12 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, const std::string& help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
-           int font_size, const std::vector<int> &font_color, int hor_mirror, int vert_mirror, int angle)
-        : Primitive::Primitive() {
+           int end_style_arrow, const std::vector<int>& line_color, const std::string& font_name,
+           int font_size, const std::vector<int>& font_color, int hor_mirror, int vert_mirror, int angle)
+    : Primitive::Primitive()
+{
     this->text = text;
     this->help_text = help_text;
     this->bool_show = bool_show;
@@ -123,11 +160,12 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, const std::string &help_text,
+Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, const std::string& help_text,
            bool bool_show, int style_line, int number_of_text, int line_width, int start_style_arrow,
-           int end_style_arrow, const std::vector<int> &line_color, const std::string &font_name,
-           int font_size, const std::vector<int> &font_color, bool bold_font, bool italic_font, bool underlined_font,
-           bool crossed_font, int hor_mirror, int vert_mirror, int angle) : Primitive::Primitive() {
+           int end_style_arrow, const std::vector<int>& line_color, const std::string& font_name,
+           int font_size, const std::vector<int>& font_color, bool bold_font, bool italic_font, bool underlined_font,
+           bool crossed_font, int hor_mirror, int vert_mirror, int angle) : Primitive::Primitive()
+{
     this->text = text;
     this->help_text = help_text;
     this->bool_show = bool_show;
@@ -151,25 +189,29 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string &text, co
     change_center_cords(st_x, st_y, end_x, end_y);
 }
 
-void Line::draw(QPainter &painter) {
+void Line::draw(QPainter& painter)
+{
     painter.save();
     painter.translate(this->get_center_cord_x(), this->get_center_cord_y());
     painter.rotate(this->angle);
     QColor color_line = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
     QLineF linef(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                  this->get_end_x() - this->get_center_cord_x(), this->get_end_y() - this->get_center_cord_y());
-    switch (this->get_start_style_arrow()) {
-        case 0: {
+    switch (this->get_start_style_arrow())
+    {
+    case 0:
+        {
             painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
+                QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
             break;
         }
-        case 1: {
+    case 1:
+        {
             painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
+                QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
@@ -177,12 +219,15 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_st_x() - this->get_center_cord_x(),
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
-            if (this->get_line_width() == 1) {
+            if (this->get_line_width() == 1)
+            {
                 painter.rotate(15);
                 painter.drawLine(0, 0, this->get_line_width() * 10, 0);
                 painter.rotate(-30);
                 painter.drawLine(0, 0, this->get_line_width() * 10, 0);
-            } else {
+            }
+            else
+            {
                 painter.rotate(15);
                 painter.drawLine(0, 0, this->get_line_width() * 5, 0);
                 painter.rotate(-30);
@@ -190,8 +235,9 @@ void Line::draw(QPainter &painter) {
             }
             painter.restore();
         }
-            break;
-        case 2: {
+        break;
+    case 2:
+        {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
@@ -202,38 +248,47 @@ void Line::draw(QPainter &painter) {
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
             painter.setBrush(color_line);
-            if (this->get_line_width() * 3 >= 10 && this->get_line_width() / 2 >= 4) {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
-                                      QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
+            if (this->get_line_width() * 3 >= 10 && this->get_line_width() / 2 >= 4)
+            {
+                QPoint qpoints1[3] = {
+                    QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
+                    QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))
+                };
                 painter.drawPolygon(qpoints1, 3);
-            } else {
+            }
+            else
+            {
                 QPoint qpoints1[3] = {QPoint(0, 0), QPoint(10, 4), QPoint(10, -4)};
                 painter.drawPolygon(qpoints1, 3);
             }
 
             painter.restore();
         }
-            break;
-        case 3: {
+        break;
+    case 3:
+        {
             painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
+                QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
             painter.setBrush(color_line);
-            if (this->get_line_width() == 1) {
+            if (this->get_line_width() == 1)
+            {
                 painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
                                     this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
                                     this->get_line_width() * 2, this->get_line_width() * 2);
-            } else {
+            }
+            else
+            {
                 painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
                                     this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
                                     this->get_line_width(), this->get_line_width());
             }
-
         }
-            break;
-        case 4: {
+        break;
+    case 4:
+        {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
@@ -244,31 +299,40 @@ void Line::draw(QPainter &painter) {
                               this->get_st_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()));
             painter.setBrush(color_line);
-            if (this->get_line_width() == 1) {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() * 3),
-                                      QPoint(this->get_line_width() * 3, (-3) * (this->get_line_width()))};
+            if (this->get_line_width() == 1)
+            {
+                QPoint qpoints1[3] = {
+                    QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() * 3),
+                    QPoint(this->get_line_width() * 3, (-3) * (this->get_line_width()))
+                };
                 painter.drawPolygon(qpoints1, 3);
-            } else {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
-                                      QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
+            }
+            else
+            {
+                QPoint qpoints1[3] = {
+                    QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
+                    QPoint(this->get_line_width(), (-1) * (this->get_line_width()))
+                };
                 painter.drawPolygon(qpoints1, 3);
             }
 
             painter.restore();
         }
-            break;
+        break;
     };
-    switch (this->get_end_style_arrow()) {
-        case 0:
+    switch (this->get_end_style_arrow())
+    {
+    case 0:
+        painter.setPen(
+            QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
+        painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                         this->get_end_x() - this->get_center_cord_x(),
+                         this->get_end_y() - this->get_center_cord_y());
+        break;
+    case 1:
+        {
             painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
-                             this->get_end_x() - this->get_center_cord_x(),
-                             this->get_end_y() - this->get_center_cord_y());
-            break;
-        case 1: {
-            painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
+                QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
                              this->get_end_x() - this->get_center_cord_x(),
                              this->get_end_y() - this->get_center_cord_y());
@@ -276,12 +340,15 @@ void Line::draw(QPainter &painter) {
             painter.translate(this->get_end_x() - this->get_center_cord_x(),
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
-            if (this->get_line_width() == 1) {
+            if (this->get_line_width() == 1)
+            {
                 painter.rotate(15);
                 painter.drawLine(0, 0, this->get_line_width() * 10, 0);
                 painter.rotate(-30);
                 painter.drawLine(0, 0, this->get_line_width() * 10, 0);
-            } else {
+            }
+            else
+            {
                 painter.rotate(15);
                 painter.drawLine(0, 0, this->get_line_width() * 5, 0);
                 painter.rotate(-30);
@@ -290,8 +357,9 @@ void Line::draw(QPainter &painter) {
 
             painter.restore();
         }
-            break;
-        case 2: {
+        break;
+    case 2:
+        {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
@@ -302,35 +370,44 @@ void Line::draw(QPainter &painter) {
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
             painter.setBrush(color_line);
-            if (this->get_line_width() * 3 >= 10 && this->get_line_width() / 2 >= 4) {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
-                                      QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))};
+            if (this->get_line_width() * 3 >= 10 && this->get_line_width() / 2 >= 4)
+            {
+                QPoint qpoints1[3] = {
+                    QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() / 2),
+                    QPoint(this->get_line_width() * 3, (-1) * (this->get_line_width() / 2))
+                };
                 painter.drawPolygon(qpoints1, 3);
-            } else {
+            }
+            else
+            {
                 QPoint qpoints1[3] = {QPoint(0, 0), QPoint(10, 4), QPoint(10, -4)};
                 painter.drawPolygon(qpoints1, 3);
             }
             painter.restore();
         }
-            break;
-        case 3:
-            painter.setPen(
-                    QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
-            painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
-                             this->get_end_x() - this->get_center_cord_x(),
-                             this->get_end_y() - this->get_center_cord_y());
-            painter.setBrush(color_line);
-            if (this->get_line_width() == 1) {
-                painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
-                                    this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
-                                    this->get_line_width() * 2, this->get_line_width() * 2);
-            } else {
-                painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
-                                    this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
-                                    this->get_line_width(), this->get_line_width());
-            }
-            break;
-        case 4: {
+        break;
+    case 3:
+        painter.setPen(
+            QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap));
+        painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
+                         this->get_end_x() - this->get_center_cord_x(),
+                         this->get_end_y() - this->get_center_cord_y());
+        painter.setBrush(color_line);
+        if (this->get_line_width() == 1)
+        {
+            painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
+                                this->get_line_width() * 2, this->get_line_width() * 2);
+        }
+        else
+        {
+            painter.drawEllipse(this->get_st_x() - this->get_center_cord_x() - this->get_line_width() / 2,
+                                this->get_st_y() - this->get_center_cord_y() - this->get_line_width() / 2,
+                                this->get_line_width(), this->get_line_width());
+        }
+        break;
+    case 4:
+        {
             painter.setPen(QPen(color_line, this->get_line_width(), style_vector[this->get_style_line()], Qt::FlatCap,
                                 Qt::MiterJoin));
             painter.drawLine(this->get_st_x() - this->get_center_cord_x(), this->get_st_y() - this->get_center_cord_y(),
@@ -341,26 +418,33 @@ void Line::draw(QPainter &painter) {
                               this->get_end_y() - this->get_center_cord_y());
             painter.rotate(-1 * (linef.angle()) + 180);
             painter.setBrush(color_line);
-            if (this->get_line_width() == 1) {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() * 3),
-                                      QPoint(this->get_line_width() * 3, (-3) * (this->get_line_width()))};
+            if (this->get_line_width() == 1)
+            {
+                QPoint qpoints1[3] = {
+                    QPoint(0, 0), QPoint(this->get_line_width() * 3, this->get_line_width() * 3),
+                    QPoint(this->get_line_width() * 3, (-3) * (this->get_line_width()))
+                };
                 painter.drawPolygon(qpoints1, 3);
-            } else {
-                QPoint qpoints1[3] = {QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
-                                      QPoint(this->get_line_width(), (-1) * (this->get_line_width()))};
+            }
+            else
+            {
+                QPoint qpoints1[3] = {
+                    QPoint(0, 0), QPoint(this->get_line_width(), this->get_line_width()),
+                    QPoint(this->get_line_width(), (-1) * (this->get_line_width()))
+                };
                 painter.drawPolygon(qpoints1, 3);
             }
             painter.restore();
         }
-            break;
-
+        break;
     }
     painter.restore();
 }
 
 //меняет координаты начала, конца, центра линии
 void Line::change_center_cords(int st_x, int st_y, int end_x,
-                               int end_y) {
+                               int end_y)
+{
     this->start_x = st_x;
     this->start_y = st_y;
     this->end_x = end_x;
@@ -370,14 +454,20 @@ void Line::change_center_cords(int st_x, int st_y, int end_x,
     int y_cord = 0;
 
     //начало изменений координат центра
-    if (st_x >= end_x) {
+    if (st_x >= end_x)
+    {
         x_cord = end_x + floor(abs(st_x - end_x) / 2);
-    } else {
+    }
+    else
+    {
         x_cord = st_x + floor(abs(st_x - end_x) / 2);
     }
-    if (st_y >= end_y) {
+    if (st_y >= end_y)
+    {
         y_cord = end_y + floor(abs(st_y - end_y) / 2);
-    } else {
+    }
+    else
+    {
         y_cord = st_y + floor(abs(st_y - end_y) / 2);
     }
 
@@ -386,77 +476,94 @@ void Line::change_center_cords(int st_x, int st_y, int end_x,
 }
 
 //далее идут функции меняющие одноименные переменные класса линии
-void Line::set_line_color(const std::vector<int> &lin_col) {
+void Line::set_line_color(const std::vector<int>& lin_col)
+{
     this->line_color = lin_col;
 }
 
-void Line::set_line_width(int width) {
+void Line::set_line_width(int width)
+{
     this->line_width = width;
 }
 
-void Line::set_start_style_arrow(int st_arrow) {
+void Line::set_start_style_arrow(int st_arrow)
+{
     this->start_style_arrow = st_arrow;
 }
 
-void Line::set_end_style_arrow(int end_arrow) {
+void Line::set_end_style_arrow(int end_arrow)
+{
     this->end_style_arrow = end_arrow;
 }
 
-void Line::set_hor_mirror(bool hor_mirror) {
+void Line::set_hor_mirror(bool hor_mirror)
+{
     this->horizontal_mirror = hor_mirror;
 }
 
-void Line::set_vert_mirror(bool vert_mirror) {
+void Line::set_vert_mirror(bool vert_mirror)
+{
     this->vertical_mirror = vert_mirror;
 }
 
-void Line::set_text(const std::string &text) {
+void Line::set_text(const std::string& text)
+{
     this->text = text;
 }
 
-void Line::set_font_name(const std::string &fn_name) {
+void Line::set_font_name(const std::string& fn_name)
+{
     this->font_name = fn_name;
 }
 
-void Line::set_font_size(int fn_size) {
+void Line::set_font_size(int fn_size)
+{
     this->font_size = fn_size;
 }
 
-void Line::set_font_color(const std::vector<int> &fn_col) {
+void Line::set_font_color(const std::vector<int>& fn_col)
+{
     this->font_color = fn_col;
 }
 
-void Line::set_italic_font(bool italic) {
+void Line::set_italic_font(bool italic)
+{
     this->italic_font = italic;
 }
 
-void Line::set_bold_font(bool bold) {
+void Line::set_bold_font(bool bold)
+{
     this->bold_font = bold;
 }
 
-void Line::set_underlined_font(bool underlined) {
+void Line::set_underlined_font(bool underlined)
+{
     this->underlined_font = underlined;
 }
 
-void Line::set_crossed_font(bool crossed) {
+void Line::set_crossed_font(bool crossed)
+{
     this->crossed_font = crossed;
 }
 
-void Line::set_font(const std::string &font_name, int font_size) {
+void Line::set_font(const std::string& font_name, int font_size)
+{
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void Line::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color) {
+void Line::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color)
+{
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-Line::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
+Line::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
                bool italic_font,
-               bool underlined_font, bool crossed_font) {
+               bool underlined_font, bool crossed_font)
+{
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
@@ -467,93 +574,121 @@ Line::set_font(const std::string &font_name, int font_size, const std::vector<in
 }
 
 //далее идут функции по выводу одноименных переменных класса линии
-std::vector<int> Line::get_line_color() {
+std::vector<int> Line::get_line_color()
+{
     return this->line_color;
 }
 
-std::string Line::get_text() {
+std::string Line::get_text()
+{
     return this->text;
 }
 
-int Line::get_line_width() {
+int Line::get_line_width()
+{
     return this->line_width;
 }
 
-int Line::get_start_style_arrow() {
+int Line::get_start_style_arrow()
+{
     return this->start_style_arrow;
 }
 
-int Line::get_end_style_arrow() {
+int Line::get_end_style_arrow()
+{
     return this->end_style_arrow;
 }
 
-int Line::get_style_line() {
+int Line::get_style_line()
+{
     return this->style_line;
 }
 
-int Line::get_st_x() { //выводит координату x начала линии
+int Line::get_st_x()
+{
+    //выводит координату x начала линии
     return this->start_x;
 }
 
-int Line::get_st_y() {  //выводит координату y начала линии
+int Line::get_st_y()
+{
+    //выводит координату y начала линии
     return this->start_y;
 }
 
-int Line::get_end_x() {  //выводит координату x конца линии
+int Line::get_end_x()
+{
+    //выводит координату x конца линии
     return this->end_x;
 }
 
-int Line::get_end_y() {  //выводит координату y конца линии
+int Line::get_end_y()
+{
+    //выводит координату y конца линии
     return this->end_y;
 }
 
-int Line::get_center_cord_x() {  //возвращает x-координату центра
+int Line::get_center_cord_x()
+{
+    //возвращает x-координату центра
     return this->center_x;
 }
 
-int Line::get_center_cord_y() {  //возвращает y-координату центра
+int Line::get_center_cord_y()
+{
+    //возвращает y-координату центра
     return this->center_y;
 }
 
-bool Line::get_hor_mirror() {
+bool Line::get_hor_mirror()
+{
     return this->horizontal_mirror;
 }
 
-bool Line::get_vert_mirror() {
+bool Line::get_vert_mirror()
+{
     return this->vertical_mirror;
 }
 
-int Line::get_font_size() {
+int Line::get_font_size()
+{
     return this->font_size;
 }
 
-std::string Line::get_font_name() {
+std::string Line::get_font_name()
+{
     return this->font_name;
 }
 
-bool Line::get_bold_font() {
+bool Line::get_bold_font()
+{
     return this->bold_font;
 }
 
-bool Line::get_italic_font() {
+bool Line::get_italic_font()
+{
     return this->italic_font;
 }
 
-bool Line::get_crossed_font() {
+bool Line::get_crossed_font()
+{
     return this->crossed_font;
 }
 
-bool Line::get_underlined_font() {
+bool Line::get_underlined_font()
+{
     return this->underlined_font;
 }
 
 
-std::vector<int> Line::get_font_color() {
+std::vector<int> Line::get_font_color()
+{
     return this->font_color;
 }
 
 //конструкторы класса прямоугольника получающие различные вводные
-Rectangle::Rectangle(int x, int y, int width, int height, int hor_mirror, int vert_mirror) : Primitive::Primitive() {
+Rectangle::Rectangle(int x, int y, int width, int height, int hor_mirror, int vert_mirror) : Primitive::Primitive()
+{
     this->type_object = "Прямоугольник";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
@@ -561,9 +696,10 @@ Rectangle::Rectangle(int x, int y, int width, int height, int hor_mirror, int ve
 }
 
 Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int hor_mirror,
+                     const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int hor_mirror,
                      int vert_mirror)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->line_width = line_width;
     this->style_line = style_line;
@@ -577,10 +713,11 @@ Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_wi
 }
 
 Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                     const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
-                     int style_gradient_filling, const std::vector<int> &filling_color, bool bool_show_filling,
+                     const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int style_frame,
+                     int style_gradient_filling, const std::vector<int>& filling_color, bool bool_show_filling,
                      int hor_mirror, int vert_mirror)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->line_width = line_width;
     this->style_line = style_line;
@@ -597,18 +734,25 @@ Rectangle::Rectangle(int x, int y, int width, int height, int angle, int line_wi
     change_center_cords(x, y, width, height);
 }
 
-void Rectangle::draw(QPainter &painter) {
+void Rectangle::draw(QPainter& painter)
+{
     //начинаем отрисовку прямоугольника
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
 
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -623,7 +767,8 @@ void Rectangle::draw(QPainter &painter) {
 }
 
 //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
-void Rectangle::change_center_cords(int x, int y, int width, int height) {
+void Rectangle::change_center_cords(int x, int y, int width, int height)
+{
     this->x = x;
     this->y = y;
     this->width = width;
@@ -633,126 +778,159 @@ void Rectangle::change_center_cords(int x, int y, int width, int height) {
 }
 
 //далее идут функции меняющие одноименные переменные класса прямоугольника
-void Rectangle::set_angle(int angl) {
+void Rectangle::set_angle(int angl)
+{
     this->angle = angl;
 }
 
-void Rectangle::set_line_width(int width) {
+void Rectangle::set_line_width(int width)
+{
     this->line_width = width;
 }
 
-void Rectangle::set_line_color(const std::vector<int> &ln_col) {
+void Rectangle::set_line_color(const std::vector<int>& ln_col)
+{
     this->line_color = ln_col;
 }
 
-void Rectangle::set_filling_color(const std::vector<int> &fil_col) {
+void Rectangle::set_filling_color(const std::vector<int>& fil_col)
+{
     this->filling_color = fil_col;
 }
 
-void Rectangle::set_style_frame(int st_frame) {
-    if (st_frame >= 0 && st_frame < this->style_frame_list.size()) {
+void Rectangle::set_style_frame(int st_frame)
+{
+    if (st_frame >= 0 && st_frame < this->style_frame_list.size())
+    {
         this->style_frame = st_frame;
     }
 }
 
-void Rectangle::set_style_gradient_filling(int st_gradient) {
-    if (st_gradient >= 0 && st_gradient < this->style_gradient_list.size()) {
+void Rectangle::set_style_gradient_filling(int st_gradient)
+{
+    if (st_gradient >= 0 && st_gradient < this->style_gradient_list.size())
+    {
         this->style_gradient_filling = st_gradient;
     }
 }
 
-void Rectangle::set_style_line(int st_line) {
-    if (st_line >= 0 && st_line < this->style_line_list.size()) {
+void Rectangle::set_style_line(int st_line)
+{
+    if (st_line >= 0 && st_line < this->style_line_list.size())
+    {
         this->style_line = st_line;
     }
 }
 
-void Rectangle::set_hor_mirror(bool hor_mirror) {
+void Rectangle::set_hor_mirror(bool hor_mirror)
+{
     this->horizontal_mirror = hor_mirror;
 }
 
-void Rectangle::set_vert_mirror(bool vert_mirror) {
+void Rectangle::set_vert_mirror(bool vert_mirror)
+{
     this->vertical_mirror = vert_mirror;
 }
 
 //далее идут функции по выводу одноименных переменных класса прямоугольника
-int Rectangle::get_style_frame() {
+int Rectangle::get_style_frame()
+{
     return this->style_frame;
 }
 
-int Rectangle::get_line_width() {
+int Rectangle::get_line_width()
+{
     return this->line_width;
 }
 
-int Rectangle::get_style_line() {
+int Rectangle::get_style_line()
+{
     return this->style_line;
 }
 
-int Rectangle::get_style_gradient_filling() {
+int Rectangle::get_style_gradient_filling()
+{
     return this->style_gradient_filling;
 }
 
-int Rectangle::get_angle() {
+int Rectangle::get_angle()
+{
     return this->angle;
 }
 
-int Rectangle::get_x() {
+int Rectangle::get_x()
+{
     return this->x;
 }
 
-int Rectangle::get_y() {
+int Rectangle::get_y()
+{
     return this->y;
 }
 
-int Rectangle::get_width() {
+int Rectangle::get_width()
+{
     return this->width;
 }
 
-int Rectangle::get_height() {
+int Rectangle::get_height()
+{
     return this->height;
 }
 
-int Rectangle::get_center_x() {
+int Rectangle::get_center_x()
+{
     return this->center_x;
 }
 
-int Rectangle::get_center_y() {
+int Rectangle::get_center_y()
+{
     return this->center_y;
 }
 
-bool Rectangle::get_hor_mirror() {
+bool Rectangle::get_hor_mirror()
+{
     return this->horizontal_mirror;
 }
 
-bool Rectangle::get_vert_mirror() {
+bool Rectangle::get_vert_mirror()
+{
     return this->vertical_mirror;
 }
 
-std::vector<int> Rectangle::get_line_color() {
+std::vector<int> Rectangle::get_line_color()
+{
     return this->line_color;
 }
 
-std::vector<int> Rectangle::get_filling_color() {
+std::vector<int> Rectangle::get_filling_color()
+{
     return this->filling_color;
 }
 
-void Rectangle::show_filling() {
+void Rectangle::show_filling()
+{
     this->bool_show_filling = true;
 }
 
-void Rectangle::hide_filling() {
+void Rectangle::hide_filling()
+{
     this->bool_show_filling = false;
 }
 
-bool Rectangle::get_show_filling() {
+bool Rectangle::get_show_filling()
+{
     return this->bool_show_filling;
 }
 
 //конструкторы класса эллипса получающие различные вводные
-Ellipse::Ellipse() : Primitive::Primitive() {}
+Ellipse::Ellipse() : Primitive::Primitive()
+{
+}
 
 Ellipse::Ellipse(int x, int y, int width, int height, int angle, int hor_mirror, int vert_mirror)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->type_object = "Эллипс";
     this->horizontal_mirror = hor_mirror;
@@ -761,9 +939,10 @@ Ellipse::Ellipse(int x, int y, int width, int height, int angle, int hor_mirror,
 }
 
 Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int hor_mirror,
+                 const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int hor_mirror,
                  int vert_mirror)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->line_width = line_width;
     this->style_line = style_line;
@@ -777,9 +956,10 @@ Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width,
 }
 
 Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width, int style_line,
-                 const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
-                 const std::vector<int> &filling_color, bool bool_show_filling, int hor_mirror, int vert_mirror)
-        : Primitive::Primitive() {
+                 const std::vector<int>& line_color, const std::string& help_text, bool bool_show,
+                 const std::vector<int>& filling_color, bool bool_show_filling, int hor_mirror, int vert_mirror)
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->line_width = line_width;
     this->style_line = style_line;
@@ -794,18 +974,25 @@ Ellipse::Ellipse(int x, int y, int width, int height, int angle, int line_width,
     change_center_cords(x, y, width, height);
 }
 
-void Ellipse::draw(QPainter &painter) {
+void Ellipse::draw(QPainter& painter)
+{
     //начинаем отрисовку эллипса
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
+    if (this->get_show())
+    {
         QColor color_el = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -813,15 +1000,17 @@ void Ellipse::draw(QPainter &painter) {
         painter.setPen(QPen(color_el, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
                             Qt::RoundJoin));
         painter.drawEllipse(
-                QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
-                      this->get_height()));
+            QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
+                  this->get_height()));
     }
     painter.restore();
 }
 
 void
 Ellipse::change_center_cords(int x, int y, int width,
-                             int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+                             int height)
+{
+    //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
     this->x = x;
     this->y = y;
     this->width = width;
@@ -831,107 +1020,132 @@ Ellipse::change_center_cords(int x, int y, int width,
 }
 
 //далее идут функции меняющие одноименные переменные класса эллипса
-void Ellipse::set_angle(int angl) {
+void Ellipse::set_angle(int angl)
+{
     this->angle = angl;
 }
 
-void Ellipse::set_line_width(int line_width) {
+void Ellipse::set_line_width(int line_width)
+{
     this->line_width = line_width;
 }
 
-void Ellipse::set_hor_mirror(bool hor_mirror) {
+void Ellipse::set_hor_mirror(bool hor_mirror)
+{
     this->horizontal_mirror = hor_mirror;
 }
 
-void Ellipse::set_vert_mirror(bool vert_mirror) {
+void Ellipse::set_vert_mirror(bool vert_mirror)
+{
     this->vertical_mirror = vert_mirror;
 }
 
-void Ellipse::set_line_color(const std::vector<int> &ln_col) {
+void Ellipse::set_line_color(const std::vector<int>& ln_col)
+{
     this->line_color = ln_col;
 }
 
-void Ellipse::set_filling_color(const std::vector<int> &fil_col) {
+void Ellipse::set_filling_color(const std::vector<int>& fil_col)
+{
     this->filling_color = fil_col;
 }
 
 
-void Ellipse::set_style_line(int st_line) {
-    if (st_line >= 0 && st_line < this->style_line_list.size()) {
+void Ellipse::set_style_line(int st_line)
+{
+    if (st_line >= 0 && st_line < this->style_line_list.size())
+    {
         this->style_line = st_line;
     }
 }
 
 //далее идут функции по выводу одноименных переменных класса эллипса
-int Ellipse::get_style_line() {
+int Ellipse::get_style_line()
+{
     return this->style_line;
 }
 
-int Ellipse::get_line_width() {
+int Ellipse::get_line_width()
+{
     return this->line_width;
 }
 
 
-int Ellipse::get_angle() {
+int Ellipse::get_angle()
+{
     return this->angle;
 }
 
-int Ellipse::get_x() {
+int Ellipse::get_x()
+{
     return this->x;
 }
 
-int Ellipse::get_y() {
+int Ellipse::get_y()
+{
     return this->y;
 }
 
-int Ellipse::get_width() {
+int Ellipse::get_width()
+{
     return this->width;
 }
 
-int Ellipse::get_height() {
+int Ellipse::get_height()
+{
     return this->height;
 }
 
-int Ellipse::get_center_x() {
+int Ellipse::get_center_x()
+{
     return this->center_x;
 }
 
-int Ellipse::get_center_y() {
+int Ellipse::get_center_y()
+{
     return this->center_y;
 }
 
-bool Ellipse::get_hor_mirror() {
+bool Ellipse::get_hor_mirror()
+{
     return this->horizontal_mirror;
 }
 
-bool Ellipse::get_vert_mirror() {
+bool Ellipse::get_vert_mirror()
+{
     return this->vertical_mirror;
 }
 
-std::vector<int> Ellipse::get_line_color() {
+std::vector<int> Ellipse::get_line_color()
+{
     return this->line_color;
 }
 
-std::vector<int> Ellipse::get_filling_color() {
+std::vector<int> Ellipse::get_filling_color()
+{
     return this->filling_color;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
-void Ellipse::show_filling() {
+void Ellipse::show_filling()
+{
     this->bool_show_filling = true;
 }
 
-void Ellipse::hide_filling() {
+void Ellipse::hide_filling()
+{
     this->bool_show_filling = false;
 }
 
-bool Ellipse::get_show_filling() {
+bool Ellipse::get_show_filling()
+{
     return this->bool_show_filling;
 }
 
 //конструкторы класса дуги получающие различные вводные
 Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int hor_mirror, int vert_mirror)
-        : Ellipse::Ellipse() {
+    : Ellipse::Ellipse()
+{
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
@@ -942,8 +1156,9 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
 }
 
 Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
-         const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int hor_mirror,
-         int vert_mirror) : Ellipse::Ellipse() {
+         const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int hor_mirror,
+         int vert_mirror) : Ellipse::Ellipse()
+{
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
@@ -959,9 +1174,10 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
 }
 
 Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_angle, int line_width, int style_line,
-         const std::vector<int> &line_color, const std::string &help_text, bool bool_show,
-         const std::vector<int> &filling_color, bool bool_show_filling, int hor_mirror, int vert_mirror)
-        : Ellipse::Ellipse() {
+         const std::vector<int>& line_color, const std::string& help_text, bool bool_show,
+         const std::vector<int>& filling_color, bool bool_show_filling, int hor_mirror, int vert_mirror)
+    : Ellipse::Ellipse()
+{
     this->type_object = "Дуга";
     this->start_angle = st_angle;
     this->end_angle = end_angle;
@@ -978,23 +1194,30 @@ Arc::Arc(int x, int y, int width, int height, int angle, int st_angle, int end_a
     change_center_cords(x, y, width, height);
 }
 
-void Arc::draw(QPainter &painter) {
+void Arc::draw(QPainter& painter)
+{
     //начинаем отрисовку дуги
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
+    if (this->get_show())
+    {
         QColor color_arc = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
         painter.setPen(QPen(color_arc, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
                             Qt::RoundJoin));
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setBrush(filling_color);
             painter.drawPie(QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
                             ((360 - (this->end_angle - this->start_angle)) % 360) * (-16));
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1007,48 +1230,58 @@ void Arc::draw(QPainter &painter) {
 }
 
 //далее идут функции меняющие одноименные переменные класса дуги
-void Arc::set_arc_angles(int start_angle, int end_angle) {
+void Arc::set_arc_angles(int start_angle, int end_angle)
+{
     this->start_angle = start_angle;
     this->end_angle = end_angle;
 }
 
-void Arc::set_start_angle(int st_angle) {
+void Arc::set_start_angle(int st_angle)
+{
     this->start_angle = st_angle;
 }
 
-void Arc::set_end_angle(int end_angle) {
+void Arc::set_end_angle(int end_angle)
+{
     this->end_angle = end_angle;
 }
 
 //далее идут функции по выводу одноименных переменных класса дуги
-int Arc::get_start_angle() {
+int Arc::get_start_angle()
+{
     return this->start_angle;
 }
 
-int Arc::get_end_angle() {
+int Arc::get_end_angle()
+{
     return this->end_angle;
 }
 
-std::vector<int> Arc::get_arc_angles() {
+std::vector<int> Arc::get_arc_angles()
+{
     return {this->start_angle, this->end_angle};
 }
 
 //конструкторы класса кривой линии получающие различные вводные
-CrookedLine::CrookedLine() : Primitive::Primitive() {}
+CrookedLine::CrookedLine() : Primitive::Primitive()
+{
+}
 
-CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector, int hor_mirror, int vert_mirror)
-        : Primitive::Primitive() {
+CrookedLine::CrookedLine(const std::vector<std::vector<int>>& points_vector, int hor_mirror, int vert_mirror)
+    : Primitive::Primitive()
+{
     this->type_object = "Кривая линия";
     this->horizontal_mirror = hor_mirror;
     this->vertical_mirror = vert_mirror;
     change_center_cords(points_vector);
 }
 
-CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector, int angle, int line_width, int style_line,
-                         const std::string &help_text, const std::vector<int> &line_color,
-                         const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
+CrookedLine::CrookedLine(const std::vector<std::vector<int>>& points_vector, int angle, int line_width, int style_line,
+                         const std::string& help_text, const std::vector<int>& line_color,
+                         const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
                          int vert_mirror)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->line_width = line_width;
     this->style_line = style_line;
@@ -1063,22 +1296,28 @@ CrookedLine::CrookedLine(const std::vector<std::vector<int>> &points_vector, int
     change_center_cords(points_vector);
 }
 
-void CrookedLine::draw(QPainter &painter) {
+void CrookedLine::draw(QPainter& painter)
+{
     //начинаем отрисовку кривой
     painter.save();
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setBrush(filling_color);
         }
         QColor color_crook = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
         painter.setPen(
-                QPen(color_crook, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
-                     Qt::RoundJoin));
+            QPen(color_crook, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
+                 Qt::RoundJoin));
         QPoint qpoints[this->get_points().size()];
-        for (int i = 0; i < this->get_points().size(); i++) {
+        for (int i = 0; i < this->get_points().size(); i++)
+        {
             qpoints[i] = QPoint(this->get_points()[i][0],
                                 this->get_points()[i][1]);
         }
@@ -1089,23 +1328,30 @@ void CrookedLine::draw(QPainter &painter) {
 
 void
 CrookedLine::change_center_cords(
-        const std::vector<std::vector<int>> &points_vector) { //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
+    const std::vector<std::vector<int>>& points_vector)
+{
+    //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
     this->points = points_vector;
     int max_x = 0;
     int max_y = 0;
     int min_x = points_vector[0][0];
     int min_y = points_vector[0][1];
-    for (int i = 0; i < points_vector.size(); i++) {
-        if (points_vector[i][0] < min_x) {
+    for (int i = 0; i < points_vector.size(); i++)
+    {
+        if (points_vector[i][0] < min_x)
+        {
             min_x = points_vector[i][0];
         }
-        if (points_vector[i][0] > max_x) {
+        if (points_vector[i][0] > max_x)
+        {
             max_x = points_vector[i][0];
         }
-        if (points_vector[i][1] < min_y) {
+        if (points_vector[i][1] < min_y)
+        {
             min_y = points_vector[i][1];
         }
-        if (points_vector[i][1] > max_y) {
+        if (points_vector[i][1] > max_y)
+        {
             max_y = points_vector[i][1];
         }
     }
@@ -1118,105 +1364,130 @@ CrookedLine::change_center_cords(
 }
 
 //далее идут функции меняющие одноименные переменные класса кривой линии
-void CrookedLine::set_angle(int angl) {
+void CrookedLine::set_angle(int angl)
+{
     this->angle = angl;
 }
 
-void CrookedLine::set_hor_mirror(bool hor_mirror) {
+void CrookedLine::set_hor_mirror(bool hor_mirror)
+{
     this->horizontal_mirror = hor_mirror;
 }
 
-void CrookedLine::set_vert_mirror(bool vert_mirror) {
+void CrookedLine::set_vert_mirror(bool vert_mirror)
+{
     this->vertical_mirror = vert_mirror;
 }
 
-void CrookedLine::set_line_color(const std::vector<int> &ln_col) {
+void CrookedLine::set_line_color(const std::vector<int>& ln_col)
+{
     this->line_color = ln_col;
 }
 
-void CrookedLine::set_filling_color(const std::vector<int> &fil_col) {
+void CrookedLine::set_filling_color(const std::vector<int>& fil_col)
+{
     this->filling_color = fil_col;
 }
 
-void CrookedLine::set_style_line(int st_line) {
-    if (st_line >= 0 && st_line < this->style_line_list.size()) {
+void CrookedLine::set_style_line(int st_line)
+{
+    if (st_line >= 0 && st_line < this->style_line_list.size())
+    {
         this->style_line = st_line;
     }
 }
 
 //далее идут функции по выводу одноименных переменных класса кривой линии
-int CrookedLine::get_style_line() {
+int CrookedLine::get_style_line()
+{
     return this->style_line;
 }
 
-int CrookedLine::get_angle() {
+int CrookedLine::get_angle()
+{
     return this->angle;
 }
 
-int CrookedLine::get_x() {
+int CrookedLine::get_x()
+{
     return this->x;
 }
 
-int CrookedLine::get_y() {
+int CrookedLine::get_y()
+{
     return this->y;
 }
 
-int CrookedLine::get_width() {
+int CrookedLine::get_width()
+{
     return this->width;
 }
 
-int CrookedLine::get_height() {
+int CrookedLine::get_height()
+{
     return this->height;
 }
 
-int CrookedLine::get_center_x() {
+int CrookedLine::get_center_x()
+{
     return this->center_x;
 }
 
-int CrookedLine::get_center_y() {
+int CrookedLine::get_center_y()
+{
     return this->center_y;
 }
 
-bool CrookedLine::get_hor_mirror() {
+bool CrookedLine::get_hor_mirror()
+{
     return this->horizontal_mirror;
 }
 
-bool CrookedLine::get_vert_mirror() {
+bool CrookedLine::get_vert_mirror()
+{
     return this->vertical_mirror;
 }
 
-int CrookedLine::get_line_width() {
+int CrookedLine::get_line_width()
+{
     return this->line_width;
 }
 
-std::vector<int> CrookedLine::get_line_color() {
+std::vector<int> CrookedLine::get_line_color()
+{
     return this->line_color;
 }
 
-std::vector<int> CrookedLine::get_filling_color() {
+std::vector<int> CrookedLine::get_filling_color()
+{
     return this->filling_color;
 }
 
-std::vector<std::vector<int>> CrookedLine::get_points() {
+std::vector<std::vector<int>> CrookedLine::get_points()
+{
     return this->points;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
-void CrookedLine::show_filling() {
+void CrookedLine::show_filling()
+{
     this->bool_show_filling = true;
 }
 
-void CrookedLine::hide_filling() {
+void CrookedLine::hide_filling()
+{
     this->bool_show_filling = false;
 }
 
-bool CrookedLine::get_show_filling() {
+bool CrookedLine::get_show_filling()
+{
     return this->bool_show_filling;
 }
 
 //конструкторы класса многоугольника получающие различные вводные
-Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int hor_mirror, int vert_mirror)
-        : CrookedLine::CrookedLine() {
+Polygon::Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon, int hor_mirror, int vert_mirror)
+    : CrookedLine::CrookedLine()
+{
     this->type_object = "Полигон";
     this->end_polygone = end_polygon;
     this->horizontal_mirror = hor_mirror;
@@ -1224,11 +1495,12 @@ Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_po
     change_center_cords(points_vector);
 }
 
-Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_polygon, int angle, int line_width,
-                 int style_line, const std::string &help_text, const std::vector<int> &line_color,
-                 const std::vector<int> &filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
+Polygon::Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon, int angle, int line_width,
+                 int style_line, const std::string& help_text, const std::vector<int>& line_color,
+                 const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
                  int vert_mirror)
-        : CrookedLine::CrookedLine() {
+    : CrookedLine::CrookedLine()
+{
     this->type_object = "Полигон";
     this->end_polygone = end_polygon;
     this->angle = angle;
@@ -1244,16 +1516,23 @@ Polygon::Polygon(const std::vector<std::vector<int>> &points_vector, bool end_po
     change_center_cords(points_vector);
 }
 
-void Polygon::draw(QPainter &painter) {
+void Polygon::draw(QPainter& painter)
+{
     //начинаем отрисовку полигона
     painter.save();
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1262,41 +1541,52 @@ void Polygon::draw(QPainter &painter) {
         painter.setPen(QPen(color_poly, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap,
                             Qt::RoundJoin));
         QPoint qpoints[this->get_points().size()];
-        for (int i = 0; i < this->get_points().size(); i++) {
+        for (int i = 0; i < this->get_points().size(); i++)
+        {
             qpoints[i] = QPoint(this->get_points()[i][0],
                                 this->get_points()[i][1]);
         }
-        if (this->get_end_polygon()) {
+        if (this->get_end_polygon())
+        {
             painter.drawPolygon(qpoints, this->get_points().size());
-        } else {
+        }
+        else
+        {
             painter.drawPolyline(qpoints, this->get_points().size());
         }
     }
     painter.restore();
 }
 
-bool Polygon::get_end_polygon() {
+bool Polygon::get_end_polygon()
+{
     return this->end_polygone;
 }
 
-void Polygon::set_end_polygon(bool end_pol) {
+void Polygon::set_end_polygon(bool end_pol)
+{
     this->end_polygone = end_pol;
 }
 
-TransitionPoint::TransitionPoint() : Primitive::Primitive() {}
+TransitionPoint::TransitionPoint() : Primitive::Primitive()
+{
+}
 
 TransitionPoint::TransitionPoint(int number, int x, int y, int width,
                                  int height)
-        : Primitive::Primitive() { // получает номер точки перехода, координаты, ширина, высота
+    : Primitive::Primitive()
+{
+    // получает номер точки перехода, координаты, ширина, высота
     this->number_of_transition_point = number;
     this->type_object = "Точка перехода";
     change_center_cords(x, y, width, height);
 }
 
 TransitionPoint::TransitionPoint(int number, int x, int y, int width,
-                                 int height, const std::vector<int> &filling_color, const std::string &help_text,
+                                 int height, const std::vector<int>& filling_color, const std::string& help_text,
                                  bool bool_show,
-                                 bool bool_show_filling) : Primitive::Primitive() {
+                                 bool bool_show_filling) : Primitive::Primitive()
+{
     this->number_of_transition_point = number;
     this->filling_color = filling_color;
     this->help_text = help_text;
@@ -1306,15 +1596,22 @@ TransitionPoint::TransitionPoint(int number, int x, int y, int width,
     change_center_cords(x, y, width, height);
 }
 
-void TransitionPoint::draw(QPainter &painter) {
+void TransitionPoint::draw(QPainter& painter)
+{
     //начало отображения точки перехода
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1327,7 +1624,9 @@ void TransitionPoint::draw(QPainter &painter) {
 
 void
 TransitionPoint::change_center_cords(int x, int y, int width,
-                                     int height) { //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
+                                     int height)
+{
+    //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
     this->x = x;
     this->y = y;
     this->width = width;
@@ -1337,64 +1636,78 @@ TransitionPoint::change_center_cords(int x, int y, int width,
 }
 
 //далее идут функции меняющие одноименные переменные класса точки перехода
-void TransitionPoint::set_filling_color(const std::vector<int> &fil_col) {
+void TransitionPoint::set_filling_color(const std::vector<int>& fil_col)
+{
     this->filling_color = fil_col;
 }
 
-void TransitionPoint::set_point_number(int num) {
+void TransitionPoint::set_point_number(int num)
+{
     this->number_of_transition_point = num;
 }
 
 //далее идут функции по выводу одноименных переменных класса кнопки перехода
-int TransitionPoint::get_point_number() {
+int TransitionPoint::get_point_number()
+{
     return this->number_of_transition_point;
 }
 
-int TransitionPoint::get_x() {
+int TransitionPoint::get_x()
+{
     return this->x;
 }
 
-int TransitionPoint::get_y() {
+int TransitionPoint::get_y()
+{
     return this->y;
 }
 
-int TransitionPoint::get_width() {
+int TransitionPoint::get_width()
+{
     return this->width;
 }
 
-int TransitionPoint::get_height() {
+int TransitionPoint::get_height()
+{
     return this->height;
 }
 
-int TransitionPoint::get_center_x() {
+int TransitionPoint::get_center_x()
+{
     return this->center_x;
 }
 
-int TransitionPoint::get_center_y() {
+int TransitionPoint::get_center_y()
+{
     return this->center_y;
 }
 
 
-std::vector<int> TransitionPoint::get_filling_color() {
+std::vector<int> TransitionPoint::get_filling_color()
+{
     return this->filling_color;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
-void TransitionPoint::show_filling() {
+void TransitionPoint::show_filling()
+{
     this->bool_show_filling = true;
 }
 
-void TransitionPoint::hide_filling() {
+void TransitionPoint::hide_filling()
+{
     this->bool_show_filling = false;
 }
 
-bool TransitionPoint::get_show_filling() {
+bool TransitionPoint::get_show_filling()
+{
     return this->bool_show_filling;
 }
 
 //конструкторы класса кнопки перехода получающие различные вводные
 TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle)
-        : TransitionPoint::TransitionPoint() {
+    : TransitionPoint::TransitionPoint()
+{
     this->number_of_transition_button = number;
     this->angle = angle;
     this->type_object = "Кнопка перехода";
@@ -1403,10 +1716,11 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
 }
 
 TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle,
-                                   const std::vector<int> &filling_color,
-                                   const std::string &help_text, bool bool_show,
+                                   const std::vector<int>& filling_color,
+                                   const std::string& help_text, bool bool_show,
                                    bool bool_show_filling)
-        : TransitionPoint::TransitionPoint() {
+    : TransitionPoint::TransitionPoint()
+{
     this->number_of_transition_button = number;
     this->type_object = "Кнопка перехода";
     int number_transition_point = 0; //служебная переменная
@@ -1419,13 +1733,14 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
 }
 
 TransitionButton::TransitionButton(int number, int x, int y, int width, int height, int angle,
-                                   const std::vector<int> &filling_color,
-                                   const std::string &help_text, bool bool_show,
-                                   bool bool_show_filling, const std::string &text, const std::string &font_name,
+                                   const std::vector<int>& filling_color,
+                                   const std::string& help_text, bool bool_show,
+                                   bool bool_show_filling, const std::string& text, const std::string& font_name,
                                    int font_size,
-                                   const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                                   const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
                                    bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text)
-        : TransitionPoint::TransitionPoint() {
+    : TransitionPoint::TransitionPoint()
+{
     this->number_of_transition_button = number;
     this->type_object = "Кнопка перехода";
     int number_transition_point = 0; //служебная переменная
@@ -1448,7 +1763,8 @@ TransitionButton::TransitionButton(int number, int x, int y, int width, int heig
     change_center_cords(x, y, width, height);
 }
 
-void TransitionButton::draw(QPainter &painter) {
+void TransitionButton::draw(QPainter& painter)
+{
     //начало отображения кнопки перехода
     painter.save();
     QFont tr_b_font(this->get_font_name().c_str(), this->get_font_size());
@@ -1456,7 +1772,8 @@ void TransitionButton::draw(QPainter &painter) {
     tr_b_font.setItalic(this->get_italic_font());
     tr_b_font.setUnderline(this->get_underlined_font());
     tr_b_font.setStrikeOut(this->get_crossed_font());
-    if (this->get_auto_size_text()) {
+    if (this->get_auto_size_text())
+    {
         QFontMetrics fm(tr_b_font);
         int pxwidth = fm.width(this->get_text().c_str());
         int pxheight = fm.height();
@@ -1464,13 +1781,19 @@ void TransitionButton::draw(QPainter &painter) {
     }
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1486,48 +1809,56 @@ void TransitionButton::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(tr_b_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()],
+                         v_alignment_vector[this->get_vAlignment()],
                          QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
 
 //далее идут функции меняющие одноименные переменные класса кнопки перехода
-void TransitionButton::set_angle(int angl) {
+void TransitionButton::set_angle(int angl)
+{
     this->angle = angl;
 }
 
-void TransitionButton::set_italic_font(bool italic) {
+void TransitionButton::set_italic_font(bool italic)
+{
     this->italic_font = italic;
 }
 
-void TransitionButton::set_bold_font(bool bold) {
+void TransitionButton::set_bold_font(bool bold)
+{
     this->bold_font = bold;
 }
 
-void TransitionButton::set_underlined_font(bool underlined) {
+void TransitionButton::set_underlined_font(bool underlined)
+{
     this->underlined_font = underlined;
 }
 
-void TransitionButton::set_crossed_font(bool crossed) {
+void TransitionButton::set_crossed_font(bool crossed)
+{
     this->crossed_font = crossed;
 }
 
-void TransitionButton::set_font(const std::string &font_name, int font_size) {
+void TransitionButton::set_font(const std::string& font_name, int font_size)
+{
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void TransitionButton::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color) {
+void TransitionButton::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color)
+{
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-TransitionButton::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color,
+TransitionButton::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color,
                            bool bold_font, bool italic_font,
-                           bool underlined_font, bool crossed_font) {
+                           bool underlined_font, bool crossed_font)
+{
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
@@ -1537,119 +1868,149 @@ TransitionButton::set_font(const std::string &font_name, int font_size, const st
     this->crossed_font = crossed_font;
 }
 
-void TransitionButton::set_auto_size_text(bool auto_size) {
+void TransitionButton::set_auto_size_text(bool auto_size)
+{
     this->auto_size_text = auto_size;
 }
 
-void TransitionButton::set_text(const std::string &text) {
+void TransitionButton::set_text(const std::string& text)
+{
     this->text = text;
 }
 
-void TransitionButton::set_font_name(const std::string &font_name) {
+void TransitionButton::set_font_name(const std::string& font_name)
+{
     this->font_name = font_name;
 }
 
-void TransitionButton::set_font_size(int font_size) {
+void TransitionButton::set_font_size(int font_size)
+{
     this->font_size = font_size;
 }
 
-void TransitionButton::set_hAlignment(int hAlignment) {
-    if (hAlignment >= 0 && hAlignment <= 3) {
+void TransitionButton::set_hAlignment(int hAlignment)
+{
+    if (hAlignment >= 0 && hAlignment <= 3)
+    {
         this->hAlignment = hAlignment;
     }
 }
 
-void TransitionButton::set_vAlignment(int vAlignment) {
-    if (vAlignment >= 0 && vAlignment <= 3) {
+void TransitionButton::set_vAlignment(int vAlignment)
+{
+    if (vAlignment >= 0 && vAlignment <= 3)
+    {
         this->vAlignment = vAlignment;
     }
 }
 
-void TransitionButton::set_Alignment(const std::vector<int> &al) {
-    if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
+void TransitionButton::set_Alignment(const std::vector<int>& al)
+{
+    if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3)
+    {
         this->hAlignment = al[0];
         this->vAlignment = al[1];
     }
 }
 
-void TransitionButton::set_button_number(int num) {
+void TransitionButton::set_button_number(int num)
+{
     this->number_of_transition_button = num;
 }
 
-void TransitionButton::set_font_color(const std::vector<int> &fn_col) {
+void TransitionButton::set_font_color(const std::vector<int>& fn_col)
+{
     this->font_color = fn_col;
 }
 
 //далее идут функции по выводу одноименных переменных класса кнопки перехода
-int TransitionButton::get_angle() {
+int TransitionButton::get_angle()
+{
     return this->angle;
 }
 
-int TransitionButton::get_font_size() {
+int TransitionButton::get_font_size()
+{
     return this->font_size;
 }
 
-int TransitionButton::get_button_number() {
+int TransitionButton::get_button_number()
+{
     return this->number_of_transition_button;
 }
 
-bool TransitionButton::get_bold_font() {
+bool TransitionButton::get_bold_font()
+{
     return this->bold_font;
 }
 
-bool TransitionButton::get_italic_font() {
+bool TransitionButton::get_italic_font()
+{
     return this->italic_font;
 }
 
-bool TransitionButton::get_crossed_font() {
+bool TransitionButton::get_crossed_font()
+{
     return this->crossed_font;
 }
 
-bool TransitionButton::get_underlined_font() {
+bool TransitionButton::get_underlined_font()
+{
     return this->underlined_font;
 }
 
-bool TransitionButton::get_auto_size_text() {
+bool TransitionButton::get_auto_size_text()
+{
     return this->auto_size_text;
 }
 
-std::string TransitionButton::get_text() {
+std::string TransitionButton::get_text()
+{
     return this->text;
 }
 
-std::string TransitionButton::get_font_name() {
+std::string TransitionButton::get_font_name()
+{
     return this->font_name;
 }
 
-std::vector<int> TransitionButton::get_font_color() {
+std::vector<int> TransitionButton::get_font_color()
+{
     return this->font_color;
 }
 
-int TransitionButton::get_hAlignment() {
+int TransitionButton::get_hAlignment()
+{
     return this->hAlignment;
 }
 
-int TransitionButton::get_vAlignment() {
+int TransitionButton::get_vAlignment()
+{
     return this->vAlignment;
 }
 
-std::vector<std::string> TransitionButton::get_alignment() {
+std::vector<std::string> TransitionButton::get_alignment()
+{
     return {this->hAlignment_list[this->hAlignment], this->vAlignment_list[this->vAlignment]};
 }
 
 //конструкторы класса текста получающие различные вводные
-Text::Text() : Primitive::Primitive() {}
+Text::Text() : Primitive::Primitive()
+{
+}
 
-Text::Text(int x, int y, int width, int height, const std::string &text) : Primitive::Primitive() {
+Text::Text(int x, int y, int width, int height, const std::string& text) : Primitive::Primitive()
+{
     this->text = text;
     this->type_object = "Текст";
     change_center_cords(x, y, width, height);
 }
 
-Text::Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-           int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+Text::Text(int x, int y, int width, int height, int angle, const std::string& text, const std::string& help_text,
+           int style_line, int line_width, const std::vector<int>& filling_color, bool bool_show,
            bool bool_show_filling)
-        : Primitive::Primitive() {
+    : Primitive::Primitive()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1662,13 +2023,14 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string &te
     change_center_cords(x, y, width, height);
 }
 
-Text::Text(int x, int y, int width, int height, int angle, const std::string &text, const std::string &help_text,
-           int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+Text::Text(int x, int y, int width, int height, int angle, const std::string& text, const std::string& help_text,
+           int style_line, int line_width, const std::vector<int>& filling_color, bool bool_show,
            bool bool_show_filling,
-           const std::string &font_name, int font_size,
-           const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+           const std::string& font_name, int font_size,
+           const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
            bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
-           const std::vector<int> &pen_color) : Primitive::Primitive() {
+           const std::vector<int>& pen_color) : Primitive::Primitive()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -1692,7 +2054,8 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string &te
     change_center_cords(x, y, width, height);
 }
 
-void Text::draw(QPainter &painter) {
+void Text::draw(QPainter& painter)
+{
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
@@ -1702,15 +2065,20 @@ void Text::draw(QPainter &painter) {
     QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     int pxwidth = fm.horizontalAdvance(text_to_measure);
     int pxheight = fm.height();
-    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+    if (pxwidth > this->get_width() && pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_center_y() - pxheight / 2, pxwidth,
                                   pxheight);
-    } else if (pxwidth > this->get_width()) {
+    }
+    else if (pxwidth > this->get_width())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
                                   this->get_height());
-    } else if (pxheight > this->get_height()) {
+    }
+    else if (pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_x(),
                                   this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
@@ -1718,13 +2086,19 @@ void Text::draw(QPainter &painter) {
 
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1746,7 +2120,7 @@ void Text::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()],
+                         v_alignment_vector[this->get_vAlignment()],
                          QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
@@ -1754,7 +2128,8 @@ void Text::draw(QPainter &painter) {
 
 void
 Text::change_center_cords(int x, int y, int width,
-                          int height) {
+                          int height)
+{
     this->x = x;
     this->y = y;
     this->width = width;
@@ -1764,53 +2139,64 @@ Text::change_center_cords(int x, int y, int width,
 }
 
 //далее идут функции меняющие одноименные переменные класса текста
-void Text::set_filling_color(const std::vector<int> &fil_col) {
+void Text::set_filling_color(const std::vector<int>& fil_col)
+{
     this->filling_color = fil_col;
 }
 
-void Text::set_line_color(const std::vector<int> &ln_col) {
+void Text::set_line_color(const std::vector<int>& ln_col)
+{
     this->line_color = ln_col;
 }
 
-void Text::set_line_width(int ln_width) {
+void Text::set_line_width(int ln_width)
+{
     this->line_width = ln_width;
 }
 
-void Text::set_angle(int angl) {
+void Text::set_angle(int angl)
+{
     this->angle = angl;
 }
 
-void Text::set_italic_font(bool italic) {
+void Text::set_italic_font(bool italic)
+{
     this->italic_font = italic;
 }
 
-void Text::set_bold_font(bool bold) {
+void Text::set_bold_font(bool bold)
+{
     this->bold_font = bold;
 }
 
-void Text::set_underlined_font(bool underlined) {
+void Text::set_underlined_font(bool underlined)
+{
     this->underlined_font = underlined;
 }
 
-void Text::set_crossed_font(bool crossed) {
+void Text::set_crossed_font(bool crossed)
+{
     this->crossed_font = crossed;
 }
 
-void Text::set_font(const std::string &font_name, int font_size) {
+void Text::set_font(const std::string& font_name, int font_size)
+{
     this->font_name = font_name;
     this->font_size = font_size;
 }
 
-void Text::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color) {
+void Text::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color)
+{
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
 }
 
 void
-Text::set_font(const std::string &font_name, int font_size, const std::vector<int> &font_color, bool bold_font,
+Text::set_font(const std::string& font_name, int font_size, const std::vector<int>& font_color, bool bold_font,
                bool italic_font,
-               bool underlined_font, bool crossed_font) {
+               bool underlined_font, bool crossed_font)
+{
     this->font_name = font_name;
     this->font_size = font_size;
     this->font_color = font_color;
@@ -1820,165 +2206,205 @@ Text::set_font(const std::string &font_name, int font_size, const std::vector<in
     this->crossed_font = crossed_font;
 }
 
-void Text::set_auto_size_text(bool auto_size) {
+void Text::set_auto_size_text(bool auto_size)
+{
     this->auto_size_text = auto_size;
 }
 
-void Text::set_font_name(const std::string &font_name) {
+void Text::set_font_name(const std::string& font_name)
+{
     this->font_name = font_name;
 }
 
-void Text::set_font_size(int font_size) {
+void Text::set_font_size(int font_size)
+{
     this->font_size = font_size;
 }
 
-void Text::set_hAlignment(int hAlignment) {
-    if (hAlignment >= 0 && hAlignment <= 3) {
+void Text::set_hAlignment(int hAlignment)
+{
+    if (hAlignment >= 0 && hAlignment <= 3)
+    {
         this->hAlignment = hAlignment;
     }
 }
 
-void Text::set_vAlignment(int vAlignment) {
-    if (vAlignment >= 0 && vAlignment <= 3) {
+void Text::set_vAlignment(int vAlignment)
+{
+    if (vAlignment >= 0 && vAlignment <= 3)
+    {
         this->vAlignment = vAlignment;
     }
 }
 
-void Text::set_Alignment(const std::vector<int> &al) {
-    if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3) {
+void Text::set_Alignment(const std::vector<int>& al)
+{
+    if (al[0] >= 0 && al[0] <= 3 && al[1] >= 0 && al[1] <= 3)
+    {
         this->hAlignment = al[0];
         this->vAlignment = al[1];
     }
 }
 
-void Text::set_font_color(const std::vector<int> &fn_col) {
+void Text::set_font_color(const std::vector<int>& fn_col)
+{
     this->font_color = fn_col;
 }
 
-void Text::set_style_line(int style_line) {
-    if (style_line >= 0 && style_line <= 9) {
+void Text::set_style_line(int style_line)
+{
+    if (style_line >= 0 && style_line <= 9)
+    {
         this->style_line = style_line;
     }
 }
 
 //далее идут функции по выводу одноименных переменных класса текста
-int Text::get_x() {
+int Text::get_x()
+{
     return this->x;
 }
 
-int Text::get_y() {
+int Text::get_y()
+{
     return this->y;
 }
 
-int Text::get_width() {
+int Text::get_width()
+{
     return this->width;
 }
 
-int Text::get_height() {
+int Text::get_height()
+{
     return this->height;
 }
 
-int Text::get_center_x() {
+int Text::get_center_x()
+{
     return this->center_x;
 }
 
-int Text::get_center_y() {
+int Text::get_center_y()
+{
     return this->center_y;
 }
 
-int Text::get_style_line() {
+int Text::get_style_line()
+{
     return this->style_line;
 }
 
-std::vector<int> Text::get_filling_color() {
+std::vector<int> Text::get_filling_color()
+{
     return this->filling_color;
 }
 
-std::vector<int> Text::get_line_color() {
+std::vector<int> Text::get_line_color()
+{
     return this->line_color;
 }
 
-int Text::get_angle() {
+int Text::get_angle()
+{
     return this->angle;
 }
 
-int Text::get_line_width() {
+int Text::get_line_width()
+{
     return this->line_width;
 }
 
-int Text::get_font_size() {
+int Text::get_font_size()
+{
     return this->font_size;
 }
 
 
-bool Text::get_bold_font() {
+bool Text::get_bold_font()
+{
     return this->bold_font;
 }
 
-bool Text::get_italic_font() {
+bool Text::get_italic_font()
+{
     return this->italic_font;
 }
 
-bool Text::get_crossed_font() {
+bool Text::get_crossed_font()
+{
     return this->crossed_font;
 }
 
-bool Text::get_underlined_font() {
+bool Text::get_underlined_font()
+{
     return this->underlined_font;
 }
 
-bool Text::get_auto_size_text() {
+bool Text::get_auto_size_text()
+{
     return this->auto_size_text;
 }
 
-std::string Text::get_text() {
+std::string Text::get_text()
+{
     return this->text;
 }
 
-std::string Text::get_font_name() {
+std::string Text::get_font_name()
+{
     return this->font_name;
 }
 
-std::vector<int> Text::get_font_color() {
+std::vector<int> Text::get_font_color()
+{
     return this->font_color;
 }
 
-int Text::get_hAlignment() {
+int Text::get_hAlignment()
+{
     return this->hAlignment;
 }
 
-int Text::get_vAlignment() {
+int Text::get_vAlignment()
+{
     return this->vAlignment;
 }
 
-std::vector<std::string> Text::get_alignment() {
+std::vector<std::string> Text::get_alignment()
+{
     return {this->hAlignment_list[this->hAlignment], this->vAlignment_list[this->vAlignment]};
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
-void Text::show_filling() {
+void Text::show_filling()
+{
     this->bool_show_filling = true;
 }
 
-void Text::hide_filling() {
+void Text::hide_filling()
+{
     this->bool_show_filling = false;
 }
 
-bool Text::get_show_filling() {
+bool Text::get_show_filling()
+{
     return this->bool_show_filling;
 }
 
 //конструкторы класса прямоугольника получающие различные вводные
-Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle) : Primitive::Primitive() {
+Image::Image(int x, int y, int width, int height, const std::string& im_path, int angle) : Primitive::Primitive()
+{
     this->image_path = im_path;
     this->angle = angle;
     this->type_object = "Картинка";
     change_center_cords(x, y, width, height);
 }
 
-Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
-             const std::vector<int> &line_color, const std::string &help_text, bool bool_show)
-        : Primitive::Primitive() {
+Image::Image(int x, int y, int width, int height, const std::string& im_path, int angle, int line_width, int style_line,
+             const std::vector<int>& line_color, const std::string& help_text, bool bool_show)
+    : Primitive::Primitive()
+{
     this->image_path = im_path;
     this->angle = angle;
     this->line_width = line_width;
@@ -1990,9 +2416,10 @@ Image::Image(int x, int y, int width, int height, const std::string &im_path, in
     change_center_cords(x, y, width, height);
 }
 
-Image::Image(int x, int y, int width, int height, const std::string &im_path, int angle, int line_width, int style_line,
-             const std::vector<int> &line_color, const std::string &help_text, bool bool_show, int style_frame,
-             const std::vector<int> &filling_color, bool bool_show_filling) : Primitive::Primitive() {
+Image::Image(int x, int y, int width, int height, const std::string& im_path, int angle, int line_width, int style_line,
+             const std::vector<int>& line_color, const std::string& help_text, bool bool_show, int style_frame,
+             const std::vector<int>& filling_color, bool bool_show_filling) : Primitive::Primitive()
+{
     this->image_path = im_path;
     this->angle = angle;
     this->line_width = line_width;
@@ -2007,12 +2434,14 @@ Image::Image(int x, int y, int width, int height, const std::string &im_path, in
     change_center_cords(x, y, width, height);
 }
 
-void Image::draw(QPainter &painter) {
+void Image::draw(QPainter& painter)
+{
     //начало отображения картинки
     painter.save();
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
+    if (this->get_show())
+    {
         QRect target(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                      this->get_height());
         QRect source(0, 0, 0, 0);
@@ -2023,7 +2452,8 @@ void Image::draw(QPainter &painter) {
 }
 
 //меняет координаты начала, конца, центра прямоугольника. Эта функция нужня для изменения размеров.
-void Image::change_center_cords(int x, int y, int width, int height) {
+void Image::change_center_cords(int x, int y, int width, int height)
+{
     this->x = x;
     this->y = y;
     this->width = width;
@@ -2033,116 +2463,143 @@ void Image::change_center_cords(int x, int y, int width, int height) {
 }
 
 //далее идут функции меняющие одноименные переменные класса прямоугольника
-void Image::set_angle(int angl) {
+void Image::set_angle(int angl)
+{
     this->angle = angl;
 }
 
-void Image::set_line_width(int width) {
+void Image::set_line_width(int width)
+{
     this->line_width = width;
 }
 
-void Image::set_line_color(const std::vector<int> &ln_col) {
+void Image::set_line_color(const std::vector<int>& ln_col)
+{
     this->line_color = ln_col;
 }
 
-void Image::set_filling_color(const std::vector<int> &fil_col) {
+void Image::set_filling_color(const std::vector<int>& fil_col)
+{
     this->filling_color = fil_col;
 }
 
-void Image::set_style_frame(int st_frame) {
-    if (st_frame >= 0 && st_frame < this->style_frame_list.size()) {
+void Image::set_style_frame(int st_frame)
+{
+    if (st_frame >= 0 && st_frame < this->style_frame_list.size())
+    {
         this->style_frame = st_frame;
     }
 }
 
-void Image::set_style_line(int st_line) {
-    if (st_line >= 0 && st_line < this->style_line_list.size()) {
+void Image::set_style_line(int st_line)
+{
+    if (st_line >= 0 && st_line < this->style_line_list.size())
+    {
         this->style_line = st_line;
     }
 }
 
-void Image::set_image_path(const std::string &im_path) {
+void Image::set_image_path(const std::string& im_path)
+{
     this->image_path = im_path;
 }
 
 //далее идут функции по выводу одноименных переменных класса прямоугольника
-std::string Image::get_image_path() {
+std::string Image::get_image_path()
+{
     return this->image_path;
 }
 
-int Image::get_style_frame() {
+int Image::get_style_frame()
+{
     return this->style_frame;
 }
 
-int Image::get_line_width() {
+int Image::get_line_width()
+{
     return this->line_width;
 }
 
-int Image::get_style_line() {
+int Image::get_style_line()
+{
     return this->style_line;
 }
 
-int Image::get_angle() {
+int Image::get_angle()
+{
     return this->angle;
 }
 
-int Image::get_x() {
+int Image::get_x()
+{
     return this->x;
 }
 
-int Image::get_y() {
+int Image::get_y()
+{
     return this->y;
 }
 
-int Image::get_width() {
+int Image::get_width()
+{
     return this->width;
 }
 
-int Image::get_height() {
+int Image::get_height()
+{
     return this->height;
 }
 
-int Image::get_center_x() {
+int Image::get_center_x()
+{
     return this->center_x;
 }
 
-int Image::get_center_y() {
+int Image::get_center_y()
+{
     return this->center_y;
 }
 
-std::vector<int> Image::get_line_color() {
+std::vector<int> Image::get_line_color()
+{
     return this->line_color;
 }
 
-std::vector<int> Image::get_filling_color() {
+std::vector<int> Image::get_filling_color()
+{
     return this->filling_color;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
-void Image::show_filling() {
+void Image::show_filling()
+{
     this->bool_show_filling = true;
 }
 
-void Image::hide_filling() {
+void Image::hide_filling()
+{
     this->bool_show_filling = false;
 }
 
-bool Image::get_show_filling() {
+bool Image::get_show_filling()
+{
     return bool_show_filling;
 }
 
 //конструкторы класса текста получающие различные вводные
-Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string &text) : Text::Text() {
+Telecontrol::Telecontrol(int x, int y, int width, int height, const std::string& text) : Text::Text()
+{
     this->text = text;
     this->type_object = "Телеконтроль";
     change_center_cords(x, y, width, height);
 }
 
-Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
-                         const std::string &help_text,
-                         int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string& text,
+                         const std::string& help_text,
+                         int style_line, int line_width, const std::vector<int>& filling_color, bool bool_show,
                          bool bool_show_filling)
-        : Text::Text() {
+    : Text::Text()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -2155,15 +2612,16 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
     change_center_cords(x, y, width, height);
 }
 
-Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string &text,
-                         const std::string &help_text,
-                         int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const std::string& text,
+                         const std::string& help_text,
+                         int style_line, int line_width, const std::vector<int>& filling_color, bool bool_show,
                          bool bool_show_filling,
-                         const std::string &font_name, int font_size,
-                         const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                         const std::string& font_name, int font_size,
+                         const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
-                         const std::vector<int> &pen_color)
-        : Text::Text() {
+                         const std::vector<int>& pen_color, int id_c)
+    : Text::Text()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -2184,10 +2642,12 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
     this->type_object = "Телеконтроль";
     this->line_width = line_width;
     this->line_color = pen_color;
+    this->id = id_c;
     change_center_cords(x, y, width, height);
 }
 
-void Telecontrol::draw(QPainter &painter) {
+void Telecontrol::draw(QPainter& painter)
+{
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
@@ -2197,15 +2657,20 @@ void Telecontrol::draw(QPainter &painter) {
     QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     int pxwidth = fm.horizontalAdvance(text_to_measure);
     int pxheight = fm.height();
-    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+    if (pxwidth > this->get_width() && pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_center_y() - pxheight / 2, pxwidth,
                                   pxheight);
-    } else if (pxwidth > this->get_width()) {
+    }
+    else if (pxwidth > this->get_width())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
                                   this->get_height());
-    } else if (pxheight > this->get_height()) {
+    }
+    else if (pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_x(),
                                   this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
@@ -2213,13 +2678,19 @@ void Telecontrol::draw(QPainter &painter) {
 
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -2241,40 +2712,46 @@ void Telecontrol::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()],
+                         v_alignment_vector[this->get_vAlignment()],
                          QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
 
 //далее идут функции меняющие одноименные переменные класса телеуправления
-void Telecontrol::set_condition(int condition) {
-    if (0 <= condition <= 1) {
+void Telecontrol::set_condition(int condition)
+{
+    if (0 <= condition <= 1)
+    {
         this->condition = condition;
     }
 }
 
 //далее идут функции по выводу одноименных переменных класса телеуправления
-int Telecontrol::get_condition() {
+int Telecontrol::get_condition()
+{
     return this->condition;
 }
 
-int Telecontrol::get_id() {
+int Telecontrol::get_id()
+{
     return this->id;
 }
 
 //конструкторы класса текста получающие различные вводные
-Telesignalisation::Telesignalisation(int x, int y, int width, int height, const std::string &text) : Text::Text() {
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, const std::string& text) : Text::Text()
+{
     this->text = text;
     this->type_object = "Телесигнализация";
     change_center_cords(x, y, width, height);
 }
 
-Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
-                                     const std::string &help_text,
-                                     int style_line, int line_width, const std::vector<int> &filling_color,
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string& text,
+                                     const std::string& help_text,
+                                     int style_line, int line_width, const std::vector<int>& filling_color,
                                      bool bool_show,
-                                     bool bool_show_filling) : Text::Text() {
+                                     bool bool_show_filling) : Text::Text()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -2287,16 +2764,17 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
     change_center_cords(x, y, width, height);
 }
 
-Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string &text,
-                                     const std::string &help_text,
-                                     int style_line, int line_width, const std::vector<int> &filling_color,
+Telesignalisation::Telesignalisation(int x, int y, int width, int height, int angle, const std::string& text,
+                                     const std::string& help_text,
+                                     int style_line, int line_width, const std::vector<int>& filling_color,
                                      bool bool_show,
                                      bool bool_show_filling,
-                                     const std::string &font_name, int font_size,
-                                     const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                                     const std::string& font_name, int font_size,
+                                     const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
                                      bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
-                                     const std::vector<int> &pen_color)
-        : Text::Text() {
+                                     const std::vector<int>& pen_color, int id_c)
+    : Text::Text()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -2317,10 +2795,12 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
     this->type_object = "Телесигнализация";
     this->line_width = line_width;
     this->line_color = pen_color;
+    this->id = id_c;
     change_center_cords(x, y, width, height);
 }
 
-void Telesignalisation::draw(QPainter &painter) {
+void Telesignalisation::draw(QPainter& painter)
+{
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
@@ -2330,15 +2810,20 @@ void Telesignalisation::draw(QPainter &painter) {
     QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     int pxwidth = fm.horizontalAdvance(text_to_measure);
     int pxheight = fm.height();
-    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+    if (pxwidth > this->get_width() && pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_center_y() - pxheight / 2, pxwidth,
                                   pxheight);
-    } else if (pxwidth > this->get_width()) {
+    }
+    else if (pxwidth > this->get_width())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
                                   this->get_height());
-    } else if (pxheight > this->get_height()) {
+    }
+    else if (pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_x(),
                                   this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
@@ -2346,13 +2831,19 @@ void Telesignalisation::draw(QPainter &painter) {
 
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -2374,40 +2865,46 @@ void Telesignalisation::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()],
+                         v_alignment_vector[this->get_vAlignment()],
                          QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
 
 //далее идут функции меняющие одноименные переменные класса телеуправления
-void Telesignalisation::set_condition(int condition) {
-    if (0 <= condition <= 1) {
+void Telesignalisation::set_condition(int condition)
+{
+    if (0 <= condition <= 1)
+    {
         this->condition = condition;
     }
 }
 
 //далее идут функции по выводу одноименных переменных класса телеуправления
-int Telesignalisation::get_condition() {
+int Telesignalisation::get_condition()
+{
     return this->condition;
 }
 
-int Telesignalisation::get_id() {
+int Telesignalisation::get_id()
+{
     return this->id;
 }
 
 //конструкторы класса текста получающие различные вводные
-Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string &text) : Text::Text() {
+Telemeasure::Telemeasure(int x, int y, int width, int height, const std::string& text) : Text::Text()
+{
     this->text = text;
     this->type_object = "Телеизмерение";
     change_center_cords(x, y, width, height);
 }
 
-Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
-                         const std::string &help_text,
-                         int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string& text,
+                         const std::string& help_text,
+                         int style_line, int line_width, const std::vector<int>& filling_color, bool bool_show,
                          bool bool_show_filling)
-        : Text::Text() {
+    : Text::Text()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -2420,15 +2917,16 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     change_center_cords(x, y, width, height);
 }
 
-Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string &text,
-                         const std::string &help_text,
-                         int style_line, int line_width, const std::vector<int> &filling_color, bool bool_show,
+Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const std::string& text,
+                         const std::string& help_text,
+                         int style_line, int line_width, const std::vector<int>& filling_color, bool bool_show,
                          bool bool_show_filling,
-                         const std::string &font_name, int font_size,
-                         const std::vector<int> &font_color, int hAlignment, int vAlignment, bool bold_font,
+                         const std::string& font_name, int font_size,
+                         const std::vector<int>& font_color, int hAlignment, int vAlignment, bool bold_font,
                          bool italic_font, bool underlined_font, bool crossed_font, bool auto_size_text,
-                         const std::vector<int> &pen_color)
-        : Text::Text() {
+                         const std::vector<int>& pen_color, int id_c)
+    : Text::Text()
+{
     this->angle = angle;
     this->text = text;
     this->help_text = help_text;
@@ -2449,10 +2947,12 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     this->type_object = "Телеизмерение";
     this->line_width = line_width;
     this->line_color = pen_color;
+    this->id = id_c;
     change_center_cords(x, y, width, height);
 }
 
-void Telemeasure::draw(QPainter &painter) {
+void Telemeasure::draw(QPainter& painter)
+{
     painter.save();
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
@@ -2462,15 +2962,20 @@ void Telemeasure::draw(QPainter &painter) {
     QString text_to_measure(QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     int pxwidth = fm.horizontalAdvance(text_to_measure);
     int pxheight = fm.height();
-    if (pxwidth > this->get_width() && pxheight > this->get_height()) {
+    if (pxwidth > this->get_width() && pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_center_y() - pxheight / 2, pxwidth,
                                   pxheight);
-    } else if (pxwidth > this->get_width()) {
+    }
+    else if (pxwidth > this->get_width())
+    {
         this->change_center_cords(this->get_center_x() - pxwidth / 2,
                                   this->get_y(), pxwidth,
                                   this->get_height());
-    } else if (pxheight > this->get_height()) {
+    }
+    else if (pxheight > this->get_height())
+    {
         this->change_center_cords(this->get_x(),
                                   this->get_center_y() - pxheight / 2, this->get_width(),
                                   pxheight);
@@ -2478,13 +2983,19 @@ void Telemeasure::draw(QPainter &painter) {
 
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
-    if (this->get_show()) {
-        if (this->get_show_filling()) {
-            QColor filling_color = {this->get_filling_color()[0], this->get_filling_color()[1],
-                                    this->get_filling_color()[2]};
+    if (this->get_show())
+    {
+        if (this->get_show_filling())
+        {
+            QColor filling_color = {
+                this->get_filling_color()[0], this->get_filling_color()[1],
+                this->get_filling_color()[2]
+            };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
-        } else {
+        }
+        else
+        {
             QColor filling_color = {Qt::transparent};
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -2506,32 +3017,38 @@ void Telemeasure::draw(QPainter &painter) {
         painter.setPen(font_color);
         painter.setFont(text_font);
         painter.drawText(rect, h_alignment_vector[this->get_hAlignment()] |
-                               v_alignment_vector[this->get_vAlignment()],
+                         v_alignment_vector[this->get_vAlignment()],
                          QTextCodec::codecForName("cp1251")->toUnicode(this->get_text().c_str()));
     }
     painter.restore();
 }
 
 //далее идут функции меняющие одноименные переменные класса телеуправления
-void Telemeasure::set_device_type(int device_type) {
+void Telemeasure::set_device_type(int device_type)
+{
     this->device_type = device_type;
 }
 
 //далее идут функции по выводу одноименных переменных класса телеуправления
-int Telemeasure::get_device_type() {
+int Telemeasure::get_device_type()
+{
     return this->device_type;
 }
 
-int Telemeasure::get_id() {
+int Telemeasure::get_id()
+{
     return this->id;
 }
 
-Set::Set() : Primitive::Primitive() {}
+Set::Set() : Primitive::Primitive()
+{
+}
 
 Set::Set(int ln_width, int ln_width2, int ln_width3, int hor_space, int vert_space, int hor_space2, int vert_space2,
          int hor_space3, int vert_space3,
-         int ln_style, const std::vector<int> &ln_color)
-        : Primitive::Primitive() {
+         int ln_style, const std::vector<int>& ln_color)
+    : Primitive::Primitive()
+{
     line_width = ln_width;
     line_width2 = ln_width2;
     line_width3 = ln_width3;
@@ -2545,78 +3062,98 @@ Set::Set(int ln_width, int ln_width2, int ln_width3, int hor_space, int vert_spa
     line_color = ln_color;
 }
 
-void Set::draw(QPainter &painter, int scheme_width, int scheme_height) {
-    if (bool_show) {
+void Set::draw(QPainter& painter, int scheme_width, int scheme_height)
+{
+    if (bool_show)
+    {
         QColor color_set = {line_color[0], line_color[1], line_color[2]};
         painter.setPen(QPen(color_set, line_width, style_vector[line_style], Qt::RoundCap));
-        for (int i = 0; i < scheme_width; i += horizontal_space) {
+        for (int i = 0; i < scheme_width; i += horizontal_space)
+        {
             painter.drawLine(i, 0, i, scheme_height);
         }
-        for (int i = 0; i < scheme_height; i += vertical_space) {
+        for (int i = 0; i < scheme_height; i += vertical_space)
+        {
             painter.drawLine(0, i, scheme_width, i);
         }
         painter.setPen(QPen(color_set, line_width2, Qt::DashLine, Qt::RoundCap));
-        for (int i = 0; i < scheme_width; i += horizontal_space2) {
+        for (int i = 0; i < scheme_width; i += horizontal_space2)
+        {
             painter.drawLine(i, 0, i, scheme_height);
         }
-        for (int i = 0; i < scheme_height; i += vertical_space2) {
+        for (int i = 0; i < scheme_height; i += vertical_space2)
+        {
             painter.drawLine(0, i, scheme_width, i);
         }
         painter.setPen(QPen(color_set, line_width3, Qt::DotLine, Qt::RoundCap));
-        for (int i = 0; i < scheme_width; i += horizontal_space3) {
+        for (int i = 0; i < scheme_width; i += horizontal_space3)
+        {
             painter.drawLine(i, 0, i, scheme_height);
         }
-        for (int i = 0; i < scheme_height; i += vertical_space3) {
+        for (int i = 0; i < scheme_height; i += vertical_space3)
+        {
             painter.drawLine(0, i, scheme_width, i);
         }
     }
 }
 
-void Set::set_line_width(int ln_width) {
+void Set::set_line_width(int ln_width)
+{
     line_width = ln_width;
 }
 
-void Set::set_horizontal_space(int hor_space) {
+void Set::set_horizontal_space(int hor_space)
+{
     horizontal_space = hor_space;
 }
 
-void Set::set_vertical_space(int ver_space) {
+void Set::set_vertical_space(int ver_space)
+{
     vertical_space = ver_space;
 }
 
-void Set::set_line_style(int ln_style) {
+void Set::set_line_style(int ln_style)
+{
     line_style = ln_style;
 }
 
-void Set::set_line_color(std::vector<int> &col) {
+void Set::set_line_color(std::vector<int>& col)
+{
     line_color = col;
 }
 
-int Set::get_line_width() {
+int Set::get_line_width()
+{
     return line_width;
 }
 
-int Set::get_horizontal_space() {
+int Set::get_horizontal_space()
+{
     return horizontal_space;
 }
 
-int Set::get_vertical_space() {
+int Set::get_vertical_space()
+{
     return vertical_space;
 }
 
-int Set::get_line_style() {
+int Set::get_line_style()
+{
     return line_style;
 }
 
-std::vector<int> Set::get_line_color() {
+std::vector<int> Set::get_line_color()
+{
     return line_color;
 }
 
-Point::Point() : Primitive() {
+Point::Point() : Primitive()
+{
     type_object = "Point";
 }
 
-Point::Point(int x, int y, int ln_width, const std::vector<int> &ln_color) : Point() {
+Point::Point(int x, int y, int ln_width, const std::vector<int>& ln_color) : Point()
+{
     type_object = "Point";
     this->x = x;
     this->y = y;
@@ -2624,50 +3161,59 @@ Point::Point(int x, int y, int ln_width, const std::vector<int> &ln_color) : Poi
     line_color = ln_color;
 }
 
-void Point::draw(QPainter &painter) {
+void Point::draw(QPainter& painter)
+{
     QColor col = QColor(line_color[0], line_color[1], line_color[2]);
     painter.setPen(QPen(col, line_width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawPoint(this->x, this->y);
-
 }
 
-void Point::change_cords(int x, int y) {
+void Point::change_cords(int x, int y)
+{
     this->x = x;
     this->y = y;
 }
 
-void Point::set_line_width(int ln_width) {
+void Point::set_line_width(int ln_width)
+{
     line_width = ln_width;
 }
 
-void Point::set_line_color(std::vector<int> ln_color) {
+void Point::set_line_color(std::vector<int> ln_color)
+{
     line_color = ln_color;
 }
 
-int Point::get_x() {
+int Point::get_x()
+{
     return this->x;
 }
 
-int Point::get_y() {
+int Point::get_y()
+{
     return this->y;
 }
 
-int Point::get_line_width() {
+int Point::get_line_width()
+{
     return line_width;
 }
 
-std::vector<int> Point::get_line_color() {
+std::vector<int> Point::get_line_color()
+{
     return line_color;
 }
 
-LibraryObject::LibraryObject() : Primitive() {
+LibraryObject::LibraryObject() : Primitive()
+{
     type_object = "Библиотечный объект";
 }
 
 LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
-                             const std::string &lib_name, const std::string &obj_name,
-                             const std::vector<std::vector<Primitive *>> &patterns, const std::string &help_text,
-                             bool show, bool show_help, int hor_mirror, int vert_mirror) : Primitive() {
+                             const std::string& lib_name, const std::string& obj_name,
+                             const std::vector<std::vector<Primitive*>>& patterns, const std::string& help_text,
+                             bool show, bool show_help, int hor_mirror, int vert_mirror) : Primitive()
+{
     type_object = "Библиотечный объект";
     this->x = x;
     this->y = y;
@@ -2687,13 +3233,17 @@ LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int
     change_center_cords(this->x, this->y, this->width, this->height);
 }
 
-void LibraryObject::draw(QPainter &painter) {
-    if (this->bool_show) {
+void LibraryObject::draw(QPainter& painter)
+{
+    if (this->bool_show)
+    {
         painter.save();
         painter.translate(this->center_x, this->center_y);
         painter.rotate((360 - this->angle) % 360);
-        if (condition < patterns.size() && condition >= 0) {
-            for (auto obj: patterns[condition]) {
+        if (condition < patterns.size() && condition >= 0)
+        {
+            for (auto obj : patterns[condition])
+            {
                 obj->draw(painter);
             }
         }
@@ -2701,7 +3251,8 @@ void LibraryObject::draw(QPainter &painter) {
     }
 }
 
-void LibraryObject::change_center_cords(int x, int y, int width, int height) {
+void LibraryObject::change_center_cords(int x, int y, int width, int height)
+{
     this->x = x;
     this->y = y;
     this->width = width;
@@ -2710,70 +3261,87 @@ void LibraryObject::change_center_cords(int x, int y, int width, int height) {
     this->center_y = this->y + floor(this->height / 2);
 }
 
-void LibraryObject::set_angle(int angle) {
+void LibraryObject::set_angle(int angle)
+{
     this->angle = angle;
 }
 
-void LibraryObject::set_library_name(const std::string &lib_name) {
+void LibraryObject::set_library_name(const std::string& lib_name)
+{
     library_name = lib_name;
 }
 
-void LibraryObject::set_object_name(const std::string &obj_name) {
+void LibraryObject::set_object_name(const std::string& obj_name)
+{
     object_name = obj_name;
 }
 
-void LibraryObject::set_patterns(const std::vector<std::vector<Primitive *>> &patterns) {
+void LibraryObject::set_patterns(const std::vector<std::vector<Primitive*>>& patterns)
+{
     this->patterns = patterns;
 }
 
-void LibraryObject::set_hor_mirror(bool hor_mirror) {
+void LibraryObject::set_hor_mirror(bool hor_mirror)
+{
     this->horizontal_mirror = hor_mirror;
 }
 
-void LibraryObject::set_vert_mirror(bool vert_mirror) {
+void LibraryObject::set_vert_mirror(bool vert_mirror)
+{
     this->vertical_mirror = vert_mirror;
 }
 
-void LibraryObject::add_pattern(const std::vector<Primitive *> pattern) {
+void LibraryObject::add_pattern(const std::vector<Primitive*> pattern)
+{
     this->patterns.push_back(pattern);
 }
 
-int LibraryObject::get_x() {
+int LibraryObject::get_x()
+{
     return this->x;
 }
 
-int LibraryObject::get_y() {
+int LibraryObject::get_y()
+{
     return this->y;
 }
 
-int LibraryObject::get_width() {
+int LibraryObject::get_width()
+{
     return this->width;
 }
 
-int LibraryObject::get_height() {
+int LibraryObject::get_height()
+{
     return this->height;
 }
 
-int LibraryObject::get_angle() {
+int LibraryObject::get_angle()
+{
     return this->angle;
 }
 
-bool LibraryObject::get_hor_mirror() {
+bool LibraryObject::get_hor_mirror()
+{
     return this->horizontal_mirror;
 }
 
-bool LibraryObject::get_vert_mirror() {
+bool LibraryObject::get_vert_mirror()
+{
     return this->vertical_mirror;
 }
 
-int LibraryObject::get_id() {
+int LibraryObject::get_id()
+{
     return this->id;
 }
 
-int LibraryObject::get_condition() {
+int LibraryObject::get_condition()
+{
     return condition;
 }
 
-std::vector<std::vector<Primitive *>> LibraryObject::get_patterns() {
+std::vector<std::vector<Primitive*>> LibraryObject::get_patterns()
+{
     return patterns;
 }

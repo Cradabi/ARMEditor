@@ -1,41 +1,73 @@
-#include "pqxx/pqxx"
+#include "QtSql"
 
-
-
-pqxx::result connection_to_db() {
-    try {
+QSqlQuery connection_to_db()
+{
+    try
+    {
         // Создание объекта соединения с базой данных
-        pqxx::connection conn("dbname=postgres user=postgres password=20052005 hostaddr=127.0.0.1 port=5432");
+        QString connectionName = "Postgres connection";
+        if (!QSqlDatabase::contains(connectionName))
+        {
+            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            db.setHostName("localhost");
+            db.setDatabaseName("postgres");
+            db.setUserName("postgres");
+            db.setPassword("MaximRozov24");
 
-        // Проверка успешности подключения
-        if (conn.is_open()) {
-
-            // Выполнение SQL-запроса
-            pqxx::work txn(conn);
-            pqxx::result result = txn.exec("SELECT name, current_state, current_value FROM objects");
-            txn.commit();
-            conn.disconnect();
-            return result;
-
-//            // Вывод данных
-//            for (const auto &row : result) {
-//                for (const auto &field : row) {
-//                    std::cout << field.c_str() << " ";
-//                }
-//                std::cout << std::endl;
-//            }
-
-        } else {
-            //std::cerr << "Ошибка подключения к базе данных" << std::endl;
-            conn.disconnect();
-            exit(1);
+            if (!db.open())
+            {
+                qWarning() << "Не удалось подключиться к базе данных";
+            }
+            QSqlQuery query("SELECT id, name, current_state, current_value FROM objects", db);
+            db.close();
+            return query;
         }
-
-
+        else
+        {
+            QSqlDatabase db = QSqlDatabase::database(connectionName);
+            QSqlQuery query("SELECT id, name, current_state, current_value FROM objects", db);
+            db.close();
+            return query;
+        }
     }
-    catch (const std::exception &e) {
-        //std::cerr << "Ошибка: " << e.what() << std::endl;
+    catch (const std::exception& e)
+    {
         exit(1);
     }
+}
 
+QSqlQuery connection_to_cp_db()
+{
+    try
+    {
+        // Создание объекта соединения с базой данных
+        QString connectionName = "Postgres connection";
+        if (!QSqlDatabase::contains(connectionName))
+        {
+            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            db.setHostName("localhost");
+            db.setDatabaseName("postgres");
+            db.setUserName("postgres");
+            db.setPassword("MaximRozov24");
+
+            if (!db.open())
+            {
+                qWarning() << "Не удалось подключиться к базе данных";
+            }
+            QSqlQuery query("SELECT id, name FROM cp_groups", db);
+            db.close();
+            return query;
+        }
+        else
+        {
+            QSqlDatabase db = QSqlDatabase::database(connectionName);
+            QSqlQuery query("SELECT id, name, current_state, current_value, cp_name_id FROM objects", db);
+            db.close();
+            return query;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        exit(1);
+    }
 }

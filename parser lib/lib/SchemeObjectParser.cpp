@@ -1,38 +1,41 @@
 #include "SchemeObjectParser.h"
 
-void SchemeObjectParser::rewriteCacheObject(int32_t lib_index, int32_t cache_size) {
-
-    CacheFileOut.write((char*) &lib_index, types_sizes._32bits);
-    CacheFileOut.write((char*) &cache_size, types_sizes._32bits);
+void SchemeObjectParser::rewriteCacheObject(int32_t lib_index, int32_t cache_size)
+{
+    CacheFileOut.write((char*)&lib_index, types_sizes._32bits);
+    CacheFileOut.write((char*)&cache_size, types_sizes._32bits);
 
     uint32_t bytes_counter = 0;
-    while (bytes_counter < cache_size) {
+    while (bytes_counter < cache_size)
+    {
         ++bytes_counter;
         SchemeFile.read(buffer, types_sizes._8bits);
         CacheFileOut.write(buffer, types_sizes._8bits);
     }
 
     lae::WriteLog(LogsFile, "\nWatch lower in OBJS section ⇓ \n", true);
-
 }
 
-void SchemeObjectParser::getButtonsInfo(std::ifstream& File, sop::ObjectParams& object_params) {
+void SchemeObjectParser::getButtonsInfo(std::ifstream& File, sop::ObjectParams& object_params)
+{
     object_params.button_left_active = getBool(File);
     object_params.button_right_active = getBool(File);
     object_params.buttons_swapped = getBool(File);
 }
 
-void SchemeObjectParser::getAnimationInfo(std::ifstream& File, sop::ObjectParams& object_params) {
+void SchemeObjectParser::getAnimationInfo(std::ifstream& File, sop::ObjectParams& object_params)
+{
     object_params.is_animated = getBool(File);
     object_params.animation_speed = getSomeInt(File, object_params.animation_speed);
     object_params.hide_when_animation_stopped = getBool(File);
 }
 
-void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int32_t nesting_level) {
-
+void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int32_t nesting_level)
+{
     sop::ObjectParams object_params;
 
-    if (nesting_level > 1) {
+    if (nesting_level > 1)
+    {
         object_params.is_group_object = true;
     }
 
@@ -50,7 +53,8 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
     object_params.is_lib_object = getBool(File);
     object_params.is_text_object = getBool(File);
 
-    if (!object_params.is_lib_object) {
+    if (!object_params.is_lib_object)
+    {
         object_params.name_length = getSomeInt(File, object_params.name_length);
         getString(File, object_params.name, object_params.name_length);
     }
@@ -65,7 +69,8 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
     getMatrix(File, object_params.contur_frame_matrix, 3, 9);
 
     object_params.reflection_possibility = getBool(File);
-    if (!object_params.is_lib_object) {
+    if (!object_params.is_lib_object)
+    {
         object_params.horizontal_reflection_mx = getBool(File);
         object_params.vertical_reflection_my = getBool(File);
     }
@@ -79,7 +84,8 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
 
     object_params.index = getSomeInt(File, object_params.index);
 
-    if (!object_params.is_lib_object) {
+    if (!object_params.is_lib_object)
+    {
         object_params.index_cache = getSomeInt(File, object_params.index_cache);
     }
 
@@ -91,13 +97,15 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
 
     object_params.bgcolor_not_needed = getBool(File);
 
-    if (object_params.is_lib_object) {
+    if (object_params.is_lib_object)
+    {
         object_params.horizontal_reflection_mx = getBool(File);
         object_params.vertical_reflection_my = getBool(File);
         object_params.has_info_for_analysis = getBool(File);
     }
 
-    if (!object_params.is_lib_object) {
+    if (!object_params.is_lib_object)
+    {
         object_params.glue_points_amount = getSomeInt(File, object_params.animation_speed);
         getVector(File, object_params.glue_points_vector, object_params.glue_points_amount);
 
@@ -105,20 +113,20 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
         object_params.primitives_in_state_amount = getSomeInt(File, object_params.primitives_in_state_amount);
     }
 
-//    if (object_params.is_struct_object)
-//        parseStructObject();
+    //    if (object_params.is_struct_object)
+    //        parseStructObject();
     if (object_params.is_lib_object)
         parseLibObject(object_params);
-//    else if (object_params.is_text_object)
-//        parseText();
+        //    else if (object_params.is_text_object)
+        //        parseText();
     else
         parsePrimitive(File, object_params);
 
     writeObjectInfo(object_params);
 }
 
-void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level) {
-
+void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level)
+{
     sop::ObjectParams object_params;
 
     getMatrix(File, object_params.coord_matrix, 3, 3);
@@ -138,27 +146,30 @@ void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level) 
     patterns.emplace_back(group_objects_vector);
 
     scheme_params->objects_vector.emplace_back(
-            new LibraryObject(abs((int) round(object_params.contur_frame_matrix[0][0])),
-                              abs((int) round(object_params.contur_frame_matrix[0][1])), ((int) round(
-                            object_params.coord_matrix[0][2] - object_params.contur_frame_matrix[0][0])) * 2,
-                              ((int) round(
-                                      object_params.coord_matrix[1][2] -
-                                      object_params.contur_frame_matrix[0][1])) * 2, object_params.angle,
-                              object_params.index, object_params.state, object_params.name,
-                              object_params.name, patterns, object_params.hint, object_params.show,
-                              object_params.hint_show, 0, 0));
+        new LibraryObject(abs((int)round(object_params.contur_frame_matrix[0][0])),
+                          abs((int)round(object_params.contur_frame_matrix[0][1])), ((int)round(
+                              object_params.coord_matrix[0][2] - object_params.contur_frame_matrix[0][0])) * 2,
+                          ((int)round(
+                              object_params.coord_matrix[1][2] -
+                              object_params.contur_frame_matrix[0][1])) * 2, object_params.angle,
+                          object_params.index, object_params.state, object_params.name,
+                          object_params.name, patterns, object_params.hint, object_params.show,
+                          object_params.hint_show, 0, 0));
 
-    if (nesting_level != 1) {
+    if (nesting_level != 1)
+    {
         group_objects_vector.clear();
         group_objects_vector.emplace_back(scheme_params->objects_vector.back());
         scheme_params->objects_vector.pop_back();
-    } else {
+    }
+    else
+    {
         group_objects_vector.clear();
     }
-
 }
 
-void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
+void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params)
+{
     CacheFileIn.open(cachefile_path, std::ios_base::binary);
 
     sop::ObjectParams actual_object_params;
@@ -170,7 +181,8 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
     lib_size = getSomeInt(CacheFileIn, lib_size);
 
     int32_t actual_cursor;
-    while (lib_id != lib_object_params.lib_index) {
+    while (lib_id != lib_object_params.lib_index)
+    {
         actual_cursor = CacheFileIn.tellg();
         CacheFileIn.clear();
         CacheFileIn.seekg(actual_cursor + lib_size, std::ios_base::beg);
@@ -245,15 +257,16 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
     sop::PrimitiveParams primitive_params;
     std::vector<std::vector<Primitive*>> patterns;
     double scale = lib_object_params.coord_matrix[0][0];
-    for (uint16_t _state = 0; _state < actual_object_params.states_amount; ++_state) {
+    for (uint16_t _state = 0; _state < actual_object_params.states_amount; ++_state)
+    {
         std::vector<Primitive*> primitives_in_pattern = {};
-//        for (int w = 0; w < actual_object_params.glue_points_amount; w++) {
-//            primitives_in_pattern.push_back(new Point((int) round(actual_object_params.glue_points_vector[w].x * scale),
-//                                                      (int) round(actual_object_params.glue_points_vector[w].y * scale),
-//                                                      4, {0, 0, 0}));
-//        }
-        for (uint16_t _primitive = 0; _primitive < actual_object_params.primitives_in_state_amount; ++_primitive) {
-
+        //        for (int w = 0; w < actual_object_params.glue_points_amount; w++) {
+        //            primitives_in_pattern.push_back(new Point((int) round(actual_object_params.glue_points_vector[w].x * scale),
+        //                                                      (int) round(actual_object_params.glue_points_vector[w].y * scale),
+        //                                                      4, {0, 0, 0}));
+        //        }
+        for (uint16_t _primitive = 0; _primitive < actual_object_params.primitives_in_state_amount; ++_primitive)
+        {
             parsePrimitiveCommonFields(CacheFileIn, primitive_params);
 
             primitive_params.has_info_for_analysis = getBool(CacheFileIn);
@@ -266,404 +279,480 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
 
             std::vector<std::vector<int>> points = {};
             bool polygon_end = false;
-            switch (primitive_params.primitive_type) {
-                case objects_types.ptNone:
-                    lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
-                    break;
-                case objects_types.ptGoBtn:
-                    primitives_in_pattern.push_back(
-                            new TransitionButton(0, (int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                                primitive_params.points_vector[0].x * scale *
-                                                                primitive_params.indentity_matrix[0][0]),
-                                                 (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                             primitive_params.points_vector[0].y * scale *
-                                                             primitive_params.indentity_matrix[1][1]),
-                                                 (int) round((primitive_params.points_vector[2].x -
-                                                              primitive_params.points_vector[0].x) * scale *
-                                                             primitive_params.indentity_matrix[0][0]),
-                                                 (int) round((primitive_params.points_vector[2].y -
-                                                              primitive_params.points_vector[0].y) * scale *
-                                                             primitive_params.indentity_matrix[1][1]),
-                                                 (int) (360 - primitive_params.primitive_angle) % 360,
-                                                 {primitive_params.brush_color.red,
-                                                  primitive_params.brush_color.green,
-                                                  primitive_params.brush_color.blue}, "", primitive_params.show,
-                                                 primitive_params.brush_style, primitive_params.text,
-                                                 primitive_params.font.name,
-                                                 primitive_params.font.size,
-                                                 {primitive_params.font.color.red,
-                                                  primitive_params.font.color.green,
-                                                  primitive_params.font.color.blue},
-                                                 primitive_params.font.align_vertical,
-                                                 primitive_params.font.reserved, primitive_params.font.is_bold,
-                                                 primitive_params.font.is_italic,
-                                                 primitive_params.font.is_underlined, 0, 0));
-                    break;
-                case objects_types.ptGoPoint:
-                    primitives_in_pattern.push_back(
-                            new TransitionPoint(0, (int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                               primitive_params.points_vector[0].x * scale *
-                                                               primitive_params.indentity_matrix[0][0]),
-                                                (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                            primitive_params.points_vector[0].y * scale *
-                                                            primitive_params.indentity_matrix[1][1]),
-                                                (int) round((primitive_params.points_vector[2].x -
-                                                             primitive_params.points_vector[0].x) * scale *
-                                                            primitive_params.indentity_matrix[0][0]),
-                                                (int) round((primitive_params.points_vector[2].y -
-                                                             primitive_params.points_vector[0].y) * scale *
-                                                            primitive_params.indentity_matrix[1][1]),
-                                                {primitive_params.brush_color.red,
-                                                 primitive_params.brush_color.green,
-                                                 primitive_params.brush_color.blue}, "", primitive_params.show,
-                                                primitive_params.brush_style));
-                    break;
-                case objects_types.ptGluePoint:
-                    primitives_in_pattern.push_back(
-                            new Point((int) round(primitive_params.points_vector[0].x * scale),
-                                      (int) round(primitive_params.points_vector[0].y * scale),
-                                      primitive_params.pen_width,
-                                      {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                       primitive_params.pen_color.blue}));
-                    break;
-                case objects_types.ptLine:
-                    primitives_in_pattern.push_back(
-                            new Line((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                 primitive_params.points_vector[0].x * scale),
-                                     (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                 primitive_params.points_vector[0].y * scale),
-                                     (int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                 primitive_params.points_vector[1].x * scale),
-                                     (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                 primitive_params.points_vector[1].y * scale),
-                                     primitive_params.text, "", primitive_params.show,
-                                     primitive_params.pen_style, 0, primitive_params.pen_width,
-                                     primitive_params.style_start,
-                                     primitive_params.style_end,
-                                     {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                      primitive_params.pen_color.blue}, 0, 0, primitive_params.primitive_angle));
-                    break;
-                case objects_types.ptText:
-                    primitives_in_pattern.push_back(
-                            new Text((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                 primitive_params.points_vector[0].x * scale *
-                                                 primitive_params.indentity_matrix[0][0]),
-                                     (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                 primitive_params.points_vector[0].y * scale *
-                                                 primitive_params.indentity_matrix[1][1]),
-                                     (int) round((primitive_params.points_vector[2].x -
-                                                  primitive_params.points_vector[0].x) * scale *
-                                                 primitive_params.indentity_matrix[0][0]),
-                                     (int) round((primitive_params.points_vector[2].y -
-                                                  primitive_params.points_vector[0].y) * scale *
-                                                 primitive_params.indentity_matrix[1][1]),
-                                     (int) (360 - primitive_params.primitive_angle) % 360, primitive_params.text,
-                                     "", primitive_params.pen_style, primitive_params.pen_width,
-                                     {primitive_params.brush_color.red,
-                                      primitive_params.brush_color.green,
-                                      primitive_params.brush_color.blue}, primitive_params.show,
-                                     primitive_params.brush_style,
-                                     primitive_params.font.name, (int) round(primitive_params.font.size * scale),
-                                     {primitive_params.font.color.red, primitive_params.font.color.green,
-                                      primitive_params.font.color.blue}, primitive_params.font.align_vertical,
-                                     primitive_params.font.reserved, primitive_params.font.is_bold,
-                                     primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
-                                     {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                      primitive_params.pen_color.blue}));
-                    break;
-                case objects_types.ptPolygon:
-                    for (int i = 0; i < primitive_params.points_amount; i++) {
-                        if ((i + 1) == primitive_params.points_amount) {
-                            if (((int) round(primitive_params.points_vector[0].x * scale) ==
-                                 points[0][0]) &&
-                                ((int) round(primitive_params.points_vector[0].y * scale) ==
-                                 points[0][1])) {
-                                polygon_end = true;
-                            } else {
-                                points.push_back({(int) round(lib_object_params.coord_matrix[0][2] +
-                                                              primitive_params.indentity_matrix[0][2] * scale +
-                                                              primitive_params.points_vector[i].x * scale *
-                                                              primitive_params.indentity_matrix[0][0]),
-                                                  (int) round(lib_object_params.coord_matrix[1][2] +
-                                                              primitive_params.indentity_matrix[1][2] * scale +
-                                                              primitive_params.points_vector[i].y * scale *
-                                                              primitive_params.indentity_matrix[1][1])});
-                                polygon_end = false;
-                            }
-                        } else {
-                            points.push_back({(int) round(lib_object_params.coord_matrix[0][2] +
-                                                          primitive_params.indentity_matrix[0][2] * scale +
-                                                          primitive_params.points_vector[i].x * scale *
-                                                          primitive_params.indentity_matrix[0][0]),
-                                              (int) round(lib_object_params.coord_matrix[1][2] +
-                                                          primitive_params.indentity_matrix[1][2] * scale +
-                                                          primitive_params.points_vector[i].y * scale *
-                                                          primitive_params.indentity_matrix[1][1])});
+            switch (primitive_params.primitive_type)
+            {
+            case objects_types.ptNone:
+                lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
+                break;
+            case objects_types.ptGoBtn:
+                primitives_in_pattern.push_back(
+                    new TransitionButton(0, (int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                             primitive_params.points_vector[0].x * scale *
+                                             primitive_params.indentity_matrix[0][0]),
+                                         (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                             primitive_params.points_vector[0].y * scale *
+                                             primitive_params.indentity_matrix[1][1]),
+                                         (int)round((primitive_params.points_vector[2].x -
+                                                 primitive_params.points_vector[0].x) * scale *
+                                             primitive_params.indentity_matrix[0][0]),
+                                         (int)round((primitive_params.points_vector[2].y -
+                                                 primitive_params.points_vector[0].y) * scale *
+                                             primitive_params.indentity_matrix[1][1]),
+                                         (int)(360 - primitive_params.primitive_angle) % 360,
+                                         {
+                                             primitive_params.brush_color.red,
+                                             primitive_params.brush_color.green,
+                                             primitive_params.brush_color.blue
+                                         }, "", primitive_params.show,
+                                         primitive_params.brush_style, primitive_params.text,
+                                         primitive_params.font.name,
+                                         primitive_params.font.size,
+                                         {
+                                             primitive_params.font.color.red,
+                                             primitive_params.font.color.green,
+                                             primitive_params.font.color.blue
+                                         },
+                                         primitive_params.font.align_vertical,
+                                         primitive_params.font.reserved, primitive_params.font.is_bold,
+                                         primitive_params.font.is_italic,
+                                         primitive_params.font.is_underlined, 0, 0));
+                break;
+            case objects_types.ptGoPoint:
+                primitives_in_pattern.push_back(
+                    new TransitionPoint(0, (int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                            primitive_params.points_vector[0].x * scale *
+                                            primitive_params.indentity_matrix[0][0]),
+                                        (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                            primitive_params.points_vector[0].y * scale *
+                                            primitive_params.indentity_matrix[1][1]),
+                                        (int)round((primitive_params.points_vector[2].x -
+                                                primitive_params.points_vector[0].x) * scale *
+                                            primitive_params.indentity_matrix[0][0]),
+                                        (int)round((primitive_params.points_vector[2].y -
+                                                primitive_params.points_vector[0].y) * scale *
+                                            primitive_params.indentity_matrix[1][1]),
+                                        {
+                                            primitive_params.brush_color.red,
+                                            primitive_params.brush_color.green,
+                                            primitive_params.brush_color.blue
+                                        }, "", primitive_params.show,
+                                        primitive_params.brush_style));
+                break;
+            case objects_types.ptGluePoint:
+                primitives_in_pattern.push_back(
+                    new Point((int)round(primitive_params.points_vector[0].x * scale),
+                              (int)round(primitive_params.points_vector[0].y * scale),
+                              primitive_params.pen_width,
+                              {
+                                  primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                  primitive_params.pen_color.blue
+                              }));
+                break;
+            case objects_types.ptLine:
+                primitives_in_pattern.push_back(
+                    new Line((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                 primitive_params.points_vector[0].x * scale),
+                             (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                 primitive_params.points_vector[0].y * scale),
+                             (int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                 primitive_params.points_vector[1].x * scale),
+                             (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                 primitive_params.points_vector[1].y * scale),
+                             primitive_params.text, "", primitive_params.show,
+                             primitive_params.pen_style, 0, primitive_params.pen_width,
+                             primitive_params.style_start,
+                             primitive_params.style_end,
+                             {
+                                 primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                 primitive_params.pen_color.blue
+                             }, 0, 0, primitive_params.primitive_angle));
+                break;
+            case objects_types.ptText:
+                primitives_in_pattern.push_back(
+                    new Text((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                 primitive_params.points_vector[0].x * scale *
+                                 primitive_params.indentity_matrix[0][0]),
+                             (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                 primitive_params.points_vector[0].y * scale *
+                                 primitive_params.indentity_matrix[1][1]),
+                             (int)round((primitive_params.points_vector[2].x -
+                                     primitive_params.points_vector[0].x) * scale *
+                                 primitive_params.indentity_matrix[0][0]),
+                             (int)round((primitive_params.points_vector[2].y -
+                                     primitive_params.points_vector[0].y) * scale *
+                                 primitive_params.indentity_matrix[1][1]),
+                             (int)(360 - primitive_params.primitive_angle) % 360, primitive_params.text,
+                             "", primitive_params.pen_style, primitive_params.pen_width,
+                             {
+                                 primitive_params.brush_color.red,
+                                 primitive_params.brush_color.green,
+                                 primitive_params.brush_color.blue
+                             }, primitive_params.show,
+                             primitive_params.brush_style,
+                             primitive_params.font.name, (int)round(primitive_params.font.size * scale),
+                             {
+                                 primitive_params.font.color.red, primitive_params.font.color.green,
+                                 primitive_params.font.color.blue
+                             }, primitive_params.font.align_vertical,
+                             primitive_params.font.reserved, primitive_params.font.is_bold,
+                             primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
+                             {
+                                 primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                 primitive_params.pen_color.blue
+                             }));
+                break;
+            case objects_types.ptPolygon:
+                for (int i = 0; i < primitive_params.points_amount; i++)
+                {
+                    if ((i + 1) == primitive_params.points_amount)
+                    {
+                        if (((int)round(primitive_params.points_vector[0].x * scale) ==
+                                points[0][0]) &&
+                            ((int)round(primitive_params.points_vector[0].y * scale) ==
+                                points[0][1]))
+                        {
+                            polygon_end = true;
+                        }
+                        else
+                        {
+                            points.push_back({
+                                (int)round(lib_object_params.coord_matrix[0][2] +
+                                    primitive_params.indentity_matrix[0][2] * scale +
+                                    primitive_params.points_vector[i].x * scale *
+                                    primitive_params.indentity_matrix[0][0]),
+                                (int)round(lib_object_params.coord_matrix[1][2] +
+                                    primitive_params.indentity_matrix[1][2] * scale +
+                                    primitive_params.points_vector[i].y * scale *
+                                    primitive_params.indentity_matrix[1][1])
+                            });
+                            polygon_end = false;
                         }
                     }
-                    scheme_params->objects_vector.emplace_back(
-                            new Polygon(points, polygon_end, (int) (360 - primitive_params.primitive_angle) % 360,
-                                        primitive_params.pen_width, primitive_params.pen_style, "",
-                                        {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                         primitive_params.pen_color.blue},
-                                        {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                         primitive_params.brush_color.blue}, primitive_params.show,
-                                        (int) primitive_params.brush_style,
-                                        0, 0));
-                    break;
-                case objects_types.ptEllipse:
-                    primitives_in_pattern.push_back(
-                            new Ellipse((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                    primitive_params.points_vector[0].x * scale *
-                                                    primitive_params.indentity_matrix[0][0]),
-                                        (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                    primitive_params.points_vector[0].y * scale *
-                                                    primitive_params.indentity_matrix[1][1]),
-                                        (int) round((primitive_params.points_vector[2].x -
-                                                     primitive_params.points_vector[0].x) * scale *
-                                                    primitive_params.indentity_matrix[0][0]),
-                                        (int) round((primitive_params.points_vector[2].y -
-                                                     primitive_params.points_vector[0].y) * scale *
-                                                    primitive_params.indentity_matrix[1][1]),
-                                        (int) (360 - primitive_params.primitive_angle) % 360,
-                                        primitive_params.pen_width, primitive_params.pen_style,
-                                        {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                         primitive_params.pen_color.blue}, "", primitive_params.show,
-                                        {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                         primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                        0, 0));
-                    break;
-                case objects_types.ptRectangle:
-                    primitives_in_pattern.push_back(
-                            new Rectangle((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                      primitive_params.points_vector[0].x * scale *
-                                                      primitive_params.indentity_matrix[0][0]),
-                                          (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                      primitive_params.points_vector[0].y * scale *
-                                                      primitive_params.indentity_matrix[1][1]),
-                                          (int) round((primitive_params.points_vector[2].x * scale *
-                                                       primitive_params.indentity_matrix[0][0] -
-                                                       primitive_params.points_vector[0].x * scale *
-                                                       primitive_params.indentity_matrix[0][0])),
-                                          (int) round((primitive_params.points_vector[2].y * scale *
-                                                       primitive_params.indentity_matrix[1][1] -
-                                                       primitive_params.points_vector[0].y * scale *
-                                                       primitive_params.indentity_matrix[1][1])),
-                                          (int) (360 - primitive_params.primitive_angle) % 360,
-                                          primitive_params.pen_width, primitive_params.pen_style,
-                                          {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                           primitive_params.pen_color.blue}, "", primitive_params.show,
-                                          0, 0,
-                                          {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                           primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                          0, 0));
-                    break;
-                case objects_types.ptDuga:
-                    primitives_in_pattern.push_back(
-                            new Arc((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                primitive_params.points_vector[0].x * scale *
-                                                primitive_params.indentity_matrix[0][0]),
-                                    (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                primitive_params.points_vector[0].y * scale *
-                                                primitive_params.indentity_matrix[1][1]),
-                                    (int) round((primitive_params.points_vector[2].x -
-                                                 primitive_params.points_vector[0].x) * scale *
-                                                primitive_params.indentity_matrix[0][0]),
-                                    (int) round((primitive_params.points_vector[2].y -
-                                                 primitive_params.points_vector[0].y) * scale *
-                                                primitive_params.indentity_matrix[1][1]),
-                                    (int) (360 - primitive_params.primitive_angle) % 360,
-                                    (int) primitive_params.points_vector[4].x % 360,
-                                    (int) primitive_params.points_vector[4].y % 360,
-                                    primitive_params.pen_width, primitive_params.pen_style,
-                                    {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                     primitive_params.pen_color.blue}, "", primitive_params.show,
-                                    {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                     primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                    0, 0));
-                    break;
-                case objects_types.ptTeleupr:
-                    primitives_in_pattern.push_back(
-                            new Telecontrol((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                        primitive_params.points_vector[0].x * scale *
-                                                        primitive_params.indentity_matrix[0][0]),
-                                            (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                        primitive_params.points_vector[0].y * scale *
-                                                        primitive_params.indentity_matrix[1][1]),
-                                            (int) round((primitive_params.points_vector[2].x -
-                                                         primitive_params.points_vector[0].x) * scale *
-                                                        primitive_params.indentity_matrix[0][0]),
-                                            (int) round((primitive_params.points_vector[2].y -
-                                                         primitive_params.points_vector[0].y) * scale *
-                                                        primitive_params.indentity_matrix[1][1]),
-                                            (int) (360 - primitive_params.primitive_angle) % 360,
-                                            primitive_params.text,
-                                            "", primitive_params.pen_style, primitive_params.pen_width,
-                                            {primitive_params.brush_color.red,
-                                             primitive_params.brush_color.green,
-                                             primitive_params.brush_color.blue}, primitive_params.show,
-                                            primitive_params.brush_style,
-                                            primitive_params.font.name, (int) round(primitive_params.font.size * scale),
-                                            {primitive_params.font.color.red, primitive_params.font.color.green,
-                                             primitive_params.font.color.blue},
-                                            primitive_params.font.align_vertical,
-                                            primitive_params.font.reserved, primitive_params.font.is_bold,
-                                            primitive_params.font.is_italic, primitive_params.font.is_underlined, 0,
-                                            0,
-                                            {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                             primitive_params.pen_color.blue}));
-                    break;
-                case objects_types.ptTeleizm:
-                    primitives_in_pattern.push_back(
-                            new Telemeasure((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                        primitive_params.points_vector[0].x * scale *
-                                                        primitive_params.indentity_matrix[0][0]),
-                                            (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                        primitive_params.points_vector[0].y * scale *
-                                                        primitive_params.indentity_matrix[1][1]),
-                                            (int) round((primitive_params.points_vector[2].x -
-                                                         primitive_params.points_vector[0].x) * scale *
-                                                        primitive_params.indentity_matrix[0][0]),
-                                            (int) round((primitive_params.points_vector[2].y -
-                                                         primitive_params.points_vector[0].y) * scale *
-                                                        primitive_params.indentity_matrix[1][1]),
-                                            (int) (360 - primitive_params.primitive_angle) % 360,
-                                            primitive_params.text,
-                                            "", primitive_params.pen_style, primitive_params.pen_width,
-                                            {primitive_params.brush_color.red,
-                                             primitive_params.brush_color.green,
-                                             primitive_params.brush_color.blue}, primitive_params.show,
-                                            primitive_params.brush_style,
-                                            primitive_params.font.name, (int) round(primitive_params.font.size * scale),
-                                            {primitive_params.font.color.red, primitive_params.font.color.green,
-                                             primitive_params.font.color.blue},
-                                            primitive_params.font.align_vertical,
-                                            primitive_params.font.reserved, primitive_params.font.is_bold,
-                                            primitive_params.font.is_italic, primitive_params.font.is_underlined, 0,
-                                            0,
-                                            {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                             primitive_params.pen_color.blue}));
-                    break;
-                case objects_types.ptSignal:
-                    primitives_in_pattern.push_back(
-                            new Telesignalisation((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                              primitive_params.points_vector[0].x * scale *
-                                                              primitive_params.indentity_matrix[0][0]),
-                                                  (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                              primitive_params.points_vector[0].y * scale *
-                                                              primitive_params.indentity_matrix[1][1]),
-                                                  (int) round((primitive_params.points_vector[2].x -
-                                                               primitive_params.points_vector[0].x) * scale *
-                                                              primitive_params.indentity_matrix[0][0]),
-                                                  (int) round((primitive_params.points_vector[2].y -
-                                                               primitive_params.points_vector[0].y) * scale *
-                                                              primitive_params.indentity_matrix[1][1]),
-                                                  (int) (360 - primitive_params.primitive_angle) % 360,
-                                                  primitive_params.text,
-                                                  "", primitive_params.pen_style, primitive_params.pen_width,
-                                                  {primitive_params.brush_color.red,
-                                                   primitive_params.brush_color.green,
-                                                   primitive_params.brush_color.blue}, primitive_params.show,
-                                                  primitive_params.brush_style,
-                                                  primitive_params.font.name,
-                                                  (int) round(primitive_params.font.size * scale),
-                                                  {primitive_params.font.color.red,
-                                                   primitive_params.font.color.green,
-                                                   primitive_params.font.color.blue},
-                                                  primitive_params.font.align_vertical,
-                                                  primitive_params.font.reserved, primitive_params.font.is_bold,
-                                                  primitive_params.font.is_italic,
-                                                  primitive_params.font.is_underlined, 0, 0,
-                                                  {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                                   primitive_params.pen_color.blue}));
-                    break;
-                case objects_types.ptPicture:
-                    primitives_in_pattern.push_back(
-                            new Image((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                  primitive_params.points_vector[0].x * scale *
-                                                  primitive_params.indentity_matrix[0][0]),
-                                      (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                  primitive_params.points_vector[0].y * scale *
-                                                  primitive_params.indentity_matrix[1][1]),
-                                      (int) round((primitive_params.points_vector[2].x -
-                                                   primitive_params.points_vector[0].x) * scale *
-                                                  primitive_params.indentity_matrix[0][0]),
-                                      (int) round((primitive_params.points_vector[2].y -
-                                                   primitive_params.points_vector[0].y) * scale *
-                                                  primitive_params.indentity_matrix[1][1]),
-                                      primitive_params.bmp_filepath,
-                                      (int) (360 - primitive_params.primitive_angle) % 360,
-                                      primitive_params.pen_width,
-                                      primitive_params.pen_style,
-                                      {primitive_params.pen_color.red,
-                                       primitive_params.pen_color.green,
-                                       primitive_params.pen_color.blue}, "",
-                                      primitive_params.show, 0,
-                                      {primitive_params.brush_color.red,
-                                       primitive_params.brush_color.green,
-                                       primitive_params.brush_color.blue},
-                                      primitive_params.brush_style));
-                    break;
-                case objects_types.ptPolyLine:
-                    for (int i = 0; i < primitive_params.points_amount; i++) {
-                        points.push_back({(int) round(lib_object_params.coord_matrix[0][2] +
-                                                      primitive_params.indentity_matrix[0][2] * scale +
-                                                      primitive_params.points_vector[i].x * scale *
-                                                      primitive_params.indentity_matrix[0][0]),
-                                          (int) round(lib_object_params.coord_matrix[1][2] +
-                                                      primitive_params.indentity_matrix[1][2] * scale +
-                                                      primitive_params.points_vector[i].y * scale *
-                                                      primitive_params.indentity_matrix[1][1])});
+                    else
+                    {
+                        points.push_back({
+                            (int)round(lib_object_params.coord_matrix[0][2] +
+                                primitive_params.indentity_matrix[0][2] * scale +
+                                primitive_params.points_vector[i].x * scale *
+                                primitive_params.indentity_matrix[0][0]),
+                            (int)round(lib_object_params.coord_matrix[1][2] +
+                                primitive_params.indentity_matrix[1][2] * scale +
+                                primitive_params.points_vector[i].y * scale *
+                                primitive_params.indentity_matrix[1][1])
+                        });
                     }
-                    primitives_in_pattern.push_back(
-                            new CrookedLine(points, (int) (360 - primitive_params.primitive_angle) % 360,
-                                            primitive_params.pen_width, primitive_params.pen_style, "",
-                                            {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                             primitive_params.pen_color.blue},
-                                            {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                             primitive_params.brush_color.blue}, primitive_params.show,
-                                            (int) primitive_params.brush_style,
-                                            0, 0));
-                    break;
-                case objects_types.ptShape:
-                    primitives_in_pattern.push_back(
-                            new Rectangle((int) round(primitive_params.indentity_matrix[0][2] * scale +
-                                                      primitive_params.points_vector[0].x * scale *
-                                                      primitive_params.indentity_matrix[0][0]),
-                                          (int) round(primitive_params.indentity_matrix[1][2] * scale +
-                                                      primitive_params.points_vector[0].y * scale *
-                                                      primitive_params.indentity_matrix[1][1]),
-                                          (int) round((primitive_params.points_vector[2].x * scale *
-                                                       primitive_params.indentity_matrix[0][0] -
-                                                       primitive_params.points_vector[0].x * scale *
-                                                       primitive_params.indentity_matrix[0][0])),
-                                          (int) round((primitive_params.points_vector[2].y * scale *
-                                                       primitive_params.indentity_matrix[1][1] -
-                                                       primitive_params.points_vector[0].y * scale *
-                                                       primitive_params.indentity_matrix[1][1])),
-                                          (int) (360 - primitive_params.primitive_angle) % 360,
-                                          primitive_params.pen_width, primitive_params.pen_style,
-                                          {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                           primitive_params.pen_color.blue}, "", primitive_params.show,
-                                          0, 0,
-                                          {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                           primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                          0, 0));
-                    break;
-                default:
-                    lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
-                    lae::PrintLog((int) primitive_params.primitive_type, true);
-                    break;
+                }
+                scheme_params->objects_vector.emplace_back(
+                    new Polygon(points, polygon_end, (int)(360 - primitive_params.primitive_angle) % 360,
+                                primitive_params.pen_width, primitive_params.pen_style, "",
+                                {
+                                    primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                    primitive_params.pen_color.blue
+                                },
+                                {
+                                    primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                    primitive_params.brush_color.blue
+                                }, primitive_params.show,
+                                (int)primitive_params.brush_style,
+                                0, 0));
+                break;
+            case objects_types.ptEllipse:
+                primitives_in_pattern.push_back(
+                    new Ellipse((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                    primitive_params.points_vector[0].x * scale *
+                                    primitive_params.indentity_matrix[0][0]),
+                                (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                    primitive_params.points_vector[0].y * scale *
+                                    primitive_params.indentity_matrix[1][1]),
+                                (int)round((primitive_params.points_vector[2].x -
+                                        primitive_params.points_vector[0].x) * scale *
+                                    primitive_params.indentity_matrix[0][0]),
+                                (int)round((primitive_params.points_vector[2].y -
+                                        primitive_params.points_vector[0].y) * scale *
+                                    primitive_params.indentity_matrix[1][1]),
+                                (int)(360 - primitive_params.primitive_angle) % 360,
+                                primitive_params.pen_width, primitive_params.pen_style,
+                                {
+                                    primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                    primitive_params.pen_color.blue
+                                }, "", primitive_params.show,
+                                {
+                                    primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                    primitive_params.brush_color.blue
+                                }, primitive_params.brush_style,
+                                0, 0));
+                break;
+            case objects_types.ptRectangle:
+                primitives_in_pattern.push_back(
+                    new Rectangle((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                      primitive_params.points_vector[0].x * scale *
+                                      primitive_params.indentity_matrix[0][0]),
+                                  (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                      primitive_params.points_vector[0].y * scale *
+                                      primitive_params.indentity_matrix[1][1]),
+                                  (int)round((primitive_params.points_vector[2].x * scale *
+                                      primitive_params.indentity_matrix[0][0] -
+                                      primitive_params.points_vector[0].x * scale *
+                                      primitive_params.indentity_matrix[0][0])),
+                                  (int)round((primitive_params.points_vector[2].y * scale *
+                                      primitive_params.indentity_matrix[1][1] -
+                                      primitive_params.points_vector[0].y * scale *
+                                      primitive_params.indentity_matrix[1][1])),
+                                  (int)(360 - primitive_params.primitive_angle) % 360,
+                                  primitive_params.pen_width, primitive_params.pen_style,
+                                  {
+                                      primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                      primitive_params.pen_color.blue
+                                  }, "", primitive_params.show,
+                                  0, 0,
+                                  {
+                                      primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                      primitive_params.brush_color.blue
+                                  }, primitive_params.brush_style,
+                                  0, 0));
+                break;
+            case objects_types.ptDuga:
+                primitives_in_pattern.push_back(
+                    new Arc((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                primitive_params.points_vector[0].x * scale *
+                                primitive_params.indentity_matrix[0][0]),
+                            (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                primitive_params.points_vector[0].y * scale *
+                                primitive_params.indentity_matrix[1][1]),
+                            (int)round((primitive_params.points_vector[2].x -
+                                    primitive_params.points_vector[0].x) * scale *
+                                primitive_params.indentity_matrix[0][0]),
+                            (int)round((primitive_params.points_vector[2].y -
+                                    primitive_params.points_vector[0].y) * scale *
+                                primitive_params.indentity_matrix[1][1]),
+                            (int)(360 - primitive_params.primitive_angle) % 360,
+                            (int)primitive_params.points_vector[4].x % 360,
+                            (int)primitive_params.points_vector[4].y % 360,
+                            primitive_params.pen_width, primitive_params.pen_style,
+                            {
+                                primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                primitive_params.pen_color.blue
+                            }, "", primitive_params.show,
+                            {
+                                primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                primitive_params.brush_color.blue
+                            }, primitive_params.brush_style,
+                            0, 0));
+                break;
+            case objects_types.ptTeleupr:
+                primitives_in_pattern.push_back(
+                    new Telecontrol((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                        primitive_params.points_vector[0].x * scale *
+                                        primitive_params.indentity_matrix[0][0]),
+                                    (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                        primitive_params.points_vector[0].y * scale *
+                                        primitive_params.indentity_matrix[1][1]),
+                                    (int)round((primitive_params.points_vector[2].x -
+                                            primitive_params.points_vector[0].x) * scale *
+                                        primitive_params.indentity_matrix[0][0]),
+                                    (int)round((primitive_params.points_vector[2].y -
+                                            primitive_params.points_vector[0].y) * scale *
+                                        primitive_params.indentity_matrix[1][1]),
+                                    (int)(360 - primitive_params.primitive_angle) % 360,
+                                    primitive_params.text,
+                                    "", primitive_params.pen_style, primitive_params.pen_width,
+                                    {
+                                        primitive_params.brush_color.red,
+                                        primitive_params.brush_color.green,
+                                        primitive_params.brush_color.blue
+                                    }, primitive_params.show,
+                                    primitive_params.brush_style,
+                                    primitive_params.font.name, (int)round(primitive_params.font.size * scale),
+                                    {
+                                        primitive_params.font.color.red, primitive_params.font.color.green,
+                                        primitive_params.font.color.blue
+                                    },
+                                    primitive_params.font.align_vertical,
+                                    primitive_params.font.reserved, primitive_params.font.is_bold,
+                                    primitive_params.font.is_italic, primitive_params.font.is_underlined, 0,
+                                    0,
+                                    {
+                                        primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                        primitive_params.pen_color.blue
+                                    }, 0));
+                break;
+            case objects_types.ptTeleizm:
+                primitives_in_pattern.push_back(
+                    new Telemeasure((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                        primitive_params.points_vector[0].x * scale *
+                                        primitive_params.indentity_matrix[0][0]),
+                                    (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                        primitive_params.points_vector[0].y * scale *
+                                        primitive_params.indentity_matrix[1][1]),
+                                    (int)round((primitive_params.points_vector[2].x -
+                                            primitive_params.points_vector[0].x) * scale *
+                                        primitive_params.indentity_matrix[0][0]),
+                                    (int)round((primitive_params.points_vector[2].y -
+                                            primitive_params.points_vector[0].y) * scale *
+                                        primitive_params.indentity_matrix[1][1]),
+                                    (int)(360 - primitive_params.primitive_angle) % 360,
+                                    primitive_params.text,
+                                    "", primitive_params.pen_style, primitive_params.pen_width,
+                                    {
+                                        primitive_params.brush_color.red,
+                                        primitive_params.brush_color.green,
+                                        primitive_params.brush_color.blue
+                                    }, primitive_params.show,
+                                    primitive_params.brush_style,
+                                    primitive_params.font.name, (int)round(primitive_params.font.size * scale),
+                                    {
+                                        primitive_params.font.color.red, primitive_params.font.color.green,
+                                        primitive_params.font.color.blue
+                                    },
+                                    primitive_params.font.align_vertical,
+                                    primitive_params.font.reserved, primitive_params.font.is_bold,
+                                    primitive_params.font.is_italic, primitive_params.font.is_underlined, 0,
+                                    0,
+                                    {
+                                        primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                        primitive_params.pen_color.blue
+                                    }, 0));
+                break;
+            case objects_types.ptSignal:
+                primitives_in_pattern.push_back(
+                    new Telesignalisation((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                              primitive_params.points_vector[0].x * scale *
+                                              primitive_params.indentity_matrix[0][0]),
+                                          (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                              primitive_params.points_vector[0].y * scale *
+                                              primitive_params.indentity_matrix[1][1]),
+                                          (int)round((primitive_params.points_vector[2].x -
+                                                  primitive_params.points_vector[0].x) * scale *
+                                              primitive_params.indentity_matrix[0][0]),
+                                          (int)round((primitive_params.points_vector[2].y -
+                                                  primitive_params.points_vector[0].y) * scale *
+                                              primitive_params.indentity_matrix[1][1]),
+                                          (int)(360 - primitive_params.primitive_angle) % 360,
+                                          primitive_params.text,
+                                          "", primitive_params.pen_style, primitive_params.pen_width,
+                                          {
+                                              primitive_params.brush_color.red,
+                                              primitive_params.brush_color.green,
+                                              primitive_params.brush_color.blue
+                                          }, primitive_params.show,
+                                          primitive_params.brush_style,
+                                          primitive_params.font.name,
+                                          (int)round(primitive_params.font.size * scale),
+                                          {
+                                              primitive_params.font.color.red,
+                                              primitive_params.font.color.green,
+                                              primitive_params.font.color.blue
+                                          },
+                                          primitive_params.font.align_vertical,
+                                          primitive_params.font.reserved, primitive_params.font.is_bold,
+                                          primitive_params.font.is_italic,
+                                          primitive_params.font.is_underlined, 0, 0,
+                                          {
+                                              primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                              primitive_params.pen_color.blue
+                                          }, 0));
+                break;
+            case objects_types.ptPicture:
+                primitives_in_pattern.push_back(
+                    new Image((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                  primitive_params.points_vector[0].x * scale *
+                                  primitive_params.indentity_matrix[0][0]),
+                              (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                  primitive_params.points_vector[0].y * scale *
+                                  primitive_params.indentity_matrix[1][1]),
+                              (int)round((primitive_params.points_vector[2].x -
+                                      primitive_params.points_vector[0].x) * scale *
+                                  primitive_params.indentity_matrix[0][0]),
+                              (int)round((primitive_params.points_vector[2].y -
+                                      primitive_params.points_vector[0].y) * scale *
+                                  primitive_params.indentity_matrix[1][1]),
+                              primitive_params.bmp_filepath,
+                              (int)(360 - primitive_params.primitive_angle) % 360,
+                              primitive_params.pen_width,
+                              primitive_params.pen_style,
+                              {
+                                  primitive_params.pen_color.red,
+                                  primitive_params.pen_color.green,
+                                  primitive_params.pen_color.blue
+                              }, "",
+                              primitive_params.show, 0,
+                              {
+                                  primitive_params.brush_color.red,
+                                  primitive_params.brush_color.green,
+                                  primitive_params.brush_color.blue
+                              },
+                              primitive_params.brush_style));
+                break;
+            case objects_types.ptPolyLine:
+                for (int i = 0; i < primitive_params.points_amount; i++)
+                {
+                    points.push_back({
+                        (int)round(lib_object_params.coord_matrix[0][2] +
+                            primitive_params.indentity_matrix[0][2] * scale +
+                            primitive_params.points_vector[i].x * scale *
+                            primitive_params.indentity_matrix[0][0]),
+                        (int)round(lib_object_params.coord_matrix[1][2] +
+                            primitive_params.indentity_matrix[1][2] * scale +
+                            primitive_params.points_vector[i].y * scale *
+                            primitive_params.indentity_matrix[1][1])
+                    });
+                }
+                primitives_in_pattern.push_back(
+                    new CrookedLine(points, (int)(360 - primitive_params.primitive_angle) % 360,
+                                    primitive_params.pen_width, primitive_params.pen_style, "",
+                                    {
+                                        primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                        primitive_params.pen_color.blue
+                                    },
+                                    {
+                                        primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                        primitive_params.brush_color.blue
+                                    }, primitive_params.show,
+                                    (int)primitive_params.brush_style,
+                                    0, 0));
+                break;
+            case objects_types.ptShape:
+                primitives_in_pattern.push_back(
+                    new Rectangle((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                      primitive_params.points_vector[0].x * scale *
+                                      primitive_params.indentity_matrix[0][0]),
+                                  (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                      primitive_params.points_vector[0].y * scale *
+                                      primitive_params.indentity_matrix[1][1]),
+                                  (int)round((primitive_params.points_vector[2].x * scale *
+                                      primitive_params.indentity_matrix[0][0] -
+                                      primitive_params.points_vector[0].x * scale *
+                                      primitive_params.indentity_matrix[0][0])),
+                                  (int)round((primitive_params.points_vector[2].y * scale *
+                                      primitive_params.indentity_matrix[1][1] -
+                                      primitive_params.points_vector[0].y * scale *
+                                      primitive_params.indentity_matrix[1][1])),
+                                  (int)(360 - primitive_params.primitive_angle) % 360,
+                                  primitive_params.pen_width, primitive_params.pen_style,
+                                  {
+                                      primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                      primitive_params.pen_color.blue
+                                  }, "", primitive_params.show,
+                                  0, 0,
+                                  {
+                                      primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                      primitive_params.brush_color.blue
+                                  }, primitive_params.brush_style,
+                                  0, 0));
+                break;
+            default:
+                lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
+                lae::PrintLog((int)primitive_params.primitive_type, true);
+                break;
             }
 
 
             writePrimitiveParams(primitive_params);
             primitive_params = {};
-
         }
-//        for (int i = 0; i < primitives_in_pattern.size(), i++){
-//
-//        }
+        //        for (int i = 0; i < primitives_in_pattern.size(), i++){
+        //
+        //        }
 
         patterns.push_back(primitives_in_pattern);
         primitive_params = {};
@@ -676,24 +765,24 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params) {
 
         actual_object_params.primitives_in_state_amount = getSomeInt(CacheFileIn,
                                                                      actual_object_params.primitives_in_state_amount);
-
     }
 
     scheme_params->objects_vector.emplace_back(
-            new LibraryObject(abs((int) round(lib_object_params.contur_frame_matrix[0][0])),
-                              abs((int) round(lib_object_params.contur_frame_matrix[0][1])), ((int) round(
-                            lib_object_params.coord_matrix[0][2] - lib_object_params.contur_frame_matrix[0][0])) * 2,
-                              ((int) round(
-                                      lib_object_params.coord_matrix[1][2] -
-                                      lib_object_params.contur_frame_matrix[0][1])) * 2, lib_object_params.angle,
-                              lib_object_params.index, lib_object_params.state, actual_object_params.name,
-                              actual_object_params.name, patterns, lib_object_params.hint, lib_object_params.show,
-                              lib_object_params.hint_show, 0, 0));
+        new LibraryObject(abs((int)round(lib_object_params.contur_frame_matrix[0][0])),
+                          abs((int)round(lib_object_params.contur_frame_matrix[0][1])), ((int)round(
+                              lib_object_params.coord_matrix[0][2] - lib_object_params.contur_frame_matrix[0][0])) * 2,
+                          ((int)round(
+                              lib_object_params.coord_matrix[1][2] -
+                              lib_object_params.contur_frame_matrix[0][1])) * 2, lib_object_params.angle,
+                          lib_object_params.hard_id, lib_object_params.state, actual_object_params.name,
+                          actual_object_params.name, patterns, lib_object_params.hint, lib_object_params.show,
+                          lib_object_params.hint_show, 0, 0));
 
     // TODO добавление либ. объекта в вектор
 }
 
-void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::PrimitiveParams& primitive_params) {
+void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::PrimitiveParams& primitive_params)
+{
     primitive_params.points_amount = getSomeInt(File, primitive_params.points_amount);
     getVector(File, primitive_params.points_vector, primitive_params.points_amount);
 
@@ -720,7 +809,8 @@ void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::Pr
     primitive_params.connect = getSomeInt(File, primitive_params.connect);
 
     primitive_params.is_font = getBool(File);
-    if (primitive_params.is_font) {
+    if (primitive_params.is_font)
+    {
         getFont(File, primitive_params);
     }
 
@@ -733,14 +823,15 @@ void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::Pr
     primitive_params.show = getBool(File);
 }
 
-void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& object_params) {
-
+void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& object_params)
+{
     sop::PrimitiveParams primitive_params;
 
     parsePrimitiveCommonFields(File, primitive_params);
 
     primitive_params.is_picture = getBool(File);
-    if (primitive_params.is_picture) {
+    if (primitive_params.is_picture)
+    {
         getPicture(File, primitive_params, primitive_params.bmp_filepath);
     }
 
@@ -757,349 +848,430 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
 
     std::vector<FiguresClasses::Primitive*>* actual_vector;
 
-    if (object_params.is_group_object) {
+    if (object_params.is_group_object)
+    {
         actual_vector = &group_objects_vector;
-    } else {
+    }
+    else
+    {
         actual_vector = &scheme_params->objects_vector;
     }
 
     std::vector<std::vector<int>> points = {};
     bool polygon_end = false;
-    switch (primitive_params.primitive_type) {
-        case objects_types.ptNone:
-            lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
-            break;
-        case objects_types.ptGoBtn:
-            actual_vector->emplace_back(
-                    new TransitionButton(object_params.index, (int) round(object_params.coord_matrix[0][2] -
-                                                                          abs((int) round(
-                                                                                  primitive_params.points_vector[0].x *
-                                                                                  object_params.coord_matrix[0][0]))),
-                                         (int) round(object_params.coord_matrix[1][2] -
-                                                     abs((int) round(primitive_params.points_vector[0].y *
-                                                                     object_params.coord_matrix[1][1]))),
-                                         abs((int) round(
-                                                 primitive_params.points_vector[0].x * 2 *
-                                                 object_params.coord_matrix[0][0])),
-                                         abs((int) round(
-                                                 primitive_params.points_vector[0].y * 2 *
-                                                 object_params.coord_matrix[1][1])),
-                                         (int) (360 - object_params.angle) % 360, {primitive_params.brush_color.red,
-                                                                                   primitive_params.brush_color.green,
-                                                                                   primitive_params.brush_color.blue},
-                                         object_params.hint, object_params.show, primitive_params.brush_style,
-                                         primitive_params.text, primitive_params.font.name, primitive_params.font.size,
-                                         {primitive_params.font.color.red, primitive_params.font.color.green,
-                                          primitive_params.font.color.blue}, primitive_params.font.align_vertical,
-                                         primitive_params.font.reserved, primitive_params.font.is_bold,
-                                         primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0));
-            break;
-        case objects_types.ptGoPoint:
-            actual_vector->emplace_back(new TransitionPoint(object_params.index,
-                                                            object_params.coord_matrix[0][2] -
-                                                            abs(primitive_params.points_vector[0].x),
-                                                            object_params.coord_matrix[1][2] -
-                                                            abs(primitive_params.points_vector[0].y),
-                                                            abs(primitive_params.points_vector[0].x) * 2,
-                                                            abs(primitive_params.points_vector[0].y) *
-                                                            2, {primitive_params.brush_color.red,
-                                                                primitive_params.brush_color.green,
-                                                                primitive_params.brush_color.blue},
-                                                            object_params.hint, object_params.show,
-                                                            primitive_params.brush_style));
-            break;
-        case objects_types.ptGluePoint:
-            actual_vector->emplace_back(
-                    new Point(object_params.coord_matrix[0][2] + primitive_params.points_vector[0].x,
-                              object_params.coord_matrix[1][2] + primitive_params.points_vector[0].y,
-                              primitive_params.pen_width,
-                              {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                               primitive_params.pen_color.blue}));
-            break;
-        case objects_types.ptLine:
-            actual_vector->emplace_back(
-                    new Line((int) round(object_params.coord_matrix[0][2] +
-                                         primitive_params.points_vector[0].x * object_params.coord_matrix[0][0]),
-                             (int) round(object_params.coord_matrix[1][2] +
-                                         primitive_params.points_vector[0].y * object_params.coord_matrix[0][0]),
-                             (int) round(object_params.coord_matrix[0][2] +
-                                         primitive_params.points_vector[1].x * object_params.coord_matrix[0][0]),
-                             (int) round(object_params.coord_matrix[1][2] +
-                                         primitive_params.points_vector[1].y * object_params.coord_matrix[0][0]),
-                             primitive_params.text, object_params.hint, object_params.show,
-                             primitive_params.pen_style, 0, primitive_params.pen_width,
-                             primitive_params.style_start,
-                             primitive_params.style_end,
-                             {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                              primitive_params.pen_color.blue}, object_params.horizontal_reflection_mx,
-                             object_params.vertical_reflection_my, object_params.angle));
-            break;
-        case objects_types.ptText:
-            actual_vector->emplace_back(
-                    new Text((int) round(object_params.coord_matrix[0][2] -
-                                         abs((int) round(primitive_params.points_vector[0].x *
-                                                         object_params.coord_matrix[0][0]))),
-                             (int) round(object_params.coord_matrix[1][2] -
-                                         abs((int) round(primitive_params.points_vector[0].y *
-                                                         object_params.coord_matrix[1][1]))),
-                             abs((int) round(
-                                     primitive_params.points_vector[0].x * 2 * object_params.coord_matrix[0][0])),
-                             abs((int) round(
-                                     primitive_params.points_vector[0].y * 2 * object_params.coord_matrix[1][1])),
-                             (int) (360 - object_params.angle) % 360,
-                             primitive_params.text,
-                             object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
-                             {primitive_params.brush_color.red,
-                              primitive_params.brush_color.green,
-                              primitive_params.brush_color.blue}, object_params.show, primitive_params.brush_style,
-                             primitive_params.font.name, primitive_params.font.size,
-                             {primitive_params.font.color.red, primitive_params.font.color.green,
-                              primitive_params.font.color.blue}, primitive_params.font.align_vertical,
-                             primitive_params.font.reserved, primitive_params.font.is_bold,
-                             primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
-                             {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                              primitive_params.pen_color.blue}));
-            break;
-        case objects_types.ptPolygon:
-            for (int i = 0; i < primitive_params.points_amount; i++) {
-                if ((i + 1) == primitive_params.points_amount) {
-                    if (((int) object_params.coord_matrix[0][2] + primitive_params.points_vector[i].x ==
-                         points[0][0]) &&
-                        ((int) object_params.coord_matrix[1][2] + primitive_params.points_vector[i].y ==
-                         points[0][1])) {
-                        polygon_end = true;
-                    } else {
-                        points.push_back({(int) (object_params.coord_matrix[0][2] +
-                                                 primitive_params.points_vector[i].x *
-                                                 object_params.coord_matrix[0][0]),
-                                          (int) (object_params.coord_matrix[1][2] +
-                                                 primitive_params.points_vector[i].y *
-                                                 object_params.coord_matrix[1][1])});
-                        polygon_end = false;
-                    }
-                } else {
-                    points.push_back({(int) (object_params.coord_matrix[0][2] +
-                                             primitive_params.points_vector[i].x *
-                                             object_params.coord_matrix[0][0]),
-                                      (int) (object_params.coord_matrix[1][2] +
-                                             primitive_params.points_vector[i].y *
-                                             object_params.coord_matrix[1][1])});
+    switch (primitive_params.primitive_type)
+    {
+    case objects_types.ptNone:
+        lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
+        break;
+    case objects_types.ptGoBtn:
+        actual_vector->emplace_back(
+            new TransitionButton(object_params.index, (int)round(object_params.coord_matrix[0][2] -
+                                     abs((int)round(
+                                         primitive_params.points_vector[0].x *
+                                         object_params.coord_matrix[0][0]))),
+                                 (int)round(object_params.coord_matrix[1][2] -
+                                     abs((int)round(primitive_params.points_vector[0].y *
+                                         object_params.coord_matrix[1][1]))),
+                                 abs((int)round(
+                                     primitive_params.points_vector[0].x * 2 *
+                                     object_params.coord_matrix[0][0])),
+                                 abs((int)round(
+                                     primitive_params.points_vector[0].y * 2 *
+                                     object_params.coord_matrix[1][1])),
+                                 (int)(360 - object_params.angle) % 360, {
+                                     primitive_params.brush_color.red,
+                                     primitive_params.brush_color.green,
+                                     primitive_params.brush_color.blue
+                                 },
+                                 object_params.hint, object_params.show, primitive_params.brush_style,
+                                 primitive_params.text, primitive_params.font.name, primitive_params.font.size,
+                                 {
+                                     primitive_params.font.color.red, primitive_params.font.color.green,
+                                     primitive_params.font.color.blue
+                                 }, primitive_params.font.align_vertical,
+                                 primitive_params.font.reserved, primitive_params.font.is_bold,
+                                 primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0));
+        break;
+    case objects_types.ptGoPoint:
+        actual_vector->emplace_back(new TransitionPoint(object_params.index,
+                                                        object_params.coord_matrix[0][2] -
+                                                        abs(primitive_params.points_vector[0].x),
+                                                        object_params.coord_matrix[1][2] -
+                                                        abs(primitive_params.points_vector[0].y),
+                                                        abs(primitive_params.points_vector[0].x) * 2,
+                                                        abs(primitive_params.points_vector[0].y) *
+                                                        2, {
+                                                            primitive_params.brush_color.red,
+                                                            primitive_params.brush_color.green,
+                                                            primitive_params.brush_color.blue
+                                                        },
+                                                        object_params.hint, object_params.show,
+                                                        primitive_params.brush_style));
+        break;
+    case objects_types.ptGluePoint:
+        actual_vector->emplace_back(
+            new Point(object_params.coord_matrix[0][2] + primitive_params.points_vector[0].x,
+                      object_params.coord_matrix[1][2] + primitive_params.points_vector[0].y,
+                      primitive_params.pen_width,
+                      {
+                          primitive_params.pen_color.red, primitive_params.pen_color.green,
+                          primitive_params.pen_color.blue
+                      }));
+        break;
+    case objects_types.ptLine:
+        actual_vector->emplace_back(
+            new Line((int)round(object_params.coord_matrix[0][2] +
+                         primitive_params.points_vector[0].x * object_params.coord_matrix[0][0]),
+                     (int)round(object_params.coord_matrix[1][2] +
+                         primitive_params.points_vector[0].y * object_params.coord_matrix[0][0]),
+                     (int)round(object_params.coord_matrix[0][2] +
+                         primitive_params.points_vector[1].x * object_params.coord_matrix[0][0]),
+                     (int)round(object_params.coord_matrix[1][2] +
+                         primitive_params.points_vector[1].y * object_params.coord_matrix[0][0]),
+                     primitive_params.text, object_params.hint, object_params.show,
+                     primitive_params.pen_style, 0, primitive_params.pen_width,
+                     primitive_params.style_start,
+                     primitive_params.style_end,
+                     {
+                         primitive_params.pen_color.red, primitive_params.pen_color.green,
+                         primitive_params.pen_color.blue
+                     }, object_params.horizontal_reflection_mx,
+                     object_params.vertical_reflection_my, object_params.angle));
+        break;
+    case objects_types.ptText:
+        actual_vector->emplace_back(
+            new Text((int)round(object_params.coord_matrix[0][2] -
+                         abs((int)round(primitive_params.points_vector[0].x *
+                             object_params.coord_matrix[0][0]))),
+                     (int)round(object_params.coord_matrix[1][2] -
+                         abs((int)round(primitive_params.points_vector[0].y *
+                             object_params.coord_matrix[1][1]))),
+                     abs((int)round(
+                         primitive_params.points_vector[0].x * 2 * object_params.coord_matrix[0][0])),
+                     abs((int)round(
+                         primitive_params.points_vector[0].y * 2 * object_params.coord_matrix[1][1])),
+                     (int)(360 - object_params.angle) % 360,
+                     primitive_params.text,
+                     object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
+                     {
+                         primitive_params.brush_color.red,
+                         primitive_params.brush_color.green,
+                         primitive_params.brush_color.blue
+                     }, object_params.show, primitive_params.brush_style,
+                     primitive_params.font.name, primitive_params.font.size,
+                     {
+                         primitive_params.font.color.red, primitive_params.font.color.green,
+                         primitive_params.font.color.blue
+                     }, primitive_params.font.align_vertical,
+                     primitive_params.font.reserved, primitive_params.font.is_bold,
+                     primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
+                     {
+                         primitive_params.pen_color.red, primitive_params.pen_color.green,
+                         primitive_params.pen_color.blue
+                     }));
+        break;
+    case objects_types.ptPolygon:
+        for (int i = 0; i < primitive_params.points_amount; i++)
+        {
+            if ((i + 1) == primitive_params.points_amount)
+            {
+                if (((int)object_params.coord_matrix[0][2] + primitive_params.points_vector[i].x ==
+                        points[0][0]) &&
+                    ((int)object_params.coord_matrix[1][2] + primitive_params.points_vector[i].y ==
+                        points[0][1]))
+                {
+                    polygon_end = true;
+                }
+                else
+                {
+                    points.push_back({
+                        (int)(object_params.coord_matrix[0][2] +
+                            primitive_params.points_vector[i].x *
+                            object_params.coord_matrix[0][0]),
+                        (int)(object_params.coord_matrix[1][2] +
+                            primitive_params.points_vector[i].y *
+                            object_params.coord_matrix[1][1])
+                    });
+                    polygon_end = false;
                 }
             }
-            actual_vector->emplace_back(
-                    new Polygon(points, polygon_end, (int) (360 - object_params.angle) % 360,
-                                primitive_params.pen_width, primitive_params.pen_style, object_params.hint,
-                                {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                 primitive_params.pen_color.blue},
-                                {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                 primitive_params.brush_color.blue}, object_params.show,
-                                (int) primitive_params.brush_style,
-                                object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-            break;
-        case objects_types.ptEllipse:
-            actual_vector->emplace_back(
-                    new Ellipse(object_params.coord_matrix[0][2] - abs((int) round(
-                                        primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
-                                object_params.coord_matrix[1][2] - abs((int) round(
-                                        primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
-                                abs((int) round(
-                                        primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
-                                abs((int) round(
-                                        primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
-                                (int) (360 - object_params.angle) % 360,
-                                primitive_params.pen_width, primitive_params.pen_style,
-                                {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                 primitive_params.pen_color.blue}, object_params.hint, object_params.show,
-                                {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                 primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-            break;
-        case objects_types.ptRectangle:
-            actual_vector->emplace_back(
-                    new Rectangle(object_params.coord_matrix[0][2] - abs((int) round(
-                                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
-                                  object_params.coord_matrix[1][2] - abs((int) round(
-                                          primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
-                                  abs((int) round(
-                                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
-                                  abs((int) round(
-                                          primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
-                                  (int) (360 - object_params.angle) % 360,
-                                  primitive_params.pen_width, primitive_params.pen_style,
-                                  {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                   primitive_params.pen_color.blue}, object_params.hint, object_params.show, 0, 0,
-                                  {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                   primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                  object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-            break;
-        case objects_types.ptDuga:
-
-            actual_vector->emplace_back(
-                    new Arc(object_params.coord_matrix[0][2] - abs((int) round(
-                                    primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
-                            object_params.coord_matrix[1][2] - abs((int) round(
-                                    primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
-                            abs((int) round(
-                                    primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
-                            abs((int) round(
-                                    primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
-                            (int) (360 - object_params.angle) % 360, (int) primitive_params.points_vector[4].x % 360,
-                            (int) primitive_params.points_vector[4].y % 360,
-                            primitive_params.pen_width, primitive_params.pen_style,
-                            {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                             primitive_params.pen_color.blue}, object_params.hint, object_params.show,
-                            {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                             primitive_params.brush_color.blue}, primitive_params.brush_style,
-                            object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-            break;
-        case objects_types.ptTeleupr:
-            actual_vector->emplace_back(
-                    new Telecontrol((int) round(object_params.coord_matrix[0][2] -
-                                                abs((int) round(primitive_params.points_vector[0].x *
-                                                                object_params.coord_matrix[0][0]))),
-                                    (int) round(object_params.coord_matrix[1][2] -
-                                                abs((int) round(primitive_params.points_vector[0].y *
-                                                                object_params.coord_matrix[1][1]))),
-                                    abs((int) round(
-                                            primitive_params.points_vector[0].x * 2 *
-                                            object_params.coord_matrix[0][0])),
-                                    abs((int) round(
-                                            primitive_params.points_vector[0].y * 2 *
-                                            object_params.coord_matrix[1][1])),
-                                    (int) (360 - object_params.angle) % 360,
-                                    primitive_params.text,
-                                    object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
-                                    {primitive_params.brush_color.red,
-                                     primitive_params.brush_color.green,
-                                     primitive_params.brush_color.blue}, object_params.show,
-                                    primitive_params.brush_style,
-                                    primitive_params.font.name, primitive_params.font.size,
-                                    {primitive_params.font.color.red, primitive_params.font.color.green,
-                                     primitive_params.font.color.blue}, primitive_params.font.align_vertical,
-                                    primitive_params.font.reserved, primitive_params.font.is_bold,
-                                    primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
-                                    {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                     primitive_params.pen_color.blue}));
-            break;
-        case objects_types.ptTeleizm:
-            actual_vector->emplace_back(
-                    new Telemeasure((int) round(object_params.coord_matrix[0][2] -
-                                                abs((int) round(primitive_params.points_vector[0].x *
-                                                                object_params.coord_matrix[0][0]))),
-                                    (int) round(object_params.coord_matrix[1][2] -
-                                                abs((int) round(primitive_params.points_vector[0].y *
-                                                                object_params.coord_matrix[1][1]))),
-                                    abs((int) round(
-                                            primitive_params.points_vector[0].x * 2 *
-                                            object_params.coord_matrix[0][0])),
-                                    abs((int) round(
-                                            primitive_params.points_vector[0].y * 2 *
-                                            object_params.coord_matrix[1][1])),
-                                    (int) (360 - object_params.angle) % 360,
-                                    primitive_params.text,
-                                    object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
-                                    {primitive_params.brush_color.red,
-                                     primitive_params.brush_color.green,
-                                     primitive_params.brush_color.blue}, object_params.show,
-                                    primitive_params.brush_style,
-                                    primitive_params.font.name, primitive_params.font.size,
-                                    {primitive_params.font.color.red, primitive_params.font.color.green,
-                                     primitive_params.font.color.blue}, primitive_params.font.align_vertical,
-                                    primitive_params.font.reserved, primitive_params.font.is_bold,
-                                    primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
-                                    {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                     primitive_params.pen_color.blue}));
-            break;
-        case objects_types.ptSignal:
-            actual_vector->emplace_back(
-                    new Telesignalisation((int) round(object_params.coord_matrix[0][2] -
-                                                      abs((int) round(primitive_params.points_vector[0].x *
-                                                                      object_params.coord_matrix[0][0]))),
-                                          (int) round(object_params.coord_matrix[1][2] -
-                                                      abs((int) round(primitive_params.points_vector[0].y *
-                                                                      object_params.coord_matrix[1][1]))),
-                                          abs((int) round(
-                                                  primitive_params.points_vector[0].x * 2 *
-                                                  object_params.coord_matrix[0][0])),
-                                          abs((int) round(
-                                                  primitive_params.points_vector[0].y * 2 *
-                                                  object_params.coord_matrix[1][1])),
-                                          (int) (360 - object_params.angle) % 360,
-                                          primitive_params.text,
-                                          object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
-                                          {primitive_params.brush_color.red,
-                                           primitive_params.brush_color.green,
-                                           primitive_params.brush_color.blue}, object_params.show,
-                                          primitive_params.brush_style,
-                                          primitive_params.font.name, primitive_params.font.size,
-                                          {primitive_params.font.color.red, primitive_params.font.color.green,
-                                           primitive_params.font.color.blue}, primitive_params.font.align_vertical,
-                                          primitive_params.font.reserved, primitive_params.font.is_bold,
-                                          primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
-                                          {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                           primitive_params.pen_color.blue}));
-            break;
-        case objects_types.ptPicture:
-            actual_vector->emplace_back(
-                    new Image(object_params.coord_matrix[0][2] - abs(primitive_params.points_vector[0].x),
-                              object_params.coord_matrix[1][2] - abs(primitive_params.points_vector[0].y),
-                              abs(primitive_params.points_vector[0].x) * 2,
-                              abs(primitive_params.points_vector[0].y) * 2, primitive_params.bmp_filepath,
-                              (int) (360 - object_params.angle) % 360, primitive_params.pen_width,
-                              primitive_params.pen_style,
-                              {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                               primitive_params.pen_color.blue}, object_params.hint,
-                              object_params.show, 0, {primitive_params.brush_color.red,
-                                                      primitive_params.brush_color.green,
-                                                      primitive_params.brush_color.blue},
-                              primitive_params.brush_style));
-            break;
-        case objects_types.ptPolyLine:
-            for (int i = 0; i < primitive_params.points_amount; i++) {
-                points.push_back({(int) (object_params.coord_matrix[0][2] +
-                                         primitive_params.points_vector[i].x *
-                                         object_params.coord_matrix[0][0]),
-                                  (int) (object_params.coord_matrix[1][2] +
-                                         primitive_params.points_vector[i].y *
-                                         object_params.coord_matrix[1][1])});
+            else
+            {
+                points.push_back({
+                    (int)(object_params.coord_matrix[0][2] +
+                        primitive_params.points_vector[i].x *
+                        object_params.coord_matrix[0][0]),
+                    (int)(object_params.coord_matrix[1][2] +
+                        primitive_params.points_vector[i].y *
+                        object_params.coord_matrix[1][1])
+                });
             }
-            actual_vector->emplace_back(
-                    new CrookedLine(points, (int) (360 - object_params.angle) % 360,
-                                    primitive_params.pen_width, primitive_params.pen_style, object_params.hint,
-                                    {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                     primitive_params.pen_color.blue},
-                                    {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                     primitive_params.brush_color.blue}, object_params.show,
-                                    (int) primitive_params.brush_style,
-                                    object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-            break;
-        case objects_types.ptShape:
-            actual_vector->emplace_back(
-                    new Rectangle(object_params.coord_matrix[0][2] - abs((int) round(
-                                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
-                                  object_params.coord_matrix[1][2] - abs((int) round(
-                                          primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
-                                  abs((int) round(
-                                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
-                                  abs((int) round(
-                                          primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
-                                  (int) (360 - object_params.angle) % 360,
-                                  primitive_params.pen_width, primitive_params.pen_style,
-                                  {primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                   primitive_params.pen_color.blue}, object_params.hint, object_params.show, 0, 0,
-                                  {primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                   primitive_params.brush_color.blue}, primitive_params.brush_style,
-                                  object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-            break;
-        default:
-            lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
-            lae::PrintLog((int) primitive_params.primitive_type, true);
-            break;
+        }
+        actual_vector->emplace_back(
+            new Polygon(points, polygon_end, (int)(360 - object_params.angle) % 360,
+                        primitive_params.pen_width, primitive_params.pen_style, object_params.hint,
+                        {
+                            primitive_params.pen_color.red, primitive_params.pen_color.green,
+                            primitive_params.pen_color.blue
+                        },
+                        {
+                            primitive_params.brush_color.red, primitive_params.brush_color.green,
+                            primitive_params.brush_color.blue
+                        }, object_params.show,
+                        (int)primitive_params.brush_style,
+                        object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        break;
+    case objects_types.ptEllipse:
+        actual_vector->emplace_back(
+            new Ellipse(object_params.coord_matrix[0][2] - abs((int)round(
+                            primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                        object_params.coord_matrix[1][2] - abs((int)round(
+                            primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                        abs((int)round(
+                            primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                        abs((int)round(
+                            primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                        (int)(360 - object_params.angle) % 360,
+                        primitive_params.pen_width, primitive_params.pen_style,
+                        {
+                            primitive_params.pen_color.red, primitive_params.pen_color.green,
+                            primitive_params.pen_color.blue
+                        }, object_params.hint, object_params.show,
+                        {
+                            primitive_params.brush_color.red, primitive_params.brush_color.green,
+                            primitive_params.brush_color.blue
+                        }, primitive_params.brush_style,
+                        object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        break;
+    case objects_types.ptRectangle:
+        actual_vector->emplace_back(
+            new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
+                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                          object_params.coord_matrix[1][2] - abs((int)round(
+                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                          abs((int)round(
+                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                          abs((int)round(
+                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                          (int)(360 - object_params.angle) % 360,
+                          primitive_params.pen_width, primitive_params.pen_style,
+                          {
+                              primitive_params.pen_color.red, primitive_params.pen_color.green,
+                              primitive_params.pen_color.blue
+                          }, object_params.hint, object_params.show, 0, 0,
+                          {
+                              primitive_params.brush_color.red, primitive_params.brush_color.green,
+                              primitive_params.brush_color.blue
+                          }, primitive_params.brush_style,
+                          object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        break;
+    case objects_types.ptDuga:
+
+        actual_vector->emplace_back(
+            new Arc(object_params.coord_matrix[0][2] - abs((int)round(
+                        primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                    object_params.coord_matrix[1][2] - abs((int)round(
+                        primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                    abs((int)round(
+                        primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                    abs((int)round(
+                        primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                    (int)(360 - object_params.angle) % 360, (int)primitive_params.points_vector[4].x % 360,
+                    (int)primitive_params.points_vector[4].y % 360,
+                    primitive_params.pen_width, primitive_params.pen_style,
+                    {
+                        primitive_params.pen_color.red, primitive_params.pen_color.green,
+                        primitive_params.pen_color.blue
+                    }, object_params.hint, object_params.show,
+                    {
+                        primitive_params.brush_color.red, primitive_params.brush_color.green,
+                        primitive_params.brush_color.blue
+                    }, primitive_params.brush_style,
+                    object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        break;
+    case objects_types.ptTeleupr:
+        actual_vector->emplace_back(
+            new Telecontrol((int)round(object_params.coord_matrix[0][2] -
+                                abs((int)round(primitive_params.points_vector[0].x *
+                                    object_params.coord_matrix[0][0]))),
+                            (int)round(object_params.coord_matrix[1][2] -
+                                abs((int)round(primitive_params.points_vector[0].y *
+                                    object_params.coord_matrix[1][1]))),
+                            abs((int)round(
+                                primitive_params.points_vector[0].x * 2 *
+                                object_params.coord_matrix[0][0])),
+                            abs((int)round(
+                                primitive_params.points_vector[0].y * 2 *
+                                object_params.coord_matrix[1][1])),
+                            (int)(360 - object_params.angle) % 360,
+                            primitive_params.text,
+                            object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
+                            {
+                                primitive_params.brush_color.red,
+                                primitive_params.brush_color.green,
+                                primitive_params.brush_color.blue
+                            }, object_params.show,
+                            primitive_params.brush_style,
+                            primitive_params.font.name, primitive_params.font.size,
+                            {
+                                primitive_params.font.color.red, primitive_params.font.color.green,
+                                primitive_params.font.color.blue
+                            }, primitive_params.font.align_vertical,
+                            primitive_params.font.reserved, primitive_params.font.is_bold,
+                            primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
+                            {
+                                primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                primitive_params.pen_color.blue
+                            }, object_params.hard_id));
+        break;
+    case objects_types.ptTeleizm:
+        actual_vector->emplace_back(
+            new Telemeasure((int)round(object_params.coord_matrix[0][2] -
+                                abs((int)round(primitive_params.points_vector[0].x *
+                                    object_params.coord_matrix[0][0]))),
+                            (int)round(object_params.coord_matrix[1][2] -
+                                abs((int)round(primitive_params.points_vector[0].y *
+                                    object_params.coord_matrix[1][1]))),
+                            abs((int)round(
+                                primitive_params.points_vector[0].x * 2 *
+                                object_params.coord_matrix[0][0])),
+                            abs((int)round(
+                                primitive_params.points_vector[0].y * 2 *
+                                object_params.coord_matrix[1][1])),
+                            (int)(360 - object_params.angle) % 360,
+                            primitive_params.text,
+                            object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
+                            {
+                                primitive_params.brush_color.red,
+                                primitive_params.brush_color.green,
+                                primitive_params.brush_color.blue
+                            }, object_params.show,
+                            primitive_params.brush_style,
+                            primitive_params.font.name, primitive_params.font.size,
+                            {
+                                primitive_params.font.color.red, primitive_params.font.color.green,
+                                primitive_params.font.color.blue
+                            }, primitive_params.font.align_vertical,
+                            primitive_params.font.reserved, primitive_params.font.is_bold,
+                            primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
+                            {
+                                primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                primitive_params.pen_color.blue
+                            }, object_params.hard_id));
+        break;
+    case objects_types.ptSignal:
+        actual_vector->emplace_back(
+            new Telesignalisation((int)round(object_params.coord_matrix[0][2] -
+                                      abs((int)round(primitive_params.points_vector[0].x *
+                                          object_params.coord_matrix[0][0]))),
+                                  (int)round(object_params.coord_matrix[1][2] -
+                                      abs((int)round(primitive_params.points_vector[0].y *
+                                          object_params.coord_matrix[1][1]))),
+                                  abs((int)round(
+                                      primitive_params.points_vector[0].x * 2 *
+                                      object_params.coord_matrix[0][0])),
+                                  abs((int)round(
+                                      primitive_params.points_vector[0].y * 2 *
+                                      object_params.coord_matrix[1][1])),
+                                  (int)(360 - object_params.angle) % 360,
+                                  primitive_params.text,
+                                  object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
+                                  {
+                                      primitive_params.brush_color.red,
+                                      primitive_params.brush_color.green,
+                                      primitive_params.brush_color.blue
+                                  }, object_params.show,
+                                  primitive_params.brush_style,
+                                  primitive_params.font.name, primitive_params.font.size,
+                                  {
+                                      primitive_params.font.color.red, primitive_params.font.color.green,
+                                      primitive_params.font.color.blue
+                                  }, primitive_params.font.align_vertical,
+                                  primitive_params.font.reserved, primitive_params.font.is_bold,
+                                  primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0,
+                                  {
+                                      primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                      primitive_params.pen_color.blue
+                                  }, object_params.hard_id));
+        break;
+    case objects_types.ptPicture:
+        actual_vector->emplace_back(
+            new Image(object_params.coord_matrix[0][2] - abs(primitive_params.points_vector[0].x),
+                      object_params.coord_matrix[1][2] - abs(primitive_params.points_vector[0].y),
+                      abs(primitive_params.points_vector[0].x) * 2,
+                      abs(primitive_params.points_vector[0].y) * 2, primitive_params.bmp_filepath,
+                      (int)(360 - object_params.angle) % 360, primitive_params.pen_width,
+                      primitive_params.pen_style,
+                      {
+                          primitive_params.pen_color.red, primitive_params.pen_color.green,
+                          primitive_params.pen_color.blue
+                      }, object_params.hint,
+                      object_params.show, 0, {
+                          primitive_params.brush_color.red,
+                          primitive_params.brush_color.green,
+                          primitive_params.brush_color.blue
+                      },
+                      primitive_params.brush_style));
+        break;
+    case objects_types.ptPolyLine:
+        for (int i = 0; i < primitive_params.points_amount; i++)
+        {
+            points.push_back({
+                (int)(object_params.coord_matrix[0][2] +
+                    primitive_params.points_vector[i].x *
+                    object_params.coord_matrix[0][0]),
+                (int)(object_params.coord_matrix[1][2] +
+                    primitive_params.points_vector[i].y *
+                    object_params.coord_matrix[1][1])
+            });
+        }
+        actual_vector->emplace_back(
+            new CrookedLine(points, (int)(360 - object_params.angle) % 360,
+                            primitive_params.pen_width, primitive_params.pen_style, object_params.hint,
+                            {
+                                primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                primitive_params.pen_color.blue
+                            },
+                            {
+                                primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                primitive_params.brush_color.blue
+                            }, object_params.show,
+                            (int)primitive_params.brush_style,
+                            object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        break;
+    case objects_types.ptShape:
+        actual_vector->emplace_back(
+            new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
+                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                          object_params.coord_matrix[1][2] - abs((int)round(
+                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                          abs((int)round(
+                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                          abs((int)round(
+                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                          (int)(360 - object_params.angle) % 360,
+                          primitive_params.pen_width, primitive_params.pen_style,
+                          {
+                              primitive_params.pen_color.red, primitive_params.pen_color.green,
+                              primitive_params.pen_color.blue
+                          }, object_params.hint, object_params.show, 0, 0,
+                          {
+                              primitive_params.brush_color.red, primitive_params.brush_color.green,
+                              primitive_params.brush_color.blue
+                          }, primitive_params.brush_style,
+                          object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        break;
+    default:
+        lae::PrintLog("Парсер объектов: Неизвестный тип примитива: ");
+        lae::PrintLog((int)primitive_params.primitive_type, true);
+        break;
     }
     writePrimitiveParams(primitive_params);
 }
 
-void SchemeObjectParser::getFont(std::ifstream& File, sop::PrimitiveParams& primitive_params) {
+void SchemeObjectParser::getFont(std::ifstream& File, sop::PrimitiveParams& primitive_params)
+{
     primitive_params.font.size = getSomeInt(File, primitive_params.font.size);
 
     primitive_params.font.is_bold = getBool(File);
@@ -1128,7 +1300,8 @@ void SchemeObjectParser::getFont(std::ifstream& File, sop::PrimitiveParams& prim
 }
 
 void
-SchemeObjectParser::getPicture(std::ifstream& File, sop::PrimitiveParams& primitive_params, std::string& bmp_filepath) {
+SchemeObjectParser::getPicture(std::ifstream& File, sop::PrimitiveParams& primitive_params, std::string& bmp_filepath)
+{
     ++pictures_counter;
 
     primitive_params.width_of_picture = getSomeInt(File, primitive_params.width_of_picture);
@@ -1143,8 +1316,10 @@ SchemeObjectParser::getPicture(std::ifstream& File, sop::PrimitiveParams& primit
                                    std::vector<sop::BGRColor>(primitive_params.width_of_picture));
     int picture_slide = (primitive_params.width_of_picture * 3) % 4;
     picture_slide == 3 ? picture_slide = 1 : picture_slide = picture_slide;
-    for (uint32_t y = 0; y < primitive_params.height_of_picture; ++y) {
-        for (uint32_t x = 0; x < primitive_params.width_of_picture; ++x) {
+    for (uint32_t y = 0; y < primitive_params.height_of_picture; ++y)
+    {
+        for (uint32_t x = 0; x < primitive_params.width_of_picture; ++x)
+        {
             sop::BGRColor pixel;
 
             File.read(buffer, 3);
@@ -1161,10 +1336,10 @@ SchemeObjectParser::getPicture(std::ifstream& File, sop::PrimitiveParams& primit
     bmp.makeBmp(bmp_filepath, primitive_params.pixmap);
 
     bmp_filepath = "../parser lib/cache/tmp_pictures/" + bmp_filepath + ".bmp";
-
 }
 
-void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params) {
+void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
+{
     lae::WriteLog(LogsFile, "\nOBJECT INFO", true);
 
     lae::WriteLog(LogsFile, "is in group: ");
@@ -1174,8 +1349,10 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
     lae::WriteLog(LogsFile, object_params.lib_index, true);
 
     lae::WriteLog(LogsFile, "coord_matrix: ", true);
-    for (int i = 0; i < object_params.coord_matrix.size(); i++) {
-        for (int j = 0; j < object_params.coord_matrix[i].size(); j++) {
+    for (int i = 0; i < object_params.coord_matrix.size(); i++)
+    {
+        for (int j = 0; j < object_params.coord_matrix[i].size(); j++)
+        {
             lae::WriteLog(LogsFile, object_params.coord_matrix[i][j]);
             lae::WriteLog(LogsFile, ' ');
         }
@@ -1219,8 +1396,10 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
     lae::WriteLog(LogsFile, object_params.tag, true);
 
     lae::WriteLog(LogsFile, "contur_real_matrix: ", true);
-    for (int i = 0; i < object_params.contur_real_matrix.size(); i++) {
-        for (int j = 0; j < object_params.contur_real_matrix[i].size(); j++) {
+    for (int i = 0; i < object_params.contur_real_matrix.size(); i++)
+    {
+        for (int j = 0; j < object_params.contur_real_matrix[i].size(); j++)
+        {
             lae::WriteLog(LogsFile, object_params.contur_real_matrix[i][j]);
             lae::WriteLog(LogsFile, ' ');
         }
@@ -1228,8 +1407,10 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
     }
 
     lae::WriteLog(LogsFile, "contur_frame_matrix: ", true);
-    for (int i = 0; i < object_params.contur_frame_matrix.size(); i++) {
-        for (int j = 0; j < object_params.contur_frame_matrix[i].size(); j++) {
+    for (int i = 0; i < object_params.contur_frame_matrix.size(); i++)
+    {
+        for (int j = 0; j < object_params.contur_frame_matrix[i].size(); j++)
+        {
             lae::WriteLog(LogsFile, object_params.contur_frame_matrix[i][j]);
             lae::WriteLog(LogsFile, ' ');
         }
@@ -1291,7 +1472,8 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
     lae::WriteLog(LogsFile, object_params.glue_points_amount, true);
 
     lae::WriteLog(LogsFile, "glue_points_vector: ", true);
-    for (int i = 0; i < object_params.glue_points_vector.size(); i++) {
+    for (int i = 0; i < object_params.glue_points_vector.size(); i++)
+    {
         lae::WriteLog(LogsFile, "x: ");
         lae::WriteLog(LogsFile, object_params.glue_points_vector[i].x);
         lae::WriteLog(LogsFile, " y: ");
@@ -1308,60 +1490,62 @@ void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)
     lae::WriteLog(LogsFile, object_params.has_info_for_analysis, true);
 }
 
-void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primitive_params) {
+void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primitive_params)
+{
     lae::WriteLog(LogsFile, "\nPRIMITIVE PARAMS", true);
 
     lae::WriteLog(LogsFile, "points_amount: ");
     lae::WriteLog(LogsFile, primitive_params.points_amount, true);
 
     lae::WriteLog(LogsFile, "points_vector: ", true);
-    for (int i = 0; i < primitive_params.points_vector.size(); i++) {
+    for (int i = 0; i < primitive_params.points_vector.size(); i++)
+    {
         lae::WriteLog(LogsFile, primitive_params.points_vector[i].x);
         lae::WriteLog(LogsFile, ' ');
         lae::WriteLog(LogsFile, primitive_params.points_vector[i].y, true);
     }
 
     lae::WriteLog(LogsFile, "primitive_type: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.primitive_type, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.primitive_type, true);
 
     lae::WriteLog(LogsFile, "ti_style: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.ti_style, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.ti_style, true);
 
     lae::WriteLog(LogsFile, "pen_color: ", true);
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.pen_color.red, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.pen_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.pen_color.green, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.pen_color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.pen_color.blue, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.pen_color.blue, true);
 
     lae::WriteLog(LogsFile, "brush_color: ", true);
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.brush_color.red, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.brush_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.brush_color.green, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.brush_color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.brush_color.blue, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.brush_color.blue, true);
 
     lae::WriteLog(LogsFile, "trans_color: ");
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.trans_color.red, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.trans_color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.trans_color.green, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.trans_color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.trans_color.blue, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.trans_color.blue, true);
 
     lae::WriteLog(LogsFile, "is_transparent: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.is_transparent, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.is_transparent, true);
 
     lae::WriteLog(LogsFile, "brush_style: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.brush_style, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.brush_style, true);
 
     lae::WriteLog(LogsFile, "pen_style: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.pen_style, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.pen_style, true);
 
     lae::WriteLog(LogsFile, "pen_width: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.pen_width, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.pen_width, true);
 
     lae::WriteLog(LogsFile, "text_length: ");
     lae::WriteLog(LogsFile, primitive_params.text_length, true);
@@ -1391,8 +1575,10 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
     lae::WriteLog(LogsFile, primitive_params.line_marker_amount, true);
 
     lae::WriteLog(LogsFile, "indentity_matrix: ", true);
-    for (int i = 0; i < primitive_params.indentity_matrix.size(); i++) {
-        for (int j = 0; j < primitive_params.indentity_matrix[i].size(); j++) {
+    for (int i = 0; i < primitive_params.indentity_matrix.size(); i++)
+    {
+        for (int j = 0; j < primitive_params.indentity_matrix[i].size(); j++)
+        {
             lae::WriteLog(LogsFile, primitive_params.indentity_matrix[i][j]);
             lae::WriteLog(LogsFile, ' ');
         }
@@ -1415,7 +1601,7 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
     lae::WriteLog(LogsFile, primitive_params.height_of_picture, true);
 
     lae::WriteLog(LogsFile, "bit_depth: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.bit_depth, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.bit_depth, true);
 
     lae::WriteLog(LogsFile, "pixmap: ");
     lae::WriteLog(LogsFile, "true", true);
@@ -1436,7 +1622,8 @@ void SchemeObjectParser::writePrimitiveParams(const sop::PrimitiveParams& primit
     lae::WriteLog(LogsFile, primitive_params.has_info_for_analysis, true);
 }
 
-void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams& primitive_params) {
+void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams& primitive_params)
+{
     lae::WriteLog(LogsFile, "size: ");
     lae::WriteLog(LogsFile, primitive_params.font.size, true);
 
@@ -1456,17 +1643,17 @@ void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams& primitive_par
     lae::WriteLog(LogsFile, primitive_params.font.name, true);
     lae::WriteLog(LogsFile, "color: ", true);
     lae::WriteLog(LogsFile, "r: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.font.color.red, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.font.color.red, true);
     lae::WriteLog(LogsFile, "g: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.font.color.green, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.font.color.green, true);
     lae::WriteLog(LogsFile, "b: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.font.color.blue, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.font.color.blue, true);
 
     lae::WriteLog(LogsFile, "align_horizontal: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.font.align_horizontal, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.font.align_horizontal, true);
 
     lae::WriteLog(LogsFile, "align_vertical: ");
-    lae::WriteLog(LogsFile, (int) primitive_params.font.align_vertical, true);
+    lae::WriteLog(LogsFile, (int)primitive_params.font.align_vertical, true);
 
     lae::WriteLog(LogsFile, "reserved: ");
     lae::WriteLog(LogsFile, primitive_params.font.reserved, true);
@@ -1483,5 +1670,3 @@ void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams& primitive_par
     lae::WriteLog(LogsFile, "descent: ");
     lae::WriteLog(LogsFile, primitive_params.font.descent, true);
 }
-
-

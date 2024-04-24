@@ -16,9 +16,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # They need to be set before the find_package(Qt5 ...) call.
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Sql REQUIRED)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_LIBPQXX REQUIRED libpqxx)
+pkg_search_module(LIBPQ REQUIRED libpq)
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -34,6 +35,7 @@ add_library(parser)
 add_library(bmp_file)
 add_library(db)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE pqxx)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Sql)
 target_include_directories(${PROJECT_NAME} PUBLIC $ {PROJECT_SOURCE_DIR})
