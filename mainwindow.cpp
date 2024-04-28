@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QMenu>
+#include <QLineEdit>
 #include <QFileDialog>
 #include "db lib/db_connection.cpp"
 
@@ -14,7 +15,7 @@ MyWidget::MyWidget()
 {
     layout = new QVBoxLayout(this);
     scene = new QGraphicsScene(this);
-    view = new QGraphicsView(scene);
+    view = new MyView(scene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -29,7 +30,7 @@ void MyWidget::draw_new_scheme(const std::string& filepath)
 
     layout = new QVBoxLayout(this);
     scene = new QGraphicsScene(this);
-    view = new QGraphicsView(scene);
+    view = new MyView(scene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -140,6 +141,43 @@ void MyWidget::draw_new_scheme(const std::string& filepath)
     delete painter;
     scene->addPixmap(pix);
 }
+
+void MyView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        qDebug() << event->pos().x() << " " << event->pos().y();
+
+        QMenu *newWindow = new QMenu();
+
+        int xOffset = 20;
+        int yOffset = -20;
+        newWindow->move(event->pos().x() + xOffset, event->pos().y() + yOffset);
+
+        QVBoxLayout *mainLayout = new QVBoxLayout(newWindow);
+
+        QHBoxLayout *row1Layout = new QHBoxLayout();
+        QLabel *label1 = new QLabel("Label 1:");
+        QLineEdit *lineEdit1 = new QLineEdit();
+        row1Layout->addWidget(label1);
+        row1Layout->addWidget(lineEdit1);
+
+        QHBoxLayout *row2Layout = new QHBoxLayout();
+        QLabel *label2 = new QLabel("Label 2:");
+        QLineEdit *lineEdit2 = new QLineEdit();
+        row2Layout->addWidget(label2);
+        row2Layout->addWidget(lineEdit2);
+
+        QPushButton *saveButton = new QPushButton("&Сохранить");
+
+        mainLayout->addLayout(row1Layout);
+        mainLayout->addLayout(row2Layout);
+        mainLayout->addWidget(saveButton);
+
+        newWindow->show();
+    }
+}
+
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)

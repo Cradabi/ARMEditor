@@ -1,29 +1,40 @@
 #include <QFrame>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QMouseEvent>
 
 #pragma once
 
 
-class MyWidget : public QFrame {
-Q_OBJECT
+class MyView : public QGraphicsView
+{
+    Q_OBJECT
+public:
+    MyView(QGraphicsScene* parent) : QGraphicsView(parent)
+    {
+    }
+
+    void mouseDoubleClickEvent(QMouseEvent* event);
+};
+
+class MyWidget : public QFrame
+{
+    Q_OBJECT
+
 public:
     QVBoxLayout* layout;
     QGraphicsScene* scene;
-    QGraphicsView* view;
+    MyView* view;
 
     MyWidget();
 
-    ~MyWidget(){
+    ~MyWidget()
+    {
         delete layout;
         delete scene;
         delete view;
     };
 
     void draw_new_scheme(const std::string& filepath);
-
-private:
-    //void paintEvent(QPaintEvent* event);
-
 };
 
