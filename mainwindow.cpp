@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include <QLabel>
 #include <QMessageBox>
+#include <QTransform>
 #include "mywidget.h"
 #include "parser lib/lib/SchemeFileParser.cpp"
 #include <QGraphicsScene>
@@ -10,6 +11,8 @@
 #include <QLineEdit>
 #include <QFileDialog>
 #include "db lib/db_connection.cpp"
+
+Scheme::SchemeParams current_scheme_params;
 
 MyWidget::MyWidget()
 {
@@ -140,6 +143,7 @@ void MyWidget::draw_new_scheme(const std::string& filepath)
     scheme.draw_scheme(*painter);
     delete painter;
     scene->addPixmap(pix);
+    current_scheme_params = tmp_scheme_params;
 }
 
 void MyView::mouseDoubleClickEvent(QMouseEvent* event)
@@ -147,6 +151,25 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton)
     {
         qDebug() << event->pos().x() << " " << event->pos().y();
+        QPoint originalpoint(event->pos().x(), event->pos().y());
+
+        // for (auto object : current_scheme_params.objects_vector)
+        // {
+        //     std::string tp_obj = object->get_type_object();
+        //     if (tp_obj == "Библиотечный объект")
+        //     {
+        //         ;
+        //     }else if (tp_obj == "Телеизмерение")
+        //     {
+        //         ;
+        //     }else if (tp_obj == "Телеконтроль")
+        //     {
+        //         ;
+        //     }else if (tp_obj == "Телесигнализация")
+        //     {
+        //         ;
+        //     }
+        // }
 
         QMenu *newWindow = new QMenu();
 

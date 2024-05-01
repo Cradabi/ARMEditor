@@ -27,6 +27,41 @@ std::string Primitive::get_help_text()
     return this->help_text;
 }
 
+int Primitive::get_angle()
+{
+    return this->angle;
+}
+
+int Primitive::get_x()
+{
+    return this->x;
+}
+
+int Primitive::get_y()
+{
+    return this->y;
+}
+
+int Primitive::get_width()
+{
+    return this->width;
+}
+
+int Primitive::get_height()
+{
+    return this->height;
+}
+
+int Primitive::get_center_x()
+{
+    return this->center_x;
+}
+
+int Primitive::get_center_y()
+{
+    return this->center_y;
+}
+
 //далее идут функции меняющие настройки показывания различных элементов
 void Primitive::show_help()
 {
@@ -853,41 +888,6 @@ int Rectangle::get_style_gradient_filling()
     return this->style_gradient_filling;
 }
 
-int Rectangle::get_angle()
-{
-    return this->angle;
-}
-
-int Rectangle::get_x()
-{
-    return this->x;
-}
-
-int Rectangle::get_y()
-{
-    return this->y;
-}
-
-int Rectangle::get_width()
-{
-    return this->width;
-}
-
-int Rectangle::get_height()
-{
-    return this->height;
-}
-
-int Rectangle::get_center_x()
-{
-    return this->center_x;
-}
-
-int Rectangle::get_center_y()
-{
-    return this->center_y;
-}
-
 bool Rectangle::get_hor_mirror()
 {
     return this->horizontal_mirror;
@@ -1068,42 +1068,6 @@ int Ellipse::get_style_line()
 int Ellipse::get_line_width()
 {
     return this->line_width;
-}
-
-
-int Ellipse::get_angle()
-{
-    return this->angle;
-}
-
-int Ellipse::get_x()
-{
-    return this->x;
-}
-
-int Ellipse::get_y()
-{
-    return this->y;
-}
-
-int Ellipse::get_width()
-{
-    return this->width;
-}
-
-int Ellipse::get_height()
-{
-    return this->height;
-}
-
-int Ellipse::get_center_x()
-{
-    return this->center_x;
-}
-
-int Ellipse::get_center_y()
-{
-    return this->center_y;
 }
 
 bool Ellipse::get_hor_mirror()
@@ -1403,41 +1367,6 @@ int CrookedLine::get_style_line()
     return this->style_line;
 }
 
-int CrookedLine::get_angle()
-{
-    return this->angle;
-}
-
-int CrookedLine::get_x()
-{
-    return this->x;
-}
-
-int CrookedLine::get_y()
-{
-    return this->y;
-}
-
-int CrookedLine::get_width()
-{
-    return this->width;
-}
-
-int CrookedLine::get_height()
-{
-    return this->height;
-}
-
-int CrookedLine::get_center_x()
-{
-    return this->center_x;
-}
-
-int CrookedLine::get_center_y()
-{
-    return this->center_y;
-}
-
 bool CrookedLine::get_hor_mirror()
 {
     return this->horizontal_mirror;
@@ -1651,37 +1580,6 @@ int TransitionPoint::get_point_number()
 {
     return this->number_of_transition_point;
 }
-
-int TransitionPoint::get_x()
-{
-    return this->x;
-}
-
-int TransitionPoint::get_y()
-{
-    return this->y;
-}
-
-int TransitionPoint::get_width()
-{
-    return this->width;
-}
-
-int TransitionPoint::get_height()
-{
-    return this->height;
-}
-
-int TransitionPoint::get_center_x()
-{
-    return this->center_x;
-}
-
-int TransitionPoint::get_center_y()
-{
-    return this->center_y;
-}
-
 
 std::vector<int> TransitionPoint::get_filling_color()
 {
@@ -1924,10 +1822,6 @@ void TransitionButton::set_font_color(const std::vector<int>& fn_col)
 }
 
 //далее идут функции по выводу одноименных переменных класса кнопки перехода
-int TransitionButton::get_angle()
-{
-    return this->angle;
-}
 
 int TransitionButton::get_font_size()
 {
@@ -2260,35 +2154,6 @@ void Text::set_style_line(int style_line)
 }
 
 //далее идут функции по выводу одноименных переменных класса текста
-int Text::get_x()
-{
-    return this->x;
-}
-
-int Text::get_y()
-{
-    return this->y;
-}
-
-int Text::get_width()
-{
-    return this->width;
-}
-
-int Text::get_height()
-{
-    return this->height;
-}
-
-int Text::get_center_x()
-{
-    return this->center_x;
-}
-
-int Text::get_center_y()
-{
-    return this->center_y;
-}
 
 int Text::get_style_line()
 {
@@ -2523,41 +2388,6 @@ int Image::get_line_width()
 int Image::get_style_line()
 {
     return this->style_line;
-}
-
-int Image::get_angle()
-{
-    return this->angle;
-}
-
-int Image::get_x()
-{
-    return this->x;
-}
-
-int Image::get_y()
-{
-    return this->y;
-}
-
-int Image::get_width()
-{
-    return this->width;
-}
-
-int Image::get_height()
-{
-    return this->height;
-}
-
-int Image::get_center_x()
-{
-    return this->center_x;
-}
-
-int Image::get_center_y()
-{
-    return this->center_y;
 }
 
 std::vector<int> Image::get_line_color()
@@ -3184,16 +3014,6 @@ void Point::set_line_color(std::vector<int> ln_color)
     line_color = ln_color;
 }
 
-int Point::get_x()
-{
-    return this->x;
-}
-
-int Point::get_y()
-{
-    return this->y;
-}
-
 int Point::get_line_width()
 {
     return line_width;
@@ -3294,31 +3114,6 @@ void LibraryObject::set_vert_mirror(bool vert_mirror)
 void LibraryObject::add_pattern(const std::vector<Primitive*> pattern)
 {
     this->patterns.push_back(pattern);
-}
-
-int LibraryObject::get_x()
-{
-    return this->x;
-}
-
-int LibraryObject::get_y()
-{
-    return this->y;
-}
-
-int LibraryObject::get_width()
-{
-    return this->width;
-}
-
-int LibraryObject::get_height()
-{
-    return this->height;
-}
-
-int LibraryObject::get_angle()
-{
-    return this->angle;
 }
 
 bool LibraryObject::get_hor_mirror()

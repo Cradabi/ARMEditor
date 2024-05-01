@@ -22,6 +22,13 @@ namespace FiguresClasses
 
         int condition = 0;
         int id = 0;
+        int x = 0;
+        int y = 0;
+        int center_x = 0;
+        int center_y = 0;
+        int width = 0;
+        int height = 0;
+        int angle = 0;
 
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignBottom, Qt::AlignVCenter};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignRight, Qt::AlignHCenter};
@@ -54,6 +61,20 @@ namespace FiguresClasses
         bool get_show();
 
         int get_id();
+
+        int get_x();
+
+        int get_y();
+
+        int get_width();
+
+        int get_height();
+
+        int get_angle();
+
+        int get_center_x();
+
+        int get_center_y();
 
         void set_id(int id_c);
 
@@ -267,11 +288,6 @@ namespace FiguresClasses
         //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 8; //ширина линии
-        int angle = 60; //угол наклона
-        int x = 0; //коодината x
-        int y = 0; //координата y
-        int width = 0; //ширина
-        int height = 0; //высота
         int center_x = 0; //координата x центра
         int center_y = 0; //координата y центра
 
@@ -321,20 +337,6 @@ namespace FiguresClasses
 
         int get_style_gradient_filling();
 
-        int get_angle();
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
-
         bool get_hor_mirror();
 
         bool get_vert_mirror();
@@ -372,13 +374,6 @@ namespace FiguresClasses
         int style_line = 1;
         //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
         int line_width = 16; //ширина линии
-        int angle = 0; //угол наклона
-        int x = 0; //координата x
-        int y = 0; //координата y
-        int width = 0; //ширина
-        int height = 0; //высота
-        int center_x = 0; //координата x центра
-        int center_y = 0; //координата y центра
 
 
     public:
@@ -420,20 +415,6 @@ namespace FiguresClasses
         int get_style_line();
 
         int get_line_width();
-
-        int get_angle();
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
 
         bool get_hor_mirror();
 
@@ -510,13 +491,6 @@ namespace FiguresClasses
         //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 8; //ширина линии
-        int angle = 0; //угол наклона
-        int x = 0; //координата x
-        int y = 0; //координата y
-        int width = 0; //ширина
-        int height = 0; //высота
-        int center_x = 0; //координата x центра
-        int center_y = 0; //координата y центра
 
     public:
         //конструкторы класса кривой линии получающие различные вводные
@@ -550,20 +524,6 @@ namespace FiguresClasses
 
         //далее идут функции по выводу одноименных переменных класса кривой линии
         int get_style_line();
-
-        int get_angle();
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
 
         bool get_hor_mirror();
 
@@ -620,12 +580,6 @@ namespace FiguresClasses
 
         std::vector<int> filling_color = {238, 233, 233}; //цвет заливки
 
-        int x = 0; //координата x
-        int y = 0; //координата y
-        int width = 0; //ширина
-        int height = 0; //высота
-        int center_x = 0; //координата x центра
-        int center_y = 0; //координаты y центра
 
     public:
         //конструкторы класса точки перехода получающие различные вводные
@@ -651,18 +605,6 @@ namespace FiguresClasses
 
         //далее идут функции по выводу одноименных переменных класса точки перехода
         int get_point_number();
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
 
 
         std::vector<int> get_filling_color();
@@ -703,7 +645,6 @@ namespace FiguresClasses
         int vAlignment = 1; //номер вертикального выравнивания
         int font_size = 12; //размер шрифта
         int number_of_transition_button = 0; //номер кнопки
-        int angle = 0; //угол наклона
 
 
     public:
@@ -763,7 +704,6 @@ namespace FiguresClasses
         void set_font_color(const std::vector<int>& fn_col);
 
         //далее идут функции по выводу одноименных переменных класса кнопки перехода
-        int get_angle();
 
         int get_font_size();
 
@@ -830,13 +770,6 @@ namespace FiguresClasses
         int style_line = 1;
         //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
         int line_width = 6;
-        int angle = 0; //угол наклона
-        int x = 0; //координата x
-        int y = 0; //координата y
-        int width = 0; //ширина
-        int height = 0; //высота
-        int center_x = 0; //координата x центра
-        int center_y = 0; //координата y центра
 
         bool bool_show_filling = false; //показывать заливку
 
@@ -907,17 +840,6 @@ namespace FiguresClasses
         void set_style_line(int style_line);
 
         //далее идут функции по выводу одноименных переменных класса текста
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
 
         int get_style_line();
 
@@ -990,13 +912,6 @@ namespace FiguresClasses
         //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 1; //ширина линии
-        int angle = 0; //угол наклона
-        int x = 0; //коодината x
-        int y = 0; //координата y
-        int width = 0; //ширина
-        int height = 0; //высота
-        int center_x = 0; //координата x центра
-        int center_y = 0; //координата y центра
 
     public:
         //конструкторы класса прямоугольника получающие различные вводные
@@ -1039,20 +954,6 @@ namespace FiguresClasses
         int get_line_width();
 
         int get_style_line();
-
-        int get_angle();
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_center_x();
-
-        int get_center_y();
 
         std::vector<int> get_line_color();
 
@@ -1226,8 +1127,6 @@ namespace FiguresClasses
     class Point : public Primitive
     {
     private:
-        int x = 0;
-        int y = 0;
         int line_width = 1;
 
         std::vector<int> line_color = {};
@@ -1245,10 +1144,6 @@ namespace FiguresClasses
 
         void set_line_color(std::vector<int> ln_color);
 
-        int get_x();
-
-        int get_y();
-
         int get_line_width();
 
         std::vector<int> get_line_color();
@@ -1260,13 +1155,6 @@ namespace FiguresClasses
         bool horizontal_mirror = false;
         bool vertical_mirror = false;
 
-        int x = 0;
-        int y = 0;
-        int width = 0;
-        int height = 0;
-        int center_x = 0;
-        int center_y = 0;
-        int angle = 0;
         int id = 0;
 
         std::string library_name;
@@ -1299,16 +1187,6 @@ namespace FiguresClasses
         void set_vert_mirror(bool vert_mirror);
 
         void add_pattern(const std::vector<Primitive*> pattern);
-
-        int get_x();
-
-        int get_y();
-
-        int get_width();
-
-        int get_height();
-
-        int get_angle();
 
         bool get_hor_mirror();
 
