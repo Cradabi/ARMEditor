@@ -3,6 +3,7 @@
 #include <QFrame>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QScrollBar>
 #include <QDebug>
 #include <QMenu>
 #include <QMouseEvent>
@@ -13,11 +14,13 @@
 
 
 class MyView : public QGraphicsView {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     MyView() = default;
 
-    explicit MyView(QGraphicsScene *parent);
+    explicit MyView(QGraphicsScene* parent);
 
-    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+
 };

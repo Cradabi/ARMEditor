@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     widget = new MyWidget();
     ui->scrollArea->setWidget(widget);
+    // ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->listView->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
 

@@ -5,12 +5,12 @@
 #include <QSqlQuery>
 
 class MyWidget : public QFrame {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    QVBoxLayout *layout;
-    QGraphicsScene *scene;
-    MyView *view;
+    QVBoxLayout* layout;
+    QGraphicsScene* scene;
+    MyView* view;
 
     MyWidget();
 
@@ -20,5 +20,5 @@ public:
         delete view;
     };
 
-    void draw_new_scheme(const std::string &filepath);
+    void draw_new_scheme(const std::string& filepath);
 };

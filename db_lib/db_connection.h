@@ -1,3 +1,5 @@
+#pragma once
+
 #include "QtSql"
 
 QSqlQuery connection_to_db()
@@ -12,7 +14,7 @@ QSqlQuery connection_to_db()
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("MaximRozov24");
+            db.setPassword("Z123c123x");
 
             if (!db.open())
             {
@@ -48,7 +50,7 @@ QSqlQuery connection_to_cp_db()
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("MaximRozov24");
+            db.setPassword("Z123c123x");
 
             if (!db.open())
             {
@@ -61,7 +63,7 @@ QSqlQuery connection_to_cp_db()
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, current_state, current_value, cp_name_id FROM objects", db);
+            QSqlQuery query("SELECT name, current_state, current_value, cp_name_id FROM objects", db);
             db.close();
             return query;
         }

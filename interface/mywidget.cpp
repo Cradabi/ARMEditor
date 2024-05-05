@@ -1,5 +1,6 @@
 #include "mywidget.h"
 
+
 #include "parser_lib/SchemeFileParser.h"
 #include "db_lib/db_connection.h"
 
@@ -14,7 +15,6 @@ MyWidget::MyWidget() {
 }
 
 void MyWidget::draw_new_scheme(const std::string &filepath) {
-
     delete layout;
     delete scene;
     delete view;
@@ -92,26 +92,37 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
     }
     //QVector<Primitive*> vector_obj = tmp_scheme_params.objects_vector;
 
-//    QVector<FiguresClasses::Primitive*> qtVector;
-//    qtVector.reserve(tmp_scheme_params.objects_vector.size()); // Резервируем память для повышения производительности
-//
-//    for (FiguresClasses::Primitive* primitive : tmp_scheme_params.objects_vector) {
-//        qtVector.append(primitive);
-//    }
-//
-//    // Открываем файл для записи
-//    QFile file("save.dat");
-//    if (!file.open(QIODevice::WriteOnly)) {
-//        qDebug() << "Не удалось открыть файл для записи";
-//        exit(0);
-//    }
-//
-//    // Записываем QVector в файл
-//    QDataStream out(&file);
-//    out.setVersion(QDataStream::Qt_5_9);
-//    out << qtVector;
-//
-//    file.close();
+    QVector<QVector<QVariant>> qtVector = {};
+    QVector<QVariant> cur_vec = {};
+    QString qString = "";
+    for(auto object: tmp_scheme_params.objects_vector) {
+        cur_vec.append(object->get_x());
+        cur_vec.append(object->get_y());
+        cur_vec.append(object->get_width());
+        cur_vec.append(object->get_height());
+        cur_vec.append(object->get_angle());
+        cur_vec.append(object->get_id());
+        qString = QString::fromStdString(object->get_text());
+        cur_vec.append(qString);
+        qString = QString::fromStdString(object->get_type_object());
+        cur_vec.append(qString);
+        qtVector.append(cur_vec);
+        cur_vec = {};
+    }
+
+   //ткрываем файл для записи
+    QFile file("/home/chekhov/github/ARMEditor/interface/save.dat");
+    if (!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "Не удалось открыть файл для записи";
+        exit(0);
+    }
+
+    // Записываем QVector в файл
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_5_11);
+    out << qtVector;
+
+    file.close();
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
 
