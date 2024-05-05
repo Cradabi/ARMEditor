@@ -1,0 +1,1 @@
+add_library(primitives_lib FiguresClasses.h SchemeClass.h)

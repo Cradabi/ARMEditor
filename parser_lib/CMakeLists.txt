@@ -1,0 +1,1 @@
+add_library(parser_lib SchemeFileNS.h SchemeObjectParser.h SchemeFileParser.h)
