@@ -15,13 +15,7 @@ find_package(Qt5 COMPONENTS Sql REQUIRED)
 find_package(PkgConfig)
 pkg_search_module(LIBPQ REQUIRED libpq)
 
-add_library(primitives_lib)
-add_library(parser_lib)
-add_library(bmp_additional)
-add_library(db_lib)
-#add_library(interface)
-
-add_executable(${PROJECT_NAME} main.cpp interface/myview.cpp interface/mywidget.cpp interface/mainwindow.cpp interface/mainwindow.ui)
+add_executable(${PROJECT_NAME} main.cpp interface/myview.cpp interface/mywidget.cpp interface/mainwindow.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)

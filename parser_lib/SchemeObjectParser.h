@@ -1858,5 +1858,3 @@ void SchemeObjectParser::writeFontInfo(const sop::PrimitiveParams &primitive_par
     lae::WriteLog(LogsFile, "descent: ");
     lae::WriteLog(LogsFile, primitive_params.font.descent, true);
 }
-
-

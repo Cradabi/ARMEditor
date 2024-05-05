@@ -14,6 +14,7 @@ MyWidget::MyWidget() {
 }
 
 void MyWidget::draw_new_scheme(const std::string &filepath) {
+
     delete layout;
     delete scene;
     delete view;
@@ -89,6 +90,28 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
             }
         }
     }
+    //QVector<Primitive*> vector_obj = tmp_scheme_params.objects_vector;
+
+//    QVector<FiguresClasses::Primitive*> qtVector;
+//    qtVector.reserve(tmp_scheme_params.objects_vector.size()); // Резервируем память для повышения производительности
+//
+//    for (FiguresClasses::Primitive* primitive : tmp_scheme_params.objects_vector) {
+//        qtVector.append(primitive);
+//    }
+//
+//    // Открываем файл для записи
+//    QFile file("save.dat");
+//    if (!file.open(QIODevice::WriteOnly)) {
+//        qDebug() << "Не удалось открыть файл для записи";
+//        exit(0);
+//    }
+//
+//    // Записываем QVector в файл
+//    QDataStream out(&file);
+//    out.setVersion(QDataStream::Qt_5_9);
+//    out << qtVector;
+//
+//    file.close();
 
     this->setFixedSize(tmp_scheme_params.width, tmp_scheme_params.height);
 

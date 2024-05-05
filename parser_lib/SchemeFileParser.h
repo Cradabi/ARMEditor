@@ -1,3 +1,5 @@
+#pragma once    // Сообщаем препроцессору, что данный заголовочный файл может быть подключен только 1 раз
+
 #include <iostream>
 #include <locale>
 #include <bitset>
@@ -6,8 +8,6 @@
 #include <sys/types.h>
 
 #include "SchemeObjectParser.h"
-
-#pragma once    // Сообщаем препроцессору, что данный заголовочный файл может быть подключен только 1 раз
 
 
 // Главный класс парсера схемы

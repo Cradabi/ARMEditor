@@ -15,8 +15,9 @@
 class MyView : public QGraphicsView {
 Q_OBJECT
 public:
-    MyView(QGraphicsScene *parent) : QGraphicsView(parent) {}
+    MyView() = default;
 
-    void mouseDoubleClickEvent(QMouseEvent *event);
+    explicit MyView(QGraphicsScene *parent);
+
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 };
-
