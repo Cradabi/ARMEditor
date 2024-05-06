@@ -25,6 +25,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
         in.setVersion(QDataStream::Qt_5_11);
         in >> qtVector;
 
+        this->vec = qtVector;
+
 
         file.close();
 
@@ -53,7 +55,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     int hor_off = 30;
                     int ver_off = -30;
 
-                    QMenu* newWindow = new QMenu();
+                    newWindow = new QMenu();
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
@@ -66,6 +68,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     QString normal_state = "None";
                     QString fail_state = "None";
                     QString cur_state = "None";
+                    this->cur_obj_id = object[5].toInt();
 
                     while (db_request_result.next()) {
                         if (db_request_result.value(0).toInt() == object[5].toInt()) {
@@ -84,40 +87,42 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     QHBoxLayout* row1Layout = new QHBoxLayout();
                     QLabel* label1 = new QLabel("Имя:");
-                    QLineEdit* lineEdit1 = new QLineEdit();
+                    lineEdit1 = new QLineEdit();
                     lineEdit1->setText(name);
                     row1Layout->addWidget(label1);
                     row1Layout->addWidget(lineEdit1);
 
                     QHBoxLayout* row2Layout = new QHBoxLayout();
                     QLabel* label2 = new QLabel("ЦП id:");
-                    QLineEdit* lineEdit2 = new QLineEdit();
+                    lineEdit2 = new QLineEdit();
                     lineEdit2->setText(cp_id);
                     row2Layout->addWidget(label2);
                     row2Layout->addWidget(lineEdit2);
 
                     QHBoxLayout* row3Layout = new QHBoxLayout();
-                    QLabel* label3 = new QLabel("Нормальнное значение:");
-                    QLineEdit* lineEdit3 = new QLineEdit();
+                    QLabel* label3 = new QLabel("Нормальное значение:");
+                    lineEdit3 = new QLineEdit();
                     lineEdit3->setText(normal_state);
                     row3Layout->addWidget(label3);
                     row3Layout->addWidget(lineEdit3);
 
                     QHBoxLayout* row4Layout = new QHBoxLayout();
-                    QLabel* label4 = new QLabel("Ошибочное значение:");
-                    QLineEdit* lineEdit4 = new QLineEdit();
+                    QLabel* label4 = new QLabel("Значение при ошибке:");
+                    lineEdit4 = new QLineEdit();
                     lineEdit4->setText(fail_state);
                     row4Layout->addWidget(label4);
                     row4Layout->addWidget(lineEdit4);
 
                     QHBoxLayout* row5Layout = new QHBoxLayout();
                     QLabel* label5 = new QLabel("Текущее значение:");
-                    QLineEdit* lineEdit5 = new QLineEdit();
+                    lineEdit5 = new QLineEdit();
                     lineEdit5->setText(cur_state);
                     row5Layout->addWidget(label5);
                     row5Layout->addWidget(lineEdit5);
 
                     QPushButton* saveButton = new QPushButton("&Сохранить");
+
+                    connect(saveButton, &QPushButton::clicked, this, &MyView::updateTablelib);
 
                     mainLayout->addLayout(row1Layout);
                     mainLayout->addLayout(row2Layout);
@@ -153,7 +158,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     int hor_off = 30;
                     int ver_off = -30;
 
-                    QMenu* newWindow = new QMenu();
+                    newWindow = new QMenu();
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
@@ -166,6 +171,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     QString cur_value = "None";
                     QString min_value = "None";
                     QString max_value = "None";
+
+                    this->cur_obj_id = object[5].toInt();
 
                     while (db_request_result.next()) {
                         if (db_request_result.value(0).toInt() == object[5].toInt()) {
@@ -184,40 +191,42 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     QHBoxLayout* row1Layout = new QHBoxLayout();
                     QLabel* label1 = new QLabel("Имя:");
-                    QLineEdit* lineEdit1 = new QLineEdit();
+                    lineEdit1 = new QLineEdit();
                     lineEdit1->setText(name);
                     row1Layout->addWidget(label1);
                     row1Layout->addWidget(lineEdit1);
 
                     QHBoxLayout* row2Layout = new QHBoxLayout();
                     QLabel* label2 = new QLabel("ЦП id:");
-                    QLineEdit* lineEdit2 = new QLineEdit();
+                    lineEdit2 = new QLineEdit();
                     lineEdit2->setText(cp_id);
                     row2Layout->addWidget(label2);
                     row2Layout->addWidget(lineEdit2);
 
                     QHBoxLayout* row3Layout = new QHBoxLayout();
                     QLabel* label3 = new QLabel("Текущее значение:");
-                    QLineEdit* lineEdit3 = new QLineEdit();
+                    lineEdit3 = new QLineEdit();
                     lineEdit3->setText(cur_value);
                     row3Layout->addWidget(label3);
                     row3Layout->addWidget(lineEdit3);
 
                     QHBoxLayout* row4Layout = new QHBoxLayout();
                     QLabel* label4 = new QLabel("Минимальное значение:");
-                    QLineEdit* lineEdit4 = new QLineEdit();
+                    lineEdit4 = new QLineEdit();
                     lineEdit4->setText(min_value);
                     row4Layout->addWidget(label4);
                     row4Layout->addWidget(lineEdit4);
 
                     QHBoxLayout* row5Layout = new QHBoxLayout();
                     QLabel* label5 = new QLabel("Максимальное значение:");
-                    QLineEdit* lineEdit5 = new QLineEdit();
+                    lineEdit5 = new QLineEdit();
                     lineEdit5->setText(max_value);
                     row5Layout->addWidget(label5);
                     row5Layout->addWidget(lineEdit5);
 
                     QPushButton* saveButton = new QPushButton("&Сохранить");
+
+                    connect(saveButton, &QPushButton::clicked, this, &MyView::updateTablemes);
 
                     mainLayout->addLayout(row1Layout);
                     mainLayout->addLayout(row2Layout);
@@ -251,7 +260,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     int hor_off = 30;
                     int ver_off = -30;
 
-                    QMenu* newWindow = new QMenu();
+                    newWindow = new QMenu();
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
@@ -261,6 +270,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     QString name = "None";
                     QString cp_id = "None";
+
+                    this->cur_obj_id = object[5].toInt();
 
                     while (db_request_result.next()) {
                         if (db_request_result.value(0).toInt() == object[5].toInt()) {
@@ -276,20 +287,22 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     QHBoxLayout* row1Layout = new QHBoxLayout();
                     QLabel* label1 = new QLabel("Имя:");
-                    QLineEdit* lineEdit1 = new QLineEdit();
+                    lineEdit1 = new QLineEdit();
                     lineEdit1->setText(name);
                     row1Layout->addWidget(label1);
                     row1Layout->addWidget(lineEdit1);
 
                     QHBoxLayout* row2Layout = new QHBoxLayout();
                     QLabel* label2 = new QLabel("ЦП id:");
-                    QLineEdit* lineEdit2 = new QLineEdit();
+                    lineEdit2 = new QLineEdit();
                     lineEdit2->setText(cp_id);
                     row2Layout->addWidget(label2);
                     row2Layout->addWidget(lineEdit2);
 
 
                     QPushButton* saveButton = new QPushButton("&Сохранить");
+
+                    connect(saveButton, &QPushButton::clicked, this, &MyView::updateTablecontrol);
 
                     mainLayout->addLayout(row1Layout);
                     mainLayout->addLayout(row2Layout);
@@ -320,7 +333,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     int hor_off = 30;
                     int ver_off = -30;
 
-                    QMenu* newWindow = new QMenu();
+                    newWindow = new QMenu();
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
@@ -330,6 +343,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     QString name = "";
                     QString cp_id = "";
+
+                    this->cur_obj_id = object[5].toInt();
 
                     while (db_request_result.next()) {
                         if (db_request_result.value(0).toInt() == object[5].toInt()) {
@@ -345,19 +360,21 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     QHBoxLayout* row1Layout = new QHBoxLayout();
                     QLabel* label1 = new QLabel("Имя:");
-                    QLineEdit* lineEdit1 = new QLineEdit();
+                    lineEdit1 = new QLineEdit();
                     lineEdit1->setText(name);
                     row1Layout->addWidget(label1);
                     row1Layout->addWidget(lineEdit1);
 
                     QHBoxLayout* row2Layout = new QHBoxLayout();
                     QLabel* label2 = new QLabel("ЦП id:");
-                    QLineEdit* lineEdit2 = new QLineEdit();
+                    lineEdit2 = new QLineEdit();
                     lineEdit2->setText(cp_id);
                     row2Layout->addWidget(label2);
                     row2Layout->addWidget(lineEdit2);
 
                     QPushButton* saveButton = new QPushButton("&Сохранить");
+
+                    connect(saveButton, &QPushButton::clicked, this, &MyView::updateTablesign);
 
                     mainLayout->addLayout(row1Layout);
                     mainLayout->addLayout(row2Layout);
@@ -368,4 +385,32 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
             }
         }
     }
+}
+
+
+void MyView::updateTablelib() {
+    qDebug() << "update";
+    update_table_lib(this->lineEdit1->text(), this->lineEdit2->text().toInt(), this->lineEdit3->text().toInt(),
+                     this->lineEdit4->text().toInt(), this->lineEdit5->text().toInt(), cur_obj_id);
+    newWindow->hide();
+
+}
+
+void MyView::updateTablemes() {
+    qDebug() << "update";
+    update_table_mes(this->lineEdit1->text(), this->lineEdit2->text().toInt(), this->lineEdit3->text().toDouble(),
+                     this->lineEdit4->text().toDouble(), this->lineEdit5->text().toDouble(), cur_obj_id);
+    newWindow->hide();
+}
+
+void MyView::updateTablecontrol() {
+    qDebug() << "update";
+    update_table_control(this->lineEdit1->text(), this->lineEdit2->text().toInt(), cur_obj_id);
+    newWindow->hide();
+}
+
+void MyView::updateTablesign() {
+    qDebug() << "update";
+    update_table_sign(this->lineEdit1->text(), this->lineEdit2->text().toInt(), cur_obj_id);
+    newWindow->hide();
 }

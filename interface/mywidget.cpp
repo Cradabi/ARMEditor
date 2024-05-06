@@ -32,9 +32,11 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
     if (!parser.parse(filepath)) {
         parser.parse("../schemes_exp/emptyscheme.схема");
     }
+
     QSqlQuery db_request_result = connection_to_db();
     QSqlQuery db_request_result_cp = connection_to_cp_db();
     std::string help_text;
+
     for (auto object: tmp_scheme_params.objects_vector) {
         if (object->get_type_object() == "Библиотечный объект") {
             while (db_request_result.next()) {
@@ -45,23 +47,34 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
                                         db_request_result_cp.value(1).toString().toStdString() + ")";
                             object->set_help_text(help_text);
+                            break;
                         }
                     }
+                    break;
                 }
             }
+            db_request_result.seek(0);
+            db_request_result_cp.seek(0);
         } else if (object->get_type_object() == "Телеизмерение") {
             while (db_request_result.next()) {
                 if (db_request_result.value(0).toInt() == object->get_id()) {
                     object->set_condition(db_request_result.value(3).toInt());
                     while (db_request_result_cp.next()) {
                         if (db_request_result_cp.value(0).toInt() == db_request_result.value(4).toInt()) {
+                            std::string cur_value = db_request_result.value(4).toString().toStdString();
+                            object->set_text(cur_value);
+
                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
                                         db_request_result_cp.value(1).toString().toStdString() + ")";
                             object->set_help_text(help_text);
+                            break;
                         }
                     }
+                    break;
                 }
             }
+            db_request_result.seek(0);
+            db_request_result_cp.seek(0);
         } else if (object->get_type_object() == "Телеконтроль") {
             while (db_request_result.next()) {
                 if (db_request_result.value(0).toInt() == object->get_id()) {
@@ -71,10 +84,14 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
                                         db_request_result_cp.value(1).toString().toStdString() + ")";
                             object->set_help_text(help_text);
+                            break;
                         }
                     }
+                    break;
                 }
             }
+            db_request_result.seek(0);
+            db_request_result_cp.seek(0);
         } else if (object->get_type_object() == "Телесигнализация") {
             while (db_request_result.next()) {
                 if (db_request_result.value(0).toInt() == object->get_id()) {
@@ -84,11 +101,16 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
                                         db_request_result_cp.value(1).toString().toStdString() + ")";
                             object->set_help_text(help_text);
+                            break;
                         }
                     }
+                    break;
                 }
             }
+            db_request_result.seek(0);
+            db_request_result_cp.seek(0);
         }
+
     }
     //QVector<Primitive*> vector_obj = tmp_scheme_params.objects_vector;
 

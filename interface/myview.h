@@ -23,4 +23,25 @@ public:
 
     void mouseDoubleClickEvent(QMouseEvent* event) override;
 
+private:
+    QVector<QVector<QVariant> > vec;
+
+    int cur_obj_id = 0;
+
+    QLineEdit* lineEdit1;
+    QLineEdit* lineEdit2;
+    QLineEdit* lineEdit3;
+    QLineEdit* lineEdit4;
+    QLineEdit* lineEdit5;
+
+    QMenu* newWindow;
+
+private slots:
+    void updateTablelib();
+
+    void updateTablemes();
+
+    void updateTablecontrol();
+
+    void updateTablesign();
 };
