@@ -9,15 +9,15 @@ class MyWidget : public QFrame {
 
 public:
     QVBoxLayout* layout;
-    QGraphicsScene* scene;
     MyView* view;
+    QGraphicsScene* scene;
 
     MyWidget();
 
     ~MyWidget() {
         delete layout;
-        delete scene;
         delete view;
+        delete scene;
     };
 
     void draw_new_scheme(const std::string& filepath);

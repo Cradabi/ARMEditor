@@ -12,6 +12,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "primitives_lib/SchemeClass.h"
+
 
 class MyView : public QGraphicsView {
     Q_OBJECT
@@ -19,9 +21,21 @@ class MyView : public QGraphicsView {
 public:
     MyView() = default;
 
+    ~MyView() {
+        scheme_params.deleteOBJS();
+        scheme_params = {};
+    }
+
     explicit MyView(QGraphicsScene* parent);
 
     void mouseDoubleClickEvent(QMouseEvent* event) override;
+
+    void updateScene();
+
+    Scheme::SchemeParams scheme_params;
+
+    QGraphicsScene* scene;
+
 
 private:
     QVector<QVector<QVariant> > vec;

@@ -2,74 +2,22 @@
 
 #include "QtSql"
 
-QSqlQuery connection_to_db()
-{
-    try
-    {
-        // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
-        if (!QSqlDatabase::contains(connectionName))
-        {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
-            db.setDatabaseName("postgres");
-            db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+QSqlQuery connection_to_db();
 
-            if (!db.open())
-            {
-                qWarning() << "Не удалось подключиться к базе данных";
-            }
-            QSqlQuery query("SELECT id, name, current_state, current_value FROM objects", db);
-            db.close();
-            return query;
-        }
-        else
-        {
-            QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, current_state, current_value FROM objects", db);
-            db.close();
-            return query;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        exit(1);
-    }
-}
+QSqlQuery connection_to_db_with_measure();
 
-QSqlQuery connection_to_cp_db()
-{
-    try
-    {
-        // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
-        if (!QSqlDatabase::contains(connectionName))
-        {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
-            db.setDatabaseName("postgres");
-            db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+QSqlQuery connection_to_db_with_lib();
 
-            if (!db.open())
-            {
-                qWarning() << "Не удалось подключиться к базе данных";
-            }
-            QSqlQuery query("SELECT id, name FROM cp_groups", db);
-            db.close();
-            return query;
-        }
-        else
-        {
-            QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name FROM cp_groups", db);
-            db.close();
-            return query;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        exit(1);
-    }
-}
+QSqlQuery connection_to_db_with_signal();
+
+QSqlQuery connection_to_db_with_control();
+
+QSqlQuery connection_to_cp_db();
+
+void update_table_lib(QString str, int int1, int int2, int int3, int int4, int id);
+
+void update_table_mes(QString str, int int1, double double1, double double2, double double3, int id);
+
+void update_table_control(QString str, int int1, int id);
+
+void update_table_sign(QString str, int int1, int id);

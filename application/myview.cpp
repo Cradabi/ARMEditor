@@ -1,10 +1,11 @@
 #include "myview.h"
 #include <iostream>
 #include <QScrollBar>
-#include "db_lib/myview_connection.h"
+#include "db_lib/db_connection.h"
 
 MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent) {
     // Подключаем слот, который будет отслеживать положение скроллбара
+    scene = parent;
 }
 
 void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
@@ -13,32 +14,17 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
         QPoint point(event->pos().x(), event->pos().y());
         qDebug() << "Начальные координаты точки:" << point;
 
-        QFile file("save.dat");
-        if (!file.open(QIODevice::ReadOnly)) {
-            qDebug() << "Не удалось открыть файл для чтения";
-            exit(0);
-        }
-
-        // Читаем QVector из файла
-        QDataStream in(&file);
-        QVector<QVector<QVariant> > qtVector;
-        in.setVersion(QDataStream::Qt_5_11);
-        in >> qtVector;
-
-        this->vec = qtVector;
-
-
-        file.close();
-
-        for (auto object: qtVector) {
-            std::string tp_obj = object[7].toString().toStdString();
+        for (auto object: scheme_params.objects_vector) {
+            std::string tp_obj = object->get_type_object();
+            // qDebug() << tp_obj;
             if (tp_obj == "Библиотечный объект") {
+                qDebug() << "Библиотечный объект";
                 QPoint original_point = point;
                 // Создаем объект преобразования
                 QTransform transform;
 
-                transform.translate(-1 * (object[0].toInt() + object[2].toInt() / 2),
-                                    -1 * (object[1].toInt() + object[3].toInt() / 2));
+                transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+                                    -1 * (object->get_y() + object->get_height() / 2));
 
 
                 //transform.rotate(-1 * object[4].toInt());
@@ -46,8 +32,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                 // Применяем преобразование к точке
                 QPoint newPoint = transform.map(point);
 
-                if (newPoint.x() >= (-1 * object[2].toInt() / 2) && newPoint.x() <= object[2].toInt() / 2 &&
-                    newPoint.y() >= (-1 * object[3].toInt() / 2) && newPoint.y() <= object[3].toInt() / 2) {
+                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2) {
                     qDebug() << "Find it";
                     transform.reset();
 
@@ -59,7 +45,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
-                    qDebug() << object[5].toInt() << "Id";
+                    qDebug() << object->get_id() << "Id";
 
                     QSqlQuery db_request_result = connection_to_db_with_lib();
 
@@ -68,10 +54,10 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     QString normal_state = "None";
                     QString fail_state = "None";
                     QString cur_state = "None";
-                    this->cur_obj_id = object[5].toInt();
+                    this->cur_obj_id = object->get_id();
 
                     while (db_request_result.next()) {
-                        if (db_request_result.value(0).toInt() == object[5].toInt()) {
+                        if (db_request_result.value(0).toInt() == object->get_id()) {
                             name = db_request_result.value(1).toString();
                             cp_id = db_request_result.value(2).toString();
                             normal_state = db_request_result.value(3).toString();
@@ -136,12 +122,13 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                 //ebug() << "Новые координаты точки:" << newPoint;
             } else if (tp_obj == "Телеизмерение") {
+                qDebug() << "Телеизмерение";
                 QPoint original_point = point;
                 // Создаем объект преобразования
                 QTransform transform;
 
-                transform.translate(-1 * (object[0].toInt() + object[2].toInt() / 2),
-                                    -1 * (object[1].toInt() + object[3].toInt() / 2));
+                transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+                                    -1 * (object->get_y() + object->get_height() / 2));
 
 
                 //transform.rotate(-1 * object[4].toInt());
@@ -149,8 +136,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                 // Применяем преобразование к точке
                 QPoint newPoint = transform.map(point);
 
-                if (newPoint.x() >= (-1 * object[2].toInt() / 2) && newPoint.x() <= object[2].toInt() / 2 &&
-                    newPoint.y() >= (-1 * object[3].toInt() / 2) && newPoint.y() <= object[3].toInt() / 2) {
+                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2) {
                     qDebug() << "Find it";
                     transform.reset();
 
@@ -162,7 +149,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
-                    qDebug() << object[5].toInt() << "Id";
+                    qDebug() << object->get_id() << "Id";
 
                     QSqlQuery db_request_result = connection_to_db_with_measure();
 
@@ -172,10 +159,10 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     QString min_value = "None";
                     QString max_value = "None";
 
-                    this->cur_obj_id = object[5].toInt();
+                    this->cur_obj_id = object->get_id();
 
                     while (db_request_result.next()) {
-                        if (db_request_result.value(0).toInt() == object[5].toInt()) {
+                        if (db_request_result.value(0).toInt() == object->get_id()) {
                             name = db_request_result.value(1).toString();
                             cp_id = db_request_result.value(2).toString();
                             cur_value = db_request_result.value(3).toString();
@@ -238,12 +225,13 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     newWindow->show();
                 }
             } else if (tp_obj == "Телеконтроль") {
+                qDebug() << "Телеконтроль";
                 QPoint original_point = point;
                 // Создаем объект преобразования
                 QTransform transform;
 
-                transform.translate(-1 * (object[0].toInt() + object[2].toInt() / 2),
-                                    -1 * (object[1].toInt() + object[3].toInt() / 2));
+                transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+                                    -1 * (object->get_y() + object->get_height() / 2));
 
 
                 //transform.rotate(-1 * object[4].toInt());
@@ -251,8 +239,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                 // Применяем преобразование к точке
                 QPoint newPoint = transform.map(point);
 
-                if (newPoint.x() >= (-1 * object[2].toInt() / 2) && newPoint.x() <= object[2].toInt() / 2 &&
-                    newPoint.y() >= (-1 * object[3].toInt() / 2) && newPoint.y() <= object[3].toInt() / 2) {
+                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2) {
                     qDebug() << "Find it";
                     transform.reset();
 
@@ -264,17 +252,17 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
-                    qDebug() << object[5].toInt() << "Id";
+                    qDebug() << object->get_id() << "Id";
 
                     QSqlQuery db_request_result = connection_to_db_with_control();
 
                     QString name = "None";
                     QString cp_id = "None";
 
-                    this->cur_obj_id = object[5].toInt();
+                    this->cur_obj_id = object->get_id();
 
                     while (db_request_result.next()) {
-                        if (db_request_result.value(0).toInt() == object[5].toInt()) {
+                        if (db_request_result.value(0).toInt() == object->get_id()) {
                             name = db_request_result.value(1).toString();
                             cp_id = db_request_result.value(2).toString();
 
@@ -311,12 +299,13 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                     newWindow->show();
                 }
             } else if (tp_obj == "Телесигнализация") {
+                qDebug() << "Телесигнализация";
                 QPoint original_point = point;
                 // Создаем объект преобразования
                 QTransform transform;
 
-                transform.translate(-1 * (object[0].toInt() + object[2].toInt() / 2),
-                                    -1 * (object[1].toInt() + object[3].toInt() / 2));
+                transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+                                    -1 * (object->get_y() + object->get_height() / 2));
 
 
                 //transform.rotate(-1 * object[4].toInt());
@@ -324,8 +313,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                 // Применяем преобразование к точке
                 QPoint newPoint = transform.map(point);
 
-                if (newPoint.x() >= (-1 * object[2].toInt() / 2) && newPoint.x() <= object[2].toInt() / 2 &&
-                    newPoint.y() >= (-1 * object[3].toInt() / 2) && newPoint.y() <= object[3].toInt() / 2) {
+                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2) {
                     qDebug() << "Find it";
                     transform.reset();
 
@@ -337,17 +326,17 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 
                     newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
 
-                    qDebug() << object[5].toInt() << "Id";
+                    qDebug() << object->get_id() << "Id";
 
                     QSqlQuery db_request_result = connection_to_db_with_signal();
 
                     QString name = "";
                     QString cp_id = "";
 
-                    this->cur_obj_id = object[5].toInt();
+                    this->cur_obj_id = object->get_id();
 
                     while (db_request_result.next()) {
-                        if (db_request_result.value(0).toInt() == object[5].toInt()) {
+                        if (db_request_result.value(0).toInt() == object->get_id()) {
                             name = db_request_result.value(1).toString();
                             cp_id = db_request_result.value(2).toString();
 
@@ -388,29 +377,125 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
 }
 
 
+ void MyView::updateScene() {
+     QSqlQuery db_request_result = connection_to_db();
+     QSqlQuery db_request_result_cp = connection_to_cp_db();
+     std::string help_text;
+
+     for (auto object: scheme_params.objects_vector) {
+         if (object->get_type_object() == "Библиотечный объект") {
+             while (db_request_result.next()) {
+                 if (db_request_result.value(0).toInt() == object->get_id()) {
+                     object->set_condition(db_request_result.value(2).toInt());
+                     while (db_request_result_cp.next()) {
+                         if (db_request_result_cp.value(0).toInt() == db_request_result.value(4).toInt()) {
+                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
+                                         db_request_result_cp.value(1).toString().toStdString() + ")";
+                             object->set_help_text(help_text);
+                             break;
+                         }
+                     }
+                     break;
+                 }
+             }
+             db_request_result.seek(0);
+             db_request_result_cp.seek(0);
+         } else if (object->get_type_object() == "Телеизмерение") {
+             while (db_request_result.next()) {
+                 if (db_request_result.value(0).toInt() == object->get_id()) {
+                     object->set_text(db_request_result.value(3).toString().toStdString());
+                     while (db_request_result_cp.next()) {
+                         if (db_request_result_cp.value(0).toInt() == db_request_result.value(4).toInt()) {
+                             std::string cur_value = db_request_result.value(4).toString().toStdString();
+                             object->set_text(cur_value);
+
+                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
+                                         db_request_result_cp.value(1).toString().toStdString() + ")";
+                             object->set_help_text(help_text);
+                             break;
+                         }
+                     }
+                     break;
+                 }
+             }
+             db_request_result.seek(0);
+             db_request_result_cp.seek(0);
+         } else if (object->get_type_object() == "Телеконтроль") {
+             while (db_request_result.next()) {
+                 if (db_request_result.value(0).toInt() == object->get_id()) {
+                     object->set_text(db_request_result.value(3).toString().toStdString());
+                     while (db_request_result_cp.next()) {
+                         if (db_request_result_cp.value(0).toInt() == db_request_result.value(4).toInt()) {
+                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
+                                         db_request_result_cp.value(1).toString().toStdString() + ")";
+                             object->set_help_text(help_text);
+                             break;
+                         }
+                     }
+                     break;
+                 }
+             }
+             db_request_result.seek(0);
+             db_request_result_cp.seek(0);
+         } else if (object->get_type_object() == "Телесигнализация") {
+             while (db_request_result.next()) {
+                 if (db_request_result.value(0).toInt() == object->get_id()) {
+                     object->set_text(db_request_result.value(3).toString().toStdString());
+                     while (db_request_result_cp.next()) {
+                         if (db_request_result_cp.value(0).toInt() == db_request_result.value(4).toInt()) {
+                             help_text = db_request_result.value(1).toString().toStdString() + " (" +
+                                         db_request_result_cp.value(1).toString().toStdString() + ")";
+                             object->set_help_text(help_text);
+                             break;
+                         }
+                     }
+                     break;
+                 }
+             }
+             db_request_result.seek(0);
+             db_request_result_cp.seek(0);
+         }
+     }
+
+     QPixmap pix(scheme_params.width, scheme_params.height);
+     QColor bgColor = {scheme_params.bgColor.red, scheme_params.bgColor.green, scheme_params.bgColor.blue};
+     pix.fill(bgColor);
+
+     QPainter* painter = new QPainter(&pix);
+
+     Scheme scheme(scheme_params);
+     scheme.draw_scheme(*painter);
+     delete painter;
+     scene->addPixmap(pix);
+ }
+
+
 void MyView::updateTablelib() {
     qDebug() << "update";
     update_table_lib(this->lineEdit1->text(), this->lineEdit2->text().toInt(), this->lineEdit3->text().toInt(),
                      this->lineEdit4->text().toInt(), this->lineEdit5->text().toInt(), cur_obj_id);
+    updateScene();
     newWindow->hide();
-
 }
 
 void MyView::updateTablemes() {
     qDebug() << "update";
     update_table_mes(this->lineEdit1->text(), this->lineEdit2->text().toInt(), this->lineEdit3->text().toDouble(),
                      this->lineEdit4->text().toDouble(), this->lineEdit5->text().toDouble(), cur_obj_id);
+    updateScene();
     newWindow->hide();
 }
 
 void MyView::updateTablecontrol() {
     qDebug() << "update";
     update_table_control(this->lineEdit1->text(), this->lineEdit2->text().toInt(), cur_obj_id);
+    updateScene();
     newWindow->hide();
 }
 
 void MyView::updateTablesign() {
     qDebug() << "update";
     update_table_sign(this->lineEdit1->text(), this->lineEdit2->text().toInt(), cur_obj_id);
+    updateScene();
     newWindow->hide();
 }

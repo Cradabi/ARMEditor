@@ -4,7 +4,6 @@
 
 class Scheme {
 public:
-
     struct Color {
         uint8_t red;
         uint8_t green;
@@ -24,17 +23,32 @@ public:
         Color bgColor;
         Color setColor;
 
-        std::string name_scheme = std::string();    // Конструктор пустой строки ("")
+        std::string name_scheme = std::string(); // Конструктор пустой строки ("")
         std::string file_path = std::string();
         std::string name_bd = std::string();
         std::string server = std::string();
 
-        std::vector<FiguresClasses::Primitive *> objects_vector;
+        std::vector<FiguresClasses::Primitive*> objects_vector;
         FiguresClasses::Set set_object;
+
+
+        // TODO Перенести в схему
+        void deleteOBJS() {
+            for (auto object: objects_vector) {
+                if (object->get_type_object() == "Библиотечный объект") {
+                    for (auto pattern: object->get_patterns()) {
+                        for (auto obj_in_pattern: pattern) {
+                            delete obj_in_pattern;
+                        }
+                    }
+                }
+                delete object;
+            }
+            objects_vector.clear();
+        }
     };
 
 private:
-
     SchemeParams actual_params;
 
 public:
@@ -42,11 +56,13 @@ public:
     Scheme() = default;
 
     // Конструктор схемы с заданными параметрами
-    Scheme(const SchemeParams &input_params) {
+    Scheme(const SchemeParams& input_params) {
         actual_params = input_params;
         actual_params.set_object = FiguresClasses::Set(1, 1, 1, 128, 128, 64, 64, 16, 16, 1,
-                                                       {actual_params.setColor.red, actual_params.setColor.green,
-                                                        actual_params.setColor.blue});
+                                                       {
+                                                           actual_params.setColor.red, actual_params.setColor.green,
+                                                           actual_params.setColor.blue
+                                                       });
     }
 
     ~Scheme();
@@ -67,13 +83,13 @@ public:
 
     void set_groups_number(int groups_number);
 
-    void set_name_scheme(const std::string &name);
+    void set_name_scheme(const std::string& name);
 
-    void set_file_path(const std::string &file_path);
+    void set_file_path(const std::string& file_path);
 
-    void set_bd_name(const std::string &bd);
+    void set_bd_name(const std::string& bd);
 
-    void set_server(const std::string &server);
+    void set_server(const std::string& server);
 
     int get_width();
 
@@ -99,8 +115,7 @@ public:
 
     std::string get_server();
 
-    void draw_scheme(QPainter &painter);
+    void draw_scheme(QPainter& painter);
 
-    void add_object(FiguresClasses::Primitive *add_object);
-
+    void add_object(FiguresClasses::Primitive* add_object);
 };

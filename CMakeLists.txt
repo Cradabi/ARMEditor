@@ -19,6 +19,8 @@ add_library(PrimitivesLib STATIC primitives_lib/FiguresClasses.cpp primitives_li
 
 add_library(ParserLib STATIC parser_lib/SchemeObjectParser.cpp parser_lib/SchemeFileParser.cpp)
 
+add_library(DBLib STATIC db_lib/db_connection.cpp)
+
 add_executable(${PROJECT_NAME} main.cpp application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
 
 #Подключаем QT к проекту
@@ -33,6 +35,11 @@ target_link_libraries(PrimitivesLib PRIVATE Qt5::Widgets)
 #Подключаем QT к статической библиотеке ParserLib
 target_link_libraries(ParserLib PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
 target_link_libraries(ParserLib PRIVATE Qt5::Widgets)
+
+target_link_libraries(DBLib PRIVATE Qt5::Sql)
+
+#Подключаем ParserLib к проекту
+target_link_libraries(${PROJECT_NAME} PRIVATE DBLib)
 
 #Подключаем ParserLib к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE ParserLib)

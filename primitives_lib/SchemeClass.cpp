@@ -1,17 +1,17 @@
 #include "SchemeClass.h"
 
 Scheme::~Scheme() {
-    for (auto object: actual_params.objects_vector) {
-        if (object->get_type_object() == "Библиотечный объект") {
-            for (auto pattern : object->get_patterns()){
-                for (auto obj_in_pattern : pattern){
-                    delete obj_in_pattern;
-                }
-            }
-        }
-        delete object;
-    }
-    actual_params = {};
+    // for (auto object: actual_params.objects_vector) {
+    //     if (object->get_type_object() == "Библиотечный объект") {
+    //         for (auto pattern : object->get_patterns()){
+    //             for (auto obj_in_pattern : pattern){
+    //                 delete obj_in_pattern;
+    //             }
+    //         }
+    //     }
+    //     delete object;
+    // }
+    // actual_params = {};
 }
 
 void Scheme::set_width(int input_width) {
