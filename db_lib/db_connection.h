@@ -63,7 +63,7 @@ QSqlQuery connection_to_cp_db()
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT name, current_state, current_value, cp_name_id FROM objects", db);
+            QSqlQuery query("SELECT id, name FROM cp_groups", db);
             db.close();
             return query;
         }

@@ -1052,6 +1052,8 @@ namespace FiguresClasses {
         //далее идут функции по выводу одноименных переменных класса телеуправления
         int get_device_type();
 
+        void set_text(const std::string& t);
+
         int get_id();
     };
 
@@ -3588,6 +3590,11 @@ void Telemeasure::draw(QPainter& painter) {
     }
     painter.restore();
 }
+
+void Telemeasure::set_text(const std::string& t) {
+    text = t;
+}
+
 
 //далее идут функции меняющие одноименные переменные класса телеуправления
 void Telemeasure::set_device_type(int device_type) {
