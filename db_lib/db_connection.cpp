@@ -12,7 +12,7 @@ QSqlQuery connection_to_db()
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+            db.setPassword("MaximRozov24");
 
             if (!db.open())
             {
@@ -48,7 +48,7 @@ QSqlQuery connection_to_cp_db()
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+            db.setPassword("MaximRozov24");
 
             if (!db.open())
             {
@@ -81,7 +81,7 @@ QSqlQuery connection_to_db_with_lib() {
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+            db.setPassword("MaximRozov24");
 
             if (!db.open()) {
                 qWarning() << "Не удалось подключиться к базе данных";
@@ -110,7 +110,7 @@ QSqlQuery connection_to_db_with_measure() {
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+            db.setPassword("MaximRozov24");
 
             if (!db.open()) {
                 qWarning() << "Не удалось подключиться к базе данных";
@@ -139,7 +139,7 @@ QSqlQuery connection_to_db_with_signal() {
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+            db.setPassword("MaximRozov24");
 
             if (!db.open()) {
                 qWarning() << "Не удалось подключиться к базе данных";
@@ -168,7 +168,7 @@ QSqlQuery connection_to_db_with_control() {
             db.setHostName("localhost");
             db.setDatabaseName("postgres");
             db.setUserName("postgres");
-            db.setPassword("Z123c123x");
+            db.setPassword("MaximRozov24");
 
             if (!db.open()) {
                 qWarning() << "Не удалось подключиться к базе данных";
@@ -192,7 +192,7 @@ void update_table_lib(QString str, int int1, int int2, int int3, int int4, int i
     db.setHostName("localhost");
     db.setDatabaseName("postgres");
     db.setUserName("postgres");
-    db.setPassword("Z123c123x");
+    db.setPassword("MaximRozov24");
 
     if (!db.open()) {
         qWarning() << "Не удалось подключиться к базе данных:" << db.lastError().text();
@@ -222,7 +222,7 @@ void update_table_mes(QString str, int int1, double double1, double double2, dou
     db.setHostName("localhost");
     db.setDatabaseName("postgres");
     db.setUserName("postgres");
-    db.setPassword("Z123c123x");
+    db.setPassword("MaximRozov24");
 
     qDebug() << str << int1 << double1 << double2;
 
@@ -254,7 +254,7 @@ void update_table_control(QString str, int int1, int id) {
     db.setHostName("localhost");
     db.setDatabaseName("postgres");
     db.setUserName("postgres");
-    db.setPassword("Z123c123x");
+    db.setPassword("MaximRozov24");
 
     if (!db.open()) {
         qWarning() << "Не удалось подключиться к базе данных:" << db.lastError().text();
@@ -281,7 +281,7 @@ void update_table_sign(QString str, int int1, int id) {
     db.setHostName("localhost");
     db.setDatabaseName("postgres");
     db.setUserName("postgres");
-    db.setPassword("Z123c123x");
+    db.setPassword("MaximRozov24");
 
     if (!db.open()) {
         qWarning() << "Не удалось подключиться к базе данных:" << db.lastError().text();

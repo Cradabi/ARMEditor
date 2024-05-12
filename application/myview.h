@@ -15,13 +15,15 @@
 #include "primitives_lib/SchemeClass.h"
 
 
-class MyView : public QGraphicsView {
+class MyView : public QGraphicsView
+{
     Q_OBJECT
 
 public:
     MyView() = default;
 
-    ~MyView() {
+    ~MyView()
+    {
         scheme_params.deleteOBJS();
         scheme_params = {};
     }
@@ -30,15 +32,16 @@ public:
 
     void mouseDoubleClickEvent(QMouseEvent* event) override;
 
+    void mousePressEvent(QMouseEvent* event) override;
+
     void updateScene();
 
     Scheme::SchemeParams scheme_params;
 
     QGraphicsScene* scene;
 
-
 private:
-    QVector<QVector<QVariant> > vec;
+    QVector<QVector<QVariant>> vec;
 
     int cur_obj_id = 0;
 

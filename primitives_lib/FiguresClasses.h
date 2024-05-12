@@ -1133,8 +1133,6 @@ namespace FiguresClasses {
         std::string library_name;
         std::string object_name;
 
-        std::vector<std::vector<Primitive*> > patterns = {};
-
     public:
         LibraryObject();
 
