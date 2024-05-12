@@ -1,6 +1,5 @@
 #include "mywidget.h"
 
-
 #include "parser_lib/SchemeFileParser.h"
 #include "db_lib/db_connection.h"
 
@@ -133,7 +132,7 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
     }
 
    //ткрываем файл для записи
-    QFile file("/home/astra/ARMEditor/interface/save.dat");
+    QFile file("save.dat");
     if (!file.open(QIODevice::WriteOnly)) {
         qDebug() << "Не удалось открыть файл для записи";
         exit(0);
