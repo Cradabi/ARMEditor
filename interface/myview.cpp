@@ -13,7 +13,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
         QPoint point(event->pos().x(), event->pos().y());
         qDebug() << "Начальные координаты точки:" << point;
 
-        QFile file("/home/chekhov/github/ARMEditor/interface/save.dat");
+        QFile file("/home/astra/ARMEditor/interface/save.dat");
         if (!file.open(QIODevice::ReadOnly)) {
             qDebug() << "Не удалось открыть файл для чтения";
             exit(0);

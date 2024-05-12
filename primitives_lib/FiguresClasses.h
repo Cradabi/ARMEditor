@@ -289,8 +289,6 @@ namespace FiguresClasses {
         //стиль линии 0-"psNull", 1-"psSolid", 2-"psDot1", 3-"psDot2", 4-"psDot3", 5-"psDot4", 6-"psDot5", 7-"psDot6", 8-"psDash1", 9-"psDash2"
 
         int line_width = 8; //ширина линии
-        int center_x = 0; //координата x центра
-        int center_y = 0; //координата y центра
 
     public:
         //конструкторы класса прямоугольника получающие различные вводные

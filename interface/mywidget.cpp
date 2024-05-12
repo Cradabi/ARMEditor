@@ -133,7 +133,7 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
     }
 
    //ткрываем файл для записи
-    QFile file("/home/chekhov/github/ARMEditor/interface/save.dat");
+    QFile file("/home/astra/ARMEditor/interface/save.dat");
     if (!file.open(QIODevice::WriteOnly)) {
         qDebug() << "Не удалось открыть файл для записи";
         exit(0);
