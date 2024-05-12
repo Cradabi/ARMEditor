@@ -15,9 +15,14 @@ find_package(Qt5 COMPONENTS Sql REQUIRED)
 find_package(PkgConfig)
 pkg_search_module(LIBPQ REQUIRED libpq)
 
-add_executable(${PROJECT_NAME} main.cpp interface/myview.cpp interface/mywidget.cpp interface/mainwindow.cpp)
+add_library(PrimitivesLib STATIC primitives_lib/FiguresClasses.cpp primitives_lib/SchemeClass.cpp)
+
+add_executable(${PROJECT_NAME} main.cpp application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Sql)
-target_include_directories(${PROJECT_NAME} PUBLIC $ {PROJECT_SOURCE_DIR})
+
+target_link_libraries(PrimitivesLib PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
+target_link_libraries(PrimitivesLib PRIVATE Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE PrimitivesLib)

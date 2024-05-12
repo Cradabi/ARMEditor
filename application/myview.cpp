@@ -13,7 +13,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
         QPoint point(event->pos().x(), event->pos().y());
         qDebug() << "Начальные координаты точки:" << point;
 
-        QFile file("/home/chekhov/github/ARMEditor/interface/save.dat");
+        QFile file("/home/chekhov/github/ARMEditor/application/save.dat");
         if (!file.open(QIODevice::ReadOnly)) {
             qDebug() << "Не удалось открыть файл для чтения";
             exit(0);
@@ -81,7 +81,6 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event) {
                             qDebug() << name << cp_id << normal_state << fail_state << cur_state;
                         }
                     }
-
 
                     QVBoxLayout* mainLayout = new QVBoxLayout(newWindow);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "myview.h"
+#include "../primitives_lib/SchemeClass.h"
 
 #include <QSqlQuery>
 
