@@ -83,8 +83,6 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                                      fail_state.toInt(), cur_state, cur_obj_id);
                     updateScene();
                 }
-
-                //ebug() << "Новые координаты точки:" << newPoint;
             }
         }
     }
@@ -131,7 +129,9 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     newWindow = new QMenu();
 
-                    newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
+                    newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
+
+                    //newWindow->exec(QCursor::pos());
 
                     qDebug() << object->get_id() << "Id";
 
@@ -240,7 +240,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     newWindow = new QMenu();
 
-                    newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
+                    newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
                     qDebug() << object->get_id() << "Id";
 
@@ -348,7 +348,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     newWindow = new QMenu();
 
-                    newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
+                    newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
                     qDebug() << object->get_id() << "Id";
 
@@ -427,7 +427,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     newWindow = new QMenu();
 
-                    newWindow->move(event->pos().x() + hor_off, event->pos().y() + ver_off);
+                    newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
                     qDebug() << object->get_id() << "Id";
 
