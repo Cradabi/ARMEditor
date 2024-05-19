@@ -11,16 +11,18 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QTimer>
 
 #include "primitives_lib/SchemeClass.h"
-
 
 class MyView : public QGraphicsView
 {
     Q_OBJECT
 
 public:
-    MyView() = default;
+    MyView(QGraphicsView  *parent = nullptr) : QGraphicsView(parent) {
+        setMouseTracking(true);
+    }
 
     ~MyView()
     {
@@ -31,6 +33,7 @@ public:
     explicit MyView(QGraphicsScene* parent);
 
     void mouseDoubleClickEvent(QMouseEvent* event) override;
+
 
     void mousePressEvent(QMouseEvent* event) override;
 
@@ -61,4 +64,9 @@ private slots:
     void updateTablecontrol();
 
     void updateTablesign();
+
+
 };
+
+
+
