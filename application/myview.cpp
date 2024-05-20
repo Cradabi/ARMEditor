@@ -3,6 +3,8 @@
 #include <QScrollBar>
 #include <QToolTip>
 #include "db_lib/db_connection.h"
+#include <sstream>
+#include <iomanip>
 
 MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent)
 {
@@ -12,7 +14,7 @@ MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent)
 
 void MyView::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton)
+    if (event->button() == Qt::RightButton)
     {
         qDebug() << event->pos().x() << " " << event->pos().y();
         QPoint point(event->pos().x(), event->pos().y());
@@ -129,6 +131,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     int ver_off = -30;
 
                     newWindow = new QMenu();
+                    newWindow->setFixedWidth(260);
 
                     newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
@@ -241,6 +244,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     newWindow = new QMenu();
 
+                    newWindow->setFixedWidth(260);
+
                     newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
                     qDebug() << object->get_id() << "Id";
@@ -265,7 +270,17 @@ void MyView::mousePressEvent(QMouseEvent* event)
                             min_value = db_request_result.value(4).toString();
                             max_value = db_request_result.value(5).toString();
 
-                            qDebug() << name << cp_id << cur_value << min_value << max_value;
+                            std::ostringstream oss;
+                            oss << std::fixed << std::setprecision(2) << db_request_result.value(3).toDouble();
+                            cur_value = QString::fromStdString(oss.str());
+
+                            std::ostringstream oss1;
+                            oss1 << std::fixed << std::setprecision(2) << db_request_result.value(4).toDouble();
+                            min_value = QString::fromStdString(oss1.str());
+
+                            std::ostringstream oss2;
+                            oss2 << std::fixed << std::setprecision(2) << db_request_result.value(5).toDouble();
+                            max_value = QString::fromStdString(oss2.str());
                         }
                     }
 
@@ -348,6 +363,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     int ver_off = -30;
 
                     newWindow = new QMenu();
+                    newWindow->setFixedWidth(260);
 
                     newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
@@ -427,6 +443,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     int ver_off = -30;
 
                     newWindow = new QMenu();
+                    newWindow->setFixedWidth(260);
 
                     newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
@@ -481,14 +498,14 @@ void MyView::mousePressEvent(QMouseEvent* event)
         }
     }
 
-    if (event->button() == Qt::LeftButton) {
-
-
+    else if (event->button() == Qt::LeftButton)
+    {
         qDebug() << event->pos().x() << " " << event->pos().y();
         QPoint point(event->pos().x(), event->pos().y());
         qDebug() << "Начальные координаты точки:" << point;
 
-        for (auto object : scheme_params.objects_vector) {
+        for (auto object : scheme_params.objects_vector)
+        {
             std::string tp_obj = object->get_type_object();
             QPoint original_point = point;
             // Создаем объект преобразования
@@ -502,9 +519,11 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
             // Применяем преобразование к точке
             QPoint newPoint = transform.map(point);
-            if(object->get_show_help()){
+            if (object->get_show_help())
+            {
                 if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
-                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2) {
+                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
+                {
                     qDebug() << "Find it";
                     transform.reset();
 
@@ -512,13 +531,13 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     newWindow->move(event->globalX(), event->globalY());
 
                     QVBoxLayout* mainLayout = new QVBoxLayout(newWindow);
-                    QLabel* label1 = new QLabel(QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().c_str()));
+                    QLabel* label1 = new QLabel(
+                        QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().c_str()));
                     mainLayout->addWidget(label1);
                     label1->adjustSize();
                     newWindow->show();
                 }
             }
-
         }
     }
 }

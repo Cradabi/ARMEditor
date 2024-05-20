@@ -400,7 +400,16 @@ void update_table_sign(QString str, int int1, int id)
 
 QStringList get_info_from_db_config()
 {
-    QFile file("/home/astra/ARMEditor/db_lib/db_config.txt");
+    QString appPath = QCoreApplication::applicationDirPath();
+    QString filePath = "";
+    int lastSlashIndex = appPath.lastIndexOf("/");
+    if (lastSlashIndex != -1)
+    {
+        // Возвращаем подстроку до последнего слэша
+        filePath = appPath.left(lastSlashIndex + 1);
+        filePath += "db_lib/db_config.txt";
+    }
+    QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "Failed to open the file.";
