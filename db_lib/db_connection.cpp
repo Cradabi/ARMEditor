@@ -5,18 +5,27 @@ QSqlQuery connection_to_db()
     try
     {
         QStringList info_list = get_info_from_db_config();
-        QString db_name = info_list[0];
-        QString db_user = info_list[1];
-        QString db_password = info_list[2];
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        QString db_port = info_list[5];
         // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
+            if(dbms_name == "postgres"){
+                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }else{
+                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+
+            db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
             db.setPassword(db_password);
+            db.setPort(db_port);
 
             if (!db.open())
             {
@@ -45,18 +54,26 @@ QSqlQuery connection_to_cp_db()
     try
     {
         QStringList info_list = get_info_from_db_config();
-        QString db_name = info_list[0];
-        QString db_user = info_list[1];
-        QString db_password = info_list[2];
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        QString db_port = info_list[5];
         // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
+            if(dbms_name == "postgres"){
+                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }else{
+                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
             db.setPassword(db_password);
+            db.setPort(db_port);
 
             if (!db.open())
             {
@@ -85,18 +102,26 @@ QSqlQuery connection_to_db_with_lib()
     try
     {
         QStringList info_list = get_info_from_db_config();
-        QString db_name = info_list[0];
-        QString db_user = info_list[1];
-        QString db_password = info_list[2];
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        QString db_port = info_list[5];
         // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
+            if(dbms_name == "postgres"){
+                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }else{
+                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
             db.setPassword(db_password);
+            db.setPort(db_port);
 
             if (!db.open())
             {
@@ -126,18 +151,26 @@ QSqlQuery connection_to_db_with_measure()
     try
     {
         QStringList info_list = get_info_from_db_config();
-        QString db_name = info_list[0];
-        QString db_user = info_list[1];
-        QString db_password = info_list[2];
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        QString db_port = info_list[5];
         // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
+            if(dbms_name == "postgres"){
+                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }else{
+                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
             db.setPassword(db_password);
+            db.setPort(db_port);
 
             if (!db.open())
             {
@@ -167,18 +200,26 @@ QSqlQuery connection_to_db_with_signal()
     try
     {
         QStringList info_list = get_info_from_db_config();
-        QString db_name = info_list[0];
-        QString db_user = info_list[1];
-        QString db_password = info_list[2];
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        QString db_port = info_list[5];
         // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
+            if(dbms_name == "postgres"){
+                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }else{
+                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
             db.setPassword(db_password);
+            db.setPort(db_port);
 
             if (!db.open())
             {
@@ -208,18 +249,26 @@ QSqlQuery connection_to_db_with_control()
     try
     {
         QStringList info_list = get_info_from_db_config();
-        QString db_name = info_list[0];
-        QString db_user = info_list[1];
-        QString db_password = info_list[2];
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        QString db_port = info_list[5];
         // Создание объекта соединения с базой данных
-        QString connectionName = "Postgres connection";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            db.setHostName("localhost");
+            if(dbms_name == "postgres"){
+                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }else{
+                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
             db.setPassword(db_password);
+            db.setPort(db_port);
 
             if (!db.open())
             {
@@ -246,14 +295,22 @@ QSqlQuery connection_to_db_with_control()
 void update_table_lib(QString str, int int1, int int2, int int3, int int4, int id)
 {
     QStringList info_list = get_info_from_db_config();
-    QString db_name = info_list[0];
-    QString db_user = info_list[1];
-    QString db_password = info_list[2];
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("localhost");
+    QString dbms_name = info_list[0];
+    QString ip = info_list[1];
+    QString db_name = info_list[2];
+    QString db_user = info_list[3];
+    QString db_password = info_list[4];
+    QString db_port = info_list[5];
+    if(dbms_name == "postgres"){
+        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+    }else{
+        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+    }
+    db.setHostName(ip);
     db.setDatabaseName(db_name);
     db.setUserName(db_user);
     db.setPassword(db_password);
+    db.setPort(db_port);
 
     if (!db.open())
     {
@@ -286,14 +343,22 @@ void update_table_lib(QString str, int int1, int int2, int int3, int int4, int i
 void update_table_mes(QString str, int int1, double double1, double double2, double double3, int id)
 {
     QStringList info_list = get_info_from_db_config();
-    QString db_name = info_list[0];
-    QString db_user = info_list[1];
-    QString db_password = info_list[2];
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("localhost");
+    QString dbms_name = info_list[0];
+    QString ip = info_list[1];
+    QString db_name = info_list[2];
+    QString db_user = info_list[3];
+    QString db_password = info_list[4];
+    QString db_port = info_list[5];
+    if(dbms_name == "postgres"){
+        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+    }else{
+        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+    }
+    db.setHostName(ip);
     db.setDatabaseName(db_name);
     db.setUserName(db_user);
     db.setPassword(db_password);
+    db.setPort(db_port);
 
     qDebug() << str << int1 << double1 << double2;
 
@@ -328,14 +393,22 @@ void update_table_mes(QString str, int int1, double double1, double double2, dou
 void update_table_control(QString str, int int1, int id)
 {
     QStringList info_list = get_info_from_db_config();
-    QString db_name = info_list[0];
-    QString db_user = info_list[1];
-    QString db_password = info_list[2];
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("localhost");
+    QString dbms_name = info_list[0];
+    QString ip = info_list[1];
+    QString db_name = info_list[2];
+    QString db_user = info_list[3];
+    QString db_password = info_list[4];
+    QString db_port = info_list[5];
+    if(dbms_name == "postgres"){
+        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+    }else{
+        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+    }
+    db.setHostName(ip);
     db.setDatabaseName(db_name);
     db.setUserName(db_user);
     db.setPassword(db_password);
+    db.setPort(db_port);
 
     if (!db.open())
     {
@@ -364,14 +437,22 @@ void update_table_control(QString str, int int1, int id)
 void update_table_sign(QString str, int int1, int id)
 {
     QStringList info_list = get_info_from_db_config();
-    QString db_name = info_list[0];
-    QString db_user = info_list[1];
-    QString db_password = info_list[2];
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("localhost");
+    QString dbms_name = info_list[0];
+    QString ip = info_list[1];
+    QString db_name = info_list[2];
+    QString db_user = info_list[3];
+    QString db_password = info_list[4];
+    QString db_port = info_list[5];
+    if(dbms_name == "postgres"){
+        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+    }else{
+        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+    }
+    db.setHostName(ip);
     db.setDatabaseName(db_name);
     db.setUserName(db_user);
     db.setPassword(db_password);
+    db.setPort(db_port);
 
     if (!db.open())
     {
