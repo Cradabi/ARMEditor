@@ -579,8 +579,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     row4Layout->addWidget(label4_4);
                     QHBoxLayout* row5Layout = new QHBoxLayout();
                     QLabel* label5 = new QLabel("Значение при ошибке:");
-                    label5_5 = new QLabel(fail_state);
-                    label5_5->setStyleSheet("QLabel { color : blue; }")
+                    QLabel* label5_5 = new QLabel(fail_state);
+                    label5_5->setStyleSheet("QLabel { color : blue; }");
                     row5Layout->addWidget(label5);
                     row5Layout->addWidget(label5_5);
 
@@ -678,7 +678,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     QHBoxLayout* row3Layout = new QHBoxLayout();
                     QLabel* label3 = new QLabel("Текущее значение:");
-                    QLabel* label3_3 = new QLabel(cur_state);
+                    QLabel* label3_3 = new QLabel(cur_value);
                     label3_3->setStyleSheet("QLabel { color : blue; }");
                     row3Layout->addWidget(label3);
                     row3Layout->addWidget(label3_3);
@@ -692,8 +692,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     QHBoxLayout* row5Layout = new QHBoxLayout();
                     QLabel* label5 = new QLabel("Максимальное значение:");
-                    label5_5 = new QLabel(max_value);
-                    label5_5->setStyleSheet("QLabel { color : blue; }")
+                    QLabel*label5_5 = new QLabel(max_value);
+                    label5_5->setStyleSheet("QLabel { color : blue; }");
                     row5Layout->addWidget(label5);
                     row5Layout->addWidget(label5_5);
 

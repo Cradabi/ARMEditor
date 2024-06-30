@@ -10,15 +10,16 @@ QSqlQuery connection_to_db()
         QString db_name = info_list[2];
         QString db_user = info_list[3];
         QString db_password = info_list[4];
-        QString db_port = info_list[5];
+        int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
         QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
+            QSqlDatabase db;
             if(dbms_name == "postgres"){
-                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
             }else{
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
 
             db.setHostName(ip);
@@ -59,15 +60,16 @@ QSqlQuery connection_to_cp_db()
         QString db_name = info_list[2];
         QString db_user = info_list[3];
         QString db_password = info_list[4];
-        QString db_port = info_list[5];
+        int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
         QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
+            QSqlDatabase db;
             if(dbms_name == "postgres"){
-                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
             }else{
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
             db.setDatabaseName(db_name);
@@ -107,15 +109,16 @@ QSqlQuery connection_to_db_with_lib()
         QString db_name = info_list[2];
         QString db_user = info_list[3];
         QString db_password = info_list[4];
-        QString db_port = info_list[5];
+        int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
         QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
+            QSqlDatabase db;
             if(dbms_name == "postgres"){
-                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
             }else{
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
             db.setDatabaseName(db_name);
@@ -156,15 +159,16 @@ QSqlQuery connection_to_db_with_measure()
         QString db_name = info_list[2];
         QString db_user = info_list[3];
         QString db_password = info_list[4];
-        QString db_port = info_list[5];
+        int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
         QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
+            QSqlDatabase db;
             if(dbms_name == "postgres"){
-                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
             }else{
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
             db.setDatabaseName(db_name);
@@ -205,15 +209,16 @@ QSqlQuery connection_to_db_with_signal()
         QString db_name = info_list[2];
         QString db_user = info_list[3];
         QString db_password = info_list[4];
-        QString db_port = info_list[5];
+        int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
         QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
+            QSqlDatabase db;
             if(dbms_name == "postgres"){
-                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
             }else{
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
             db.setDatabaseName(db_name);
@@ -254,15 +259,16 @@ QSqlQuery connection_to_db_with_control()
         QString db_name = info_list[2];
         QString db_user = info_list[3];
         QString db_password = info_list[4];
-        QString db_port = info_list[5];
+        int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
         QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
+            QSqlDatabase db;
             if(dbms_name == "postgres"){
-                QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
             }else{
-                QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
             db.setDatabaseName(db_name);
@@ -300,11 +306,12 @@ void update_table_lib(QString str, int int1, int int2, int int3, int int4, int i
     QString db_name = info_list[2];
     QString db_user = info_list[3];
     QString db_password = info_list[4];
-    QString db_port = info_list[5];
+    int db_port = info_list[5].toInt();
+    QSqlDatabase db;
     if(dbms_name == "postgres"){
-        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QPSQL");
     }else{
-        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
     db.setDatabaseName(db_name);
@@ -348,11 +355,12 @@ void update_table_mes(QString str, int int1, double double1, double double2, dou
     QString db_name = info_list[2];
     QString db_user = info_list[3];
     QString db_password = info_list[4];
-    QString db_port = info_list[5];
+    int db_port = info_list[5].toInt();
+    QSqlDatabase db;
     if(dbms_name == "postgres"){
-        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QPSQL");
     }else{
-        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
     db.setDatabaseName(db_name);
@@ -398,11 +406,12 @@ void update_table_control(QString str, int int1, int id)
     QString db_name = info_list[2];
     QString db_user = info_list[3];
     QString db_password = info_list[4];
-    QString db_port = info_list[5];
+    int db_port = info_list[5].toInt();
+    QSqlDatabase db;
     if(dbms_name == "postgres"){
-        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QPSQL");
     }else{
-        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
     db.setDatabaseName(db_name);
@@ -442,11 +451,12 @@ void update_table_sign(QString str, int int1, int id)
     QString db_name = info_list[2];
     QString db_user = info_list[3];
     QString db_password = info_list[4];
-    QString db_port = info_list[5];
+    int db_port = info_list[5].toInt();
+    QSqlDatabase db;
     if(dbms_name == "postgres"){
-        QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QPSQL");
     }else{
-        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+        db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
     db.setDatabaseName(db_name);
