@@ -81,14 +81,14 @@ QSqlQuery connection_to_cp_db()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name FROM cp_groups", db);
+            QSqlQuery query("SELECT id, name FROM cp_names", db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name FROM cp_groups", db);
+            QSqlQuery query("SELECT id, name, number FROM cp_names", db);
             db.close();
             return query;
         }
@@ -130,14 +130,14 @@ QSqlQuery connection_to_db_with_lib()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id, normal_state, failure_state, current_state FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, normal_state, failure_state, current_state, obj_type_id, obj_name_id FROM objects", db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id, normal_state, failure_state, current_state FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, normal_state, failure_state, current_state, obj_type_id, obj_name_id FROM objects", db);
             db.close();
             return query;
         }
@@ -180,14 +180,14 @@ QSqlQuery connection_to_db_with_measure()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id, normal_lower_limit, normal_upper_limit, critical_lower_limit, critical_upper_limit FROM objects", db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id, normal_lower_limit, normal_upper_limit, critical_lower_limit, critical_upper_limit FROM objects", db);
             db.close();
             return query;
         }
@@ -230,14 +230,14 @@ QSqlQuery connection_to_db_with_signal()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, obj_type_id, obj_name_id FROM objects", db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, obj_type_id, obj_name_id FROM objects", db);
             db.close();
             return query;
         }
@@ -280,14 +280,14 @@ QSqlQuery connection_to_db_with_control()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id FROM objects", db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value FROM objects", db);
+            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id FROM objects", db);
             db.close();
             return query;
         }
