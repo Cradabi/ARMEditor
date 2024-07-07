@@ -12,73 +12,73 @@ MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent)
     scene = parent;
 }
 
-void MyView::mouseDoubleClickEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        QPoint point(event->pos().x(), event->pos().y());
-
-        for (auto object : scheme_params.objects_vector)
-        {
-            std::string tp_obj = object->get_type_object();
-            if (tp_obj == "Библиотечный объект")
-            {
-                QPoint original_point = point;
-                // Создаем объект преобразования
-                QTransform transform;
-
-                transform.translate(-1 * (object->get_x() + object->get_width() / 2),
-                                    -1 * (object->get_y() + object->get_height() / 2));
-
-
-                //transform.rotate(-1 * object[4].toInt());
-
-                // Применяем преобразование к точке
-                QPoint newPoint = transform.map(point);
-
-                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
-                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
-                {
-                    transform.reset();
-                    QSqlQuery db_request_result = connection_to_db_with_lib();
-
-                    QString name = "None";
-                    QString cp_id = "None";
-                    QString normal_state = "None";
-                    QString fail_state = "None";
-                    int cur_state = 0;
-                    this->cur_obj_id = object->get_id();
-
-                    while (db_request_result.next())
-                    {
-                        if (db_request_result.value(0).toInt() == object->get_id())
-                        {
-                            name = db_request_result.value(1).toString();
-                            cp_id = db_request_result.value(2).toString();
-                            normal_state = db_request_result.value(3).toString();
-                            fail_state = db_request_result.value(4).toString();
-                            cur_state = db_request_result.value(5).toInt();
-                        }
-                    }
-
-
-                    if (cur_state < (object->get_patterns().size() - 1))
-                    {
-                        cur_state += 1;
-                    }
-                    else
-                    {
-                        cur_state = 0;
-                    }
-                    update_table_lib(name, cp_id.toInt(),
-                                     normal_state.toInt(),
-                                     fail_state.toInt(), cur_state, cur_obj_id);
-                    updateScene();
-                }
-            }
-        }
-    }
-}
+// void MyView::mouseDoubleClickEvent(QMouseEvent* event)
+// {
+//     if (event->button() == Qt::LeftButton)
+//     {
+//         QPoint point(event->pos().x(), event->pos().y());
+//
+//         for (auto object : scheme_params.objects_vector)
+//         {
+//             std::string tp_obj = object->get_type_object();
+//             if (tp_obj == "Библиотечный объект")
+//             {
+//                 QPoint original_point = point;
+//                 // Создаем объект преобразования
+//                 QTransform transform;
+//
+//                 transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+//                                     -1 * (object->get_y() + object->get_height() / 2));
+//
+//
+//                 //transform.rotate(-1 * object[4].toInt());
+//
+//                 // Применяем преобразование к точке
+//                 QPoint newPoint = transform.map(point);
+//
+//                 if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+//                     newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
+//                 {
+//                     transform.reset();
+//                     QSqlQuery db_request_result = connection_to_db_with_lib();
+//
+//                     QString name = "None";
+//                     QString cp_id = "None";
+//                     QString normal_state = "None";
+//                     QString fail_state = "None";
+//                     int cur_state = 0;
+//                     this->cur_obj_id = object->get_id();
+//
+//                     while (db_request_result.next())
+//                     {
+//                         if (db_request_result.value(0).toInt() == object->get_id())
+//                         {
+//                             name = db_request_result.value(1).toString();
+//                             cp_id = db_request_result.value(2).toString();
+//                             normal_state = db_request_result.value(3).toString();
+//                             fail_state = db_request_result.value(4).toString();
+//                             cur_state = db_request_result.value(5).toInt();
+//                         }
+//                     }
+//
+//
+//                     if (cur_state < (object->get_patterns().size() - 1))
+//                     {
+//                         cur_state += 1;
+//                     }
+//                     else
+//                     {
+//                         cur_state = 0;
+//                     }
+//                     update_table_lib(name, cp_id.toInt(),
+//                                      normal_state.toInt(),
+//                                      fail_state.toInt(), cur_state, cur_obj_id);
+//                     updateScene();
+//                 }
+//             }
+//         }
+//     }
+// }
 
 
 void MyView::mousePressEvent(QMouseEvent* event)

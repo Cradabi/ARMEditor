@@ -1,6 +1,6 @@
-dbms_name(postgres_or_mysql):postgres
+dbms_name(postgres_or_mysql):mysql
 ip_db:localhost
-db_name:postgres
-db_user:postgres
-db_password:MaximRozov24
-db_port:5432
+db_name:arm
+db_user:newuser
+db_password:password
+db_port:3306

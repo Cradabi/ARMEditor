@@ -16,10 +16,13 @@ QSqlQuery connection_to_db()
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
-            if(dbms_name == "postgres"){
-                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            }else{
-                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            if (dbms_name == "postgres")
+            {
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }
+            else
+            {
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
 
             db.setHostName(ip);
@@ -66,9 +69,12 @@ QSqlQuery connection_to_cp_db()
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
-            if(dbms_name == "postgres"){
+            if (dbms_name == "postgres")
+            {
                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            }else{
+            }
+            else
+            {
                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
@@ -115,9 +121,12 @@ QSqlQuery connection_to_db_with_lib()
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
-            if(dbms_name == "postgres"){
+            if (dbms_name == "postgres")
+            {
                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            }else{
+            }
+            else
+            {
                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
@@ -130,14 +139,18 @@ QSqlQuery connection_to_db_with_lib()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id, normal_state, failure_state, current_state, obj_type_id, obj_name_id FROM objects", db);
+            QSqlQuery query(
+                "SELECT id, name, cp_name_id, normal_state, failure_state, current_state, obj_type_id, obj_name_id FROM objects",
+                db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id, normal_state, failure_state, current_state, obj_type_id, obj_name_id FROM objects", db);
+            QSqlQuery query(
+                "SELECT id, name, cp_name_id, normal_state, failure_state, current_state, obj_type_id, obj_name_id FROM objects",
+                db);
             db.close();
             return query;
         }
@@ -165,9 +178,12 @@ QSqlQuery connection_to_db_with_measure()
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
-            if(dbms_name == "postgres"){
+            if (dbms_name == "postgres")
+            {
                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            }else{
+            }
+            else
+            {
                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
@@ -180,14 +196,18 @@ QSqlQuery connection_to_db_with_measure()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id, normal_lower_limit, normal_upper_limit, critical_lower_limit, critical_upper_limit FROM objects", db);
+            QSqlQuery query(
+                "SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id, normal_lower_limit, normal_upper_limit, critical_lower_limit, critical_upper_limit FROM objects",
+                db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id, normal_lower_limit, normal_upper_limit, critical_lower_limit, critical_upper_limit FROM objects", db);
+            QSqlQuery query(
+                "SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id, normal_lower_limit, normal_upper_limit, critical_lower_limit, critical_upper_limit FROM objects",
+                db);
             db.close();
             return query;
         }
@@ -215,9 +235,12 @@ QSqlQuery connection_to_db_with_signal()
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
-            if(dbms_name == "postgres"){
+            if (dbms_name == "postgres")
+            {
                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            }else{
+            }
+            else
+            {
                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
@@ -265,9 +288,12 @@ QSqlQuery connection_to_db_with_control()
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
-            if(dbms_name == "postgres"){
+            if (dbms_name == "postgres")
+            {
                 db = QSqlDatabase::addDatabase("QPSQL", connectionName);
-            }else{
+            }
+            else
+            {
                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
             db.setHostName(ip);
@@ -280,14 +306,18 @@ QSqlQuery connection_to_db_with_control()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id FROM objects", db);
+            QSqlQuery query(
+                "SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id FROM objects",
+                db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id FROM objects", db);
+            QSqlQuery query(
+                "SELECT id, name, cp_name_id, current_value, min_value, max_value, obj_type_id, obj_name_id FROM objects",
+                db);
             db.close();
             return query;
         }
@@ -308,9 +338,12 @@ void update_table_lib(QString str, int int1, int int2, int int3, int int4, int i
     QString db_password = info_list[4];
     int db_port = info_list[5].toInt();
     QSqlDatabase db;
-    if(dbms_name == "postgres"){
+    if (dbms_name == "postgres")
+    {
         db = QSqlDatabase::addDatabase("QPSQL");
-    }else{
+    }
+    else
+    {
         db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
@@ -357,9 +390,12 @@ void update_table_mes(QString str, int int1, double double1, double double2, dou
     QString db_password = info_list[4];
     int db_port = info_list[5].toInt();
     QSqlDatabase db;
-    if(dbms_name == "postgres"){
+    if (dbms_name == "postgres")
+    {
         db = QSqlDatabase::addDatabase("QPSQL");
-    }else{
+    }
+    else
+    {
         db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
@@ -408,9 +444,12 @@ void update_table_control(QString str, int int1, int id)
     QString db_password = info_list[4];
     int db_port = info_list[5].toInt();
     QSqlDatabase db;
-    if(dbms_name == "postgres"){
+    if (dbms_name == "postgres")
+    {
         db = QSqlDatabase::addDatabase("QPSQL");
-    }else{
+    }
+    else
+    {
         db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
@@ -453,9 +492,12 @@ void update_table_sign(QString str, int int1, int id)
     QString db_password = info_list[4];
     int db_port = info_list[5].toInt();
     QSqlDatabase db;
-    if(dbms_name == "postgres"){
+    if (dbms_name == "postgres")
+    {
         db = QSqlDatabase::addDatabase("QPSQL");
-    }else{
+    }
+    else
+    {
         db = QSqlDatabase::addDatabase("QMYSQL");
     }
     db.setHostName(ip);
