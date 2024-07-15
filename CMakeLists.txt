@@ -1,6 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
-
+cmake_minimum_required(VERSION 3.27)
 project(ARM LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 23)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -8,32 +9,40 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# QtCreator supports the following variables for Android, which are identical to qmake Android variables.
-# Check http://doc.qt.io/qt-5/deployment-android.html for more information.
-# They need to be set before the find_package(Qt5 ...) call.
-
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Sql REQUIRED)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_LIBPQXX REQUIRED libpqxx)
+pkg_search_module(LIBPQ REQUIRED libpq)
 
-add_executable(${PROJECT_NAME}
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mywidget.h
-        mainwindow.ui
-)
+add_library(PrimitivesLib STATIC primitives_lib/FiguresClasses.cpp primitives_lib/SchemeClass.cpp)
 
+add_library(ParserLib STATIC parser_lib/SchemeObjectParser.cpp parser_lib/SchemeFileParser.cpp)
 
-add_library(figures)
-add_library(parser)
-add_library(bmp_file)
-add_library(db)
+add_library(DBLib STATIC db_lib/db_connection.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE pqxx)
+add_executable(${PROJECT_NAME} main.cpp application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
+
+#Подключаем QT к проекту
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
-target_include_directories(${PROJECT_NAME} PUBLIC $ {PROJECT_SOURCE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Sql)
+
+#Подключаем QT к статической библиотеке PrimitivesLib
+target_link_libraries(PrimitivesLib PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
+target_link_libraries(PrimitivesLib PRIVATE Qt5::Widgets)
+
+#Подключаем QT к статической библиотеке ParserLib
+target_link_libraries(ParserLib PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
+target_link_libraries(ParserLib PRIVATE Qt5::Widgets)
+
+target_link_libraries(DBLib PRIVATE Qt5::Sql)
+
+#Подключаем ParserLib к проекту
+target_link_libraries(${PROJECT_NAME} PRIVATE DBLib)
+
+#Подключаем ParserLib к проекту
+target_link_libraries(${PROJECT_NAME} PRIVATE ParserLib)
+
+#Подключаем PrimitivesLib к проекту
+target_link_libraries(${PROJECT_NAME} PRIVATE PrimitivesLib)
