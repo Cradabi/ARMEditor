@@ -501,9 +501,14 @@ void SchemeSectionsParser::parseObject() {
         // Получаем размер блока
         block_size = getBlockSize();
 
+        uint32_t actual_cursor_pos = scheme_file_.tellg();
+
         SchemeObjectParser::parse(lib_index, is_object, actual_nesting_level);
         actual_nesting_level = 1;
         is_object = true;
+
+        scheme_file_.clear();
+        scheme_file_.seekg(actual_cursor_pos + block_size);
     }
 
 }

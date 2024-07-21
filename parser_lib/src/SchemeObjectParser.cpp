@@ -41,8 +41,8 @@ void SchemeObjectParser::getMatrix(std::ifstream& File, std::vector<std::vector<
 
 void SchemeObjectParser::rewriteCacheObject(int32_t lib_index, int32_t cache_size)
 {
-    CacheFileOut.write((char*)&lib_index, size_._32bits);
-    CacheFileOut.write((char*)&cache_size, size_._32bits);
+    CacheFileOut.write(reinterpret_cast<char*>(&lib_index), size_._32bits);
+    CacheFileOut.write(reinterpret_cast<char*>(&cache_size), size_._32bits);
 
     uint32_t bytes_counter = 0;
     while (bytes_counter < cache_size)
@@ -145,7 +145,7 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
 
     if (!object_params.is_lib_object)
     {
-        getSomeInt(File, object_params.animation_speed);
+        getSomeInt(File, object_params.glue_points_amount);
         getVector(File, object_params.glue_points_vector, object_params.glue_points_amount);
 
         getSomeInt(File, object_params.states_amount);
@@ -276,7 +276,7 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params)
 
     actual_object_params.bgcolor_not_needed = getBool(CacheFileIn);
 
-    getSomeInt(CacheFileIn, actual_object_params.animation_speed);
+    getSomeInt(CacheFileIn, actual_object_params.glue_points_amount);
 
     getVector(CacheFileIn, actual_object_params.glue_points_vector, actual_object_params.glue_points_amount);
 
@@ -887,7 +887,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
     // object_params лежит в OBJS
     // primitive_params лежит в OBJS
 
-    std::vector<FiguresClasses::Primitive*>* actual_vector;
+    std::vector<Primitive*>* actual_vector;
 
     if (object_params.is_group_object)
     {
