@@ -17,7 +17,7 @@ pkg_search_module(LIBPQ REQUIRED libpq)
 
 add_library(PrimitivesLib STATIC primitives_lib/FiguresClasses.cpp primitives_lib/SchemeClass.cpp)
 
-add_library(ParserLib STATIC parser_lib/SchemeObjectParser.cpp parser_lib/SchemeFileParser.cpp)
+add_library(ParserLib STATIC parser_lib/src/SchemeParser.cpp parser_lib/src/SchemeObjectParser.cpp parser_lib/src/SchemeSectionsParser.cpp parser_lib/SchemeFileParser.cpp)
 
 add_library(DBLib STATIC db_lib/db_connection.cpp)
 
