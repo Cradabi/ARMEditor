@@ -26,9 +26,9 @@ void MyWidget::draw_new_scheme(const std::string &filepath) {
 
     view->scheme_params.deleteOBJS();
 
-    SchemeFileParser parser(view->scheme_params);
-    if (!parser.parse(filepath)) {
-        parser.parse("../schemes_exp/emptyscheme.схема");
+    SchemeFileParser parser;
+    if (!parser.parse(view->scheme_params, filepath)) {
+        parser.parse(view->scheme_params, "../schemes_exp/emptyscheme.схема");
     }
 
     QSqlQuery db_request_result = connection_to_db();
