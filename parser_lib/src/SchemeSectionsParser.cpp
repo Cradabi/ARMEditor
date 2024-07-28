@@ -139,9 +139,9 @@ void SchemeSectionsParser::parseSchm() {
                     lae::writeLog(logs_file_, byte_, true);
                     break;
                 case schm_data_.count_of_objects_flag:
-                    getSomeInt(scheme_file_, objects_amount, block_size);
+                    getSomeInt(scheme_file_, objects_amount_, block_size);
                     lae::writeLog(logs_file_, "count_of_objects: ");
-                    lae::writeLog(logs_file_, objects_amount, true);
+                    lae::writeLog(logs_file_, objects_amount_, true);
                     break;
                 case schm_data_.windowsSize_x_flag:
                     getSomeInt(scheme_file_, tmp_value, block_size);
@@ -394,7 +394,7 @@ void SchemeSectionsParser::parseFont() {
 }
 
 
-void SchemeSectionsParser::parseUnknown() {
+void SchemeSectionsParser::parseDefault() {
     // Пока не дошли до конца секции, считываем данные
     while (scheme_file_.tellg() < sections_stack_.back().start_pos + sections_stack_.back().sect_size) {
         scheme_file_.get(byte_);
@@ -417,7 +417,7 @@ void SchemeSectionsParser::parseCashObject() {
     uint32_t block_size;
 
     if (sections_stack_.back().sect_name != "1")
-        parseUnknown();
+        parseDefault();
     else {
         scheme_file_.get(byte_);
         // Получаем размер блока
@@ -449,7 +449,7 @@ void SchemeSectionsParser::parseObjectInfo() {
     scheme_file_.get(byte_);
     block_size = getBlockSize();
 
-    getSomeInt(scheme_file_, actual_nesting_level, block_size);
+    getSomeInt(scheme_file_, actual_nesting_level_, block_size);
 
     scheme_file_.get(byte_);
     block_size = getBlockSize();
@@ -471,7 +471,7 @@ void SchemeSectionsParser::parseObject() {
     uint32_t block_size;
 
     if (sections_stack_.back().sect_name != "1")
-        parseUnknown();
+        parseDefault();
     else {
 
         scheme_file_.get(byte_);
@@ -503,8 +503,8 @@ void SchemeSectionsParser::parseObject() {
 
         uint32_t actual_cursor_pos = scheme_file_.tellg();
 
-        SchemeObjectParser::parse(lib_index, is_object, actual_nesting_level);
-        actual_nesting_level = 1;
+        SchemeObjectParser::parse(lib_index, is_object, actual_nesting_level_);
+        actual_nesting_level_ = 1;
         is_object = true;
 
         scheme_file_.clear();
@@ -530,7 +530,7 @@ void SchemeSectionsParser::parseSectionData() {
     else if (sections_stack_.back().sect_name == "sch2")
         parseSch2();
     else if (sections_stack_.back().sect_name == "font")
-        parseUnknown();
+        parseDefault();
     else if (sections_stack_.size() == 3 and sections_stack_[1].sect_name == "objs")
         parseObjectInfo();
     else if (sections_stack_.size() == 4 and sections_stack_[1].sect_name == "objs")
@@ -538,7 +538,7 @@ void SchemeSectionsParser::parseSectionData() {
     else if (sections_stack_.size() == 4 and sections_stack_[1].sect_name == "cach")
         parseCashObject();
     else
-        parseUnknown();
+        parseDefault();
 }
 
 // Функция чтения блока байтов в схеме
