@@ -11,23 +11,6 @@
 
 #endif
 
-// namespace fwf // file work functions
-// {
-//     // Шаблон получения целочисленного значения из файла
-//     template <typename IntType>
-//     void getSomeInt(std::ifstream& file, IntType some_int, uint8_t int_size)
-//     {
-//         file.read(some_int, int_size);
-//     }
-//
-//     // Шаблон получения числового значения с плавающей точкой из буффера
-//     template <typename FloatType>
-//     void getSomeFloat(std::ifstream& file, FloatType some_float, uint8_t float_size)
-//     {
-//         file.read(some_float, float_size);
-//     }
-// }
-
 // Пространство имен для функций, предназначенных для работы с логами и исключениями
 namespace lae
 {

@@ -41,9 +41,9 @@ class SchemeSectionsParser : public SchemeObjectParser
     // Стек открытых секций
     std::vector<Section> sections_stack_;
 
-    uint64_t objects_amount{0}; // Кол-во объектов в схеме
+    uint64_t objects_amount_{0}; // Кол-во объектов в схеме
 
-    int32_t actual_nesting_level{1};
+    int32_t actual_nesting_level_{1};
     bool is_object;
 
     // Функция закрытия секции
@@ -168,7 +168,7 @@ class SchemeSectionsParser : public SchemeObjectParser
 
     void parseFont();
 
-    void parseUnknown();
+    void parseDefault();
 
     void parseObjectInfo();
 
