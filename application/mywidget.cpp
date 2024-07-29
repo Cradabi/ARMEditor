@@ -11,8 +11,8 @@ MyWidget::MyWidget()
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    db_request_result_ = connection_to_db();
-    db_request_result_cp_ = connection_to_cp_db();
+    db_request_result_actual = connection_to_db();
+    db_request_result_cp_actual = connection_to_cp_db();
 
     draw_new_scheme("../schemes_exp/emptyscheme.схема");
 }
@@ -37,6 +37,8 @@ void MyWidget::draw_new_scheme(const std::string& filepath)
         parser.parse(view->scheme_params, "../schemes_exp/emptyscheme.схема");
     }
 
+    make_bd_objects();
+
     startThread();
 
     this->setFixedSize(view->scheme_params.width, view->scheme_params.height);
@@ -56,4 +58,16 @@ void MyWidget::draw_new_scheme(const std::string& filepath)
     scheme.draw_scheme(*painter);
     delete painter;
     scene->addPixmap(pix);
+}
+
+
+void MyWidget::make_bd_objects()
+{
+    for (auto object : view->scheme_params.objects_vector)
+    {
+        if (object->get_id())
+        {
+            view->bd_objects[object->get_id()] = object;
+        }
+    }
 }

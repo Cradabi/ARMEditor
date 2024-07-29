@@ -12,6 +12,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QTimer>
+#include <unordered_map>
 
 #include "primitives_lib/SchemeClass.h"
 #include "db_lib/db_connection.h"
@@ -42,6 +43,7 @@ public:
     void updateScene();
 
     Scheme::SchemeParams scheme_params;
+    std::unordered_map<int, FiguresClasses::Primitive*> bd_objects;
 
     QGraphicsScene* scene;
 

@@ -72,7 +72,7 @@ bool Primitive::get_show() {
     return this->bool_show;
 }
 
-int Primitive::get_id() {
+uint32_t Primitive::get_id() {
     return this->id;
 }
 
@@ -2091,6 +2091,10 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
     this->type_object = "Телеконтроль";
     this->line_width = line_width;
     this->line_color = pen_color;
+    if(id_c < 0)
+    {
+        id_c = abs(id_c);
+    }
     this->id = id_c;
     change_center_cords(x, y, width, height);
 }
@@ -2223,6 +2227,10 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
     this->type_object = "Телесигнализация";
     this->line_width = line_width;
     this->line_color = pen_color;
+    if(id_c < 0)
+    {
+        id_c = abs(id_c);
+    }
     this->id = id_c;
     change_center_cords(x, y, width, height);
 }
@@ -2354,6 +2362,10 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
     this->type_object = "Телеизмерение";
     this->line_width = line_width;
     this->line_color = pen_color;
+    if(id_c < 0)
+    {
+        id_c = abs(id_c);
+    }
     this->id = id_c;
     change_center_cords(x, y, width, height);
 }
@@ -2575,6 +2587,10 @@ LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int
     this->width = width;
     this->height = height;
     this->angle = angle;
+    if(id < 0)
+    {
+        id = abs(id);
+    }
     this->id = id;
     this->condition = condition;
     this->library_name = lib_name;

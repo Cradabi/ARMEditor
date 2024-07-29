@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QWidget>
 #include <QTextCodec>
+#include <cinttypes>
 
 namespace FiguresClasses {
     class Primitive {
@@ -22,7 +23,7 @@ namespace FiguresClasses {
         std::string text = "";
 
         int condition = 0;
-        int id = 0;
+        uint32_t id = 0;
         int x = 0;
         int y = 0;
         int center_x = 0;
@@ -62,7 +63,7 @@ namespace FiguresClasses {
 
         bool get_show();
 
-        int get_id();
+        uint32_t get_id();
 
         int get_x();
 
