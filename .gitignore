@@ -1,3 +1,4 @@
 #dont need to commit
 *cmake-build-debug*
+*cmake-build-release*
 *.idea*

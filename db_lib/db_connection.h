@@ -1,6 +1,10 @@
 #pragma once
 
-#include "QtSql"
+#include <QtSql>
+#include <QThread>
+#include <QTimer>
+#include <QDebug>
+
 
 QSqlQuery connection_to_db();
 

@@ -87,7 +87,7 @@ QSqlQuery connection_to_cp_db()
             {
                 qWarning() << "Не удалось подключиться к базе данных";
             }
-            QSqlQuery query("SELECT id, name FROM cp_names", db);
+            QSqlQuery query("SELECT id, name, number  FROM cp_names", db);
             db.close();
             return query;
         }

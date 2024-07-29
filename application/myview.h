@@ -14,10 +14,13 @@
 #include <QTimer>
 
 #include "primitives_lib/SchemeClass.h"
+#include "db_lib/db_connection.h"
 
 class MyView : public QGraphicsView
 {
     Q_OBJECT
+
+    // friend class UpdateDBThread;
 
 public:
     MyView(QGraphicsView  *parent = nullptr) : QGraphicsView(parent) {
@@ -63,8 +66,6 @@ private slots:
     void updateTablecontrol();
 
     void updateTablesign();
-
-
 };
 
 
