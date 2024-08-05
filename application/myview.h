@@ -24,9 +24,13 @@ class MyView : public QGraphicsView
     // friend class UpdateDBThread;
 
 public:
-    MyView(QGraphicsView  *parent = nullptr) : QGraphicsView(parent) {
+    MyView(QGraphicsView* parent = nullptr) : QGraphicsView(parent)
+    {
         setMouseTracking(true);
+        // clickTimer = new QTimer(this);
+        // connect(clickTimer, &QTimer::timeout, this, &MyView::handleTimeout);
     }
+
 
     ~MyView()
     {
@@ -40,6 +44,10 @@ public:
 
     void mousePressEvent(QMouseEvent* event) override;
 
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
+
+    // void handleSingleClick(QMouseEvent* event);
+
     void updateScene();
 
     Scheme::SchemeParams scheme_params;
@@ -48,6 +56,12 @@ public:
     QGraphicsScene* scene;
 
 private:
+    // QTimer* clickTimer;
+
+    QPoint lastClickPos;
+
+    // QMouseEvent* lastEvent;
+
     QVector<QVector<QVariant>> vec;
 
     int cur_obj_id = 0;
@@ -60,7 +74,16 @@ private:
 
     QMenu* newWindow;
 
+    void showOrderDialog(QPoint& point);
+
 private slots:
+
+    // void handleTimeout()
+    // {
+    //     clickTimer->stop();
+    //     handleSingleClick();
+    // }
+
     void updateTablelib();
 
     void updateTablemes();
@@ -69,6 +92,3 @@ private slots:
 
     void updateTablesign();
 };
-
-
-

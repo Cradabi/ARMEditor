@@ -161,6 +161,62 @@ QSqlQuery connection_to_db_with_lib()
     }
 }
 
+QSqlQuery connection_to_db_with_lib_short()
+{
+    try
+    {
+        QStringList info_list = get_info_from_db_config();
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        int db_port = info_list[5].toInt();
+        // Создание объекта соединения с базой данных
+        QString connectionName = "db_connection";
+        if (!QSqlDatabase::contains(connectionName))
+        {
+            QSqlDatabase db;
+            if (dbms_name == "postgres")
+            {
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }
+            else
+            {
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
+            db.setDatabaseName(db_name);
+            db.setUserName(db_user);
+            db.setPassword(db_password);
+            db.setPort(db_port);
+
+            if (!db.open())
+            {
+                qWarning() << "Не удалось подключиться к базе данных";
+            }
+            QSqlQuery query(
+                "SELECT name, cp_name_id, normal_state, failure_state, current_state FROM objects",
+                db);
+            db.close();
+            return query;
+        }
+        else
+        {
+            QSqlDatabase db = QSqlDatabase::database(connectionName);
+            QSqlQuery query(
+                "SELECT name, cp_name_id, normal_state, failure_state, current_state FROM objects",
+                db);
+            db.close();
+            return query;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        exit(1);
+    }
+}
+
 
 QSqlQuery connection_to_db_with_measure()
 {
@@ -366,6 +422,54 @@ void update_table_lib(QString str, int int1, int int2, int int3, int int4, int i
     query.bindValue(":value3", int2);
     query.bindValue(":value4", int3);
     query.bindValue(":value5", int4);
+    query.bindValue(":id", id);
+
+    if (!query.exec())
+    {
+        qWarning() << "Ошибка выполнения запроса:" << query.lastError().text();
+    }
+    else
+    {
+        qDebug() << "Запрос выполнен успешно";
+    }
+
+    db.close();
+}
+
+void update_table_lib_short(int int1, int id)
+{
+    QStringList info_list = get_info_from_db_config();
+    QString dbms_name = info_list[0];
+    QString ip = info_list[1];
+    QString db_name = info_list[2];
+    QString db_user = info_list[3];
+    QString db_password = info_list[4];
+    int db_port = info_list[5].toInt();
+    QSqlDatabase db;
+    if (dbms_name == "postgres")
+    {
+        db = QSqlDatabase::addDatabase("QPSQL");
+    }
+    else
+    {
+        db = QSqlDatabase::addDatabase("QMYSQL");
+    }
+    db.setHostName(ip);
+    db.setDatabaseName(db_name);
+    db.setUserName(db_user);
+    db.setPassword(db_password);
+    db.setPort(db_port);
+
+    if (!db.open())
+    {
+        qWarning() << "Не удалось подключиться к базе данных:" << db.lastError().text();
+        return;
+    }
+
+    QSqlQuery query;
+    query.prepare(
+        "UPDATE objects SET current_state = :value1 WHERE id = :id");
+    query.bindValue(":value1", int1);
     query.bindValue(":id", id);
 
     if (!query.exec())
