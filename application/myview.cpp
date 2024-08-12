@@ -6,6 +6,7 @@
 #include "db_lib/db_connection.h"
 #include <sstream>
 #include <iomanip>
+#include <QTableWidget>
 
 MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent)
 {
@@ -152,6 +153,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                         cur_state = db_request_result.value(5).toString();
                         obj_type = db_request_result.value(6).toString();
                         obj_name = db_request_result.value(7).toString();
+
                         while (db_request_result_cp.next())
                         {
                             if (db_request_result_cp.value(0).toString() == cp_id)
@@ -224,7 +226,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                         int state = !cur_state.toInt();
 
                         update_table_lib_short(state, id.toInt());
-                        
+
                         timerLabel->setText("Приказ отправлен");
                         cancelButton->hide();
                     }
@@ -339,6 +341,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     QString cp_name = "None";
                     QString obj_type = "None";
                     QString obj_name = "None";
+                    QSqlQuery cp_objects;
 
                     this->cur_obj_id = object->get_id();
 
@@ -354,6 +357,10 @@ void MyView::mousePressEvent(QMouseEvent* event)
                             cur_state = db_request_result.value(5).toString();
                             obj_type = db_request_result.value(6).toString();
                             obj_name = db_request_result.value(7).toString();
+
+                            cp_objects = get_all_cp_objects(cp_id.toInt());
+
+
                             while (db_request_result_cp.next())
                             {
                                 if (db_request_result_cp.value(0).toString() == cp_id)
@@ -441,6 +448,27 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     mainLayout->addLayout(row5Layout);
                     mainLayout->addLayout(row6Layout);
                     mainLayout->addLayout(row7Layout);
+
+
+
+                    QTableWidget* table = new QTableWidget();
+
+                    table->setColumnCount(2);
+
+
+                    // Заполняем таблицу данными
+                    int row = 0;
+                    while (cp_objects.next()) {
+                        table->insertRow(row);
+                        for (int col = 0; col < 2; ++col) {
+                            qDebug() << cp_objects.value(col).toString();
+                            QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
+                            table->setItem(row, col, item);
+                        }
+                        ++row;
+                    }
+
+                    row8Layout->addWidget(table);
                     mainLayout->addLayout(row8Layout);
                     //mainLayout->addWidget(saveButton);
 

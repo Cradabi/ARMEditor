@@ -31,3 +31,5 @@ void update_table_control(QString str, int int1, int id);
 void update_table_sign(QString str, int int1, int id);
 
 QStringList get_info_from_db_config();
+
+QSqlQuery get_all_cp_objects(int cp_id);

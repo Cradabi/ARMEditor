@@ -671,3 +671,60 @@ QStringList get_info_from_db_config()
     file.close();
     return values;
 }
+
+
+QSqlQuery get_all_cp_objects(int cp_id)
+{
+    try
+    {
+        QStringList info_list = get_info_from_db_config();
+        QString dbms_name = info_list[0];
+        QString ip = info_list[1];
+        QString db_name = info_list[2];
+        QString db_user = info_list[3];
+        QString db_password = info_list[4];
+        int db_port = info_list[5].toInt();
+        // Создание объекта соединения с базой данных
+        QString connectionName = "db_connection_to_cp";
+        if (!QSqlDatabase::contains(connectionName))
+        {
+            QSqlDatabase db;
+            if (dbms_name == "postgres")
+            {
+                db = QSqlDatabase::addDatabase("QPSQL", connectionName);
+            }
+            else
+            {
+                db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+            }
+            db.setHostName(ip);
+            db.setDatabaseName(db_name);
+            db.setUserName(db_user);
+            db.setPassword(db_password);
+            db.setPort(db_port);
+
+            if (!db.open())
+            {
+                qWarning() << "Не удалось подключиться к базе данных";
+            }
+
+            QSqlQuery query("SELECT id, name FROM objects WHERE cp_name_id = :id");
+            query.bindValue(":id", cp_id);
+
+            db.close();
+            return query;
+        }
+        else
+        {
+            QSqlDatabase db = QSqlDatabase::database(connectionName);
+            QSqlQuery query("SELECT id, name FROM objects WHERE cp_name_id = :id");
+            query.bindValue(":id", cp_id);
+            db.close();
+            return query;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        exit(1);
+    }
+}
