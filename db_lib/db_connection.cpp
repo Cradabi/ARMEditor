@@ -685,7 +685,7 @@ QSqlQuery get_all_cp_objects(int cp_id)
         QString db_password = info_list[4];
         int db_port = info_list[5].toInt();
         // Создание объекта соединения с базой данных
-        QString connectionName = "db_connection_to_cp";
+        QString connectionName = "db_connection";
         if (!QSqlDatabase::contains(connectionName))
         {
             QSqlDatabase db;
@@ -697,6 +697,7 @@ QSqlQuery get_all_cp_objects(int cp_id)
             {
                 db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
             }
+
             db.setHostName(ip);
             db.setDatabaseName(db_name);
             db.setUserName(db_user);
@@ -708,17 +709,15 @@ QSqlQuery get_all_cp_objects(int cp_id)
                 qWarning() << "Не удалось подключиться к базе данных";
             }
 
-            QSqlQuery query("SELECT id, name FROM objects WHERE cp_name_id = :id");
-            query.bindValue(":id", cp_id);
-
+            std::string text = "SELECT id, name FROM objects WHERE cp_name_id = " + std::to_string(cp_id);
+            QSqlQuery query(QString::fromStdString(text), db);
             db.close();
             return query;
         }
         else
         {
             QSqlDatabase db = QSqlDatabase::database(connectionName);
-            QSqlQuery query("SELECT id, name FROM objects WHERE cp_name_id = :id");
-            query.bindValue(":id", cp_id);
+            QSqlQuery query("SELECT id, name FROM objects WHERE cp_name_id = 2", db);
             db.close();
             return query;
         }

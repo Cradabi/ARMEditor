@@ -326,7 +326,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     int ver_off = -30;
 
                     newWindow = new QMenu();
-                    newWindow->setFixedWidth(260);
+                    newWindow->setFixedWidth(270);
 
                     newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
                     QSqlQuery db_request_result = connection_to_db_with_lib();
@@ -454,6 +454,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     QTableWidget* table = new QTableWidget();
 
                     table->setColumnCount(2);
+                    table->setHorizontalHeaderItem(0, new QTableWidgetItem("id объекта"));
+                    table->setHorizontalHeaderItem(1, new QTableWidgetItem("Имя объекта"));
 
 
                     // Заполняем таблицу данными
@@ -461,15 +463,27 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     while (cp_objects.next()) {
                         table->insertRow(row);
                         for (int col = 0; col < 2; ++col) {
-                            qDebug() << cp_objects.value(col).toString();
                             QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
                             table->setItem(row, col, item);
                         }
                         ++row;
                     }
+                    if(table->rowCount() >= 7)
+                    {
+                        table->setFixedHeight(250);
+                    }
 
-                    row8Layout->addWidget(table);
+
                     mainLayout->addLayout(row8Layout);
+
+                    QHBoxLayout* row9Layout = new QHBoxLayout();
+                    QLabel* label9 = new QLabel("Объекты этого контр. пункта:");
+                    row9Layout->addWidget(label9);
+                    mainLayout->addLayout(row9Layout);
+
+                    QHBoxLayout* row10Layout = new QHBoxLayout();
+                    row10Layout->addWidget(table);
+                    mainLayout->addLayout(row10Layout);
                     //mainLayout->addWidget(saveButton);
 
                     newWindow->show();
@@ -495,7 +509,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     int ver_off = -30;
 
                     newWindow = new QMenu();
-                    newWindow->setFixedWidth(260);
+                    newWindow->setFixedWidth(270);
 
                     newWindow->move(event->globalX() + hor_off, event->globalY() + ver_off);
 
@@ -515,6 +529,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     QString n_u_l = "None";
                     QString c_l_l = "None";
                     QString c_u_l = "None";
+                    QSqlQuery cp_objects;
 
                     this->cur_obj_id = object->get_id();
 
@@ -546,6 +561,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                             std::ostringstream oss2;
                             oss2 << std::fixed << std::setprecision(2) << db_request_result.value(5).toDouble();
                             max_value = QString::fromStdString(oss2.str());
+
+                            cp_objects = get_all_cp_objects(cp_id.toInt());
 
 
                             while (db_request_result_cp.next())
@@ -670,6 +687,38 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     mainLayout->addLayout(row12Layout);
                     //mainLayout->addWidget(saveButton);
 
+
+                    QTableWidget* table = new QTableWidget();
+
+                    table->setColumnCount(2);
+                    table->setHorizontalHeaderItem(0, new QTableWidgetItem("id объекта"));
+                    table->setHorizontalHeaderItem(1, new QTableWidgetItem("Имя объекта"));
+
+
+                    // Заполняем таблицу данными
+                    int row = 0;
+                    while (cp_objects.next()) {
+                        table->insertRow(row);
+                        for (int col = 0; col < 2; ++col) {
+                            QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
+                            table->setItem(row, col, item);
+                        }
+                        ++row;
+                    }
+                    if(table->rowCount() >= 7)
+                    {
+                        table->setFixedHeight(250);
+                    }
+
+                    QHBoxLayout* row13Layout = new QHBoxLayout();
+                    QLabel* label13 = new QLabel("Объекты этого контр. пункта:");
+                    row13Layout->addWidget(label13);
+                    mainLayout->addLayout(row13Layout);
+
+                    QHBoxLayout* row14Layout = new QHBoxLayout();
+                    row14Layout->addWidget(table);
+                    mainLayout->addLayout(row14Layout);
+
                     newWindow->show();
                 }
             }
@@ -707,6 +756,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     QString cp_name = "None";
                     QString obj_type = "None";
                     QString obj_name = "None";
+                    QSqlQuery cp_objects;
 
                     this->cur_obj_id = object->get_id();
                     while (db_request_result.next())
@@ -718,6 +768,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                             id = db_request_result.value(0).toString();
                             obj_type = db_request_result.value(6).toString();
                             obj_name = db_request_result.value(7).toString();
+
+                            cp_objects = get_all_cp_objects(cp_id.toInt());
 
                             while (db_request_result_cp.next())
                             {
@@ -787,6 +839,37 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     mainLayout->addLayout(row8Layout);
                     //mainLayout->addWidget(saveButton);
 
+                    QTableWidget* table = new QTableWidget();
+
+                    table->setColumnCount(2);
+                    table->setHorizontalHeaderItem(0, new QTableWidgetItem("id объекта"));
+                    table->setHorizontalHeaderItem(1, new QTableWidgetItem("Имя объекта"));
+
+
+                    // Заполняем таблицу данными
+                    int row = 0;
+                    while (cp_objects.next()) {
+                        table->insertRow(row);
+                        for (int col = 0; col < 2; ++col) {
+                            QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
+                            table->setItem(row, col, item);
+                        }
+                        ++row;
+                    }
+                    if(table->rowCount() >= 7)
+                    {
+                        table->setFixedHeight(250);
+                    }
+
+                    QHBoxLayout* row13Layout = new QHBoxLayout();
+                    QLabel* label13 = new QLabel("Объекты этого контр. пункта:");
+                    row13Layout->addWidget(label13);
+                    mainLayout->addLayout(row13Layout);
+
+                    QHBoxLayout* row14Layout = new QHBoxLayout();
+                    row14Layout->addWidget(table);
+                    mainLayout->addLayout(row14Layout);
+
                     newWindow->show();
                 }
             }
@@ -824,6 +907,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     QString cp_name = "None";
                     QString obj_type = "None";
                     QString obj_name = "None";
+                    QSqlQuery cp_objects;
 
                     this->cur_obj_id = object->get_id();
                     while (db_request_result.next())
@@ -835,6 +919,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
                             id = db_request_result.value(0).toString();
                             obj_type = db_request_result.value(3).toString();
                             obj_name = db_request_result.value(4).toString();
+                            cp_objects = get_all_cp_objects(cp_id.toInt());
 
                             while (db_request_result_cp.next())
                             {
@@ -902,6 +987,37 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     mainLayout->addLayout(row6Layout);
                     mainLayout->addLayout(row7Layout);
                     mainLayout->addLayout(row8Layout);
+
+                    QTableWidget* table = new QTableWidget();
+
+                    table->setColumnCount(2);
+                    table->setHorizontalHeaderItem(0, new QTableWidgetItem("id объекта"));
+                    table->setHorizontalHeaderItem(1, new QTableWidgetItem("Имя объекта"));
+
+
+                    // Заполняем таблицу данными
+                    int row = 0;
+                    while (cp_objects.next()) {
+                        table->insertRow(row);
+                        for (int col = 0; col < 2; ++col) {
+                            QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
+                            table->setItem(row, col, item);
+                        }
+                        ++row;
+                    }
+                    if(table->rowCount() >= 7)
+                    {
+                        table->setFixedHeight(250);
+                    }
+
+                    QHBoxLayout* row13Layout = new QHBoxLayout();
+                    QLabel* label13 = new QLabel("Объекты этого контр. пункта:");
+                    row13Layout->addWidget(label13);
+                    mainLayout->addLayout(row13Layout);
+
+                    QHBoxLayout* row14Layout = new QHBoxLayout();
+                    row14Layout->addWidget(table);
+                    mainLayout->addLayout(row14Layout);
                     //mainLayout->addWidget(saveButton);
 
                     newWindow->show();
