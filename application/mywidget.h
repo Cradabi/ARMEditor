@@ -62,11 +62,11 @@ public:
         // Соединяем сигнал таймера с нашим слотом updateDB
         connect(m_timer, &QTimer::timeout, this, &MyWidget::updateDB);
 
-        // Соединяем сигнал завершения потока с удалением таймера
-        connect(m_thread, &QThread::finished, m_timer, &QTimer::deleteLater);
-
-        // Соединяем сигнал завершения потока с удалением самого потока
-        connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
+        // // Соединяем сигнал завершения потока с удалением таймера
+        // connect(m_thread, &QThread::finished, m_timer, &QTimer::deleteLater);
+        //
+        // // Соединяем сигнал завершения потока с удалением самого потока
+        // connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
 
         // Запускаем поток
         m_thread->start();
