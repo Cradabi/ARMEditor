@@ -472,6 +472,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     {
                         table->setFixedHeight(250);
                     }
+                    table->setFixedWidth(256);
+                    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 
                     mainLayout->addLayout(row8Layout);
@@ -709,6 +711,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     {
                         table->setFixedHeight(250);
                     }
+                    table->setFixedWidth(256);
+                    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
                     QHBoxLayout* row13Layout = new QHBoxLayout();
                     QLabel* label13 = new QLabel("Объекты этого контр. пункта:");
@@ -860,6 +864,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     {
                         table->setFixedHeight(250);
                     }
+                    table->setFixedWidth(256);
+                    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
                     QHBoxLayout* row13Layout = new QHBoxLayout();
                     QLabel* label13 = new QLabel("Объекты этого контр. пункта:");
@@ -1009,6 +1015,8 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     {
                         table->setFixedHeight(250);
                     }
+                    table->setFixedWidth(256);
+                    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
                     QHBoxLayout* row13Layout = new QHBoxLayout();
                     QLabel* label13 = new QLabel("Объекты этого контр. пункта:");

@@ -6,6 +6,24 @@ MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+    std::string filename = "../info.txt";  // Имя файла
+    std::string prog_name;
+
+    std::ifstream file(filename);
+    if (file.is_open()) {
+        // Читаем первую строку
+        std::getline(file, prog_name);
+
+        // Закрываем файл
+        file.close();
+    } else {
+        std::cout << "Не удалось открыть файл с информацией о программе" << std::endl;
+    }
+
+    prog_name = "ARM Клиент " + prog_name;
+
+    this->setWindowTitle(QString::fromStdString(prog_name));
+
     widget = new MyWidget();
     ui->scrollArea->setWidget(widget);
     // ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
