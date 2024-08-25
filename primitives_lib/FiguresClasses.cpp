@@ -1100,6 +1100,10 @@ void
 CrookedLine::change_center_cords(
     const std::vector<std::vector<int> >& points_vector) {
     //меняет координаты начала, конца, центра многоугольника. Эта функция нужня для изменения размеров.
+
+    if (!points_vector.size())
+        return;
+
     this->points = points_vector;
     int max_x = 0;
     int max_y = 0;

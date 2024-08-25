@@ -52,7 +52,7 @@ class SchemeObjectParser : public SchemeParser
 
     //  void parseStructObject() {};
 
-    void parseLibObject(sop::ObjectParams& object_params);
+    void parseLibObject(std::ifstream& File, sop::ObjectParams& object_params);
 
     void writeFontInfo(const sop::PrimitiveParams& primitive_params);
 
@@ -85,7 +85,7 @@ protected:
                 qDebug() << "Парсер объектов: читаю группу... ";
                 parseGroup(scheme_file_, nasting_level);
                 // lae::printLog("ОК", true);
-                qDebug() << "OK\n";
+                qDebug() << "OK";
             }
             else
             {
@@ -93,7 +93,7 @@ protected:
                 qDebug() << "Парсер объектов: читаю объект... ";
                 parseObject(scheme_file_, lib_index, nasting_level);
                // lae::printLog("ОК", true);
-                qDebug() << "OK\n";
+                qDebug() << "OK";
             }
         }
         else
@@ -103,7 +103,7 @@ protected:
             CacheFileOut.open(cachefile_path_, std::ios_base::binary | std::ios_base::app);
             rewriteCacheObject(lib_index, cache_size);
             // lae::printLog("ОК", true);
-            qDebug() << "OK\n";
+            qDebug() << "OK";
         }
 
         CacheFileOut.close();

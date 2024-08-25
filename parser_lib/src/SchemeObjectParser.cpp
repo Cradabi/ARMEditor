@@ -157,7 +157,7 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
     //        parseStructObject();
     if (object_params.is_lib_object) {
         qDebug() << "Парсер объектов: читаю библ. объект...";
-        parseLibObject(object_params);
+        parseLibObject(File, object_params);
         //    else if (object_params.is_text_object)
         //        parseText();
         qDebug() << "OK";
@@ -214,7 +214,7 @@ void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level)
     }
 }
 
-void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params)
+void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& lib_object_params)
 {
     CacheFileIn.open(cachefile_path_, std::ios_base::binary);
 
@@ -325,6 +325,64 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params)
             std::vector<std::vector<int>> points = {};
             bool polygon_end = false;
             qDebug() << primitive_params.primitive_type;
+
+            switch (primitive_params.primitive_type)
+            {
+            case objects_types_.ptNone:
+                qDebug() << "неизвестный тип";
+                break;
+            case objects_types_.ptGoBtn:
+                qDebug() << "gobtn";
+                break;
+            case objects_types_.ptGoPoint:
+                qDebug() << "gopoint";
+                break;
+            case objects_types_.ptGluePoint:
+                qDebug() << "gluepoint";
+                break;
+            case objects_types_.ptLine:
+                qDebug() << "line";
+                break;
+            case objects_types_.ptText:
+                qDebug() << "text";
+                break;
+            case objects_types_.ptPolygon:
+                qDebug() << "polygon";
+                break;
+            case objects_types_.ptEllipse:
+                qDebug() << "ellipse";
+                break;
+            case objects_types_.ptRectangle:
+                qDebug() << "rect";
+                break;
+            case objects_types_.ptDuga:
+                qDebug() << "duga";
+                break;
+            case objects_types_.ptTeleupr:
+                qDebug() << "telepupr";
+                break;
+            case objects_types_.ptTeleizm:
+                qDebug() << "teleizm";
+                break;
+            case objects_types_.ptSignal:
+                qDebug() << "signal";
+                break;
+            case objects_types_.ptPicture:
+                qDebug() << "picture";
+                break;
+            case objects_types_.ptPolyLine:
+                qDebug() << "polyline";
+                break;
+            case objects_types_.ptShape:
+                qDebug() << "shape";
+                break;
+            default:
+                // lae::printLog("Парсер объектов: Неизвестный тип примитива: ");
+                    // lae::printLog((int)primitive_params.primitive_type, true);
+                        qDebug() << "неизвестный тип";
+                break;
+            }
+
             switch (primitive_params.primitive_type)
             {
             case objects_types_.ptNone:
@@ -835,6 +893,7 @@ void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::Pr
     getVector(File, primitive_params.points_vector, primitive_params.points_amount);
 
     getSomeInt(File, primitive_params.primitive_type);
+
     getSomeInt(File, primitive_params.ti_style);
 
     getColor(File, primitive_params.pen_color);
@@ -912,6 +971,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
     bool polygon_end = false;
 //    qDebug() << QString::fromStdString(primitive_params.bmp_filepath);
     qDebug() << primitive_params.primitive_type;
+
     switch (primitive_params.primitive_type)
     {
     case objects_types_.ptNone:
@@ -1068,6 +1128,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                 });
             }
         }
+        qDebug() << "Полигон считан";
         actual_vector->emplace_back(
             new Polygon(points, polygon_end, (int)(360 - object_params.angle) % 360,
                         primitive_params.pen_width, primitive_params.pen_style, object_params.hint,
@@ -1081,6 +1142,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                         }, object_params.show,
                         (int)primitive_params.brush_style,
                         object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+        qDebug() << "Полигон записан";
         break;
     case objects_types_.ptEllipse:
         qDebug() << "ellipse";

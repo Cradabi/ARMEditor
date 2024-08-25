@@ -2,7 +2,9 @@
 
 bool SchemeSectionsParser::parse() {
 
-    lae::printLog("Парсер секций: начал работу", true);
+    // lae::printLog("Парсер секций: начал работу", true);
+
+    qDebug() << "Парсер секций: начал работу";
 
     while (scheme_file_.get(byte_)) {
         // Если дошли до границ открытой секции, закрываем её
@@ -24,7 +26,9 @@ bool SchemeSectionsParser::parse() {
         closeSection();
     }
 
-    lae::printLog("Парсер секций: отработал", true);
+    //lae::printLog("Парсер секций: отработал", true);
+
+    qDebug() << "Парсер секций: отработал";
 
     return true;
 }
