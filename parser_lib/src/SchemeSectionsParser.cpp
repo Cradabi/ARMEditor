@@ -2,6 +2,8 @@
 
 bool SchemeSectionsParser::parse() {
 
+    lae::printLog("Парсер секций: начал работу", true);
+
     while (scheme_file_.get(byte_)) {
         // Если дошли до границ открытой секции, закрываем её
         while (!sections_stack_.empty() &&
@@ -21,6 +23,8 @@ bool SchemeSectionsParser::parse() {
     while (!sections_stack_.empty()) {
         closeSection();
     }
+
+    lae::printLog("Парсер секций: отработал", true);
 
     return true;
 }

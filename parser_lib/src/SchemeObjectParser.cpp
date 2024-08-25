@@ -1,6 +1,7 @@
 #include "SchemeObjectParser.h"
 #include "SchemeParser.h"
 
+
 void SchemeObjectParser::getVector(std::ifstream& File, std::vector<sop::Point>& some_vector, uint8_t vector_size)
 {
     some_vector.resize(vector_size);
@@ -154,12 +155,18 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
 
     //    if (object_params.is_struct_object)
     //        parseStructObject();
-    if (object_params.is_lib_object)
+    if (object_params.is_lib_object) {
+        qDebug() << "Парсер объектов: читаю библ. объект...";
         parseLibObject(object_params);
         //    else if (object_params.is_text_object)
         //        parseText();
-    else
+        qDebug() << "OK";
+    }
+    else {
+        qDebug() << "Парсер объектов: читаю примитив...";
         parsePrimitive(File, object_params);
+        qDebug() << "OK";
+    }
 
     writeObjectInfo(object_params);
 }
@@ -290,7 +297,6 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params)
     lae::writeLog(logs_file_, "\n\nACTUAL OBJECT PARAMS:");
     writeObjectInfo(actual_object_params);
 
-    // TODO создание библиотечного объекта
     // LibraryObject tmp_lib_object(data);
 
     sop::PrimitiveParams primitive_params;
@@ -318,6 +324,7 @@ void SchemeObjectParser::parseLibObject(sop::ObjectParams& lib_object_params)
 
             std::vector<std::vector<int>> points = {};
             bool polygon_end = false;
+            qDebug() << primitive_params.primitive_type;
             switch (primitive_params.primitive_type)
             {
             case objects_types_.ptNone:
@@ -867,13 +874,16 @@ void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::Pr
 void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& object_params)
 {
     sop::PrimitiveParams primitive_params;
-
+    qDebug() << "Парсер объектов: читаю общие поля примитивов... ";
     parsePrimitiveCommonFields(File, primitive_params);
+    qDebug() << "ОК";
 
     primitive_params.is_picture = getBool(File);
     if (primitive_params.is_picture)
     {
+        qDebug() << "Парсер объектов: читаю картинку... ";
         getPicture(File, primitive_params, primitive_params.bmp_filepath);
+        qDebug() << "ОК";
     }
 
     getSomeFloat(File, primitive_params.koeff);
@@ -900,12 +910,16 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
 
     std::vector<std::vector<int>> points = {};
     bool polygon_end = false;
+//    qDebug() << QString::fromStdString(primitive_params.bmp_filepath);
+    qDebug() << primitive_params.primitive_type;
     switch (primitive_params.primitive_type)
     {
     case objects_types_.ptNone:
+        qDebug() << "неизвестно";
         lae::printLog("Парсер объектов: Неизвестный тип примитива: ptNone\n");
         break;
     case objects_types_.ptGoBtn:
+        qDebug() << "gobtn";
         actual_vector->emplace_back(
             new TransitionButton(object_params.index, (int)round(object_params.coord_matrix[0][2] -
                                      abs((int)round(
@@ -935,6 +949,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                                  primitive_params.font.is_italic, primitive_params.font.is_underlined, 0, 0));
         break;
     case objects_types_.ptGoPoint:
+        qDebug() << "gopoint";
         actual_vector->emplace_back(new TransitionPoint(object_params.index,
                                                         object_params.coord_matrix[0][2] -
                                                         abs(primitive_params.points_vector[0].x),
@@ -951,6 +966,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                                                         primitive_params.brush_style));
         break;
     case objects_types_.ptGluePoint:
+        qDebug() << "gluepoint";
         actual_vector->emplace_back(
             new Point(object_params.coord_matrix[0][2] + primitive_params.points_vector[0].x,
                       object_params.coord_matrix[1][2] + primitive_params.points_vector[0].y,
@@ -961,6 +977,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                       }));
         break;
     case objects_types_.ptLine:
+        qDebug() << "line";
         actual_vector->emplace_back(
             new Line((int)round(object_params.coord_matrix[0][2] +
                          primitive_params.points_vector[0].x * object_params.coord_matrix[0][0]),
@@ -981,6 +998,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                      object_params.vertical_reflection_my, object_params.angle));
         break;
     case objects_types_.ptText:
+        qDebug() << "text";
         actual_vector->emplace_back(
             new Text((int)round(object_params.coord_matrix[0][2] -
                          abs((int)round(primitive_params.points_vector[0].x *
@@ -1013,6 +1031,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                      }));
         break;
     case objects_types_.ptPolygon:
+        qDebug() << "polygon";
         for (int i = 0; i < primitive_params.points_amount; i++)
         {
             if ((i + 1) == primitive_params.points_amount)
@@ -1064,6 +1083,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                         object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
         break;
     case objects_types_.ptEllipse:
+        qDebug() << "ellipse";
         actual_vector->emplace_back(
             new Ellipse(object_params.coord_matrix[0][2] - abs((int)round(
                             primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
@@ -1086,6 +1106,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                         object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
         break;
     case objects_types_.ptRectangle:
+        qDebug() << "rect";
         actual_vector->emplace_back(
             new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
                               primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
@@ -1108,7 +1129,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                           object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
         break;
     case objects_types_.ptDuga:
-
+        qDebug() << "duga";
         actual_vector->emplace_back(
             new Arc(object_params.coord_matrix[0][2] - abs((int)round(
                         primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
@@ -1132,6 +1153,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                     object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
         break;
     case objects_types_.ptTeleupr:
+        qDebug() << "telepupr";
         actual_vector->emplace_back(
             new Telecontrol((int)round(object_params.coord_matrix[0][2] -
                                 abs((int)round(primitive_params.points_vector[0].x *
@@ -1167,6 +1189,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                             }, object_params.hard_id));
         break;
     case objects_types_.ptTeleizm:
+        qDebug() << "teleizm";
         actual_vector->emplace_back(
             new Telemeasure((int)round(object_params.coord_matrix[0][2] -
                                 abs((int)round(primitive_params.points_vector[0].x *
@@ -1202,6 +1225,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                             }, object_params.hard_id));
         break;
     case objects_types_.ptSignal:
+        qDebug() << "signal";
         actual_vector->emplace_back(
             new Telesignalisation((int)round(object_params.coord_matrix[0][2] -
                                       abs((int)round(primitive_params.points_vector[0].x *
@@ -1237,6 +1261,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                                   }, object_params.hard_id));
         break;
     case objects_types_.ptPicture:
+        qDebug() << "picture";
         actual_vector->emplace_back(
             new Image(object_params.coord_matrix[0][2] - abs(primitive_params.points_vector[0].x),
                       object_params.coord_matrix[1][2] - abs(primitive_params.points_vector[0].y),
@@ -1256,6 +1281,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                       primitive_params.brush_style));
         break;
     case objects_types_.ptPolyLine:
+        qDebug() << "polyline";
         for (int i = 0; i < primitive_params.points_amount; i++)
         {
             points.push_back({
@@ -1282,6 +1308,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                             object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
         break;
     case objects_types_.ptShape:
+        qDebug() << "shape";
         actual_vector->emplace_back(
             new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
                               primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
@@ -1376,7 +1403,7 @@ SchemeObjectParser::getPicture(std::ifstream& File, sop::PrimitiveParams& primit
 
     bmp.makeBmp(bmp_filepath, primitive_params.pixmap);
 
-    bmp_filepath = "../parser lib/cache/tmp_pictures/" + bmp_filepath + ".bmp";
+    bmp_filepath = "../parser_lib/cache/tmp_pictures/" + bmp_filepath + ".bmp";
 }
 
 void SchemeObjectParser::writeObjectInfo(const sop::ObjectParams& object_params)

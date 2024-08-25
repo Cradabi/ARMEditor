@@ -3,7 +3,7 @@
 bool SchemeFileParser::parse(Scheme::SchemeParams& scheme_params, const std::string& schemefile_path)
 {
 
-    lae::printLog("Парсер начал работу", true);
+    lae::printLog("Парсер схемы: начал работу", true);
 
     setSchemeParams(scheme_params);
 
@@ -19,7 +19,7 @@ bool SchemeFileParser::parse(Scheme::SchemeParams& scheme_params, const std::str
     scheme_file_.close();
     logs_file_.close();
 
-    lae::printLog("Парсер схемы: Парсер отработал", true, 2);
+    lae::printLog("Парсер схемы: отработал", true, 2);
 
     return true;
 }

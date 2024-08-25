@@ -8,6 +8,8 @@
 #include "../primitives_lib/SchemeClass.h"
 #include "../bmp_additional/BMPFile.h"
 
+#include "QDebug"
+
 using namespace FiguresClasses;
 
 class SchemeObjectParser : public SchemeParser
@@ -71,25 +73,45 @@ protected:
     bool parse(int32_t lib_index, bool is_object = false, int32_t nasting_level = 1,
                bool is_cache = false, int32_t cache_size = 0)
     {
+
+        // lae::printLog("Парсер объектов: начал работу", true);
+        qDebug() << "Парсер объектов: начал работу";
+
         if (!is_cache)
         {
             if (!is_object)
             {
+                // lae::printLog("Парсер объектов: читаю группу... ");
+                qDebug() << "Парсер объектов: читаю группу... ";
                 parseGroup(scheme_file_, nasting_level);
+                // lae::printLog("ОК", true);
+                qDebug() << "OK\n";
             }
             else
             {
+                // lae::printLog("Парсер объектов: читаю объект... ");
+                qDebug() << "Парсер объектов: читаю объект... ";
                 parseObject(scheme_file_, lib_index, nasting_level);
+               // lae::printLog("ОК", true);
+                qDebug() << "OK\n";
             }
         }
         else
         {
+            // lae::printLog("Парсер объектов: читаю кэш... ");
+            qDebug() << "Парсер объектов: читаю кэш... ";
             CacheFileOut.open(cachefile_path_, std::ios_base::binary | std::ios_base::app);
             rewriteCacheObject(lib_index, cache_size);
+            // lae::printLog("ОК", true);
+            qDebug() << "OK\n";
         }
 
         CacheFileOut.close();
         CacheFileIn.close();
+
+        // lae::printLog("Парсер объектов: отработал", true);
+
+        qDebug() << "Парсер объектов: отработал";
 
         return true;
     }
