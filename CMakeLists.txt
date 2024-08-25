@@ -1,13 +1,17 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.14)
 project(ARM LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+
+# Добавить путь к библиотекам gtest и gmock
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt5 COMPONENTS Sql REQUIRED)
@@ -22,6 +26,7 @@ add_library(ParserLib STATIC parser_lib/src/SchemeParser.cpp parser_lib/src/Sche
 add_library(DBLib STATIC db_lib/db_connection.cpp)
 
 add_executable(${PROJECT_NAME} main.cpp application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
+
 
 #Подключаем QT к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
@@ -46,3 +51,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ParserLib)
 
 #Подключаем PrimitivesLib к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE PrimitivesLib)
+
+add_subdirectory(tests)
+
