@@ -634,7 +634,7 @@ void update_table_sign(QString str, int int1, int id)
     db.close();
 }
 
-
+/*
 QStringList get_info_from_db_config()
 {
     QString appPath = QCoreApplication::applicationDirPath();
@@ -671,7 +671,7 @@ QStringList get_info_from_db_config()
     file.close();
     return values;
 }
-
+*/
 
 QSqlQuery get_all_cp_objects(int cp_id)
 {

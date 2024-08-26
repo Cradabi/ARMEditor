@@ -400,9 +400,9 @@ TEST(UpdateTableMesTest, ExecutesUpdateSuccessfully) {
     EXPECT_CALL(mockDb, prepare(QString::fromStdString("UPDATE objects SET name = :value1, cp_name_id = :value2, current_value = :value3, min_value = :value4, max_value = :value5 WHERE id = :id")));
     EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value1"), QVariant("TestName")));
     EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value2"), QVariant(1)));
-    EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value3"), QVariant(2)));
-    EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value4"), QVariant(3)));
-    EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value5"), QVariant(4)));
+    EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value3"), QVariant(5.0)));
+    EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value4"), QVariant(6.0)));
+    EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":value5"), QVariant(7.0)));
     EXPECT_CALL(mockDb, bindValue(QString::fromStdString(":id"), QVariant(123)));
     EXPECT_CALL(mockDb, exec(QString::fromStdString(""))).WillOnce(::testing::Return(true));
     EXPECT_CALL(mockDb, close()).Times(1);
