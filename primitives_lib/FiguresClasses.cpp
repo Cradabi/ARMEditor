@@ -1682,6 +1682,13 @@ void Text::draw(QPainter& painter) {
 
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
+    int new_angle = this->get_angle() % 360;
+    while (new_angle < 0) {
+        new_angle += 360;
+    }
+    if(new_angle > 90 && new_angle < 270){
+        painter.scale(-1, -1);
+    }
     if (this->get_show()) {
         if (this->get_show_filling()) {
             QColor filling_color = {
