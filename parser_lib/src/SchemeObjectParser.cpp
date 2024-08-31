@@ -156,16 +156,16 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
     //    if (object_params.is_struct_object)
     //        parseStructObject();
     if (object_params.is_lib_object) {
-        qDebug() << "Парсер объектов: читаю библ. объект...";
+        // qDebug() << "Парсер объектов: читаю библ. объект...";
         parseLibObject(File, object_params);
         //    else if (object_params.is_text_object)
         //        parseText();
-        qDebug() << "OK";
+        // qDebug() << "OK";
     }
     else {
-        qDebug() << "Парсер объектов: читаю примитив...";
+        // qDebug() << "Парсер объектов: читаю примитив...";
         parsePrimitive(File, object_params);
-        qDebug() << "OK";
+        // qDebug() << "OK";
     }
 
     writeObjectInfo(object_params);
@@ -952,16 +952,16 @@ void SchemeObjectParser::parsePrimitiveCommonFields(std::ifstream& File, sop::Pr
 void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& object_params)
 {
     sop::PrimitiveParams primitive_params;
-    qDebug() << "Парсер объектов: читаю общие поля примитивов... ";
+    // qDebug() << "Парсер объектов: читаю общие поля примитивов... ";
     parsePrimitiveCommonFields(File, primitive_params);
-    qDebug() << "ОК";
+    // qDebug() << "ОК";
 
     primitive_params.is_picture = getBool(File);
     if (primitive_params.is_picture)
     {
-        qDebug() << "Парсер объектов: читаю картинку... ";
+        // qDebug() << "Парсер объектов: читаю картинку... ";
         getPicture(File, primitive_params, primitive_params.bmp_filepath);
-        qDebug() << "ОК";
+        // qDebug() << "ОК";
     }
 
     getSomeFloat(File, primitive_params.koeff);

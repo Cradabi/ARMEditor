@@ -75,35 +75,35 @@ protected:
     {
 
         // lae::printLog("Парсер объектов: начал работу", true);
-        qDebug() << "Парсер объектов: начал работу";
+        // qDebug() << "Парсер объектов: начал работу";
 
         if (!is_cache)
         {
             if (!is_object)
             {
                 // lae::printLog("Парсер объектов: читаю группу... ");
-                qDebug() << "Парсер объектов: читаю группу... ";
+                // qDebug() << "Парсер объектов: читаю группу... ";
                 parseGroup(scheme_file_, nasting_level);
                 // lae::printLog("ОК", true);
-                qDebug() << "OK";
+                // qDebug() << "OK";
             }
             else
             {
                 // lae::printLog("Парсер объектов: читаю объект... ");
-                qDebug() << "Парсер объектов: читаю объект... ";
+                // qDebug() << "Парсер объектов: читаю объект... ";
                 parseObject(scheme_file_, lib_index, nasting_level);
                // lae::printLog("ОК", true);
-                qDebug() << "OK";
+               // qDebug() << "OK";
             }
         }
         else
         {
             // lae::printLog("Парсер объектов: читаю кэш... ");
-            qDebug() << "Парсер объектов: читаю кэш... ";
+            // qDebug() << "Парсер объектов: читаю кэш... ";
             CacheFileOut.open(cachefile_path_, std::ios_base::binary | std::ios_base::app);
             rewriteCacheObject(lib_index, cache_size);
             // lae::printLog("ОК", true);
-            qDebug() << "OK";
+           // Debug() << "OK";
         }
 
         CacheFileOut.close();
@@ -111,7 +111,7 @@ protected:
 
         // lae::printLog("Парсер объектов: отработал", true);
 
-        qDebug() << "Парсер объектов: отработал";
+        // qDebug() << "Парсер объектов: отработал";
 
         return true;
     }
