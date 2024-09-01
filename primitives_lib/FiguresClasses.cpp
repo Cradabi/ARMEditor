@@ -2621,17 +2621,18 @@ void LibraryObject::draw(QPainter& painter) {
         painter.save();
         painter.translate(this->center_x, this->center_y);
         // painter.rotate((360 - this->angle) % 360);
-        int new_angle = this->get_angle() % 360;
-        while (new_angle < 0) {
-            new_angle += 360;
-        }
-        if(new_angle > 90 && new_angle < 270){
-            painter.rotate(new_angle + 180);
-        }else
-        {
-            painter.rotate(new_angle);
-        }
-        qDebug() << this->angle;
+        // int new_angle = this->get_angle() % 360;
+        // while (new_angle < 0) {
+        //     new_angle += 360;
+        // }
+        // if(new_angle > 90 && new_angle < 270){
+        //     painter.rotate(new_angle + 180);
+        // }else
+        // {
+        //     painter.rotate(new_angle);
+        // }
+        painter.rotate(this->angle % 360);
+        // qDebug() << this->angle;
         if (condition < patterns.size() && condition >= 0) {
             for (auto obj: patterns[condition]) {
                 obj->draw(painter);
