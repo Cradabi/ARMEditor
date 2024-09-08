@@ -1002,8 +1002,9 @@ void Arc::draw(QPainter& painter) {
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
                             ((360 - (this->end_angle - this->start_angle)) % 360) * (-16));
         } else {
+            QColor color_arc = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
             QColor filling_color = {Qt::transparent};
-            painter.setPen(filling_color);
+            painter.setPen(QPen(color_arc, this->get_line_width(), style_vector[this->get_style_line()], Qt::RoundCap, Qt::RoundJoin));
             painter.setBrush(filling_color);
             painter.drawArc(QRect((-1) * (this->get_width() / 2), (-1) * (this->get_height() / 2), this->get_width(),
                                   this->get_height()), ((360 - this->get_start_angle()) % 360) * (-16),
@@ -1092,6 +1093,7 @@ void CrookedLine::draw(QPainter& painter) {
             qpoints[i] = QPoint(this->get_points()[i][0],
                                 this->get_points()[i][1]);
         }
+        qDebug() << "Polyline";
         painter.drawPolyline(qpoints, this->get_points().size());
     }
     painter.restore();
@@ -1255,11 +1257,15 @@ void Polygon::draw(QPainter& painter) {
             qpoints[i] = QPoint(this->get_points()[i][0],
                                 this->get_points()[i][1]);
         }
-        if (this->get_end_polygon()) {
-            painter.drawPolygon(qpoints, this->get_points().size());
-        } else {
-            painter.drawPolyline(qpoints, this->get_points().size());
-        }
+        painter.drawPolygon(qpoints, this->get_points().size());
+        // if (this->get_end_polygon()) {
+        //     qDebug() << "Polygon";
+        //     painter.drawPolygon(qpoints, this->get_points().size());
+        // }
+        // else {
+        //     qDebug() << "Polyline2";
+        //     painter.drawPolyline(qpoints, this->get_points().size());
+        // }
     }
     painter.restore();
 }
