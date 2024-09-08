@@ -333,7 +333,15 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
         {
             parsePrimitiveCommonFields(CacheFileIn, primitive_params);
 
-            primitive_params.has_info_for_analysis = getBool(CacheFileIn);
+            // primitive_params.has_info_for_analysis = getBool(CacheFileIn);
+
+            primitive_params.is_picture = getBool(CacheFileIn);
+            if (primitive_params.is_picture)
+            {
+                // qDebug() << "Парсер объектов: читаю картинку... ";
+                getPicture(CacheFileIn, primitive_params, primitive_params.bmp_filepath);
+                // qDebug() << "ОК";
+            }
 
             // TODO switch для б. объектов
             // Нужные структуры:
