@@ -130,8 +130,7 @@ public slots:
                 {
                     cur_prim->set_condition(db_request_result_actual.value(2).toInt());
                 }
-                else if (cur_prim->get_type_object() == "Телеизмерение" || cur_prim->get_type_object() ==
-                    "Телеконтроль" || cur_prim->get_type_object() == "Телесигнализация")
+                else if (cur_prim->get_type_object() == "Телеизмерение")
                 {
                     cur_prim->set_text(db_request_result_actual.value(3).toString().toStdString());
                 }

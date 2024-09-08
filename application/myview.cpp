@@ -99,149 +99,149 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
         // showOrderDialog(point);
 
         for (auto object : scheme_params.objects_vector)
-    {
-        std::string tp_obj = object->get_type_object();
-        if (tp_obj == "Библиотечный объект")
         {
-            QPoint original_point = point;
-
-            // Создаем объект преобразования
-            QTransform transform;
-            transform.translate(-1 * (object->get_x() + object->get_width() / 2),
-                                -1 * (object->get_y() + object->get_height() / 2));
-
-            // Применяем преобразование к точке
-            QPoint newPoint = transform.map(point);
-            if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
-                newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
+            std::string tp_obj = object->get_type_object();
+            if (tp_obj == "Библиотечный объект")
             {
-                transform.reset();
+                QPoint original_point = point;
 
-                int hor_off = 30;
-                int ver_off = -30;
+                // Создаем объект преобразования
+                QTransform transform;
+                transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+                                    -1 * (object->get_y() + object->get_height() / 2));
 
-                QDialog dialog(this);
-                dialog.setWindowTitle("Создание приказа");
-
-                dialog.setFixedSize(400, 300);
-
-                dialog.move(event->globalX() + hor_off, event->globalY() + ver_off);
-                QSqlQuery db_request_result = connection_to_db_with_lib();
-                QSqlQuery db_request_result_cp = connection_to_cp_db();
-
-                QString id = "None";
-                QString name = "None";
-                QString cp_id = "None";
-                QString normal_state = "None";
-                QString fail_state = "None";
-                QString cur_state = "None";
-                QString cp_name = "None";
-                QString obj_type = "None";
-                QString obj_name = "None";
-
-                this->cur_obj_id = object->get_id();
-
-                while (db_request_result.next())
+                // Применяем преобразование к точке
+                QPoint newPoint = transform.map(point);
+                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
                 {
-                    if (db_request_result.value(0).toInt() == object->get_id())
-                    {
-                        id = db_request_result.value(0).toString();
-                        name = db_request_result.value(1).toString();
-                        cp_id = db_request_result.value(2).toString();
-                        normal_state = db_request_result.value(3).toString();
-                        fail_state = db_request_result.value(4).toString();
-                        cur_state = db_request_result.value(5).toString();
-                        obj_type = db_request_result.value(6).toString();
-                        obj_name = db_request_result.value(7).toString();
+                    transform.reset();
 
-                        while (db_request_result_cp.next())
+                    int hor_off = 30;
+                    int ver_off = -30;
+
+                    QDialog dialog(this);
+                    dialog.setWindowTitle("Создание приказа");
+
+                    dialog.setFixedSize(400, 300);
+
+                    dialog.move(event->globalX() + hor_off, event->globalY() + ver_off);
+                    QSqlQuery db_request_result = connection_to_db_with_lib();
+                    QSqlQuery db_request_result_cp = connection_to_cp_db();
+
+                    QString id = "None";
+                    QString name = "None";
+                    QString cp_id = "None";
+                    QString normal_state = "None";
+                    QString fail_state = "None";
+                    QString cur_state = "None";
+                    QString cp_name = "None";
+                    QString obj_type = "None";
+                    QString obj_name = "None";
+
+                    this->cur_obj_id = object->get_id();
+
+                    while (db_request_result.next())
+                    {
+                        if (db_request_result.value(0).toInt() == object->get_id())
                         {
-                            if (db_request_result_cp.value(0).toString() == cp_id)
+                            id = db_request_result.value(0).toString();
+                            name = db_request_result.value(1).toString();
+                            cp_id = db_request_result.value(2).toString();
+                            normal_state = db_request_result.value(3).toString();
+                            fail_state = db_request_result.value(4).toString();
+                            cur_state = db_request_result.value(5).toString();
+                            obj_type = db_request_result.value(6).toString();
+                            obj_name = db_request_result.value(7).toString();
+
+                            while (db_request_result_cp.next())
                             {
-                                if (db_request_result_cp.value(1).toString() == "None")
+                                if (db_request_result_cp.value(0).toString() == cp_id)
                                 {
-                                    cp_name = db_request_result_cp.value(1).toString();
-                                }
-                                else
-                                {
-                                    cp_name = db_request_result_cp.value(2).toString() + " " + db_request_result_cp.
-                                        value(1).toString();;
+                                    if (db_request_result_cp.value(1).toString() == "None")
+                                    {
+                                        cp_name = db_request_result_cp.value(1).toString();
+                                    }
+                                    else
+                                    {
+                                        cp_name = db_request_result_cp.value(2).toString() + " " + db_request_result_cp.
+                                            value(1).toString();;
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                QVBoxLayout* layout = new QVBoxLayout(&dialog);
+                    QVBoxLayout* layout = new QVBoxLayout(&dialog);
 
-                QLabel* label = new QLabel(QString("Объект: %1").arg(name));
-                label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-                layout->addWidget(label);
+                    QLabel* label = new QLabel(QString("Объект: %1").arg(name));
+                    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    layout->addWidget(label);
 
-                label = new QLabel(QString("Наим. контрольного пункта: %1").arg(cp_name));
-                label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-                layout->addWidget(label);
+                    label = new QLabel(QString("Наим. контрольного пункта: %1").arg(cp_name));
+                    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    layout->addWidget(label);
 
-                label = new QLabel(QString("Нормальное состояние объекта: %1").arg(normal_state));
-                label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-                layout->addWidget(label);
+                    label = new QLabel(QString("Нормальное состояние объекта: %1").arg(normal_state));
+                    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    layout->addWidget(label);
 
-                label = new QLabel(QString("Cостояние объекта при неисправности: %1").arg(fail_state));
-                label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-                layout->addWidget(label);
+                    label = new QLabel(QString("Cостояние объекта при неисправности: %1").arg(fail_state));
+                    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    layout->addWidget(label);
 
-                label = new QLabel(QString("Текущее состояние объекта: %1").arg(cur_state));
-                label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-                layout->addWidget(label);
+                    label = new QLabel(QString("Текущее состояние объекта: %1").arg(cur_state));
+                    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    layout->addWidget(label);
 
-                QPushButton* createOrderButton = new QPushButton("Создать приказ");
-                layout->addWidget(createOrderButton);
+                    QPushButton* createOrderButton = new QPushButton("Создать приказ");
+                    layout->addWidget(createOrderButton);
 
-                QLabel* timerLabel = new QLabel();
-                QPushButton* cancelButton = new QPushButton("Отменить");
-                cancelButton->hide();
+                    QLabel* timerLabel = new QLabel();
+                    QPushButton* cancelButton = new QPushButton("Отменить");
+                    cancelButton->hide();
 
-                layout->addWidget(timerLabel);
-                layout->addWidget(cancelButton);
+                    layout->addWidget(timerLabel);
+                    layout->addWidget(cancelButton);
 
-                QTimer timer;
-                int remainingTime = 5;
+                    QTimer timer;
+                    int remainingTime = 5;
 
-                connect(createOrderButton, &QPushButton::clicked, [&]()
-                {
-                    createOrderButton->setEnabled(false);
-                    cancelButton->show();
-                    timer.start(1000);
-                });
+                    connect(createOrderButton, &QPushButton::clicked, [&]()
+                    {
+                        createOrderButton->setEnabled(false);
+                        cancelButton->show();
+                        timer.start(1000);
+                    });
 
-                connect(&timer, &QTimer::timeout, [&]()
-                {
-                    --remainingTime;
-                    timerLabel->setText(QString("Время до отправки приказа: %1").arg(remainingTime));
+                    connect(&timer, &QTimer::timeout, [&]()
+                    {
+                        --remainingTime;
+                        timerLabel->setText(QString("Время до отправки приказа: %1").arg(remainingTime));
 
-                    if (remainingTime == 0)
+                        if (remainingTime == 0)
+                        {
+                            timer.stop();
+
+                            int state = !cur_state.toInt();
+
+                            update_table_lib_short(state, id.toInt());
+
+                            timerLabel->setText("Приказ отправлен");
+                            cancelButton->hide();
+                        }
+                    });
+
+                    connect(cancelButton, &QPushButton::clicked, [&]()
                     {
                         timer.stop();
+                        timerLabel->setText("Приказ отменен");
+                    });
 
-                        int state = !cur_state.toInt();
-
-                        update_table_lib_short(state, id.toInt());
-
-                        timerLabel->setText("Приказ отправлен");
-                        cancelButton->hide();
-                    }
-                });
-
-                connect(cancelButton, &QPushButton::clicked, [&]()
-                {
-                    timer.stop();
-                    timerLabel->setText("Приказ отменен");
-                });
-
-                dialog.exec();
+                    dialog.exec();
+                }
             }
         }
-    }
     }
 }
 
@@ -450,7 +450,6 @@ void MyView::mousePressEvent(QMouseEvent* event)
                     mainLayout->addLayout(row7Layout);
 
 
-
                     QTableWidget* table = new QTableWidget();
 
                     table->setColumnCount(2);
@@ -460,15 +459,17 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     // Заполняем таблицу данными
                     int row = 0;
-                    while (cp_objects.next()) {
+                    while (cp_objects.next())
+                    {
                         table->insertRow(row);
-                        for (int col = 0; col < 2; ++col) {
+                        for (int col = 0; col < 2; ++col)
+                        {
                             QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
                             table->setItem(row, col, item);
                         }
                         ++row;
                     }
-                    if(table->rowCount() >= 7)
+                    if (table->rowCount() >= 7)
                     {
                         table->setFixedHeight(250);
                     }
@@ -699,15 +700,17 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     // Заполняем таблицу данными
                     int row = 0;
-                    while (cp_objects.next()) {
+                    while (cp_objects.next())
+                    {
                         table->insertRow(row);
-                        for (int col = 0; col < 2; ++col) {
+                        for (int col = 0; col < 2; ++col)
+                        {
                             QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
                             table->setItem(row, col, item);
                         }
                         ++row;
                     }
-                    if(table->rowCount() >= 7)
+                    if (table->rowCount() >= 7)
                     {
                         table->setFixedHeight(250);
                     }
@@ -852,15 +855,17 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     // Заполняем таблицу данными
                     int row = 0;
-                    while (cp_objects.next()) {
+                    while (cp_objects.next())
+                    {
                         table->insertRow(row);
-                        for (int col = 0; col < 2; ++col) {
+                        for (int col = 0; col < 2; ++col)
+                        {
                             QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
                             table->setItem(row, col, item);
                         }
                         ++row;
                     }
-                    if(table->rowCount() >= 7)
+                    if (table->rowCount() >= 7)
                     {
                         table->setFixedHeight(250);
                     }
@@ -1003,15 +1008,17 @@ void MyView::mousePressEvent(QMouseEvent* event)
 
                     // Заполняем таблицу данными
                     int row = 0;
-                    while (cp_objects.next()) {
+                    while (cp_objects.next())
+                    {
                         table->insertRow(row);
-                        for (int col = 0; col < 2; ++col) {
+                        for (int col = 0; col < 2; ++col)
+                        {
                             QTableWidgetItem* item = new QTableWidgetItem(cp_objects.value(col).toString());
                             table->setItem(row, col, item);
                         }
                         ++row;
                     }
-                    if(table->rowCount() >= 7)
+                    if (table->rowCount() >= 7)
                     {
                         table->setFixedHeight(250);
                     }
