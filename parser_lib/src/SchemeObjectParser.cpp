@@ -155,14 +155,16 @@ void SchemeObjectParser::parseObject(std::ifstream& File, int32_t lib_index, int
 
     //    if (object_params.is_struct_object)
     //        parseStructObject();
-    if (object_params.is_lib_object) {
+    if (object_params.is_lib_object)
+    {
         // qDebug() << "Парсер объектов: читаю библ. объект...";
         parseLibObject(File, object_params);
         //    else if (object_params.is_text_object)
         //        parseText();
         // qDebug() << "OK";
     }
-    else {
+    else
+    {
         // qDebug() << "Парсер объектов: читаю примитив...";
         parsePrimitive(File, object_params);
         // qDebug() << "OK";
@@ -301,18 +303,20 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
 
     sop::PrimitiveParams primitive_params;
     std::vector<std::vector<Primitive*>> patterns;
-    double maxAbs = std::max(std::abs(lib_object_params.coord_matrix[0][0]), std::abs(lib_object_params.coord_matrix[0][1]));
-    double radians = lib_object_params.angle * M_PI / 180.0;   // Переводим градусы в радианы
-    double sinValue = std::abs(std::sin(std::abs(radians)));  // Находим синус модуля угла
+    double maxAbs = std::max(std::abs(lib_object_params.coord_matrix[0][0]),
+                             std::abs(lib_object_params.coord_matrix[0][1]));
+    double radians = lib_object_params.angle * M_PI / 180.0; // Переводим градусы в радианы
+    double sinValue = std::abs(std::sin(std::abs(radians))); // Находим синус модуля угла
     double cosValue = std::abs(std::cos(std::abs(radians)));
     double scale = 1;
     double scval = 1;
 
     // Проверка на синус, чтобы избежать деления на 0
-    if(sinValue<0 || sinValue > 1 || cosValue<0 || cosValue > 1)
+    if (sinValue < 0 || sinValue > 1 || cosValue < 0 || cosValue > 1)
     {
         qDebug() << "Некорректный синус";
-    }else
+    }
+    else
     {
         // Деление максимального числа по модулю на синус
         // qDebug() << sinValue << cosValue;
@@ -410,6 +414,18 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
             //     break;
             // }
 
+            double im1;
+            double im2;
+            if(abs(primitive_params.indentity_matrix[0][0]) > 0.1)
+            {
+                im1 = primitive_params.indentity_matrix[0][0];
+                im2 = primitive_params.indentity_matrix[1][1];
+            }else
+            {
+                im1 = primitive_params.indentity_matrix[0][1];
+                im2 = primitive_params.indentity_matrix[1][0];
+            }
+
             switch (primitive_params.primitive_type)
             {
             case objects_types_.ptNone:
@@ -419,16 +435,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new TransitionButton(0, (int)round(primitive_params.indentity_matrix[0][2] * scale +
                                              primitive_params.points_vector[0].x * scale *
-                                             primitive_params.indentity_matrix[0][0]),
+                                             im1),
                                          (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                              primitive_params.points_vector[0].y * scale *
-                                             primitive_params.indentity_matrix[1][1]),
+                                             im2),
                                          (int)round((primitive_params.points_vector[2].x -
                                                  primitive_params.points_vector[0].x) * scale *
-                                             primitive_params.indentity_matrix[0][0]),
+                                             im1),
                                          (int)round((primitive_params.points_vector[2].y -
                                                  primitive_params.points_vector[0].y) * scale *
-                                             primitive_params.indentity_matrix[1][1]),
+                                             im2),
                                          (int)(360 - primitive_params.primitive_angle) % 360,
                                          {
                                              primitive_params.brush_color.red,
@@ -452,16 +468,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new TransitionPoint(0, (int)round(primitive_params.indentity_matrix[0][2] * scale +
                                             primitive_params.points_vector[0].x * scale *
-                                            primitive_params.indentity_matrix[0][0]),
+                                            im1),
                                         (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                             primitive_params.points_vector[0].y * scale *
-                                            primitive_params.indentity_matrix[1][1]),
+                                            im2),
                                         (int)round((primitive_params.points_vector[2].x -
                                                 primitive_params.points_vector[0].x) * scale *
-                                            primitive_params.indentity_matrix[0][0]),
+                                            im1),
                                         (int)round((primitive_params.points_vector[2].y -
                                                 primitive_params.points_vector[0].y) * scale *
-                                            primitive_params.indentity_matrix[1][1]),
+                                            im2),
                                         {
                                             primitive_params.brush_color.red,
                                             primitive_params.brush_color.green,
@@ -502,16 +518,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Text((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                  primitive_params.points_vector[0].x * scale *
-                                 primitive_params.indentity_matrix[0][0]),
+                                 im1),
                              (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                  primitive_params.points_vector[0].y * scale *
-                                 primitive_params.indentity_matrix[1][1]),
+                                 im2),
                              (int)round((primitive_params.points_vector[2].x -
                                      primitive_params.points_vector[0].x) * scale *
-                                 primitive_params.indentity_matrix[0][0]),
+                                 im1),
                              (int)round((primitive_params.points_vector[2].y -
                                      primitive_params.points_vector[0].y) * scale *
-                                 primitive_params.indentity_matrix[1][1]),
+                                 im2),
                              (int)(360 - primitive_params.primitive_angle) % 360, primitive_params.text,
                              "", primitive_params.pen_style, primitive_params.pen_width,
                              {
@@ -550,11 +566,11 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                                 (int)round(lib_object_params.coord_matrix[0][2] +
                                     primitive_params.indentity_matrix[0][2] * scale +
                                     primitive_params.points_vector[i].x * scale *
-                                    primitive_params.indentity_matrix[0][0]),
+                                    im1),
                                 (int)round(lib_object_params.coord_matrix[1][2] +
                                     primitive_params.indentity_matrix[1][2] * scale +
                                     primitive_params.points_vector[i].y * scale *
-                                    primitive_params.indentity_matrix[1][1])
+                                    im2)
                             });
                             polygon_end = false;
                         }
@@ -565,11 +581,11 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                             (int)round(lib_object_params.coord_matrix[0][2] +
                                 primitive_params.indentity_matrix[0][2] * scale +
                                 primitive_params.points_vector[i].x * scale *
-                                primitive_params.indentity_matrix[0][0]),
+                                im1),
                             (int)round(lib_object_params.coord_matrix[1][2] +
                                 primitive_params.indentity_matrix[1][2] * scale +
                                 primitive_params.points_vector[i].y * scale *
-                                primitive_params.indentity_matrix[1][1])
+                                im2)
                         });
                     }
                 }
@@ -591,16 +607,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Ellipse((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                     primitive_params.points_vector[0].x * scale *
-                                    primitive_params.indentity_matrix[0][0]),
+                                    im1),
                                 (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                     primitive_params.points_vector[0].y * scale *
-                                    primitive_params.indentity_matrix[1][1]),
+                                    im2),
                                 (int)round((primitive_params.points_vector[2].x -
                                         primitive_params.points_vector[0].x) * scale *
-                                    primitive_params.indentity_matrix[0][0]),
+                                    im1),
                                 (int)round((primitive_params.points_vector[2].y -
                                         primitive_params.points_vector[0].y) * scale *
-                                    primitive_params.indentity_matrix[1][1]),
+                                    im2),
                                 (int)(360 - primitive_params.primitive_angle) % 360,
                                 primitive_params.pen_width, primitive_params.pen_style,
                                 {
@@ -614,21 +630,30 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                                 0, 0));
                 break;
             case objects_types_.ptRectangle:
+                // qDebug() << scale;
+                // qDebug() << primitive_params.indentity_matrix[0][2] << primitive_params.points_vector[0].x <<
+                //     primitive_params.indentity_matrix[0][0];
+                // qDebug() << primitive_params.indentity_matrix[1][2] << primitive_params.points_vector[0].y <<
+                //     primitive_params.indentity_matrix[1][1];
+                // qDebug() << primitive_params.points_vector[2].x << primitive_params.indentity_matrix[0][0] <<
+                //     primitive_params.points_vector[0].x << primitive_params.indentity_matrix[0][0];
+                // qDebug() << primitive_params.points_vector[2].y << primitive_params.indentity_matrix[1][1] <<
+                //     primitive_params.points_vector[0].y << primitive_params.indentity_matrix[1][1];
                 primitives_in_pattern.push_back(
                     new Rectangle((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                       primitive_params.points_vector[0].x * scale *
-                                      primitive_params.indentity_matrix[0][0]),
+                                      im1),
                                   (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                       primitive_params.points_vector[0].y * scale *
-                                      primitive_params.indentity_matrix[1][1]),
+                                      im2),
                                   (int)round((primitive_params.points_vector[2].x * scale *
-                                      primitive_params.indentity_matrix[0][0] -
+                                      im1 -
                                       primitive_params.points_vector[0].x * scale *
-                                      primitive_params.indentity_matrix[0][0])),
+                                      im1)),
                                   (int)round((primitive_params.points_vector[2].y * scale *
-                                      primitive_params.indentity_matrix[1][1] -
+                                      im2 -
                                       primitive_params.points_vector[0].y * scale *
-                                      primitive_params.indentity_matrix[1][1])),
+                                      im2)),
                                   (int)(360 - primitive_params.primitive_angle) % 360,
                                   primitive_params.pen_width, primitive_params.pen_style,
                                   {
@@ -646,16 +671,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Arc((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                 primitive_params.points_vector[0].x * scale *
-                                primitive_params.indentity_matrix[0][0]),
+                                im1),
                             (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                 primitive_params.points_vector[0].y * scale *
-                                primitive_params.indentity_matrix[1][1]),
+                                im2),
                             (int)round((primitive_params.points_vector[2].x -
                                     primitive_params.points_vector[0].x) * scale *
-                                primitive_params.indentity_matrix[0][0]),
+                                im1),
                             (int)round((primitive_params.points_vector[2].y -
                                     primitive_params.points_vector[0].y) * scale *
-                                primitive_params.indentity_matrix[1][1]),
+                                im2),
                             (int)(360 - primitive_params.primitive_angle) % 360,
                             (int)primitive_params.points_vector[4].x % 360,
                             (int)primitive_params.points_vector[4].y % 360,
@@ -674,16 +699,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Telecontrol((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                         primitive_params.points_vector[0].x * scale *
-                                        primitive_params.indentity_matrix[0][0]),
+                                        im1),
                                     (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                         primitive_params.points_vector[0].y * scale *
-                                        primitive_params.indentity_matrix[1][1]),
+                                        im2),
                                     (int)round((primitive_params.points_vector[2].x -
                                             primitive_params.points_vector[0].x) * scale *
-                                        primitive_params.indentity_matrix[0][0]),
+                                        im1),
                                     (int)round((primitive_params.points_vector[2].y -
                                             primitive_params.points_vector[0].y) * scale *
-                                        primitive_params.indentity_matrix[1][1]),
+                                        im2),
                                     (int)(360 - primitive_params.primitive_angle) % 360,
                                     primitive_params.text,
                                     "", primitive_params.pen_style, primitive_params.pen_width,
@@ -711,16 +736,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Telemeasure((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                         primitive_params.points_vector[0].x * scale *
-                                        primitive_params.indentity_matrix[0][0]),
+                                        im1),
                                     (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                         primitive_params.points_vector[0].y * scale *
-                                        primitive_params.indentity_matrix[1][1]),
+                                        im2),
                                     (int)round((primitive_params.points_vector[2].x -
                                             primitive_params.points_vector[0].x) * scale *
-                                        primitive_params.indentity_matrix[0][0]),
+                                        im1),
                                     (int)round((primitive_params.points_vector[2].y -
                                             primitive_params.points_vector[0].y) * scale *
-                                        primitive_params.indentity_matrix[1][1]),
+                                        im2),
                                     (int)(360 - primitive_params.primitive_angle) % 360,
                                     primitive_params.text,
                                     "", primitive_params.pen_style, primitive_params.pen_width,
@@ -748,16 +773,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Telesignalisation((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                               primitive_params.points_vector[0].x * scale *
-                                              primitive_params.indentity_matrix[0][0]),
+                                              im1),
                                           (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                               primitive_params.points_vector[0].y * scale *
-                                              primitive_params.indentity_matrix[1][1]),
+                                              im2),
                                           (int)round((primitive_params.points_vector[2].x -
                                                   primitive_params.points_vector[0].x) * scale *
-                                              primitive_params.indentity_matrix[0][0]),
+                                              im1),
                                           (int)round((primitive_params.points_vector[2].y -
                                                   primitive_params.points_vector[0].y) * scale *
-                                              primitive_params.indentity_matrix[1][1]),
+                                              im2),
                                           (int)(360 - primitive_params.primitive_angle) % 360,
                                           primitive_params.text,
                                           "", primitive_params.pen_style, primitive_params.pen_width,
@@ -788,16 +813,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Image((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                   primitive_params.points_vector[0].x * scale *
-                                  primitive_params.indentity_matrix[0][0]),
+                                  im1),
                               (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                   primitive_params.points_vector[0].y * scale *
-                                  primitive_params.indentity_matrix[1][1]),
+                                  im2),
                               (int)round((primitive_params.points_vector[2].x -
                                       primitive_params.points_vector[0].x) * scale *
-                                  primitive_params.indentity_matrix[0][0]),
+                                  im1),
                               (int)round((primitive_params.points_vector[2].y -
                                       primitive_params.points_vector[0].y) * scale *
-                                  primitive_params.indentity_matrix[1][1]),
+                                  im2),
                               primitive_params.bmp_filepath,
                               (int)(360 - primitive_params.primitive_angle) % 360,
                               primitive_params.pen_width,
@@ -822,11 +847,11 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                         (int)round(lib_object_params.coord_matrix[0][2] +
                             primitive_params.indentity_matrix[0][2] * scale +
                             primitive_params.points_vector[i].x * scale *
-                            primitive_params.indentity_matrix[0][0]),
+                            im1),
                         (int)round(lib_object_params.coord_matrix[1][2] +
                             primitive_params.indentity_matrix[1][2] * scale +
                             primitive_params.points_vector[i].y * scale *
-                            primitive_params.indentity_matrix[1][1])
+                            im2)
                     });
                 }
                 primitives_in_pattern.push_back(
@@ -848,18 +873,18 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 primitives_in_pattern.push_back(
                     new Rectangle((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                       primitive_params.points_vector[0].x * scale *
-                                      primitive_params.indentity_matrix[0][0]),
+                                      im1),
                                   (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                       primitive_params.points_vector[0].y * scale *
-                                      primitive_params.indentity_matrix[1][1]),
+                                      im2),
                                   (int)round((primitive_params.points_vector[2].x * scale *
-                                      primitive_params.indentity_matrix[0][0] -
+                                      im1 -
                                       primitive_params.points_vector[0].x * scale *
-                                      primitive_params.indentity_matrix[0][0])),
+                                      im1)),
                                   (int)round((primitive_params.points_vector[2].y * scale *
-                                      primitive_params.indentity_matrix[1][1] -
+                                      im2 -
                                       primitive_params.points_vector[0].y * scale *
-                                      primitive_params.indentity_matrix[1][1])),
+                                      im2)),
                                   (int)(360 - primitive_params.primitive_angle) % 360,
                                   primitive_params.pen_width, primitive_params.pen_style,
                                   {
@@ -996,9 +1021,20 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
 
     std::vector<std::vector<int>> points = {};
     bool polygon_end = false;
-//    qDebug() << QString::fromStdString(primitive_params.bmp_filepath);
+    //    qDebug() << QString::fromStdString(primitive_params.bmp_filepath);
     // qDebug() << primitive_params.primitive_type;
-
+    double c_m1;
+    double c_m2;
+    if (abs(object_params.coord_matrix[0][0]) > 0.1)
+    {
+        c_m1 = object_params.coord_matrix[0][0];
+        c_m2 = object_params.coord_matrix[1][1];
+    }
+    else
+    {
+        c_m1 = object_params.coord_matrix[0][1];
+        c_m2 = object_params.coord_matrix[1][0];
+    }
     switch (primitive_params.primitive_type)
     {
     case objects_types_.ptNone:
@@ -1011,16 +1047,16 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
             new TransitionButton(object_params.index, (int)round(object_params.coord_matrix[0][2] -
                                      abs((int)round(
                                          primitive_params.points_vector[0].x *
-                                         object_params.coord_matrix[0][0]))),
+                                         c_m1))),
                                  (int)round(object_params.coord_matrix[1][2] -
                                      abs((int)round(primitive_params.points_vector[0].y *
-                                         object_params.coord_matrix[1][1]))),
+                                         c_m2))),
                                  abs((int)round(
                                      primitive_params.points_vector[0].x * 2 *
-                                     object_params.coord_matrix[0][0])),
+                                     c_m1)),
                                  abs((int)round(
                                      primitive_params.points_vector[0].y * 2 *
-                                     object_params.coord_matrix[1][1])),
+                                     c_m2)),
                                  (int)(360 - object_params.angle) % 360, {
                                      primitive_params.brush_color.red,
                                      primitive_params.brush_color.green,
@@ -1064,16 +1100,15 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                       }));
         break;
     case objects_types_.ptLine:
-        // qDebug() << "line";
         actual_vector->emplace_back(
             new Line((int)round(object_params.coord_matrix[0][2] +
-                         primitive_params.points_vector[0].x * object_params.coord_matrix[0][0]),
+                         primitive_params.points_vector[0].x * c_m1),
                      (int)round(object_params.coord_matrix[1][2] +
-                         primitive_params.points_vector[0].y * object_params.coord_matrix[0][0]),
+                         primitive_params.points_vector[0].y * c_m1),
                      (int)round(object_params.coord_matrix[0][2] +
-                         primitive_params.points_vector[1].x * object_params.coord_matrix[0][0]),
+                         primitive_params.points_vector[1].x * c_m1),
                      (int)round(object_params.coord_matrix[1][2] +
-                         primitive_params.points_vector[1].y * object_params.coord_matrix[0][0]),
+                         primitive_params.points_vector[1].y * c_m1),
                      primitive_params.text, object_params.hint, object_params.show,
                      primitive_params.pen_style, 0, primitive_params.pen_width,
                      primitive_params.style_start,
@@ -1089,14 +1124,14 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         actual_vector->emplace_back(
             new Text((int)round(object_params.coord_matrix[0][2] -
                          abs((int)round(primitive_params.points_vector[0].x *
-                             object_params.coord_matrix[0][0]))),
+                             c_m1))),
                      (int)round(object_params.coord_matrix[1][2] -
                          abs((int)round(primitive_params.points_vector[0].y *
-                             object_params.coord_matrix[1][1]))),
+                             c_m2))),
                      abs((int)round(
-                         primitive_params.points_vector[0].x * 2 * object_params.coord_matrix[0][0])),
+                         primitive_params.points_vector[0].x * 2 * c_m1)),
                      abs((int)round(
-                         primitive_params.points_vector[0].y * 2 * object_params.coord_matrix[1][1])),
+                         primitive_params.points_vector[0].y * 2 * c_m2)),
                      (int)(360 - object_params.angle) % 360,
                      primitive_params.text,
                      object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
@@ -1135,10 +1170,10 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                     points.push_back({
                         (int)(object_params.coord_matrix[0][2] +
                             primitive_params.points_vector[i].x *
-                            object_params.coord_matrix[0][0]),
+                            c_m1),
                         (int)(object_params.coord_matrix[1][2] +
                             primitive_params.points_vector[i].y *
-                            object_params.coord_matrix[1][1])
+                            c_m2)
                     });
                     polygon_end = false;
                 }
@@ -1148,14 +1183,14 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                 points.push_back({
                     (int)(object_params.coord_matrix[0][2] +
                         primitive_params.points_vector[i].x *
-                        object_params.coord_matrix[0][0]),
+                        c_m1),
                     (int)(object_params.coord_matrix[1][2] +
                         primitive_params.points_vector[i].y *
-                        object_params.coord_matrix[1][1])
+                        c_m2)
                 });
             }
         }
-        // qDebug() << "Полигон считан";
+    // qDebug() << "Полигон считан";
         actual_vector->emplace_back(
             new Polygon(points, polygon_end, (int)(360 - object_params.angle) % 360,
                         primitive_params.pen_width, primitive_params.pen_style, object_params.hint,
@@ -1169,19 +1204,19 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                         }, object_params.show,
                         (int)primitive_params.brush_style,
                         object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
-        // qDebug() << "Полигон записан";
+    // qDebug() << "Полигон записан";
         break;
     case objects_types_.ptEllipse:
         // qDebug() << "ellipse";
         actual_vector->emplace_back(
             new Ellipse(object_params.coord_matrix[0][2] - abs((int)round(
-                            primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                            primitive_params.points_vector[0].x * c_m1)),
                         object_params.coord_matrix[1][2] - abs((int)round(
-                            primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                            primitive_params.points_vector[0].y * c_m2)),
                         abs((int)round(
-                            primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                            primitive_params.points_vector[0].x * c_m1)) * 2,
                         abs((int)round(
-                            primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                            primitive_params.points_vector[0].y * c_m2)) * 2,
                         (int)(360 - object_params.angle) % 360,
                         primitive_params.pen_width, primitive_params.pen_style,
                         {
@@ -1198,13 +1233,13 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         // qDebug() << "rect";
         actual_vector->emplace_back(
             new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
-                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                              primitive_params.points_vector[0].x * c_m1)),
                           object_params.coord_matrix[1][2] - abs((int)round(
-                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                              primitive_params.points_vector[0].y * c_m2)),
                           abs((int)round(
-                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                              primitive_params.points_vector[0].x * c_m1)) * 2,
                           abs((int)round(
-                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                              primitive_params.points_vector[0].y * c_m2)) * 2,
                           (int)(360 - object_params.angle) % 360,
                           primitive_params.pen_width, primitive_params.pen_style,
                           {
@@ -1221,13 +1256,13 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         // qDebug() << "duga";
         actual_vector->emplace_back(
             new Arc(object_params.coord_matrix[0][2] - abs((int)round(
-                        primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                        primitive_params.points_vector[0].x * c_m1)),
                     object_params.coord_matrix[1][2] - abs((int)round(
-                        primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                        primitive_params.points_vector[0].y * c_m2)),
                     abs((int)round(
-                        primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                        primitive_params.points_vector[0].x * c_m1)) * 2,
                     abs((int)round(
-                        primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                        primitive_params.points_vector[0].y * c_m2)) * 2,
                     (int)(360 - object_params.angle) % 360, (int)primitive_params.points_vector[4].x % 360,
                     (int)primitive_params.points_vector[4].y % 360,
                     primitive_params.pen_width, primitive_params.pen_style,
@@ -1246,16 +1281,16 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         actual_vector->emplace_back(
             new Telecontrol((int)round(object_params.coord_matrix[0][2] -
                                 abs((int)round(primitive_params.points_vector[0].x *
-                                    object_params.coord_matrix[0][0]))),
+                                    c_m1))),
                             (int)round(object_params.coord_matrix[1][2] -
                                 abs((int)round(primitive_params.points_vector[0].y *
-                                    object_params.coord_matrix[1][1]))),
+                                    c_m2))),
                             abs((int)round(
                                 primitive_params.points_vector[0].x * 2 *
-                                object_params.coord_matrix[0][0])),
+                                c_m1)),
                             abs((int)round(
                                 primitive_params.points_vector[0].y * 2 *
-                                object_params.coord_matrix[1][1])),
+                                c_m2)),
                             (int)(360 - object_params.angle) % 360,
                             primitive_params.text,
                             object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
@@ -1282,16 +1317,16 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         actual_vector->emplace_back(
             new Telemeasure((int)round(object_params.coord_matrix[0][2] -
                                 abs((int)round(primitive_params.points_vector[0].x *
-                                    object_params.coord_matrix[0][0]))),
+                                    c_m1))),
                             (int)round(object_params.coord_matrix[1][2] -
                                 abs((int)round(primitive_params.points_vector[0].y *
-                                    object_params.coord_matrix[1][1]))),
+                                    c_m2))),
                             abs((int)round(
                                 primitive_params.points_vector[0].x * 2 *
-                                object_params.coord_matrix[0][0])),
+                                c_m1)),
                             abs((int)round(
                                 primitive_params.points_vector[0].y * 2 *
-                                object_params.coord_matrix[1][1])),
+                                c_m2)),
                             (int)(360 - object_params.angle) % 360,
                             primitive_params.text,
                             object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
@@ -1318,16 +1353,16 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         actual_vector->emplace_back(
             new Telesignalisation((int)round(object_params.coord_matrix[0][2] -
                                       abs((int)round(primitive_params.points_vector[0].x *
-                                          object_params.coord_matrix[0][0]))),
+                                          c_m1))),
                                   (int)round(object_params.coord_matrix[1][2] -
                                       abs((int)round(primitive_params.points_vector[0].y *
-                                          object_params.coord_matrix[1][1]))),
+                                          c_m2))),
                                   abs((int)round(
                                       primitive_params.points_vector[0].x * 2 *
-                                      object_params.coord_matrix[0][0])),
+                                      c_m1)),
                                   abs((int)round(
                                       primitive_params.points_vector[0].y * 2 *
-                                      object_params.coord_matrix[1][1])),
+                                      c_m2)),
                                   (int)(360 - object_params.angle) % 360,
                                   primitive_params.text,
                                   object_params.hint, primitive_params.pen_style, primitive_params.pen_width,
@@ -1376,10 +1411,10 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
             points.push_back({
                 (int)(object_params.coord_matrix[0][2] +
                     primitive_params.points_vector[i].x *
-                    object_params.coord_matrix[0][0]),
+                    c_m1),
                 (int)(object_params.coord_matrix[1][2] +
                     primitive_params.points_vector[i].y *
-                    object_params.coord_matrix[1][1])
+                    c_m2)
             });
         }
         actual_vector->emplace_back(
@@ -1400,13 +1435,13 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         // qDebug() << "shape";
         actual_vector->emplace_back(
             new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
-                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])),
+                              primitive_params.points_vector[0].x * c_m1)),
                           object_params.coord_matrix[1][2] - abs((int)round(
-                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])),
+                              primitive_params.points_vector[0].y * c_m2)),
                           abs((int)round(
-                              primitive_params.points_vector[0].x * object_params.coord_matrix[0][0])) * 2,
+                              primitive_params.points_vector[0].x * c_m1)) * 2,
                           abs((int)round(
-                              primitive_params.points_vector[0].y * object_params.coord_matrix[1][1])) * 2,
+                              primitive_params.points_vector[0].y * c_m2)) * 2,
                           (int)(360 - object_params.angle) % 360,
                           primitive_params.pen_width, primitive_params.pen_style,
                           {
