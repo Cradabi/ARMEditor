@@ -1127,14 +1127,13 @@ namespace FiguresClasses {
     };
 
     class LibraryObject : public Primitive {
-    private:
+    public:
         bool horizontal_mirror = false;
         bool vertical_mirror = false;
 
         std::string library_name;
         std::string object_name;
 
-    public:
         LibraryObject();
 
         LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
@@ -1165,5 +1164,18 @@ namespace FiguresClasses {
         bool get_vert_mirror();
 
         int get_condition();
+    };
+
+    class GroupObject : public LibraryObject
+    {
+    public:
+        GroupObject();
+
+        GroupObject(int x, int y, int width, int height, int angle, int id, int condition,
+                    const std::string& lib_name, const std::string& obj_name,
+                    const std::vector<std::vector<Primitive*>>& patterns, const std::string& help_text, bool show,
+                    bool show_help, int hor_mirror, int vert_mirror);
+
+        void draw(QPainter& painter) override;
     };
 }

@@ -194,7 +194,7 @@ void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level)
     patterns.emplace_back(group_objects_vector_);
 
     scheme_params_->objects_vector.emplace_back(
-        new LibraryObject(abs((int)round(object_params.contur_frame_matrix[0][0])),
+        new GroupObject(abs((int)round(object_params.contur_frame_matrix[0][0])),
                           abs((int)round(object_params.contur_frame_matrix[0][1])), ((int)round(
                               object_params.coord_matrix[0][2] - object_params.contur_frame_matrix[0][0])) * 2,
                           ((int)round(
