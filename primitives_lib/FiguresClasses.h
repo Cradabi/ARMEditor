@@ -92,6 +92,8 @@ namespace FiguresClasses {
         void set_condition(int cond);
 
         void set_text(const std::string& text);
+
+        int get_condition();
     };
 
     class Line : public Primitive {

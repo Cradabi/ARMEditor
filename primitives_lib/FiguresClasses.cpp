@@ -1,5 +1,6 @@
 #include "FiguresClasses.h"
 #include <QDebug>
+#include <iostream>
 
 using namespace FiguresClasses;
 
@@ -137,6 +138,11 @@ void Primitive::set_condition(int cond)
 void Primitive::set_text(const std::string& text)
 {
     this->text = text;
+}
+
+int Primitive::get_condition()
+{
+    return condition;
 }
 
 
@@ -1476,6 +1482,7 @@ void Polygon::draw(QPainter& painter)
         QPoint qpoints[this->get_points().size()];
         for (int i = 0; i < this->get_points().size(); i++)
         {
+            // std::cout << this->get_points()[i][0] << this->get_points()[i][1];
             qpoints[i] = QPoint(this->get_points()[i][0],
                                 this->get_points()[i][1]);
         }
@@ -3083,7 +3090,7 @@ void LibraryObject::draw(QPainter& painter)
         // }
         painter.rotate(this->angle % 360);
         // qDebug() << this->angle;
-        if (condition < patterns.size() && condition >= 0)
+        if (condition < patterns.size())
         {
             for (auto obj : patterns[condition])
             {
@@ -3149,11 +3156,6 @@ bool LibraryObject::get_vert_mirror()
     return this->vertical_mirror;
 }
 
-int LibraryObject::get_condition()
-{
-    return condition;
-}
-
 GroupObject::GroupObject() : LibraryObject()
 {
     type_object = "Групповой объект";
@@ -3192,9 +3194,10 @@ void GroupObject::draw(QPainter& painter)
 {
     if (this->bool_show)
     {
+        qDebug() << this->center_x << this->center_y;
         painter.save();
         painter.translate(this->center_x, this->center_y);
-        // painter.rotate((360 - this->angle) % 360);
+        painter.rotate((360 - this->angle) % 360);
         // int new_angle = this->get_angle() % 360;
         // while (new_angle < 0) {
         //     new_angle += 360;
@@ -3207,7 +3210,7 @@ void GroupObject::draw(QPainter& painter)
         // }
         painter.rotate(this->angle % 360);
         // qDebug() << this->angle;
-        if (condition < patterns.size() && condition >= 0)
+        if (condition < patterns.size())
         {
             for (auto obj : patterns[condition])
             {

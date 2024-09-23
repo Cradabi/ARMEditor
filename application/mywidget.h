@@ -128,7 +128,14 @@ public slots:
                 cur_prim = view->bd_objects[db_request_result_actual.value(0).toInt()];
                 if (cur_prim->get_type_object() == "Библиотечный объект")
                 {
-                    cur_prim->set_condition(db_request_result_actual.value(2).toInt());
+                    if(db_request_result_actual.value(2).toInt() >= 0)
+                    {
+                        cur_prim->set_condition(db_request_result_actual.value(2).toInt());
+                    }else
+                    {
+                        update_table_lib_short(0, cur_prim->get_id());
+                        cur_prim->set_condition(0);
+                    }
                 }
                 else if (cur_prim->get_type_object() == "Телеизмерение")
                 {
