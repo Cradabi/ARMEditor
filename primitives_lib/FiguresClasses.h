@@ -32,6 +32,8 @@ namespace FiguresClasses {
         int height = 0;
         int angle = 0;
 
+        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
+
         std::vector<std::vector<Primitive*> > patterns = {};
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignBottom, Qt::AlignVCenter};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignRight, Qt::AlignHCenter};
@@ -94,6 +96,10 @@ namespace FiguresClasses {
         void set_text(const std::string& text);
 
         int get_condition();
+
+        std::vector<int> get_filling_color();
+
+        void set_filling_color(const std::vector<int>& fil_col);
     };
 
     class Line : public Primitive {
@@ -255,6 +261,8 @@ namespace FiguresClasses {
         bool get_underlined_font();
 
         std::vector<int> get_font_color();
+
+        void set_filling_color(const std::vector<int>& fil_col);
     };
 
 
@@ -265,7 +273,6 @@ namespace FiguresClasses {
         bool horizontal_mirror = false;
         bool vertical_mirror = false;
         std::vector<int> line_color = {0, 0, 0}; //цвет линии
-        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
 
         std::vector<std::string> style_frame_list = //список названий стилей линий
         {
@@ -318,8 +325,6 @@ namespace FiguresClasses {
 
         void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(const std::vector<int>& fil_col);
-
         void set_style_frame(int st_frame);
 
         void set_style_gradient_filling(int st_gradient);
@@ -345,8 +350,6 @@ namespace FiguresClasses {
 
         std::vector<int> get_line_color();
 
-        std::vector<int> get_filling_color();
-
         //далее идут функции меняющие настройки показывания различных элементов
 
         void show_filling();
@@ -364,7 +367,7 @@ namespace FiguresClasses {
         bool horizontal_mirror = false;
         bool vertical_mirror = false;
         std::vector<int> line_color = {0, 0, 0}; //цвет линии
-        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
+
         std::vector<std::string> style_line_list = {
             "psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4",
             "psDot5",
@@ -404,8 +407,6 @@ namespace FiguresClasses {
 
         void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(const std::vector<int>& fil_col);
-
         void set_style_line(int st_line);
 
         void set_hor_mirror(bool hor_mirror);
@@ -422,8 +423,6 @@ namespace FiguresClasses {
         bool get_vert_mirror();
 
         std::vector<int> get_line_color();
-
-        std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
         void show_filling();
@@ -476,7 +475,6 @@ namespace FiguresClasses {
         bool vertical_mirror = false;
 
         std::vector<int> line_color = {0, 0, 0}; //цвет линии
-        std::vector<int> filling_color = {150, 0, 0}; //цвет заливки
 
         std::vector<std::vector<int> > points; //вектор координат точек
 
@@ -513,8 +511,6 @@ namespace FiguresClasses {
 
         void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(const std::vector<int>& fil_col);
-
         void set_style_line(int st_line);
 
         void set_hor_mirror(bool hor_mirror);
@@ -531,8 +527,6 @@ namespace FiguresClasses {
         int get_line_width();
 
         std::vector<int> get_line_color();
-
-        std::vector<int> get_filling_color();
 
         std::vector<std::vector<int> > get_points();
 
@@ -596,15 +590,11 @@ namespace FiguresClasses {
                             int height);
 
         //далее идут функции меняющие одноименные переменные класса точки перехода
-        void set_filling_color(const std::vector<int>& fil_col);
 
         void set_point_number(int num);
 
         //далее идут функции по выводу одноименных переменных класса точки перехода
         int get_point_number();
-
-
-        std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
         void show_filling();
@@ -736,7 +726,6 @@ namespace FiguresClasses {
         bool auto_size_text = false; //авторазмер текста
         std::vector<int> font_color = {0, 0, 0}; //цвет шрифта
         std::vector<int> line_color = {0, 0, 0};
-        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
 
         std::vector<std::string> hAlignment_list = {
             "ahLeft", "ahRight",
@@ -789,9 +778,6 @@ namespace FiguresClasses {
         change_center_cords(int x, int y, int width,
                             int height);
 
-        //далее идут функции меняющие одноименные переменные класса текста
-        void set_filling_color(const std::vector<int>& fil_col);
-
         void set_line_color(const std::vector<int>& ln_col);
 
         void set_line_width(int ln_width);
@@ -835,8 +821,6 @@ namespace FiguresClasses {
 
         int get_style_line();
 
-        std::vector<int> get_filling_color();
-
         std::vector<int> get_line_color();
 
         int get_angle();
@@ -879,7 +863,6 @@ namespace FiguresClasses {
         bool bool_show_filling = false; //показывать заливку
         bool bool_transparancy = false;
         std::vector<int> line_color = {0, 0, 0}; //цвет линии
-        std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
         std::vector<int> transparancy_color = {255, 255, 255}; //цвет заливки
 
         std::vector<std::string> style_frame_list = //список названий стилей линий
@@ -927,8 +910,6 @@ namespace FiguresClasses {
 
         void set_line_color(const std::vector<int>& ln_col);
 
-        void set_filling_color(const std::vector<int>& fil_col);
-
         void set_style_frame(int st_frame);
 
         void set_style_line(int st_line);
@@ -945,8 +926,6 @@ namespace FiguresClasses {
         int get_style_line();
 
         std::vector<int> get_line_color();
-
-        std::vector<int> get_filling_color();
 
         //далее идут функции меняющие настройки показывания различных элементов
         void show_filling();

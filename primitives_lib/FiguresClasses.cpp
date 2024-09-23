@@ -1,6 +1,6 @@
 #include "FiguresClasses.h"
 #include <QDebug>
-#include <iostream>
+// #include <iostream>
 
 using namespace FiguresClasses;
 
@@ -143,6 +143,16 @@ void Primitive::set_text(const std::string& text)
 int Primitive::get_condition()
 {
     return condition;
+}
+
+void Primitive::set_filling_color(const std::vector<int>& fil_col)
+{
+    this->filling_color = fil_col;
+}
+
+std::vector<int> Primitive::get_filling_color()
+{
+    return this->filling_color;
 }
 
 
@@ -831,11 +841,6 @@ void Rectangle::set_line_color(const std::vector<int>& ln_col)
     this->line_color = ln_col;
 }
 
-void Rectangle::set_filling_color(const std::vector<int>& fil_col)
-{
-    this->filling_color = fil_col;
-}
-
 void Rectangle::set_style_frame(int st_frame)
 {
     if (st_frame >= 0 && st_frame < this->style_frame_list.size())
@@ -904,11 +909,6 @@ bool Rectangle::get_vert_mirror()
 std::vector<int> Rectangle::get_line_color()
 {
     return this->line_color;
-}
-
-std::vector<int> Rectangle::get_filling_color()
-{
-    return this->filling_color;
 }
 
 void Rectangle::show_filling()
@@ -1048,12 +1048,6 @@ void Ellipse::set_line_color(const std::vector<int>& ln_col)
     this->line_color = ln_col;
 }
 
-void Ellipse::set_filling_color(const std::vector<int>& fil_col)
-{
-    this->filling_color = fil_col;
-}
-
-
 void Ellipse::set_style_line(int st_line)
 {
     if (st_line >= 0 && st_line < this->style_line_list.size())
@@ -1086,11 +1080,6 @@ bool Ellipse::get_vert_mirror()
 std::vector<int> Ellipse::get_line_color()
 {
     return this->line_color;
-}
-
-std::vector<int> Ellipse::get_filling_color()
-{
-    return this->filling_color;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
@@ -1358,11 +1347,6 @@ void CrookedLine::set_line_color(const std::vector<int>& ln_col)
     this->line_color = ln_col;
 }
 
-void CrookedLine::set_filling_color(const std::vector<int>& fil_col)
-{
-    this->filling_color = fil_col;
-}
-
 void CrookedLine::set_style_line(int st_line)
 {
     if (st_line >= 0 && st_line < this->style_line_list.size())
@@ -1395,11 +1379,6 @@ int CrookedLine::get_line_width()
 std::vector<int> CrookedLine::get_line_color()
 {
     return this->line_color;
-}
-
-std::vector<int> CrookedLine::get_filling_color()
-{
-    return this->filling_color;
 }
 
 std::vector<std::vector<int>> CrookedLine::get_points()
@@ -1576,12 +1555,6 @@ TransitionPoint::change_center_cords(int x, int y, int width,
     this->center_y = this->y + floor(this->height / 2);
 }
 
-//далее идут функции меняющие одноименные переменные класса точки перехода
-void TransitionPoint::set_filling_color(const std::vector<int>& fil_col)
-{
-    this->filling_color = fil_col;
-}
-
 void TransitionPoint::set_point_number(int num)
 {
     this->number_of_transition_point = num;
@@ -1591,11 +1564,6 @@ void TransitionPoint::set_point_number(int num)
 int TransitionPoint::get_point_number()
 {
     return this->number_of_transition_point;
-}
-
-std::vector<int> TransitionPoint::get_filling_color()
-{
-    return this->filling_color;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
@@ -2048,12 +2016,6 @@ Text::change_center_cords(int x, int y, int width,
     this->center_y = this->y + floor(this->height / 2);
 }
 
-//далее идут функции меняющие одноименные переменные класса текста
-void Text::set_filling_color(const std::vector<int>& fil_col)
-{
-    this->filling_color = fil_col;
-}
-
 void Text::set_line_color(const std::vector<int>& ln_col)
 {
     this->line_color = ln_col;
@@ -2174,11 +2136,6 @@ void Text::set_style_line(int style_line)
 int Text::get_style_line()
 {
     return this->style_line;
-}
-
-std::vector<int> Text::get_filling_color()
-{
-    return this->filling_color;
 }
 
 std::vector<int> Text::get_line_color()
@@ -2354,11 +2311,6 @@ void Image::set_line_color(const std::vector<int>& ln_col)
     this->line_color = ln_col;
 }
 
-void Image::set_filling_color(const std::vector<int>& fil_col)
-{
-    this->filling_color = fil_col;
-}
-
 void Image::set_style_frame(int st_frame)
 {
     if (st_frame >= 0 && st_frame < this->style_frame_list.size())
@@ -2404,11 +2356,6 @@ int Image::get_style_line()
 std::vector<int> Image::get_line_color()
 {
     return this->line_color;
-}
-
-std::vector<int> Image::get_filling_color()
-{
-    return this->filling_color;
 }
 
 //далее идут функции меняющие настройки показывания различных элементов
@@ -3073,27 +3020,23 @@ LibraryObject::LibraryObject(int x, int y, int width, int height, int angle, int
 
 void LibraryObject::draw(QPainter& painter)
 {
+    std::vector<int> green_col = {50, 146, 77};
+    std::vector<int> red_col = {204, 0, 0};
     if (this->bool_show)
     {
         painter.save();
         painter.translate(this->center_x, this->center_y);
-        // painter.rotate((360 - this->angle) % 360);
-        // int new_angle = this->get_angle() % 360;
-        // while (new_angle < 0) {
-        //     new_angle += 360;
-        // }
-        // if(new_angle > 90 && new_angle < 270){
-        //     painter.rotate(new_angle + 180);
-        // }else
-        // {
-        //     painter.rotate(new_angle);
-        // }
         painter.rotate(this->angle % 360);
         // qDebug() << this->angle;
         if (condition < patterns.size())
         {
             for (auto obj : patterns[condition])
             {
+                if ((obj->get_type_object() == "Эллипс" || obj->get_type_object() == "Прямоугольник") && obj->
+                    get_filling_color() == green_col && condition == 1)
+                {
+                    obj->set_filling_color(red_col);
+                }
                 obj->draw(painter);
             }
         }
@@ -3194,20 +3137,10 @@ void GroupObject::draw(QPainter& painter)
 {
     if (this->bool_show)
     {
-        qDebug() << this->center_x << this->center_y;
+        // qDebug() << this->center_x << this->center_y;
         painter.save();
         painter.translate(this->center_x, this->center_y);
         painter.rotate((360 - this->angle) % 360);
-        // int new_angle = this->get_angle() % 360;
-        // while (new_angle < 0) {
-        //     new_angle += 360;
-        // }
-        // if(new_angle > 90 && new_angle < 270){
-        //     painter.rotate(new_angle + 180);
-        // }else
-        // {
-        //     painter.rotate(new_angle);
-        // }
         painter.rotate(this->angle % 360);
         // qDebug() << this->angle;
         if (condition < patterns.size())
