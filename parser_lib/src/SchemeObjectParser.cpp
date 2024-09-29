@@ -347,7 +347,6 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 // qDebug() << "ОК";
             }
 
-            // TODO switch для б. объектов
             // Нужные структуры:
             // lib_object_params лежит в OBJS обновляется только если есть другие объекты
             // actual_object_params лежит в CACH
@@ -563,12 +562,10 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                         else
                         {
                             points.push_back({
-                                (int)round(lib_object_params.coord_matrix[0][2] +
-                                    primitive_params.indentity_matrix[0][2] * scale +
+                                (int)round(primitive_params.indentity_matrix[0][2] * scale +
                                     primitive_params.points_vector[i].x * scale *
                                     im1),
-                                (int)round(lib_object_params.coord_matrix[1][2] +
-                                    primitive_params.indentity_matrix[1][2] * scale +
+                                (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                     primitive_params.points_vector[i].y * scale *
                                     im2)
                             });
@@ -578,18 +575,16 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                     else
                     {
                         points.push_back({
-                            (int)round(lib_object_params.coord_matrix[0][2] +
-                                primitive_params.indentity_matrix[0][2] * scale +
+                            (int)round(primitive_params.indentity_matrix[0][2] * scale +
                                 primitive_params.points_vector[i].x * scale *
                                 im1),
-                            (int)round(lib_object_params.coord_matrix[1][2] +
-                                primitive_params.indentity_matrix[1][2] * scale +
+                            (int)round(primitive_params.indentity_matrix[1][2] * scale +
                                 primitive_params.points_vector[i].y * scale *
                                 im2)
                         });
                     }
                 }
-                scheme_params_->objects_vector.emplace_back(
+                primitives_in_pattern.push_back(
                     new Polygon(points, polygon_end, (int)(360 - primitive_params.primitive_angle) % 360,
                                 primitive_params.pen_width, primitive_params.pen_style, "",
                                 {
@@ -844,12 +839,10 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 for (int i = 0; i < primitive_params.points_amount; i++)
                 {
                     points.push_back({
-                        (int)round(lib_object_params.coord_matrix[0][2] +
-                            primitive_params.indentity_matrix[0][2] * scale +
+                        (int)round(primitive_params.indentity_matrix[0][2] * scale +
                             primitive_params.points_vector[i].x * scale *
                             im1),
-                        (int)round(lib_object_params.coord_matrix[1][2] +
-                            primitive_params.indentity_matrix[1][2] * scale +
+                        (int)round(primitive_params.indentity_matrix[1][2] * scale +
                             primitive_params.points_vector[i].y * scale *
                             im2)
                     });
@@ -924,7 +917,6 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
         getSomeInt(CacheFileIn,
                    actual_object_params.primitives_in_state_amount);
     }
-
     scheme_params_->objects_vector.emplace_back(
         new LibraryObject(abs((int)round(lib_object_params.contur_frame_matrix[0][0])),
                           abs((int)round(lib_object_params.contur_frame_matrix[0][1])), ((int)round(

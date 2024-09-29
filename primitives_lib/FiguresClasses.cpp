@@ -1279,7 +1279,6 @@ void CrookedLine::draw(QPainter& painter)
             qpoints[i] = QPoint(this->get_points()[i][0],
                                 this->get_points()[i][1]);
         }
-        qDebug() << "Polyline";
         painter.drawPolyline(qpoints, this->get_points().size());
     }
     painter.restore();
@@ -3140,7 +3139,7 @@ void GroupObject::draw(QPainter& painter)
         // qDebug() << this->center_x << this->center_y;
         painter.save();
         painter.translate(this->center_x, this->center_y);
-        painter.rotate((360 - this->angle) % 360);
+        // painter.rotate((360 - this->angle) % 360);
         painter.rotate(this->angle % 360);
         // qDebug() << this->angle;
         if (condition < patterns.size())

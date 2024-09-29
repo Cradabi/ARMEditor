@@ -124,8 +124,7 @@ namespace FiguresClasses {
             "psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6", "psDash1",
             "psDash2"
         }; //список названий стилей линий
-
-        std::string type_object = "Линия"; //тип объекта
+        
         std::string help_text = ""; //подсказка к линии
         std::string font_name = ""; //имя шрифта
 
