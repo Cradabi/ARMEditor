@@ -1681,8 +1681,7 @@ void TransitionButton::draw(QPainter& painter)
         if (this->get_show_filling())
         {
             QColor filling_color = {
-                this->get_filling_color()[0], this->get_filling_color()[1],
-                this->get_filling_color()[2]
+                238,233,223
             };
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
@@ -1693,10 +1692,28 @@ void TransitionButton::draw(QPainter& painter)
             painter.setPen(filling_color);
             painter.setBrush(filling_color);
         }
+
         QColor color_rect(0, 0, 0);
         painter.setPen(QPen(color_rect, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
         painter.drawRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(), this->get_width(),
                          this->get_height());
+
+        QColor white_shadowColor(255, 255, 255);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(white_shadowColor);
+        painter.drawRect(QRect((-1)*(this->get_width() / 2), (-1) * (this->get_height() / 2 - 1),
+                               3, this->get_height() - 2));
+        painter.drawRect(QRect((-1)*(this->get_width() / 2 - 1), (-1)*(this->get_height() / 2),
+                               this->get_width() - 2, 3));
+
+        QColor shadowColor(172,168,153);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(shadowColor);
+        painter.drawRect(QRect((this->get_width() / 2 - 3), (-1) * (this->get_height() / 2),
+                               3, this->get_height() - 2));
+        painter.drawRect(QRect((-1)*(this->get_width() / 2), (this->get_height() / 2 - 3),
+                               this->get_width() - 2, 3));
+
         QRect rect = QRect(this->get_x() - this->get_center_x(), this->get_y() - this->get_center_y(),
                            this->get_width(),
                            this->get_height());
