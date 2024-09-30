@@ -2991,7 +2991,7 @@ Point::Point() : Primitive()
 
 Point::Point(int x, int y, int ln_width, const std::vector<int>& ln_color) : Point()
 {
-    type_object = "Point";
+    type_object = "Точка";
     this->x = x;
     this->y = y;
     line_width = ln_width;
@@ -3083,7 +3083,10 @@ void LibraryObject::draw(QPainter& painter)
                 {
                     obj->set_filling_color(red_col);
                 }
-                obj->draw(painter);
+                if(obj->get_type_object() != "Точка")
+                {
+                    obj->draw(painter);
+                }
             }
         }
         painter.restore();

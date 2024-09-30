@@ -195,14 +195,14 @@ void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level)
 
     scheme_params_->objects_vector.emplace_back(
         new GroupObject(abs((int)round(object_params.contur_frame_matrix[0][0])),
-                          abs((int)round(object_params.contur_frame_matrix[0][1])), ((int)round(
-                              object_params.coord_matrix[0][2] - object_params.contur_frame_matrix[0][0])) * 2,
-                          ((int)round(
-                              object_params.coord_matrix[1][2] -
-                              object_params.contur_frame_matrix[0][1])) * 2, object_params.angle,
-                          object_params.index, object_params.state, object_params.name,
-                          object_params.name, patterns, object_params.hint, object_params.show,
-                          object_params.hint_show, 0, 0));
+                        abs((int)round(object_params.contur_frame_matrix[0][1])), ((int)round(
+                            object_params.coord_matrix[0][2] - object_params.contur_frame_matrix[0][0])) * 2,
+                        ((int)round(
+                            object_params.coord_matrix[1][2] -
+                            object_params.contur_frame_matrix[0][1])) * 2, object_params.angle,
+                        object_params.index, object_params.state, object_params.name,
+                        object_params.name, patterns, object_params.hint, object_params.show,
+                        object_params.hint_show, 0, 0));
 
     if (nesting_level != 1)
     {
@@ -415,11 +415,12 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
 
             double im1;
             double im2;
-            if(abs(primitive_params.indentity_matrix[0][0]) > 0.1)
+            if (abs(primitive_params.indentity_matrix[0][0]) > 0.1)
             {
                 im1 = primitive_params.indentity_matrix[0][0];
                 im2 = primitive_params.indentity_matrix[1][1];
-            }else
+            }
+            else
             {
                 im1 = primitive_params.indentity_matrix[0][1];
                 im2 = primitive_params.indentity_matrix[1][0];
@@ -864,32 +865,31 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                 break;
             case objects_types_.ptShape:
                 primitives_in_pattern.push_back(
-                    new Rectangle((int)round(primitive_params.indentity_matrix[0][2] * scale +
-                                      primitive_params.points_vector[0].x * scale *
-                                      im1),
-                                  (int)round(primitive_params.indentity_matrix[1][2] * scale +
-                                      primitive_params.points_vector[0].y * scale *
-                                      im2),
-                                  (int)round((primitive_params.points_vector[2].x * scale *
-                                      im1 -
-                                      primitive_params.points_vector[0].x * scale *
-                                      im1)),
-                                  (int)round((primitive_params.points_vector[2].y * scale *
-                                      im2 -
-                                      primitive_params.points_vector[0].y * scale *
-                                      im2)),
-                                  (int)(360 - primitive_params.primitive_angle) % 360,
-                                  primitive_params.pen_width, primitive_params.pen_style,
-                                  {
-                                      primitive_params.pen_color.red, primitive_params.pen_color.green,
-                                      primitive_params.pen_color.blue
-                                  }, "", primitive_params.show,
-                                  0, 0,
-                                  {
-                                      primitive_params.brush_color.red, primitive_params.brush_color.green,
-                                      primitive_params.brush_color.blue
-                                  }, primitive_params.brush_style,
-                                  0, 0));
+                    new Ellipse((int)round(primitive_params.indentity_matrix[0][2] * scale +
+                                    primitive_params.points_vector[0].x * scale *
+                                    im1),
+                                (int)round(primitive_params.indentity_matrix[1][2] * scale +
+                                    primitive_params.points_vector[0].y * scale *
+                                    im2),
+                                (int)round((primitive_params.points_vector[2].x * scale *
+                                    im1 -
+                                    primitive_params.points_vector[0].x * scale *
+                                    im1)),
+                                (int)round((primitive_params.points_vector[2].y * scale *
+                                    im2 -
+                                    primitive_params.points_vector[0].y * scale *
+                                    im2)),
+                                (int)(360 - primitive_params.primitive_angle) % 360,
+                                primitive_params.pen_width, primitive_params.pen_style,
+                                {
+                                    primitive_params.pen_color.red, primitive_params.pen_color.green,
+                                    primitive_params.pen_color.blue
+                                }, "", primitive_params.show,
+                                {
+                                    primitive_params.brush_color.red, primitive_params.brush_color.green,
+                                    primitive_params.brush_color.blue
+                                }, primitive_params.brush_style,
+                                0, 0));
                 break;
             default:
                 lae::printLog("Парсер объектов: Неизвестный тип примитива: ");
@@ -1426,25 +1426,25 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
     case objects_types_.ptShape:
         // qDebug() << "shape";
         actual_vector->emplace_back(
-            new Rectangle(object_params.coord_matrix[0][2] - abs((int)round(
-                              primitive_params.points_vector[0].x * c_m1)),
-                          object_params.coord_matrix[1][2] - abs((int)round(
-                              primitive_params.points_vector[0].y * c_m2)),
-                          abs((int)round(
-                              primitive_params.points_vector[0].x * c_m1)) * 2,
-                          abs((int)round(
-                              primitive_params.points_vector[0].y * c_m2)) * 2,
-                          (int)(360 - object_params.angle) % 360,
-                          primitive_params.pen_width, primitive_params.pen_style,
-                          {
-                              primitive_params.pen_color.red, primitive_params.pen_color.green,
-                              primitive_params.pen_color.blue
-                          }, object_params.hint, object_params.show, 0, 0,
-                          {
-                              primitive_params.brush_color.red, primitive_params.brush_color.green,
-                              primitive_params.brush_color.blue
-                          }, primitive_params.brush_style,
-                          object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
+            new Ellipse(object_params.coord_matrix[0][2] - abs((int)round(
+                            primitive_params.points_vector[0].x * c_m1)),
+                        object_params.coord_matrix[1][2] - abs((int)round(
+                            primitive_params.points_vector[0].y * c_m2)),
+                        abs((int)round(
+                            primitive_params.points_vector[0].x * c_m1)) * 2,
+                        abs((int)round(
+                            primitive_params.points_vector[0].y * c_m2)) * 2,
+                        (int)(360 - object_params.angle) % 360,
+                        primitive_params.pen_width, primitive_params.pen_style,
+                        {
+                            primitive_params.pen_color.red, primitive_params.pen_color.green,
+                            primitive_params.pen_color.blue
+                        }, object_params.hint, object_params.show,
+                        {
+                            primitive_params.brush_color.red, primitive_params.brush_color.green,
+                            primitive_params.brush_color.blue
+                        }, primitive_params.brush_style,
+                        object_params.horizontal_reflection_mx, object_params.vertical_reflection_my));
         break;
     default:
         lae::printLog("Парсер объектов: Неизвестный тип примитива: ");
