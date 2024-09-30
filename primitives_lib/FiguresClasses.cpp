@@ -245,6 +245,8 @@ Line::Line(int st_x, int st_y, int end_x, int end_y, const std::string& text, co
 void Line::draw(QPainter& painter)
 {
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.translate(this->get_center_cord_x(), this->get_center_cord_y());
     painter.rotate(this->angle);
     QColor color_line = {this->get_line_color()[0], this->get_line_color()[1], this->get_line_color()[2]};
@@ -786,6 +788,10 @@ void Rectangle::draw(QPainter& painter)
 {
     //начинаем отрисовку прямоугольника
     painter.save();
+
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
+
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
 
@@ -981,6 +987,8 @@ void Ellipse::draw(QPainter& painter)
 {
     //начинаем отрисовку эллипса
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show())
@@ -1154,6 +1162,8 @@ void Arc::draw(QPainter& painter)
 {
     //начинаем отрисовку дуги
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show())
@@ -1258,6 +1268,8 @@ void CrookedLine::draw(QPainter& painter)
 {
     //начинаем отрисовку кривой
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.rotate((-1) * this->get_angle());
     if (this->get_show())
     {
@@ -1437,6 +1449,8 @@ void Polygon::draw(QPainter& painter)
 {
     //начинаем отрисовку полигона
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.rotate((-1) * this->get_angle());
     if (this->get_show())
     {
@@ -1518,6 +1532,8 @@ TransitionPoint::TransitionPoint(int number, int x, int y, int width,
 void TransitionPoint::draw(QPainter& painter)
 {
     //начало отображения точки перехода
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     if (this->get_show())
     {
         if (this->get_show_filling())
@@ -1644,6 +1660,8 @@ void TransitionButton::draw(QPainter& painter)
 {
     //начало отображения кнопки перехода
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     QFont tr_b_font(this->get_font_name().c_str(), this->get_font_size());
     tr_b_font.setBold(this->get_bold_font());
     tr_b_font.setItalic(this->get_italic_font());
@@ -1925,6 +1943,8 @@ Text::Text(int x, int y, int width, int height, int angle, const std::string& te
 void Text::draw(QPainter& painter)
 {
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
@@ -2270,6 +2290,8 @@ void Image::draw(QPainter& painter)
 {
     //начало отображения картинки
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.translate(this->get_center_x(), this->get_center_y());
     painter.rotate((-1) * this->get_angle());
     if (this->get_show())
@@ -2440,6 +2462,8 @@ Telecontrol::Telecontrol(int x, int y, int width, int height, int angle, const s
 void Telecontrol::draw(QPainter& painter)
 {
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
@@ -2592,6 +2616,8 @@ Telesignalisation::Telesignalisation(int x, int y, int width, int height, int an
 void Telesignalisation::draw(QPainter& painter)
 {
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
@@ -2743,6 +2769,8 @@ Telemeasure::Telemeasure(int x, int y, int width, int height, int angle, const s
 void Telemeasure::draw(QPainter& painter)
 {
     painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     QFont text_font(this->get_font_name().c_str(), this->get_font_size());
     text_font.setBold(this->get_bold_font());
     text_font.setItalic(this->get_italic_font());
@@ -2854,6 +2882,8 @@ Set::Set(int ln_width, int ln_width2, int ln_width3, int hor_space, int vert_spa
 
 void Set::draw(QPainter& painter, int scheme_width, int scheme_height)
 {
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     if (bool_show)
     {
         QColor color_set = {line_color[0], line_color[1], line_color[2]};
