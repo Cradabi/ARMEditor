@@ -2899,8 +2899,8 @@ Set::Set(int ln_width, int ln_width2, int ln_width3, int hor_space, int vert_spa
 
 void Set::draw(QPainter& painter, int scheme_width, int scheme_height)
 {
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
+    // painter.setRenderHint(QPainter::Antialiasing, true);
+    // painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     if (bool_show)
     {
         QColor color_set = {line_color[0], line_color[1], line_color[2]};
