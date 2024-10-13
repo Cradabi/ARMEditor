@@ -3072,7 +3072,6 @@ void LibraryObject::draw(QPainter& painter)
     {
         painter.save();
         painter.translate(this->center_x, this->center_y);
-        qDebug() << horizontal_mirror << vertical_mirror;
         if(this->horizontal_mirror && this->vertical_mirror)
         {
             painter.scale(-1, -1);
@@ -3081,7 +3080,6 @@ void LibraryObject::draw(QPainter& painter)
             painter.scale(1, -1);
         }else if(this->vertical_mirror)
         {
-            qDebug() << 1;
             painter.scale(-1, 1);
         }
         painter.rotate(this->angle % 360);
@@ -3202,7 +3200,6 @@ void GroupObject::draw(QPainter& painter)
         painter.save();
         painter.translate(this->center_x, this->center_y);
         // painter.rotate((360 - this->angle) % 360);
-        qDebug() << horizontal_mirror << vertical_mirror;
         if(this->horizontal_mirror && this->vertical_mirror)
         {
             painter.scale(-1, -1);
@@ -3211,7 +3208,6 @@ void GroupObject::draw(QPainter& painter)
             painter.scale(1, -1);
         }else if(this->vertical_mirror)
         {
-            qDebug() << 1;
             painter.scale(-1, 1);
         }
         painter.rotate(this->angle % 360);
