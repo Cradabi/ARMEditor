@@ -299,6 +299,17 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
     lae::writeLog(logs_file_, "\n\nACTUAL OBJECT PARAMS:");
     writeObjectInfo(actual_object_params);
 
+    std::vector<Primitive*>* actual_vector;
+
+    if (lib_object_params.is_group_object)
+    {
+        actual_vector = &group_objects_vector_;
+    }
+    else
+    {
+        actual_vector = &scheme_params_->objects_vector;
+    }
+
     // LibraryObject tmp_lib_object(data);
 
     sop::PrimitiveParams primitive_params;
@@ -354,64 +365,6 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
 
             std::vector<std::vector<int>> points = {};
             bool polygon_end = false;
-            // qDebug() << primitive_params.primitive_type;
-
-            // switch (primitive_params.primitive_type)
-            // {
-            // case objects_types_.ptNone:
-            //     qDebug() << "неизвестный тип";
-            //     break;
-            // case objects_types_.ptGoBtn:
-            //     qDebug() << "gobtn";
-            //     break;
-            // case objects_types_.ptGoPoint:
-            //     qDebug() << "gopoint";
-            //     break;
-            // case objects_types_.ptGluePoint:
-            //     qDebug() << "gluepoint";
-            //     break;
-            // case objects_types_.ptLine:
-            //     qDebug() << "line";
-            //     break;
-            // case objects_types_.ptText:
-            //     qDebug() << "text";
-            //     break;
-            // case objects_types_.ptPolygon:
-            //     qDebug() << "polygon";
-            //     break;
-            // case objects_types_.ptEllipse:
-            //     qDebug() << "ellipse";
-            //     break;
-            // case objects_types_.ptRectangle:
-            //     qDebug() << "rect";
-            //     break;
-            // case objects_types_.ptDuga:
-            //     qDebug() << "duga";
-            //     break;
-            // case objects_types_.ptTeleupr:
-            //     qDebug() << "telepupr";
-            //     break;
-            // case objects_types_.ptTeleizm:
-            //     qDebug() << "teleizm";
-            //     break;
-            // case objects_types_.ptSignal:
-            //     qDebug() << "signal";
-            //     break;
-            // case objects_types_.ptPicture:
-            //     qDebug() << "picture";
-            //     break;
-            // case objects_types_.ptPolyLine:
-            //     qDebug() << "polyline";
-            //     break;
-            // case objects_types_.ptShape:
-            //     qDebug() << "shape";
-            //     break;
-            // default:
-            //     // lae::printLog("Парсер объектов: Неизвестный тип примитива: ");
-            //         // lae::printLog((int)primitive_params.primitive_type, true);
-            //             qDebug() << "неизвестный тип";
-            //     break;
-            // }
 
             double im1;
             double im2;
@@ -952,7 +905,7 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
         getSomeInt(CacheFileIn,
                    actual_object_params.primitives_in_state_amount);
     }
-    scheme_params_->objects_vector.emplace_back(
+    actual_vector->emplace_back(
         new LibraryObject(abs((int)round(lib_object_params.contur_frame_matrix[0][0])),
                           abs((int)round(lib_object_params.contur_frame_matrix[0][1])), ((int)round(
                               lib_object_params.coord_matrix[0][2] - lib_object_params.contur_frame_matrix[0][0])) * 2,
