@@ -942,15 +942,19 @@ void SchemeObjectParser::parsePrimitive(std::ifstream &File, sop::ObjectParams &
         actual_vector = &scheme_params_->objects_vector;
     }
 
-    double c_m1;
-    double c_m2;
-    if (abs(object_params.coord_matrix[0][0]) >= abs(object_params.coord_matrix[0][1])) {
-        c_m1 = object_params.coord_matrix[0][0];
-        c_m2 = object_params.coord_matrix[1][1];
-    } else {
-        c_m1 = object_params.coord_matrix[0][1];
-        c_m2 = object_params.coord_matrix[1][0];
-    }
+    double c_m1 = std::max(abs(object_params.coord_matrix[0][0]), abs(object_params.coord_matrix[0][1]));
+    double c_m2 = std::max(abs(object_params.coord_matrix[1][0]), abs(object_params.coord_matrix[1][1]));
+    // if (abs(object_params.coord_matrix[0][0]) >= abs(object_params.coord_matrix[0][1])) {
+    //     c_m1 = object_params.coord_matrix[0][0];
+    //     c_m2 = object_params.coord_matrix[1][1];
+    // } else {
+    //     c_m1 = object_params.coord_matrix[0][1];
+    //     c_m2 = object_params.coord_matrix[1][0];
+    // }
+
+    // double c_m = std::max(c_m1, c_m2);
+
+    // qDebug() << c_m1 << c_m2;
 
     std::vector<std::vector<int>> points = {};
     bool polygon_end = false;
