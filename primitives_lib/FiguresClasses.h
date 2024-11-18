@@ -9,8 +9,10 @@
 #include <QTextCodec>
 #include <cinttypes>
 
-namespace FiguresClasses {
-    class Primitive {
+namespace FiguresClasses
+{
+    class Primitive
+    {
         //класс примитива
     protected:
         bool bool_show_help = false;
@@ -34,12 +36,15 @@ namespace FiguresClasses {
 
         std::vector<int> filling_color = {255, 255, 255}; //цвет заливки
 
-        std::vector<std::vector<Primitive*> > patterns = {};
+        std::vector<std::vector<Primitive*>> patterns = {};
         std::vector<Qt::Alignment> v_alignment_vector = {Qt::AlignTop, Qt::AlignBottom, Qt::AlignVCenter};
         std::vector<Qt::Alignment> h_alignment_vector = {Qt::AlignLeft, Qt::AlignRight, Qt::AlignHCenter};
         std::vector<Qt::PenStyle> style_vector = {
             Qt::NoPen, Qt::SolidLine, Qt::DotLine, Qt::DotLine, Qt::DotLine,
-            Qt::DotLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine
+            Qt::DotLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine,
+            Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine,
+            Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine, Qt::DashLine,
+            Qt::DashLine
         };
 
     public:
@@ -89,7 +94,7 @@ namespace FiguresClasses {
 
         std::string get_text();
 
-        std::vector<std::vector<Primitive*> > get_patterns();
+        std::vector<std::vector<Primitive*>> get_patterns();
 
         void set_condition(int cond);
 
@@ -102,7 +107,8 @@ namespace FiguresClasses {
         void set_filling_color(const std::vector<int>& fil_col);
     };
 
-    class Line : public Primitive {
+    class Line : public Primitive
+    {
         // класс линии
     private:
         bool bool_show_help = false; //флаг показывания подсказки
@@ -124,7 +130,7 @@ namespace FiguresClasses {
             "psNull", "psSolid", "psDot1", "psDot2", "psDot3", "psDot4", "psDot5", "psDot6", "psDash1",
             "psDash2"
         }; //список названий стилей линий
-        
+
         std::string help_text = ""; //подсказка к линии
         std::string font_name = ""; //имя шрифта
 
@@ -265,7 +271,8 @@ namespace FiguresClasses {
     };
 
 
-    class Rectangle : public Primitive {
+    class Rectangle : public Primitive
+    {
         //класс прямоугольника
     private: //показывать прямоугольник
         bool bool_show_filling = false; //показывать заливку
@@ -359,7 +366,8 @@ namespace FiguresClasses {
     };
 
 
-    class Ellipse : public Primitive {
+    class Ellipse : public Primitive
+    {
         //класс эллипса
     protected: //показывать эллипс
         bool bool_show_filling = false; //показывать заливку
@@ -431,7 +439,8 @@ namespace FiguresClasses {
         bool get_show_filling();
     };
 
-    class Arc : public Ellipse {
+    class Arc : public Ellipse
+    {
         //класс дуги, которая наслдуется от эллипса
     private:
         int start_angle = 0; //начальный угол
@@ -466,7 +475,8 @@ namespace FiguresClasses {
         std::vector<int> get_arc_angles();
     };
 
-    class CrookedLine : public Primitive {
+    class CrookedLine : public Primitive
+    {
         //класс кривой линии
     protected:
         bool bool_show_filling = true; //показывать заливку
@@ -475,7 +485,7 @@ namespace FiguresClasses {
 
         std::vector<int> line_color = {0, 0, 0}; //цвет линии
 
-        std::vector<std::vector<int> > points; //вектор координат точек
+        std::vector<std::vector<int>> points; //вектор координат точек
 
         std::vector<std::string> style_line_list =
         {
@@ -492,9 +502,9 @@ namespace FiguresClasses {
         //конструкторы класса кривой линии получающие различные вводные
         CrookedLine();
 
-        CrookedLine(const std::vector<std::vector<int> >& points_vector, int hor_mirror, int vert_mirror);
+        CrookedLine(const std::vector<std::vector<int>>& points_vector, int hor_mirror, int vert_mirror);
 
-        CrookedLine(const std::vector<std::vector<int> >& points_vector, int angle, int line_width, int style_line,
+        CrookedLine(const std::vector<std::vector<int>>& points_vector, int angle, int line_width, int style_line,
                     const std::string& help_text, const std::vector<int>& line_color,
                     const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
                     int vert_mirror);
@@ -503,7 +513,7 @@ namespace FiguresClasses {
 
         void
         change_center_cords(
-            const std::vector<std::vector<int> >& points_vector);
+            const std::vector<std::vector<int>>& points_vector);
 
         //далее идут функции меняющие одноименные переменные класса кривой линии
         void set_angle(int angl);
@@ -527,7 +537,7 @@ namespace FiguresClasses {
 
         std::vector<int> get_line_color();
 
-        std::vector<std::vector<int> > get_points();
+        std::vector<std::vector<int>> get_points();
 
         //далее идут функции меняющие настройки показывания различных элементов
         void show_filling();
@@ -537,16 +547,17 @@ namespace FiguresClasses {
         bool get_show_filling();
     };
 
-    class Polygon : public CrookedLine {
+    class Polygon : public CrookedLine
+    {
         //класс многоугольника
     private:
         bool end_polygone = true; //замыкание полигона
 
     public:
         //конструкторы класса многоугольника получающие различные вводные
-        Polygon(const std::vector<std::vector<int> >& points_vector, bool end_polygon, int hor_mirror, int vert_mirror);
+        Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon, int hor_mirror, int vert_mirror);
 
-        Polygon(const std::vector<std::vector<int> >& points_vector, bool end_polygon, int angle, int line_width,
+        Polygon(const std::vector<std::vector<int>>& points_vector, bool end_polygon, int angle, int line_width,
                 int style_line,
                 const std::string& help_text, const std::vector<int>& line_color,
                 const std::vector<int>& filling_color, bool bool_show, bool bool_show_filling, int hor_mirror,
@@ -560,7 +571,8 @@ namespace FiguresClasses {
     };
 
 
-    class TransitionPoint : public Primitive {
+    class TransitionPoint : public Primitive
+    {
         //класс точки перехода
     private:
         int number_of_transition_point = 0; // номер точки перехода
@@ -604,7 +616,8 @@ namespace FiguresClasses {
     };
 
 
-    class TransitionButton : public TransitionPoint {
+    class TransitionButton : public TransitionPoint
+    {
         //класс кнопка перехода
     private:
         bool bold_font = false; //флаг жирности шрифта
@@ -715,7 +728,8 @@ namespace FiguresClasses {
     };
 
 
-    class Text : public Primitive {
+    class Text : public Primitive
+    {
         //класс текста
     protected:
         bool bold_font = true; //флаг жирности шрифта
@@ -856,7 +870,8 @@ namespace FiguresClasses {
         bool get_show_filling();
     };
 
-    class Image : public Primitive {
+    class Image : public Primitive
+    {
         //класс картинки
     private:
         bool bool_show_filling = false; //показывать заливку
@@ -934,7 +949,8 @@ namespace FiguresClasses {
         bool get_show_filling();
     };
 
-    class Telecontrol : public Text {
+    class Telecontrol : public Text
+    {
     private:
         int condition = 0; // состояние
 
@@ -965,7 +981,8 @@ namespace FiguresClasses {
         int get_condition();
     };
 
-    class Telesignalisation : public Text {
+    class Telesignalisation : public Text
+    {
     private:
         int condition = 0; // состояние
 
@@ -996,7 +1013,8 @@ namespace FiguresClasses {
         int get_condition();
     };
 
-    class Telemeasure : public Text {
+    class Telemeasure : public Text
+    {
     private:
         std::vector<std::string> device_type_list = {
             "gsNone", "gsDigit", "gsElipse",
@@ -1036,7 +1054,8 @@ namespace FiguresClasses {
         int get_id();
     };
 
-    class Set : public Primitive {
+    class Set : public Primitive
+    {
         //класс сетки
     private:
         int line_width = 1;
@@ -1082,7 +1101,8 @@ namespace FiguresClasses {
         std::vector<int> get_line_color();
     };
 
-    class Point : public Primitive {
+    class Point : public Primitive
+    {
     private:
         int line_width = 1;
 
@@ -1106,7 +1126,8 @@ namespace FiguresClasses {
         std::vector<int> get_line_color();
     };
 
-    class LibraryObject : public Primitive {
+    class LibraryObject : public Primitive
+    {
     public:
         bool horizontal_mirror = false;
         bool vertical_mirror = false;
@@ -1118,7 +1139,7 @@ namespace FiguresClasses {
 
         LibraryObject(int x, int y, int width, int height, int angle, int id, int condition,
                       const std::string& lib_name, const std::string& obj_name,
-                      const std::vector<std::vector<Primitive*> >& patterns, const std::string& help_text, bool show,
+                      const std::vector<std::vector<Primitive*>>& patterns, const std::string& help_text, bool show,
                       bool show_help, int hor_mirror, int vert_mirror);
 
         void draw(QPainter& painter) override;
@@ -1131,7 +1152,7 @@ namespace FiguresClasses {
 
         void set_object_name(const std::string& obj_name);
 
-        void set_patterns(const std::vector<std::vector<Primitive*> >& patterns);
+        void set_patterns(const std::vector<std::vector<Primitive*>>& patterns);
 
         void set_hor_mirror(bool hor_mirror);
 
