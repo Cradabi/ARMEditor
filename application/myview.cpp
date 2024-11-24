@@ -7,11 +7,30 @@
 #include <sstream>
 #include <iomanip>
 #include <QTableWidget>
+#include "arm_client/lib/arm_client.h"
 
 MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent)
 {
     // Подключаем слот, который будет отслеживать положение скроллбара
     scene = parent;
+
+    ClientWorker *client = new ClientWorker();
+    client->setupConnection("127.0.0.1", 12345);
+
+    QObject::connect(client, &ClientWorker::connected, []() {
+        qDebug() << "Соединение установлено!";
+    });
+
+    QObject::connect(client, &ClientWorker::disconnected, []() {
+        qDebug() << "Соединение разорвано!";
+    });
+
+    QObject::connect(client, &ClientWorker::errorOccurred, [](const QString &error) {
+        qDebug() << "Ошибка:" << error;
+    });
+
+    // Запуск клиента
+    client->start();
 }
 
 // void MyView::mouseDoubleClickEvent(QMouseEvent* event)
