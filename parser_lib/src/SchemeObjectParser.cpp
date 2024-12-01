@@ -193,9 +193,10 @@ void SchemeObjectParser::parseGroup(std::ifstream& File, int32_t nesting_level)
     std::vector<std::vector<FiguresClasses::Primitive*>> patterns;
     patterns.emplace_back(group_objects_vector_);
 
+    //TODO спросить по поводу отрицательных координат объектов
     scheme_params_->objects_vector.emplace_back(
-        new GroupObject(abs((int)round(object_params.contur_frame_matrix[0][0])),
-                        abs((int)round(object_params.contur_frame_matrix[0][1])), ((int)round(
+        new GroupObject((int)round(object_params.contur_frame_matrix[0][0]),
+                        (int)round(object_params.contur_frame_matrix[0][1]), ((int)round(
                             object_params.coord_matrix[0][2] - object_params.contur_frame_matrix[0][0])) * 2,
                         ((int)round(
                             object_params.coord_matrix[1][2] -
@@ -750,6 +751,7 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                                           }, 0));
                 break;
             case objects_types_.ptPicture:
+                qDebug() << primitive_params.trans_color.red << primitive_params.trans_color.green << primitive_params.trans_color.blue;
                 primitives_in_pattern.push_back(
                     new Image((int)round(primitive_params.indentity_matrix[0][2] * scale +
                                   primitive_params.points_vector[0].x * scale *
@@ -778,7 +780,11 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                                   primitive_params.brush_color.green,
                                   primitive_params.brush_color.blue
                               },
-                              primitive_params.brush_style));
+                              primitive_params.brush_style, {
+                          primitive_params.trans_color.red,
+                          primitive_params.trans_color.green,
+                          primitive_params.trans_color.blue
+                      }));
                 break;
             case objects_types_.ptPolyLine:
                 for (int i = 0; i < primitive_params.points_amount; i++)
@@ -1361,6 +1367,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
         break;
     case objects_types_.ptPicture:
         // qDebug() << "picture";
+        qDebug() << primitive_params.trans_color.red << primitive_params.trans_color.green << primitive_params.trans_color.blue;
         actual_vector->emplace_back(
             new Image(object_params.coord_matrix[0][2] - abs(primitive_params.points_vector[0].x*c_m1/cosin),
                       object_params.coord_matrix[1][2] - abs(primitive_params.points_vector[0].y*c_m2/cosin),
@@ -1377,7 +1384,11 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                           primitive_params.brush_color.green,
                           primitive_params.brush_color.blue
                       },
-                      primitive_params.brush_style));
+                      primitive_params.brush_style, {
+                          primitive_params.trans_color.red,
+                          primitive_params.trans_color.green,
+                          primitive_params.trans_color.blue
+                      }));
         break;
     case objects_types_.ptPolyLine:
         // qDebug() << "polyline";
