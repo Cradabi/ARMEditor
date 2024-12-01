@@ -780,11 +780,7 @@ void SchemeObjectParser::parseLibObject(std::ifstream& File, sop::ObjectParams& 
                                   primitive_params.brush_color.green,
                                   primitive_params.brush_color.blue
                               },
-                              primitive_params.brush_style, {
-                          primitive_params.trans_color.red,
-                          primitive_params.trans_color.green,
-                          primitive_params.trans_color.blue
-                      }));
+                              primitive_params.brush_style));
                 break;
             case objects_types_.ptPolyLine:
                 for (int i = 0; i < primitive_params.points_amount; i++)
@@ -1384,11 +1380,7 @@ void SchemeObjectParser::parsePrimitive(std::ifstream& File, sop::ObjectParams& 
                           primitive_params.brush_color.green,
                           primitive_params.brush_color.blue
                       },
-                      primitive_params.brush_style, {
-                          primitive_params.trans_color.red,
-                          primitive_params.trans_color.green,
-                          primitive_params.trans_color.blue
-                      }));
+                      primitive_params.brush_style));
         break;
     case objects_types_.ptPolyLine:
         // qDebug() << "polyline";
