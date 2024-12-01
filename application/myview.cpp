@@ -9,28 +9,42 @@
 #include <QTableWidget>
 #include "arm_client/lib/arm_client.h"
 
-MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent)
+MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new QThread), clientWorker(new arm_client)
 {
     // Подключаем слот, который будет отслеживать положение скроллбара
     scene = parent;
 
-    ClientWorker *client = new ClientWorker();
-    client->setupConnection("127.0.0.1", 12345);
+    clientWorker->moveToThread(clientThread);
 
-    QObject::connect(client, &ClientWorker::connected, []() {
-        qDebug() << "Соединение установлено!";
+    // Связываем сигналы/слоты
+    connect(clientWorker, &arm_client::messageReceived, this, &MyView::onMessageReceived);
+    connect(clientWorker, &arm_client::errorOccurred, this, &MyView::onErrorOccurred);
+    connect(this, &MyView::sendCommannd, clientWorker, &arm_client::sendCommand);
+
+    // Запускаем поток
+    clientThread->start();
+
+    // Стартуем клиента
+    startClient("127.0.0.1", 3011);
+}
+
+void MyView::startClient(const QString &host, quint16 port) {
+    // Соединяемся с сервером через сигнал/слот
+    QMetaObject::invokeMethod(clientWorker, [=]() {
+        clientWorker->connectToServer(host, port);
     });
+}
 
-    QObject::connect(client, &ClientWorker::disconnected, []() {
-        qDebug() << "Соединение разорвано!";
-    });
+void MyView::sendMessageToServer(const QString &action, const QString &object) {
+    emit sendCommannd(action, object);  // Отправляем сигнал клиенту
+}
 
-    QObject::connect(client, &ClientWorker::errorOccurred, [](const QString &error) {
-        qDebug() << "Ошибка:" << error;
-    });
+void MyView::onMessageReceived(const QString &message) {
+    qDebug() << "Message from server:" << message;
+}
 
-    // Запуск клиента
-    client->start();
+void MyView::onErrorOccurred(const QString &error) {
+    qDebug() << "Error:" << error;
 }
 
 // void MyView::mouseDoubleClickEvent(QMouseEvent* event)
@@ -246,7 +260,11 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
 
                             update_table_lib_short(state, id.toInt());
 
-                            timerLabel->setText("Приказ отправлен");
+                            timerLabel->setText("Приказ выполняетсся...");
+
+                            sendCommannd(name, cur_state);
+
+                            timerLabel->setText("Приказ выполнен");
                             cancelButton->hide();
                         }
                     });

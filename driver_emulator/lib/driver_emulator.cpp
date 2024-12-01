@@ -33,7 +33,7 @@ void DriverEmulator::onNewConnection() {
     qDebug() << "Новый клиент подключен:" << clientSocket->peerAddress().toString();
 
     // Подключаем сигналы для обработки клиента
-    connect(clientSocket, &QTcpSocket::disconnected, this, &DriverEmulator::onClientDisconnected);
+    //connect(clientSocket, &QTcpSocket::disconnected, this, &DriverEmulator::onClientDisconnected);
     connect(clientSocket, &QTcpSocket::readyRead, this, &DriverEmulator::onReadyRead);
 
     // Инициализируем клиента по умолчанию

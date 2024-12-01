@@ -1,88 +1,100 @@
 #include "arm_client.h"
 #include <QDebug>
 
-ClientWorker::ClientWorker(QObject *parent)
-        : QObject(parent), socket(nullptr), workerThread(new QThread(this)), port(0) {
-    moveToThread(workerThread);
+arm_client::arm_client(QObject *parent) : QObject(parent), socket(new QTcpSocket(this)) {
+    connect(socket, &QTcpSocket::readyRead, this, &arm_client::onReadyRead);
+    //connect(socket, &QTcpSocket::errorOccurred, this, &arm_client::onErrorOccurred);
+    connect(socket, &QTcpSocket::connected, this, &arm_client::connected);
+    connect(socket, &QTcpSocket::disconnected, this, &arm_client::disconnected);
 
-    connect(workerThread, &QThread::started, this, [this]() {
-        socket = new QTcpSocket();
-
-        connect(socket, &QTcpSocket::connected, this, &ClientWorker::onConnected);
-        connect(socket, &QTcpSocket::disconnected, this, &ClientWorker::onDisconnected);
-        connect(socket, &QTcpSocket::readyRead, this, &ClientWorker::onReadyRead);
-
-        socket->connectToHost(host, port);
-    });
-
-    connect(workerThread, &QThread::finished, this, [this]() {
-        if (socket) {
-            socket->disconnectFromHost();
-            socket->deleteLater();
-            socket = nullptr;
-        }
-    });
+    qDebug() << "arm_client created";
 }
 
-ClientWorker::~ClientWorker() {
-    stop();
+arm_client::~arm_client() {
+    if (socket->isOpen()) {
+        qDebug() << "Disconnecting and closing socket in destructor";
+        socket->disconnectFromHost();
+        socket->close();
+    }
+    delete socket;
+
+    qDebug() << "arm_client destroyed";
 }
 
-void ClientWorker::setupConnection(const QString &host, quint16 port) {
-    this->host = host;
-    this->port = port;
+void arm_client::connectToServer(const QString &host, quint16 port) {
+    qDebug() << "Trying to connect to server at" << host << "on port" << port;
+    if (socket->isOpen()) {
+        qDebug() << "Socket already open, disconnecting from current host";
+        socket->disconnectFromHost();
+    }
+    socket->connectToHost(host, port);
+
+    sendInitCommand(0, "A.M.T.");
 }
 
-void ClientWorker::start() {
-    if (!workerThread->isRunning()) {
-        workerThread->start();
+// void arm_client::sendMessageToServer(const QString &message) {
+//     if (socket->isOpen()) {
+//         qDebug() << "Sending message to server:" << message;
+//         socket->write(message.toUtf8());
+//         socket->flush();
+//     } else {
+//         qDebug() << "Error: Socket is not connected, cannot send message";
+//         emit errorOccurred("Socket is not connected.");
+//     }
+// }
+
+void arm_client::sendInitCommand(const QString &id, const QString &driverType) {
+    // Формируем JSON-команду
+    QJsonObject jsonObj;
+    jsonObj["init"] = true;
+    jsonObj["id"] = id;
+    jsonObj["driver"] = driverType;
+
+    QJsonDocument jsonDoc(jsonObj);
+    QString message = jsonDoc.toJson(QJsonDocument::Compact);
+
+    // Отправляем команду
+    socket->write(message.toUtf8() + "\n"); // Добавляем \n для разделения сообщений
+    socket->flush();
+    qDebug() << "Отправлена команда инициализации:" << message;
+}
+
+void arm_client::sendCommand(const QString &action, const QString &object) {
+    // Формируем JSON-команду
+    QJsonObject jsonObj;
+    jsonObj["command"] = action;
+    jsonObj["object"] = object;
+
+    QJsonDocument jsonDoc(jsonObj);
+    QString message = jsonDoc.toJson(QJsonDocument::Compact);
+
+    // Отправляем команду
+    socket->write(message.toUtf8() + "\n"); // Добавляем \n для разделения сообщений
+    socket->flush();
+    qDebug() << "Отправлена команда управления:" << message;
+}
+
+
+void arm_client::disconnectFromServer() {
+    if (socket->isOpen()) {
+        qDebug() << "Disconnecting from server";
+        socket->disconnectFromHost();
+    } else {
+        qDebug() << "Socket is already closed, no need to disconnect";
     }
 }
 
-void ClientWorker::stop() {
-    if (workerThread->isRunning()) {
-        workerThread->quit();
-        workerThread->wait();
-    }
-}
-
-void ClientWorker::onConnected() {
-    qDebug() << "Клиент подключен к серверу";
-    emit connected();
-}
-
-void ClientWorker::onDisconnected() {
-    qDebug() << "Клиент отключен от сервера";
-    emit disconnected();
-}
-
-void ClientWorker::onReadyRead() {
+void arm_client::onReadyRead() {
+    qDebug() << "Data available to read from server";
     while (socket->canReadLine()) {
-        QString response = QString::fromUtf8(socket->readLine()).trimmed();
-        qDebug() << "Ответ от сервера:" << response;
-
-        mutex.lock();
-        lastResponse = response;
-        condition.wakeAll();
-        mutex.unlock();
-
-        emit messageReceived(response);
+        QString line = QString::fromUtf8(socket->readLine()).trimmed();
+        qDebug() << "Received message from server:" << line;
+        emit messageReceived(line);
     }
 }
 
-QString ClientWorker::sendMessage(const QString &message) {
-    QMutexLocker locker(&mutex);
-    if (socket && socket->state() == QAbstractSocket::ConnectedState) {
-        socket->write(message.toUtf8() + "\n");
-        socket->flush();
-
-        // Ожидание ответа
-        if (!condition.wait(&mutex, 5000)) {
-            return "ERROR: Timeout waiting for response";
-        }
-
-        return lastResponse;
-    }
-
-    return "ERROR: Not connected to server";
+void arm_client::onErrorOccurred(QAbstractSocket::SocketError socketError) {
+    Q_UNUSED(socketError);
+    qDebug() << "Socket error occurred:" << socket->errorString();
+    emit errorOccurred(socket->errorString());
 }

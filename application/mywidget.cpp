@@ -3,6 +3,8 @@
 #include "parser_lib/SchemeFileParser.h"
 #include "db_lib/db_connection.h"
 
+
+
 MyWidget::MyWidget()
 {
     layout = new QVBoxLayout(this);
@@ -10,6 +12,8 @@ MyWidget::MyWidget()
     view = new MyView(scene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+
 
     db_request_result_actual = connection_to_db();
     db_request_result_cp_actual = connection_to_cp_db();

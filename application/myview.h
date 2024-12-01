@@ -15,6 +15,7 @@
 #include <unordered_map>
 
 #include "primitives_lib/SchemeClass.h"
+#include "arm_client/lib/arm_client.h"
 #include "db_lib/db_connection.h"
 
 class MyView : public QGraphicsView
@@ -34,6 +35,14 @@ public:
 
     ~MyView()
     {
+
+        // Завершаем поток и освобождаем ресурсы
+        clientThread->quit();
+        clientThread->wait();
+        delete clientWorker;
+        delete clientThread;
+
+
         scheme_params.deleteOBJS();
         scheme_params = {};
     }
@@ -91,4 +100,20 @@ private slots:
     void updateTablecontrol();
 
     void updateTablesign();
+
+public:
+
+    void startClient(const QString &host, quint16 port);
+    void sendMessageToServer(const QString &action, const QString &object);
+
+    signals:
+        void sendCommannd(const QString &action, const QString &object);
+
+    private slots:
+        void onMessageReceived(const QString &message);
+    void onErrorOccurred(const QString &error);
+
+private:
+    QThread *clientThread;
+    arm_client *clientWorker;
 };

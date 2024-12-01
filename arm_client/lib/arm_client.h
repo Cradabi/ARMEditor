@@ -1,42 +1,38 @@
 #pragma once
 
+
 #include <QObject>
 #include <QTcpSocket>
 #include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
 
-class ClientWorker : public QObject {
-Q_OBJECT
+#include <QJsonDocument>
+#include <QJsonObject>
 
+class arm_client : public QObject {
+    Q_OBJECT
 public:
-    explicit ClientWorker(QObject *parent = nullptr);
-    ~ClientWorker();
+    explicit arm_client(QObject *parent = nullptr);
+    ~arm_client();
 
-    QString sendMessage(const QString &message);
+    void connectToServer(const QString &host, quint16 port);
 
-    void setupConnection(const QString &host, quint16 port);
-
-    void start();
-    void stop();
-
-signals:
+    signals:
+        void messageReceived(const QString &message);
+    void errorOccurred(const QString &error);
     void connected();
     void disconnected();
-    void errorOccurred(const QString &error);
-    void messageReceived(const QString &message);
 
-private slots:
-    void onConnected();
-    void onDisconnected();
-    void onReadyRead();
+    public slots:
+        // void sendMessageToServer(const QString &message);
+
+    void sendCommand(const QString &action, const QString &object);
+    void sendInitCommand(const QString &id, const QString &driverType);
+    void disconnectFromServer();
+
+    private slots:
+        void onReadyRead();
+    void onErrorOccurred(QAbstractSocket::SocketError socketError);
 
 private:
     QTcpSocket *socket;
-    QThread *workerThread;
-    QString host;
-    quint16 port;
-    QMutex mutex;
-    QWaitCondition condition;
-    QString lastResponse;
 };

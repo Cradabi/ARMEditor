@@ -4,6 +4,7 @@
 
 #include <QSqlQuery>
 #include <parser_lib/src/SchemeFileNS.h>
+#include <arm_client/lib/arm_client.h>
 
 class MyWidget : public QFrame
 {
@@ -19,6 +20,7 @@ public:
     QVBoxLayout* layout;
     MyView* view;
     QGraphicsScene* scene;
+
 
     MyWidget();
 
@@ -260,4 +262,7 @@ public slots:
         scene->clear();
         scene->addPixmap(pix);
     }
+
+
+
 };
