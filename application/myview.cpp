@@ -272,53 +272,53 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
 
 void MyView::mousePressEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton)
-    {
-        // if (!clickTimer->isActive())
-        // {
-        //     //lastClickPos = QPoint(event->pos().x(), event->pos().y());
-        //     lastEvent = event;
-        //     clickTimer->start(250);
-        // }
+    // if (event->button() == Qt::LeftButton)
+    // {
+    //     // if (!clickTimer->isActive())
+    //     // {
+    //     //     //lastClickPos = QPoint(event->pos().x(), event->pos().y());
+    //     //     lastEvent = event;
+    //     //     clickTimer->start(250);
+    //     // }
+    //
+    //     QPoint point(event->pos().x(), event->pos().y());
+    //
+    //     for (auto object : scheme_params.objects_vector)
+    //     {
+    //         std::string tp_obj = object->get_type_object();
+    //         QPoint original_point = point;
+    //         // Создаем объект преобразования
+    //         QTransform transform;
+    //
+    //         transform.translate(-1 * (object->get_x() + object->get_width() / 2),
+    //                             -1 * (object->get_y() + object->get_height() / 2));
+    //
+    //         //transform.rotate(-1 * object[4].toInt());
+    //
+    //         // Применяем преобразование к точке
+    //         QPoint newPoint = transform.map(point);
+    //         if (object->get_show_help())
+    //         {
+    //             if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
+    //                 newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
+    //             {
+    //                 transform.reset();
+    //
+    //                 newWindow = new QMenu();
+    //                 newWindow->move(event->globalX(), event->globalY());
+    //
+    //                 QVBoxLayout* mainLayout = new QVBoxLayout(newWindow);
+    //                 QLabel* label1 = new QLabel(
+    //                     QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().c_str()));
+    //                 mainLayout->addWidget(label1);
+    //                 label1->adjustSize();
+    //                 newWindow->show();
+    //             }
+    //         }
+    //     }
+    // }
 
-        QPoint point(event->pos().x(), event->pos().y());
-
-        for (auto object : scheme_params.objects_vector)
-        {
-            std::string tp_obj = object->get_type_object();
-            QPoint original_point = point;
-            // Создаем объект преобразования
-            QTransform transform;
-
-            transform.translate(-1 * (object->get_x() + object->get_width() / 2),
-                                -1 * (object->get_y() + object->get_height() / 2));
-
-            //transform.rotate(-1 * object[4].toInt());
-
-            // Применяем преобразование к точке
-            QPoint newPoint = transform.map(point);
-            if (object->get_show_help())
-            {
-                if (newPoint.x() >= (-1 * object->get_width() / 2) && newPoint.x() <= object->get_width() / 2 &&
-                    newPoint.y() >= (-1 * object->get_height() / 2) && newPoint.y() <= object->get_height() / 2)
-                {
-                    transform.reset();
-
-                    newWindow = new QMenu();
-                    newWindow->move(event->globalX(), event->globalY());
-
-                    QVBoxLayout* mainLayout = new QVBoxLayout(newWindow);
-                    QLabel* label1 = new QLabel(
-                        QTextCodec::codecForName("cp1251")->toUnicode(object->get_help_text().c_str()));
-                    mainLayout->addWidget(label1);
-                    label1->adjustSize();
-                    newWindow->show();
-                }
-            }
-        }
-    }
-
-    else if (event->button() == Qt::RightButton)
+    if (event->button() == Qt::RightButton)
     {
         QPoint point(event->pos().x(), event->pos().y());
 
