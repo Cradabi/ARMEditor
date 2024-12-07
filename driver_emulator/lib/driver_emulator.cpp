@@ -4,7 +4,7 @@
 #include <QDebug>
 
 DriverEmulator::DriverEmulator(QObject *parent)
-    : QObject(parent), server(new QTcpServer(this)) {}
+        : QObject(parent), server(new QTcpServer(this)) {}
 
 DriverEmulator::~DriverEmulator() {
     if (server->isListening()) {
@@ -15,38 +15,43 @@ DriverEmulator::~DriverEmulator() {
 
 bool DriverEmulator::startServer(quint16 port) {
     if (!server->listen(QHostAddress::Any, port)) {
-        qCritical() << "Не удалось запустить сервер: " << server->errorString();
+        QString errorMsg = "Не удалось запустить сервер: " + server->errorString();
+        emit logMessage(errorMsg);
         return false;
     }
 
     connect(server, &QTcpServer::newConnection, this, &DriverEmulator::onNewConnection);
-    qDebug() << "Сервер запущен на порту" << port;
+    QString successMsg = "Сервер запущен на порту " + QString::number(port);
+    emit logMessage(successMsg);
     return true;
 }
 
 void DriverEmulator::onNewConnection() {
     QTcpSocket *clientSocket = server->nextPendingConnection();
     if (!clientSocket) {
+        emit logMessage("Ошибка: Не удалось получить подключение клиента.");
         return;
     }
 
-    qDebug() << "Новый клиент подключен:" << clientSocket->peerAddress().toString();
+    QString clientAddress = clientSocket->peerAddress().toString();
+    emit logMessage("Новый клиент подключен: " + clientAddress);
 
-    // Подключаем сигналы для обработки клиента
-    //connect(clientSocket, &QTcpSocket::disconnected, this, &DriverEmulator::onClientDisconnected);
+    connect(clientSocket, &QTcpSocket::disconnected, this, &DriverEmulator::onClientDisconnected);
     connect(clientSocket, &QTcpSocket::readyRead, this, &DriverEmulator::onReadyRead);
 
-    // Инициализируем клиента по умолчанию
-    clients[clientSocket] = ClientInfo();
+    clients[clientSocket] = ClientInfo(); // Инициализируем клиента
 }
 
 void DriverEmulator::onClientDisconnected() {
     QTcpSocket *clientSocket = qobject_cast<QTcpSocket *>(sender());
     if (!clientSocket) {
+        emit logMessage("Ошибка: Не удалось обработать отключение клиента.");
         return;
     }
 
-    qDebug() << "Клиент отключен:" << clientSocket->peerAddress().toString();
+    QString clientAddress = clientSocket->peerAddress().toString();
+    emit logMessage("Клиент отключен: " + clientAddress);
+
     clients.remove(clientSocket);
     clientSocket->deleteLater();
 }
@@ -54,12 +59,13 @@ void DriverEmulator::onClientDisconnected() {
 void DriverEmulator::onReadyRead() {
     QTcpSocket *clientSocket = qobject_cast<QTcpSocket *>(sender());
     if (!clientSocket) {
+        emit logMessage("Ошибка: Не удалось прочитать данные от клиента.");
         return;
     }
 
     while (clientSocket->canReadLine()) {
         QString message = QString::fromUtf8(clientSocket->readLine()).trimmed();
-        qDebug() << "Получено сообщение от клиента:" << message;
+        emit logMessage("Получено сообщение от клиента: " + message);
 
         // Обработка команды
         handleCommand(clientSocket, message);
@@ -69,8 +75,9 @@ void DriverEmulator::onReadyRead() {
 void DriverEmulator::handleCommand(QTcpSocket *client, const QString &command) {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(command.toUtf8());
     if (!jsonDoc.isObject()) {
-        qWarning() << "Неверный формат команды:" << command;
-        client->write("ERROR: Invalid command format\n");
+        QString errorMsg = "Неверный формат команды: " + command;
+        emit logMessage(errorMsg);
+        sendToClient(client, "ERROR: Invalid command format");
         return;
     }
 
@@ -82,8 +89,9 @@ void DriverEmulator::handleCommand(QTcpSocket *client, const QString &command) {
         QString driverType = jsonObj["driver"].toString();
         clients[client] = {id, driverType};
 
-        qDebug() << "Клиент инициализирован: ID =" << id << ", Driver =" << driverType;
-        client->write("OK: Initialized\n");
+        QString initMsg = QString("Клиент инициализирован: ID = %1, Driver = %2").arg(id, driverType);
+        emit logMessage(initMsg);
+        sendToClient(client, "OK: Initialized");
     } else if (jsonObj.contains("command")) {
         // Обработка команды управления
         QString action = jsonObj["command"].toString();
@@ -91,11 +99,16 @@ void DriverEmulator::handleCommand(QTcpSocket *client, const QString &command) {
 
         // Эмуляция выполнения команды
         QString response = QString("OK: Object %1 %2").arg(object, action);
-        qDebug() << "Команда выполнена:" << response;
+        emit logMessage("Команда выполнена: " + response);
 
-        client->write(response.toUtf8() + "\n");
+        sendToClient(client, response);
     } else {
-        qWarning() << "Неизвестная команда:" << command;
-        client->write("ERROR: Unknown command\n");
+        QString unknownMsg = "Неизвестная команда: " + command;
+        emit logMessage(unknownMsg);
+        sendToClient(client, "ERROR: Unknown command");
     }
+}
+
+void DriverEmulator::sendToClient(QTcpSocket *client, const QString &message) {
+    client->write(message.toUtf8() + "\n");
 }

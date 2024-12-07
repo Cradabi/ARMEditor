@@ -1,33 +1,42 @@
 cmake_minimum_required(VERSION 3.27)
 project(ARM_driver_emulator LANGUAGES CXX)
 
+# Установка стандарта C++
 set(CMAKE_CXX_STANDARD 23)
 
+# Включение автоматической обработки Qt файлов
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOUIC ON)  # Генерация .ui файлов
+set(CMAKE_AUTOMOC ON)  # Генерация moc-файлов
+set(CMAKE_AUTORCC ON)  # Генерация rcc-файлов
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+# Поиск необходимых компонентов Qt
+find_package(Qt5 COMPONENTS Widgets Network Sql REQUIRED)
 
-find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
-find_package(Qt5 COMPONENTS Sql REQUIRED)
-
+# Поиск библиотеки libpq
 find_package(PkgConfig)
 pkg_search_module(LIBPQ REQUIRED libpq)
 
+# Добавление исходников и библиотек
 add_library(EmulatorLib STATIC lib/driver_emulator.cpp)
 
-add_executable(${PROJECT_NAME} driver_emulator_main.cpp)
+# Добавление главного приложения
+add_executable(${PROJECT_NAME}
+        driver_emulator_main.cpp
+        mainwindow.cpp
+        mainwindow.ui
+)
 
-#Подключаем QT к проекту
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql Qt5::Network ${LIBPQ_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Sql)
-
-#Подключаем QT к статической библиотеке PrimitivesLib
-target_link_libraries(EmulatorLib PRIVATE Qt5::Core Qt5::Sql Qt5::Network  ${LIBPQ_LIBRARIES})
-target_link_libraries(EmulatorLib PRIVATE Qt5::Widgets)
-
-
-#Подключаем ParserLib к проекту
+# Подключение Qt библиотек к главному проекту
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Widgets Qt5::Network Qt5::Sql ${LIBPQ_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE EmulatorLib)
+
+# Подключение Qt библиотек к библиотеке EmulatorLib
+target_link_libraries(EmulatorLib PRIVATE Qt5::Core Qt5::Widgets Qt5::Network Qt5::Sql ${LIBPQ_LIBRARIES})
+
+# Установка необходимых директорий
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(EmulatorLib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
+# Генерация файлов для пользовательского интерфейса
+qt5_wrap_ui(UI_HEADERS mainwindow.ui)

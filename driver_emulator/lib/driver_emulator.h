@@ -13,7 +13,7 @@ struct ClientInfo {
 
 // Класс эмулятора драйвера
 class DriverEmulator : public QObject {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     explicit DriverEmulator(QObject *parent = nullptr);
@@ -22,9 +22,13 @@ public:
     // Запускает сервер на указанном порту
     bool startServer(quint16 port);
 
-    private slots:
-        // Слоты для обработки событий
-        void onNewConnection();
+signals:
+    // Сигнал для передачи логов в GUI
+    void logMessage(const QString &message);
+
+private slots:
+    // Слоты для обработки событий
+    void onNewConnection();
     void onClientDisconnected();
     void onReadyRead();
 
@@ -34,4 +38,7 @@ private:
 
     // Обработка команд от клиента
     void handleCommand(QTcpSocket *client, const QString &command);
+
+    // Утилита для отправки сообщения клиенту
+    void sendToClient(QTcpSocket *client, const QString &message);
 };
