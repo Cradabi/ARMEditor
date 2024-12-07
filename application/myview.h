@@ -36,6 +36,8 @@ public:
     ~MyView()
     {
 
+        qDebug() << "myWiev удален";
+
         // Завершаем поток и освобождаем ресурсы
         clientThread->quit();
         clientThread->wait();

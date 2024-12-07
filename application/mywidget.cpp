@@ -7,13 +7,11 @@
 
 MyWidget::MyWidget()
 {
-    layout = new QVBoxLayout(this);
-    scene = new QGraphicsScene(this);
-    view = new MyView(scene);
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
+    // layout = new QVBoxLayout(this);
+    // scene = new QGraphicsScene(this);
+    // view = new MyView(scene);
+    // view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     db_request_result_actual = connection_to_db();
     db_request_result_cp_actual = connection_to_cp_db();
@@ -23,9 +21,12 @@ MyWidget::MyWidget()
 
 void MyWidget::draw_new_scheme(const std::string& filepath)
 {
-    delete layout;
-    delete scene;
-    delete view;
+    if (view != nullptr)
+    {
+        delete layout;
+        delete scene;
+        delete view;
+    }
 
     layout = new QVBoxLayout(this);
     scene = new QGraphicsScene(this);

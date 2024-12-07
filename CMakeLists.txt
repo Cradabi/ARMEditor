@@ -23,12 +23,15 @@ add_library(DBLib STATIC db_lib/db_connection.cpp)
 
 add_library(ArmClientLib STATIC arm_client/lib/arm_client.cpp)
 
-add_executable(${PROJECT_NAME} main.cpp application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
+add_library(Application STATIC application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
+
+add_executable(${PROJECT_NAME} main.cpp)
 
 #Подключаем QT к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql Qt5::Network ${LIBPQ_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Sql)
+
+target_link_libraries(Application PRIVATE Qt5::Core Qt5::Sql Qt5::Widgets Qt5::Network ${LIBPQ_LIBRARIES})
 
 #Подключаем QT к статической библиотеке PrimitivesLib
 target_link_libraries(PrimitivesLib PRIVATE Qt5::Core Qt5::Sql ${LIBPQ_LIBRARIES})
@@ -44,6 +47,10 @@ target_link_libraries(ArmClientLib PRIVATE Qt5::Core Qt5::Sql Qt5::Network ${LIB
 
 #Подключаем ParserLib к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE DBLib)
+
+target_link_libraries(Application PRIVATE DBLib)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Application)
 
 #Подключаем ParserLib к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE ParserLib)

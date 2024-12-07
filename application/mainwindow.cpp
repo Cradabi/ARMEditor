@@ -29,7 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     // ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     // ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->listView->setVisible(this->panel_is_visible);
+
+    //TODO Удалить line_2 как сущность
     ui->line_2->setVisible(this->panel_is_visible);
+
+    slot_change_panel_visibility();
 
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
     connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));

@@ -23,13 +23,25 @@ arm_client::~arm_client() {
 
 void arm_client::connectToServer(const QString &host, quint16 port) {
     qDebug() << "Trying to connect to server at" << host << "on port" << port;
+
     if (socket->isOpen()) {
         qDebug() << "Socket already open, disconnecting from current host";
         socket->disconnectFromHost();
     }
-    socket->connectToHost(host, port);
 
-    sendInitCommand(0, "A.M.T.");
+    // Подключаем сигналы для обработки успешного подключения и ошибок
+    connect(socket, &QTcpSocket::connected, this, [this]() {
+        qDebug() << "Подключились к серверу";
+        sendInitCommand("0", "A.M.T.");
+    });
+
+    // Для старых версий Qt используем сигнал error
+    connect(socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, [this](QAbstractSocket::SocketError) {
+        qDebug() << "Ошибка подключения к серверу:" << socket->errorString();
+    });
+
+    // Начинаем подключение
+    socket->connectToHost(host, port);
 }
 
 // void arm_client::sendMessageToServer(const QString &message) {
@@ -86,11 +98,11 @@ void arm_client::disconnectFromServer() {
 
 void arm_client::onReadyRead() {
     qDebug() << "Data available to read from server";
-    while (socket->canReadLine()) {
+    // while (socket->canReadLine()) {
         QString line = QString::fromUtf8(socket->readLine()).trimmed();
-        qDebug() << "Received message from server:" << line;
+        // qDebug() << "Received message from server:" << line;
         emit messageReceived(line);
-    }
+    // }
 }
 
 void arm_client::onErrorOccurred(QAbstractSocket::SocketError socketError) {
