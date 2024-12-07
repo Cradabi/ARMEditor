@@ -100,7 +100,7 @@ void arm_client::onReadyRead() {
     qDebug() << "Data available to read from server";
     // while (socket->canReadLine()) {
         QString line = QString::fromUtf8(socket->readLine()).trimmed();
-        // qDebug() << "Received message from server:" << line;
+        qDebug() << "Received message from server:" << line;
         emit messageReceived(line);
     // }
 }

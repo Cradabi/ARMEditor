@@ -69,6 +69,8 @@ public:
 private:
     // QTimer* clickTimer;
 
+    QString messageStatus;
+
     QPoint lastClickPos;
 
     // QMouseEvent* lastEvent;
@@ -107,6 +109,7 @@ public:
 
     void startClient(const QString &host, quint16 port);
     void sendMessageToServer(const QString &action, const QString &object);
+    void ReadMessageReceivedtest(const QString &message);
 
     signals:
         void sendCommannd(const QString &action, const QString &object);

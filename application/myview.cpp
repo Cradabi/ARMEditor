@@ -18,6 +18,7 @@ MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new
 
     // Связываем сигналы/слоты
     connect(clientWorker, &arm_client::messageReceived, this, &MyView::onMessageReceived);
+    connect(clientWorker, &arm_client::messageReceived, this, &MyView::ReadMessageReceivedtest);
     connect(clientWorker, &arm_client::errorOccurred, this, &MyView::onErrorOccurred);
     connect(this, &MyView::sendCommannd, clientWorker, &arm_client::sendCommand);
 
@@ -309,6 +310,14 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                     connect(this, &MyView::onMessageReceived, [&]()
                     {
                         responseTimer.stop(); // Останавливаем таймер ожидания ответа
+                        if(messageStatus.split(":")[0] != "OK")
+                        {
+                            qDebug() << "Эмулятор запретил проводить управляющее воздействие";
+                            timerLabel->setText("Приказ не выполнен");
+                            cancelButton->hide();
+                            return;
+                        }
+                        qDebug() << "Эмулятор разрешил проводить управляющее воздействие";
                         timerLabel->setText("Приказ выполнен");
                         cancelButton->hide();
 
@@ -329,6 +338,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                         qDebug() << "Таблица обновлена: id = " << id.toInt() << ", новое состояние = " << newState;
                     });
 
+
                     // Обработчик нажатия на кнопку "Отменить"
                     connect(cancelButton, &QPushButton::clicked, [&]()
                     {
@@ -346,6 +356,10 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
+void MyView::ReadMessageReceivedtest(const QString &message)
+{
+    messageStatus = message;
+}
 // void MyView::handleSingleClick(QMouseEvent* event)
 // {
 //
