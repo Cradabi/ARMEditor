@@ -42,11 +42,6 @@ void MyView::sendMessageToServer(const QString& action, const QString& object)
     emit sendCommannd(action, object); // Отправляем сигнал клиенту
 }
 
-void MyView::onMessageReceived(const QString& message)
-{
-    qDebug() << "Message from server:" << message;
-}
-
 void MyView::onErrorOccurred(const QString& error)
 {
     qDebug() << "Error:" << error;

@@ -110,9 +110,10 @@ public:
 
     signals:
         void sendCommannd(const QString &action, const QString &object);
+        void onMessageReceived(const QString &message);
 
     private slots:
-        void onMessageReceived(const QString &message);
+
     void onErrorOccurred(const QString &error);
 
 private:
