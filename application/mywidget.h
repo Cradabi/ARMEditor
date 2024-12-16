@@ -41,6 +41,7 @@ public:
 
     void startThread()
     {
+        emit updateDB();
         if (m_thread)
         {
             stopThread();
@@ -58,7 +59,7 @@ public:
         // Соединяем сигнал запуска потока с лямбда-функцией, которая запускает таймер
         connect(m_thread, &QThread::started, m_timer, [=]()
         {
-            m_timer->start(1000); // Запускаем таймер с интервалом в 1 секунду
+            m_timer->start(60000); // Запускаем таймер с интервалом в 1 секунду
         });
 
         // Соединяем сигнал таймера с нашим слотом updateDB
@@ -102,22 +103,6 @@ public slots:
         // db_request_result_cp_previous = db_request_result_cp_actual;
 
         db_request_result_actual = connection_to_db();
-        // db_request_result_cp_actual = connection_to_cp_db();
-
-        // if (db_request_result_actual.size() == db_request_result_previous.size()) {
-        //     bool flag = false;
-        //     while (db_request_result_actual.next() && db_request_result_previous.next()) {
-        //         for (int i = 0; i < db_request_result_actual.record().count(); ++i) {
-        //             if (db_request_result_actual.value(i) != db_request_result_previous.value(i)) {
-        //                 flag = true;
-        //             }
-        //         }
-        //     }
-        //     if (!flag)
-        //     {
-        //         return;
-        //     }
-        // }
 
         std::string help_text;
 
@@ -145,108 +130,6 @@ public slots:
                 }
             }
         }
-
-        // lae::writeLog(logs_file_, "Обновился", true);
-
-        // for (auto object : view->scheme_params.objects_vector)
-        // {
-        //     if (object->get_type_object() == "Библиотечный объект")
-        //     {
-        //         while (db_request_result_.next())
-        //         {
-        //             if (db_request_result_.value(0).toInt() == object->get_id())
-        //             {
-        //                 object->set_condition(db_request_result_.value(2).toInt());
-        //                 while (db_request_result_cp_.next())
-        //                 {
-        //                     if (db_request_result_cp_.value(0).toInt() == db_request_result_.value(4).toInt())
-        //                     {
-        //                         help_text = db_request_result_.value(1).toString().toStdString() + " (" +
-        //                             db_request_result_cp_.value(1).toString().toStdString() + ")";
-        //                         object->set_help_text(help_text);
-        //                         break;
-        //                     }
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //         db_request_result_.seek(0);
-        //         db_request_result_cp_.seek(0);
-        //     }
-        //     else if (object->get_type_object() == "Телеизмерение")
-        //     {
-        //         while (db_request_result_.next())
-        //         {
-        //             if (db_request_result_.value(0).toInt() == object->get_id())
-        //             {
-        //                 object->set_text(db_request_result_.value(3).toString().toStdString());
-        //                 while (db_request_result_cp_.next())
-        //                 {
-        //                     if (db_request_result_cp_.value(0).toInt() == db_request_result_.value(4).toInt())
-        //                     {
-        //                         std::string cur_value = db_request_result_.value(4).toString().toStdString();
-        //                         object->set_text(cur_value);
-        //
-        //                         help_text = db_request_result_.value(1).toString().toStdString() + " (" +
-        //                             db_request_result_cp_.value(1).toString().toStdString() + ")";
-        //                         object->set_help_text(help_text);
-        //                         break;
-        //                     }
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //         db_request_result_.seek(0);
-        //         db_request_result_cp_.seek(0);
-        //     }
-        //     else if (object->get_type_object() == "Телеконтроль")
-        //     {
-        //         while (db_request_result_.next())
-        //         {
-        //             if (db_request_result_.value(0).toInt() == object->get_id())
-        //             {
-        //                 object->set_text(db_request_result_.value(3).toString().toStdString());
-        //                 while (db_request_result_cp_.next())
-        //                 {
-        //                     if (db_request_result_cp_.value(0).toInt() == db_request_result_.value(4).toInt())
-        //                     {
-        //                         help_text = db_request_result_.value(1).toString().toStdString() + " (" +
-        //                             db_request_result_cp_.value(1).toString().toStdString() + ")";
-        //                         object->set_help_text(help_text);
-        //                         break;
-        //                     }
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //         db_request_result_.seek(0);
-        //         db_request_result_cp_.seek(0);
-        //     }
-        //     else if (object->get_type_object() == "Телесигнализация")
-        //     {
-        //         while (db_request_result_.next())
-        //         {
-        //             if (db_request_result_.value(0).toInt() == object->get_id())
-        //             {
-        //                 object->set_text(db_request_result_.value(3).toString().toStdString());
-        //                 while (db_request_result_cp_.next())
-        //                 {
-        //                     if (db_request_result_cp_.value(0).toInt() == db_request_result_.value(4).toInt())
-        //                     {
-        //                         help_text = db_request_result_.value(1).toString().toStdString() + " (" +
-        //                             db_request_result_cp_.value(1).toString().toStdString() + ")";
-        //                         object->set_help_text(help_text);
-        //                         break;
-        //                     }
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //         db_request_result_.seek(0);
-        //         db_request_result_cp_.seek(0);
-        //     }
-        // }
-
 
         QPixmap pix(view->scheme_params.width, view->scheme_params.height);
         QColor bgColor = {
