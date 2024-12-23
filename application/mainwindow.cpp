@@ -1,12 +1,17 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
+#include <iostream>
+#include <fstream>
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    std::string filename = "../info.txt";  // Имя файла
+    // Чтение версии программы из info.txt
+    std::string filename = "../info.txt";  // Имя файла с версией программы
     std::string prog_name;
 
     std::ifstream file(filename);
@@ -18,12 +23,20 @@ MainWindow::MainWindow(QWidget *parent)
         file.close();
     } else {
         std::cout << "Не удалось открыть файл с информацией о программе" << std::endl;
+        prog_name = "ARM Клиент";  // Значение по умолчанию
     }
 
-    prog_name = "ARM Клиент " + prog_name;
+    // Чтение имени пользователя из user.cfg
+    QString username = getUserLogin("../user.cfg"); // Укажите правильный путь к user.cfg
+    if (username.isEmpty()) {
+        username = "Неизвестный пользователь"; // Если логин не удалось прочитать
+    }
 
-    this->setWindowTitle(QString::fromStdString(prog_name));
+    // Устанавливаем заголовок окна
+    QString windowTitle = QString("ARM Клиент %1 | Пользователь: %2").arg(QString::fromStdString(prog_name)).arg(username);
+    this->setWindowTitle(windowTitle);
 
+    // Настройка виджетов
     widget = new MyWidget();
     ui->scrollArea->setWidget(widget);
     // ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -78,4 +91,27 @@ void MainWindow::slot_open_file_manager() {
     std::string filepath = fileName.toStdString();
     std::cout << filepath << '\n';
     this->widget->draw_new_scheme(filepath);
+}
+
+// Функция для чтения логина из user.cfg
+QString MainWindow::getUserLogin(const QString &filePath) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(nullptr, "Ошибка", "Не удалось открыть файл user.cfg");
+        return QString(); // Вернуть пустую строку, если файл не открылся
+    }
+
+    QString username;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        if (line.startsWith("login=")) {
+            username = line.mid(6).trimmed(); // Извлекаем значение после "login="
+            break;
+        }
+    }
+
+    file.close();
+    return username;
 }

@@ -159,112 +159,9 @@
                 <property name="toolTipsVisible">
                     <bool>false</bool>
                 </property>
-                <widget class="QMenu" name="menu_recently_opened_files">
-                    <property name="title">
-                        <string>Список ндавно открытых файлов</string>
-                    </property>
-                    <addaction name="action1_2"/>
-                </widget>
-                <addaction name="action_create"/>
                 <addaction name="action_open"/>
                 <addaction name="separator"/>
-                <addaction name="action_save"/>
-                <addaction name="action_save_as"/>
-                <addaction name="separator"/>
-                <addaction name="action_export_metafile"/>
-                <addaction name="action_export_xml"/>
-                <addaction name="separator"/>
-                <addaction name="action_preview"/>
-                <addaction name="action_print_xml"/>
-                <addaction name="separator"/>
-                <addaction name="menu_recently_opened_files"/>
-                <addaction name="separator"/>
                 <addaction name="action_exit"/>
-            </widget>
-            <widget class="QMenu" name="menu_edit">
-                <property name="title">
-                    <string>Правка</string>
-                </property>
-                <widget class="QMenu" name="menu_align_objects">
-                    <property name="title">
-                        <string>Выровнять объекты</string>
-                    </property>
-                    <addaction name="action_align_left"/>
-                    <addaction name="action_align_right"/>
-                    <addaction name="action_align_horizontal_center"/>
-                    <addaction name="separator"/>
-                    <addaction name="action_align_up"/>
-                    <addaction name="action_align_down"/>
-                    <addaction name="action_align_vertical_center"/>
-                </widget>
-                <widget class="QMenu" name="menu_align_sizes">
-                    <property name="title">
-                        <string>Выровнять размеры</string>
-                    </property>
-                    <addaction name="action_align_by_widest"/>
-                    <addaction name="action_align_by_tighest"/>
-                    <addaction name="action_tallest"/>
-                    <addaction name="action_lowest"/>
-                </widget>
-                <addaction name="action_cancel"/>
-                <addaction name="action_repeat"/>
-                <addaction name="separator"/>
-                <addaction name="action_cut"/>
-                <addaction name="action_copy"/>
-                <addaction name="action_paste"/>
-                <addaction name="action_paste_here"/>
-                <addaction name="action_duplicate"/>
-                <addaction name="action_find"/>
-                <addaction name="separator"/>
-                <addaction name="action_select_all"/>
-                <addaction name="separator"/>
-                <addaction name="menu_align_objects"/>
-                <addaction name="menu_align_sizes"/>
-            </widget>
-            <widget class="QMenu" name="menu_view">
-                <property name="title">
-                    <string>Вид</string>
-                </property>
-                <addaction name="action_binding_mode"/>
-                <addaction name="action_ruler"/>
-                <addaction name="separator"/>
-                <addaction name="action_inspector"/>
-            </widget>
-            <widget class="QMenu" name="menu_scheme">
-                <property name="title">
-                    <string>Схема</string>
-                </property>
-                <widget class="QMenu" name="menu_service_functions">
-                    <property name="title">
-                        <string>Сервисные функции</string>
-                    </property>
-                    <addaction name="action_clean_scheme"/>
-                    <addaction name="separator"/>
-                    <addaction name="action_relocate"/>
-                    <addaction name="action_offset_transition_numbers"/>
-                    <addaction name="separator"/>
-                    <addaction name="action_check_animation_transitions"/>
-                    <addaction name="separator"/>
-                    <addaction name="action_copy_as_picture"/>
-                    <addaction name="separator"/>
-                    <addaction name="action_set_info_cedp"/>
-                    <addaction name="action_give_info_cedp"/>
-                </widget>
-                <addaction name="action_connect_to_database"/>
-                <addaction name="separator"/>
-                <addaction name="action_objects_repository"/>
-                <addaction name="action_statistics"/>
-                <addaction name="menu_service_functions"/>
-                <addaction name="separator"/>
-                <addaction name="action_set_scheme"/>
-            </widget>
-            <widget class="QMenu" name="menu_service">
-                <property name="title">
-                    <string>Сервис</string>
-                </property>
-                <addaction name="action_set_objects"/>
-                <addaction name="separator"/>
-                <addaction name="action_set_editor"/>
             </widget>
             <widget class="QMenu" name="menu_reference">
                 <property name="title">
@@ -295,31 +192,6 @@
         <action name="action_save">
             <property name="text">
                 <string>Сохранить</string>
-            </property>
-        </action>
-        <action name="action_save_as">
-            <property name="text">
-                <string>Сохранить как</string>
-            </property>
-        </action>
-        <action name="action_export_metafile">
-            <property name="text">
-                <string>Экспорт в метафайл...</string>
-            </property>
-        </action>
-        <action name="action_export_xml">
-            <property name="text">
-                <string>Экспорт в XML...</string>
-            </property>
-        </action>
-        <action name="action_preview">
-            <property name="text">
-                <string>Предварительный просмотр</string>
-            </property>
-        </action>
-        <action name="action_print_xml">
-            <property name="text">
-                <string>Печать XML</string>
             </property>
         </action>
         <action name="action_exit">

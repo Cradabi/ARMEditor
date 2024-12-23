@@ -23,7 +23,8 @@ add_library(DBLib STATIC db_lib/db_connection.cpp)
 
 add_library(ArmClientLib STATIC arm_client/lib/arm_client.cpp)
 
-add_library(Application STATIC application/myview.cpp application/mywidget.cpp application/mainwindow.cpp)
+add_library(Application STATIC application/myview.cpp application/mywidget.cpp application/mainwindow.cpp
+        application/LoginDialog.cpp)
 
 add_executable(${PROJECT_NAME} main.cpp)
 

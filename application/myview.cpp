@@ -2,12 +2,34 @@
 #include <iostream>
 #include <QScrollBar>
 #include <QDialog>
-#include <QToolTip>
+#include <QMessageBox>
 #include "db_lib/db_connection.h"
 #include <sstream>
 #include <iomanip>
 #include <QTableWidget>
 #include "arm_client/lib/arm_client.h"
+
+QString MyView::getUserLogin(const QString &filePath) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(nullptr, "Ошибка", "Не удалось открыть файл user.cfg");
+        return QString(); // Вернуть пустую строку, если файл не открылся
+    }
+
+    QString username;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        if (line.startsWith("login=")) {
+            username = line.mid(6).trimmed(); // Извлекаем значение после "login="
+            break;
+        }
+    }
+
+    file.close();
+    return username;
+}
 
 MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new QThread), clientWorker(new arm_client)
 {
@@ -160,7 +182,11 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                     label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
                     layout->addWidget(label);
 
-                    QPushButton* createOrderButton = new QPushButton("Создать приказ");
+                    label = new QLabel(QString("Диспетчер: %1").arg(getUserLogin("../user.cfg")));
+                    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+                    layout->addWidget(label);
+
+                    QPushButton* createOrderButton = new QPushButton("Подписать приказ");
                     layout->addWidget(createOrderButton);
 
                     QLabel* timerLabel = new QLabel();
@@ -172,8 +198,8 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
 
                     QTimer timer;
                     QTimer responseTimer;
-                    int remainingTime = 5;
-                    int responseRemainingTime = 5; // Для отслеживания времени ожидания ответа
+                    int remainingTime = 10;
+                    int responseRemainingTime = 10; // Для отслеживания времени ожидания ответа
 
                     // Обработчик нажатия на кнопку "Создать приказ"
                     connect(createOrderButton, &QPushButton::clicked, [&]()

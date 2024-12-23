@@ -120,6 +120,9 @@ public:
     void onErrorOccurred(const QString &error);
 
 private:
+
+    QString getUserLogin(const QString &filePath);
+
     QThread *clientThread;
     arm_client *clientWorker;
 };

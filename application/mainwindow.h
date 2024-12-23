@@ -37,6 +37,8 @@ private:
 
     QDesktopWidget desk;
 
+    QString getUserLogin(const QString &filePath);
+
 private slots:
 
     void slot_button_close();
