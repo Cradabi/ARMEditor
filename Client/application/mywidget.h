@@ -72,28 +72,37 @@ public:
         // connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
 
         // Запускаем поток
+        connect(this, &MyWidget::stopTimerSignal, this, &MyWidget::stopTimerAndDelete);
+
         m_thread->start();
     }
 
     void stopThread()
     {
-        if (m_thread)
-        {
-            m_thread->quit(); // Просим поток завершиться
-            m_thread->wait(); // Ждем завершения потока
-            delete m_timer; // Удаляем таймер
-            delete m_thread;
-            m_timer = nullptr;
-            m_thread = nullptr;
-
-            // logs_file_.close();
-        }
+        emit stopTimerSignal();
     }
 
     void make_bd_objects();
 
+signals:
+    void stopTimerSignal();
+
 
 public slots:
+    void stopTimerAndDelete() {
+        if (m_timer) {
+            m_timer->stop();
+            delete m_timer;
+            m_timer = nullptr;
+        }
+        if (m_thread) {
+            m_thread->quit();
+            m_thread->wait();
+            delete m_thread;
+            m_thread = nullptr;
+        }
+    }
+
     void updateDB()
     {
         if (!view->scheme_params.objects_vector.size())
