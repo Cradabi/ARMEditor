@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <QTableWidget>
-#include "arm_client/lib/arm_client.h"
+#include "socket_client/lib/arm_client.h"
 
 QString MyView::getUserLogin(const QString &filePath) {
     QFile file(filePath);

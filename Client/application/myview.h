@@ -15,7 +15,7 @@
 #include <unordered_map>
 
 #include "primitives_lib/SchemeClass.h"
-#include "arm_client/lib/arm_client.h"
+#include "socket_client/lib/arm_client.h"
 #include "db_lib/db_connection.h"
 
 class MyView : public QGraphicsView
