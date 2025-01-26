@@ -6,11 +6,14 @@
 #include <parser_lib/src/SchemeFileNS.h>
 #include <socket_client/lib/arm_client.h>
 
+class MainWindow;
+
 class MainWidget : public QFrame
 {
     Q_OBJECT
 
 public:
+    MainWindow *main_window;
     QSqlQuery db_request_result_actual;
     QSqlQuery db_request_result_cp_actual;
 
@@ -22,7 +25,7 @@ public:
     QGraphicsScene* scene;
 
 
-    MainWidget();
+    explicit MainWidget(MainWindow* _main_window);
 
     ~MainWidget()
     {

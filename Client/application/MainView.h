@@ -18,6 +18,8 @@
 #include "socket_client/lib/arm_client.h"
 #include "db_lib/db_connection.h"
 
+class MainWindow;
+
 class MainView : public QGraphicsView
 {
     Q_OBJECT
@@ -49,7 +51,7 @@ public:
         scheme_params = {};
     }
 
-    explicit MainView(QGraphicsScene* parent);
+    explicit MainView(QGraphicsScene* parent, MainWindow *_main_window);
 
     // void mouseDoubleClickEvent(QMouseEvent* event) override;
 
@@ -67,6 +69,8 @@ public:
     QGraphicsScene* scene;
 
 private:
+
+    MainWindow *main_window;
     // QTimer* clickTimer;
 
     QString messageStatus;

@@ -7,6 +7,8 @@
 #include <QMainWindow>
 #include <QDesktopWidget>
 #include <QFileDialog>
+#include <qlistwidget.h>
+#include <nlohmann/json.hpp>
 
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +25,12 @@ public:
 
     ~MainWindow();
 
+    void updateListWidgetFromJson();
+
+void setupConnections();
+
+void onItemDoubleClicked(QListWidgetItem *item);
+
 signals:
 
     void signal_from_button(int buttonID);    // Сигнал для передачи номер нажатой кнопки
@@ -38,6 +46,8 @@ private:
     QDesktopWidget desk;
 
     QString getUserLogin(const QString &filePath);
+
+void removeOrderFromJson(const nlohmann::json &orderToRemove);
 
 private slots:
 

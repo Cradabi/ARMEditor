@@ -5,8 +5,9 @@
 
 
 
-MainWidget::MainWidget()
+MainWidget::MainWidget(MainWindow *_main_window)
 {
+    main_window = _main_window;
     // layout = new QVBoxLayout(this);
     // scene = new QGraphicsScene(this);
     // view = new MyView(scene);
@@ -30,7 +31,7 @@ void MainWidget::draw_new_scheme(const std::string& filepath)
 
     layout = new QVBoxLayout(this);
     scene = new QGraphicsScene(this);
-    view = new MainView(scene);
+    view = new MainView(scene, main_window);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
