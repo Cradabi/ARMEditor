@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 project(ARM LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -13,6 +13,8 @@ find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
 find_package(Qt5 COMPONENTS Sql REQUIRED)
 
 find_package(PkgConfig)
+find_package(nlohmann_json REQUIRED)
+
 pkg_search_module(LIBPQ REQUIRED libpq)
 
 add_library(PrimitivesLib STATIC primitives_lib/FiguresClasses.cpp primitives_lib/SchemeClass.cpp)
@@ -23,10 +25,19 @@ add_library(DBLib STATIC db_lib/db_connection.cpp)
 
 add_library(ArmClientLib STATIC socket_client/lib/arm_client.cpp)
 
+add_library(OrdersLib STATIC orders_lib/AutomaticOrder.cpp orders_lib/ManualOrder.cpp)
+
 add_library(Application STATIC application/myview.cpp application/mywidget.cpp application/mainwindow.cpp
         application/LoginDialog.cpp)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp
+        orders_lib/Order.h
+        orders_lib/AutomaticOrder.cpp
+        orders_lib/AutomaticOrder.h
+        orders_lib/ManualOrder.cpp
+        orders_lib/ManualOrder.h)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
 #Подключаем QT к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql Qt5::Network ${LIBPQ_LIBRARIES})
