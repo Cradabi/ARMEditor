@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mywidget.h"
+#include "MainWidget.h"
 
 #include <iostream>
 
@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
-    MyWidget *widget;
+    MainWidget *widget;
 
     MainWindow(QWidget *parent = nullptr);
 

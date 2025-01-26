@@ -1,12 +1,12 @@
 #pragma once
 
-#include "myview.h"
+#include "MainView.h"
 
 #include <QSqlQuery>
 #include <parser_lib/src/SchemeFileNS.h>
 #include <socket_client/lib/arm_client.h>
 
-class MyWidget : public QFrame
+class MainWidget : public QFrame
 {
     Q_OBJECT
 
@@ -22,9 +22,9 @@ public:
     QGraphicsScene* scene;
 
 
-    MyWidget();
+    MainWidget();
 
-    ~MyWidget()
+    ~MainWidget()
     {
         stopThread();
         delete layout;
@@ -63,7 +63,7 @@ public:
         });
 
         // Соединяем сигнал таймера с нашим слотом updateDB
-        connect(m_timer, &QTimer::timeout, this, &MyWidget::updateDB);
+        connect(m_timer, &QTimer::timeout, this, &MainWidget::updateDB);
 
         // // Соединяем сигнал завершения потока с удалением таймера
         // connect(m_thread, &QThread::finished, m_timer, &QTimer::deleteLater);
@@ -72,7 +72,7 @@ public:
         // connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
 
         // Запускаем поток
-        connect(this, &MyWidget::stopTimerSignal, this, &MyWidget::stopTimerAndDelete);
+        connect(this, &MainWidget::stopTimerSignal, this, &MainWidget::stopTimerAndDelete);
 
         m_thread->start();
     }

@@ -1,11 +1,11 @@
-#include "mywidget.h"
+#include "MainWidget.h"
 
 #include "parser_lib/SchemeFileParser.h"
 #include "db_lib/db_connection.h"
 
 
 
-MyWidget::MyWidget()
+MainWidget::MainWidget()
 {
     // layout = new QVBoxLayout(this);
     // scene = new QGraphicsScene(this);
@@ -19,7 +19,7 @@ MyWidget::MyWidget()
     draw_new_scheme("../schemes_exp/emptyscheme.схема");
 }
 
-void MyWidget::draw_new_scheme(const std::string& filepath)
+void MainWidget::draw_new_scheme(const std::string& filepath)
 {
     if (view != nullptr)
     {
@@ -66,7 +66,7 @@ void MyWidget::draw_new_scheme(const std::string& filepath)
 }
 
 
-void MyWidget::make_bd_objects()
+void MainWidget::make_bd_objects()
 {
     for (auto object : view->scheme_params.objects_vector)
     {
