@@ -13,7 +13,6 @@ find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
 find_package(Qt5 COMPONENTS Sql REQUIRED)
 
 find_package(PkgConfig)
-find_package(nlohmann_json REQUIRED)
 
 pkg_search_module(LIBPQ REQUIRED libpq)
 
@@ -27,17 +26,10 @@ add_library(ArmClientLib STATIC socket_client/lib/arm_client.cpp)
 
 add_library(OrdersLib STATIC orders_lib/AutomaticOrder.cpp orders_lib/ManualOrder.cpp)
 
-add_library(Application STATIC application/myview.cpp application/mywidget.cpp application/mainwindow.cpp
+add_library(Application STATIC application/MainView.cpp application/MainWidget.cpp application/MainWindow.cpp
         application/LoginDialog.cpp)
 
-add_executable(${PROJECT_NAME} main.cpp
-        orders_lib/Order.h
-        orders_lib/AutomaticOrder.cpp
-        orders_lib/AutomaticOrder.h
-        orders_lib/ManualOrder.cpp
-        orders_lib/ManualOrder.h)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+add_executable(${PROJECT_NAME} main.cpp)
 
 #Подключаем QT к проекту
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Sql Qt5::Network ${LIBPQ_LIBRARIES})

@@ -1,10 +1,12 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "./ui_mainwindow.h"
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
 #include <iostream>
 #include <fstream>
+
+#include "MainWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -37,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle(windowTitle);
 
     // Настройка виджетов
-    widget = new MyWidget();
+    widget = new MainWidget();
     ui->scrollArea->setWidget(widget);
     // ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     // ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

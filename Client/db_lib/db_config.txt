@@ -1,6 +1,6 @@
 dbms_name(postgres_or_mysql):mysql
 ip_db:127.0.0.1
 db_name:arm
-db_user:root
-db_password:20052005
+db_user:user
+db_password:password
 db_port:3306
