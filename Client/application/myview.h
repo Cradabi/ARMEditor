@@ -18,14 +18,14 @@
 #include "socket_client/lib/arm_client.h"
 #include "db_lib/db_connection.h"
 
-class MyView : public QGraphicsView
+class MainView : public QGraphicsView
 {
     Q_OBJECT
 
     // friend class UpdateDBThread;
 
 public:
-    MyView(QGraphicsView* parent = nullptr) : QGraphicsView(parent)
+    MainView(QGraphicsView* parent = nullptr) : QGraphicsView(parent)
     {
         setMouseTracking(true);
         // clickTimer = new QTimer(this);
@@ -33,7 +33,7 @@ public:
     }
 
 
-    ~MyView()
+    ~MainView()
     {
 
         qDebug() << "myWiev удален";
@@ -49,7 +49,7 @@ public:
         scheme_params = {};
     }
 
-    explicit MyView(QGraphicsScene* parent);
+    explicit MainView(QGraphicsScene* parent);
 
     // void mouseDoubleClickEvent(QMouseEvent* event) override;
 

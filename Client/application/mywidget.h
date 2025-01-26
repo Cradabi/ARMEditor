@@ -18,7 +18,7 @@ public:
     QSqlQuery db_request_result_cp_previous;
 
     QVBoxLayout* layout;
-    MyView* view = nullptr;
+    MainView* view = nullptr;
     QGraphicsScene* scene;
 
 

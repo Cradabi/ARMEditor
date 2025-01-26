@@ -9,7 +9,7 @@
 #include <QTableWidget>
 #include "socket_client/lib/arm_client.h"
 
-QString MyView::getUserLogin(const QString &filePath) {
+QString MainView::getUserLogin(const QString &filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(nullptr, "Ошибка", "Не удалось открыть файл user.cfg");
@@ -31,7 +31,7 @@ QString MyView::getUserLogin(const QString &filePath) {
     return username;
 }
 
-MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new QThread), clientWorker(new arm_client)
+MainView::MainView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new QThread), clientWorker(new arm_client)
 {
     // Подключаем слот, который будет отслеживать положение скроллбара
     scene = parent;
@@ -39,10 +39,10 @@ MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new
     clientWorker->moveToThread(clientThread);
 
     // Связываем сигналы/слоты
-    connect(clientWorker, &arm_client::messageReceived, this, &MyView::onMessageReceived);
-    connect(clientWorker, &arm_client::messageReceived, this, &MyView::ReadMessageReceivedtest);
-    connect(clientWorker, &arm_client::errorOccurred, this, &MyView::onErrorOccurred);
-    connect(this, &MyView::sendCommannd, clientWorker, &arm_client::sendCommand);
+    connect(clientWorker, &arm_client::messageReceived, this, &MainView::onMessageReceived);
+    connect(clientWorker, &arm_client::messageReceived, this, &MainView::ReadMessageReceivedtest);
+    connect(clientWorker, &arm_client::errorOccurred, this, &MainView::onErrorOccurred);
+    connect(this, &MainView::sendCommannd, clientWorker, &arm_client::sendCommand);
 
     // Запускаем поток
     clientThread->start();
@@ -51,7 +51,7 @@ MyView::MyView(QGraphicsScene* parent) : QGraphicsView(parent), clientThread(new
     startClient("127.0.0.1", 3011);
 }
 
-void MyView::startClient(const QString& host, quint16 port)
+void MainView::startClient(const QString& host, quint16 port)
 {
     // Соединяемся с сервером через сигнал/слот
     QMetaObject::invokeMethod(clientWorker, [=]()
@@ -60,23 +60,23 @@ void MyView::startClient(const QString& host, quint16 port)
     });
 }
 
-void MyView::sendMessageToServer(const QString& action, const QString& object)
+void MainView::sendMessageToServer(const QString& action, const QString& object)
 {
     emit sendCommannd(action, object); // Отправляем сигнал клиенту
 }
 
-void MyView::onErrorOccurred(const QString& error)
+void MainView::onErrorOccurred(const QString& error)
 {
     qDebug() << "Error:" << error;
 }
 
-void MyView::showOrderDialog(QPoint& point)
+void MainView::showOrderDialog(QPoint& point)
 {
     ;
 }
 
 
-void MyView::mouseDoubleClickEvent(QMouseEvent* event)
+void MainView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -265,7 +265,7 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
                     });
 
                     // Если onMessageReceived вызывается успешно:
-                    connect(this, &MyView::onMessageReceived, [&]()
+                    connect(this, &MainView::onMessageReceived, [&]()
                     {
                         responseTimer.stop(); // Останавливаем таймер ожидания ответа
                         if(messageStatus.split(":")[0] != "OK")
@@ -316,13 +316,13 @@ void MyView::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void MyView::ReadMessageReceivedtest(const QString &message)
+void MainView::ReadMessageReceivedtest(const QString &message)
 {
     messageStatus = message;
 }
 
 
-void MyView::mousePressEvent(QMouseEvent* event)
+void MainView::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::RightButton)
     {
@@ -1068,7 +1068,7 @@ void MyView::mousePressEvent(QMouseEvent* event)
 }
 
 
-void MyView::updateScene()
+void MainView::updateScene()
 {
     QSqlQuery db_request_result = connection_to_db();
     QSqlQuery db_request_result_cp = connection_to_cp_db();
@@ -1186,7 +1186,7 @@ void MyView::updateScene()
 }
 
 
-void MyView::updateTablelib()
+void MainView::updateTablelib()
 {
     update_table_lib(this->lineEdit1->text(), this->lineEdit2->text().toInt(), this->lineEdit3->text().toInt(),
                      this->lineEdit4->text().toInt(), this->lineEdit5->text().toInt(), cur_obj_id);
@@ -1194,7 +1194,7 @@ void MyView::updateTablelib()
     newWindow->hide();
 }
 
-void MyView::updateTablemes()
+void MainView::updateTablemes()
 {
     update_table_mes(this->lineEdit1->text(), this->lineEdit2->text().toInt(), this->lineEdit3->text().toDouble(),
                      this->lineEdit4->text().toDouble(), this->lineEdit5->text().toDouble(), cur_obj_id);
@@ -1202,14 +1202,14 @@ void MyView::updateTablemes()
     newWindow->hide();
 }
 
-void MyView::updateTablecontrol()
+void MainView::updateTablecontrol()
 {
     update_table_control(this->lineEdit1->text(), this->lineEdit2->text().toInt(), cur_obj_id);
     updateScene();
     newWindow->hide();
 }
 
-void MyView::updateTablesign()
+void MainView::updateTablesign()
 {
     update_table_sign(this->lineEdit1->text(), this->lineEdit2->text().toInt(), cur_obj_id);
     updateScene();
