@@ -12,6 +12,7 @@
 #include "socket_client/lib/arm_client.h"
 #include <nlohmann/json.hpp>
 
+#include "MainWindow.h"
 #include "../orders_lib/Order.h"
 
 
@@ -37,8 +38,9 @@ QString MainView::getUserLogin(const QString &filePath) {
     return username;
 }
 
-MainView::MainView(QGraphicsScene *parent) : QGraphicsView(parent), clientThread(new QThread),
+MainView::MainView(QGraphicsScene *parent, MainWindow *_main_window) : QGraphicsView(parent), clientThread(new QThread),
                                              clientWorker(new arm_client) {
+    main_window = _main_window;
     // Подключаем слот, который будет отслеживать положение скроллбара
     scene = parent;
 
@@ -278,6 +280,7 @@ void MainView::mouseDoubleClickEvent(QMouseEvent *event) {
                             createOrderButton->setText("Ошибка записи файла");
                             createOrderButton->setEnabled(true); // Разблокируем кнопку обратно
                         }
+                        main_window->updateListWidgetFromJson();
                     });
 
                     //});
