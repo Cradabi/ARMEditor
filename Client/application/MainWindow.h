@@ -31,7 +31,11 @@ void setupConnections();
 
 void onItemDoubleClicked(QListWidgetItem *item);
 
+    void ReadMessageReceivedtest(const QString &message);
+
 signals:
+    void sendCommannd(const QString &action, const QString &object);
+    void onMessageReceived(const QString &message);
 
     void signal_from_button(int buttonID);    // Сигнал для передачи номер нажатой кнопки
     void signal_from_close_button();
@@ -40,8 +44,10 @@ private:
     Ui::MainWindow *ui;
     QVBoxLayout *verticalLayout;
 
-    bool panel_is_visible = true;
+    bool panel_is_visible = false;
     bool is_fullscreen = true;
+    QString messageStatus;
+
 
     QDesktopWidget desk;
 

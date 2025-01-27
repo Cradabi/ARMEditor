@@ -14,6 +14,8 @@ namespace FiguresClasses
     class Primitive
     {
         //класс примитива
+    public:
+        std::string object_name = "";
     protected:
         bool bool_show_help = false;
         bool bool_show = true;
@@ -21,7 +23,7 @@ namespace FiguresClasses
         std::string type_object = "";
         std::string help_text = "";
         std::string library_name = "";
-        std::string object_name = "";
+        // std::string object_name = "";
         std::string text = "";
 
         int condition = 0;

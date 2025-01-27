@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "control_point": " Милохово",
+        "dispatcher": "Сергей Рашевский",
+        "id": 0,
+        "object": "ДПР",
+        "object_id": 542,
+        "operation_type": 0,
+        "timestamp": "2025-01-27 05:26:34"
+    }
+]
