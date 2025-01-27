@@ -68,6 +68,8 @@ public:
 
     QGraphicsScene* scene;
 
+    arm_client *clientWorker;
+
 private:
 
     MainWindow *main_window;
@@ -90,6 +92,7 @@ private:
     QLineEdit* lineEdit5;
 
     QMenu* newWindow;
+
 
     void showOrderDialog(QPoint& point);
 
@@ -128,5 +131,5 @@ private:
     QString getUserLogin(const QString &filePath);
 
     QThread *clientThread;
-    arm_client *clientWorker;
+
 };
