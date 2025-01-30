@@ -57,8 +57,25 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
     connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));
     connect(ui->action_open, SIGNAL(triggered(bool)), this, SLOT(slot_open_file_manager()));
-    connect(this, &MainWindow::sendCommannd, widget->view->clientWorker, &arm_client::sendCommand);
-    connect(widget->view->clientWorker, &arm_client::messageReceived, this, &MainWindow::onMessageReceived);
+
+    clientThread = new QThread(this);
+    client = new arm_client();
+    client->moveToThread(clientThread);
+
+    connect(clientThread, &QThread::started, client, [=]() {
+        client->connectToServer("localhost", 3011);
+    });
+    connect(client, &arm_client::messageReceived, this, &MainWindow::ReadMessageReceivedtest);
+    connect(this, &MainWindow::sendCommannd, client, &arm_client::sendCommand);
+    connect(client, &arm_client::errorOccurred, this, [](const QString &error) {
+        qDebug() << "Ошибка соединения:" << error;
+    });
+
+    // Добавляем обработку завершения потока
+    connect(clientThread, &QThread::finished, client, &arm_client::deleteLater);
+    connect(clientThread, &QThread::finished, clientThread, &QThread::deleteLater);
+
+    clientThread->start();
 
     //connect(ui->menu_file, SIGNAL(hovered()), this, SLOT(slot_menu_hover()));
 
@@ -67,7 +84,17 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
+    if (clientThread) {
+        clientThread->quit();
+        clientThread->wait();
+    }
     delete ui;
+}
+
+void MainWindow::ReadMessageReceivedtest(const QString &message) {
+    // Обработка входящего сообщения
+    qDebug() << "Получено сообщение от сервера:" << message;
+    // Можно добавить дополнительную логику обработки сообщений
 }
 
 void MainWindow::slot_button_close() {
@@ -213,12 +240,11 @@ void MainWindow::updateListWidgetFromJson() {
             _operationType = "Отключить";
         }
 
-        QString orderInfo = QString("%7 Приказ №%6\n На %1\n%4 %3\nВремя: %5")
+        QString orderInfo = QString("Приказ №%6\nНа %1\n%4 %3\nВремя: %5")
                 .arg(controlPoint, object)
                 .arg(_operationType)
                 .arg(timestamp)
-                .arg(id)
-                .arg(object_id);
+                .arg(id);
 
         QLabel *label = new QLabel(orderInfo, orderWidget);
         QPushButton *deleteButton = new QPushButton("Отменить", orderWidget);
@@ -247,210 +273,247 @@ void MainWindow::updateListWidgetFromJson() {
 }
 
 void MainWindow::setupConnections() {
-    connect(ui->listWidget, &QListWidget::itemDoubleClicked, this, &MainWindow::onItemDoubleClicked);
+    connect(ui->listWidget, &QListWidget::itemClicked, this, &MainWindow::onItemClicked);
 }
 
-void MainWindow::ReadMessageReceivedtest(const QString &message) {
-    messageStatus = message;
-}
+// void MainWindow::ReadMessageReceivedtest(const QString &message) {
+//     messageStatus = message;
+// }
 
-void MainWindow::onItemDoubleClicked(QListWidgetItem *item) {
+void MainWindow::onItemClicked(QListWidgetItem *item) {
     // Получить виджет элемента
     QWidget *orderWidget = ui->listWidget->itemWidget(item);
-    QLabel *label = orderWidget->findChild<QLabel *>();
+    QLabel *label = orderWidget ? orderWidget->findChild<QLabel *>() : nullptr;
     QString orderInfo = label ? label->text() : "Нет данных";
 
-    // Извлечение object_id
-    int _object_id = -1; // Значение по умолчанию
-    QRegularExpression numberBeforeOrderRegex("(\\d+)\\s*Приказ");
-    QRegularExpressionMatch match = numberBeforeOrderRegex.match(orderInfo);
-    if (match.hasMatch()) {
-        _object_id = match.captured(1).toInt();
-    }
-
     // Извлечение id
-    int id = -1; // Значение по умолчанию, если id не удастся извлечь
+    int id = -1;
     QRegularExpression idRegex("Приказ №(\\d+)");
     QRegularExpressionMatch idMatch = idRegex.match(orderInfo);
     if (idMatch.hasMatch()) {
         id = idMatch.captured(1).toInt();
     }
 
-    // Извлечение контрольного пункта (после "На")
-    QString controlPoint;
-    QRegularExpression controlPointRegex("На (.+?)\\n");
-    QRegularExpressionMatch controlPointMatch = controlPointRegex.match(orderInfo);
-    if (controlPointMatch.hasMatch()) {
-        controlPoint = controlPointMatch.captured(1); // Извлекаем контрольный пункт
+    // Загрузка данных из JSON
+    QFile file("../orders_lib/orders.json");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл JSON");
+        return;
     }
 
-    // Извлечение типа операции и объекта
-    QString operationType;
-    QString object;
-    QRegularExpression operationAndObjectRegex("\\n (.+?)\\n(.+?) (.+?)\\n");
-    QRegularExpressionMatch operationAndObjectMatch = operationAndObjectRegex.match(orderInfo);
-    int state = 0;
-    if (operationAndObjectMatch.hasMatch()) {
-        operationType = operationAndObjectMatch.captured(2); // Тип операции
-        object = operationAndObjectMatch.captured(3);        // Объект
-        if (operationType == "Включить") {
-            state = 1;
-        }else {
-            state = 0;
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    QJsonArray ordersArray = doc.array();
+
+    QJsonObject orderObject;
+    for (const auto &order: ordersArray) {
+        if (order.toObject()["id"].toInt() == id) {
+            orderObject = order.toObject();
+            break;
         }
     }
 
-    // Вывод в консоль для проверки
-    qDebug() << "Извлечённые данные:";
-    qDebug() << "OBJ ID:" << _object_id;
-    qDebug() << "ID:" << id;
-    qDebug() << "Контрольный пункт:" << controlPoint;
-    qDebug() << "Тип операции:" << operationType;
-    qDebug() << "Объект:" << object;
+    if (orderObject.isEmpty()) {
+        // Приказ не найден в JSON-файле, игнорируем клик
+        return;
+    }
 
     // Создаем диалоговое окно
     QDialog *dialog = new QDialog(this);
-    dialog->setWindowTitle("Детали приказа");
-    dialog->resize(400, 300);
+    dialog->setWindowTitle(QString("Приказ №%1").arg(id));
+    dialog->setFixedSize(400, 300);
 
     // Создаем лейаут для диалогового окна
     QVBoxLayout *dialogLayout = new QVBoxLayout(dialog);
 
+    // Заголовок "Текст приказа" по центру
+    QLabel *headerLabel = new QLabel("Текст приказа", dialog);
+    headerLabel->setAlignment(Qt::AlignCenter);
+    QFont headerFont;
+    headerFont.setBold(true);
+    headerFont.setPointSize(12);
+    headerLabel->setFont(headerFont);
+    dialogLayout->addWidget(headerLabel);
+
     // Отображаем информацию о приказе
-    QLabel *infoLabel = new QLabel(orderInfo, dialog);
+    QString orderDetails = QString("%1 %2 на %3 в %4\nДиспетчер: %5\nИсполнитель:")
+            .arg(orderObject["operation_type"].toInt() == 0 ? "Включить" : "Выключить")
+            .arg(orderObject["object"].toString())
+            .arg(orderObject["control_point"].toString().trimmed())
+            .arg(orderObject["timestamp"].toString())
+            .arg(orderObject["dispatcher"].toString());
+
+    QLabel *infoLabel = new QLabel(orderDetails, dialog);
     dialogLayout->addWidget(infoLabel);
 
-    // Добавляем кнопки
+    // Выпадающий список для выбора исполнителя
+    QComboBox *executorComboBox = new QComboBox(dialog);
+    if (orderObject["control_type"].toInt() == 0) {
+        // Ручное управление
+        QStringList personnelFIO = DBManager::getInstance().getPersonnelFIO();
+        if (!personnelFIO.isEmpty()) {
+            executorComboBox->addItems(personnelFIO);
+        } else {
+            executorComboBox->addItem("Нет доступных исполнителей");
+            executorComboBox->setEnabled(false);
+        }
+    } else {
+        // Автоматическое управление
+        executorComboBox->addItem(orderObject["dispatcher"].toString());
+        executorComboBox->setEnabled(false);
+    }
+    dialogLayout->addWidget(executorComboBox);
+
+    // Таймер для отображения времени ожидания
+    QLabel *timerLabel = new QLabel(dialog);
+    dialogLayout->addWidget(timerLabel);
+
+    // Кнопки
     QPushButton *executeButton = new QPushButton("Выполнить", dialog);
-    // QPushButton* viaRUButton = new QPushButton("Через РУ", dialog);
-    // QPushButton* cancelButton = new QPushButton("Отменить", dialog);
+    QPushButton *executeViaRUButton = new QPushButton("Выполнить через РУ", dialog);
+    QPushButton *cancelButton = new QPushButton("Отменить", dialog);
+
+    if (orderObject["control_type"].toInt() == 0) {
+        executeButton->setEnabled(false);
+    }
 
     dialogLayout->addWidget(executeButton);
-    // dialogLayout->addWidget(viaRUButton);
-    // dialogLayout->addWidget(cancelButton);
+    dialogLayout->addWidget(executeViaRUButton);
+    dialogLayout->addWidget(cancelButton);
 
-    // Устанавливаем лейаут для диалога
-    dialog->setLayout(dialogLayout);
+    // Кнопка отмены выполнения (изначально скрыта)
+    QPushButton *cancelExecutionButton = new QPushButton("Отмена выполнения", dialog);
+    cancelExecutionButton->setVisible(false);
+    dialogLayout->addWidget(cancelExecutionButton);
 
-    QLabel *timerLabel = new QLabel();
-    QPushButton *cancelButton = new QPushButton("Отменить");
-    cancelButton->hide(); // Кнопка отмены скрыта по умолчанию
+    // Локальная переменная для отслеживания отмены
+    bool executionCancelled = false;
 
-
-    // Связываем кнопки с действиями
-    connect(executeButton, &QPushButton::clicked, dialog, [=]() {
-        qDebug() << "Выполнить: " << orderInfo;
-
-        int objectId = 0;
-        for (auto object_pair : widget->view->bd_objects) {
-
-            if (object_pair.second->get_id() == _object_id) {
-                update_table_lib_short(state, _object_id);
-                object_pair.second->set_condition(state);
-                qDebug() << "Таблица обновлена: id = " << _object_id << ", новое состояние = " << state;
-                widget->view->updateScene();
-            }
+    // Функция для начала выполнения приказа
+    auto startOrderExecution = [=](const QString &command) {
+        if (executionCancelled) {
+            return;
         }
-        executeButton->setDisabled(true);
-        executeButton->setText("Приказ выполнен");
-        dialog->accept();
 
-        // dialogLayout->addWidget(timerLabel);
-        // dialogLayout->addWidget(cancelButton);
+        waitingForResponse = true;
 
-        // QTimer timer;
-        // QTimer responseTimer;
-        // int remainingTime = 10;
-        // int responseRemainingTime = 10; // Для отслеживания времени ожидания ответа
+        QJsonObject commandObj;
+        commandObj["command"] = command;
+        commandObj["order_id"] = id;
+        commandObj["executor"] = executorComboBox->currentText();
 
+        emit sendCommannd(command, QJsonDocument(commandObj).toJson(QJsonDocument::Compact));
 
-        // executeButton->setEnabled(false);
-        // cancelButton->show(); // Показываем кнопку отмены
-        // timer.start(1000); // Запускаем таймер
+        // Таймер обратного отсчета ожидания ответа
+        int remainingTime = 10;
+        timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(remainingTime));
 
+        QTimer *countdownTimer = new QTimer(this);
+        countdownTimer->setInterval(1000);
+        connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
+            remainingTime--;
+            timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(remainingTime));
+            if (remainingTime <= 0) {
+                countdownTimer->stop();
+                countdownTimer->deleteLater();
+            }
+        });
+        countdownTimer->start();
 
-        // Таймер обратного отсчета времени до отправки приказа
-        // connect(&timer, &QTimer::timeout, [&]() {
-        //     --remainingTime;
-        //     timerLabel->setText(QString("Время до отправки приказа: %1").arg(remainingTime));
-        //
-        //     if (remainingTime == 0) {
-        //         timer.stop();
-        //
-        //         timerLabel->setText("Приказ выполняется...");
-        //         qDebug() << "Отправляем приказ: новое состояние " << operationType << " для объекта " << object;
-        //
-        //         // Отправляем команду
-        //         sendCommannd(QString::number(state), object);
-        //
-        //         // Запускаем таймер ожидания ответа
-        //         responseRemainingTime = 5; // Сбрасываем время ожидания
-        //         timerLabel->setText(QString("Ожидание ответа: %1").arg(responseRemainingTime));
-        //         responseTimer.start(1000); // Обновляем каждую секунду
-        //     }
-        // });
+        // Обработка получения ответа от сервера
+        connect(client, &arm_client::messageReceived, this, [=](const QString &message) {
+            if (executionCancelled || !message.startsWith("OK:")) {
+                return;
+            }
 
-        // Обновление счетчика ожидания ответа
-        // connect(&responseTimer, &QTimer::timeout, [&]() {
-        //     --responseRemainingTime;
-        //     if (responseRemainingTime > 0) {
-        //         timerLabel->setText(QString("Ожидание ответа: %1").arg(responseRemainingTime));
-        //     } else {
-        //         // Если время ожидания истекло, останавливаем таймер
-        //         responseTimer.stop();
-        //         timerLabel->setText("Приказ не выполнен");
-        //         cancelButton->hide();
-        //         qWarning() << "Ответ на приказ не получен в заданное время.";
-        //     }
-        // });
+            waitingForResponse = false;
+            countdownTimer->stop();
+            countdownTimer->deleteLater();
 
-        // Если onMessageReceived вызывается успешно:
-        // connect(this, &MainWindow::onMessageReceived, [&]() {
-        //     // responseTimer.stop(); // Останавливаем таймер ожидания ответа
-        //     if (messageStatus.split(":")[0] != "OK") {
-        //         qDebug() << "Эмулятор запретил проводить управляющее воздействие";
-        //         // timerLabel->setText("Приказ не выполнен");
-        //         // cancelButton->hide();
-        //         return;
-        //     }
-        //     qDebug() << "Эмулятор разрешил проводить управляющее воздействие";
-        //     // timerLabel->setText("Приказ выполнен");
-        //     // cancelButton->hide();
-        //
-        //     qDebug() << "Сигнал onMessageReceived получен. Обновляем состояние объекта.";
-        //
-        //     int objectId = 0;
-        //     for (auto object_pair : widget->view->bd_objects) {
-        //         if (object_pair.second->get_object_name() == object.toStdString()) {
-        //             objectId = object_pair.second->get_id();
-        //             // Обновляем данные в таблице
-        //             update_table_lib_short(state, objectId);
-        //             object_pair.second->set_condition(state);
-        //             qDebug() << "Таблица обновлена: id = " << objectId << ", новое состояние = " << state;
-        //             widget->view->updateScene();
-        //         }
-        //     }
-        // });
+            // Преобразование QJsonObject в nlohmann::json
+            nlohmann::json orderJson = nlohmann::json::parse(QJsonDocument(orderObject).toJson().toStdString());
 
+            // Удаление приказа из JSON
+            removeOrderFromJson(orderJson);
 
-        // // Обработчик нажатия на кнопку "Отменить"
-        // connect(cancelButton, &QPushButton::clicked, [&]() {
-        //     timer.stop();
-        //     timerLabel->setText("Приказ отменен");
-        //     cancelButton->hide();
-        //     // createOrderButton->setEnabled(true); // Включаем кнопку создания приказа снова
-        //     qDebug() << "Приказ отменен пользователем.";
-        // });
+            DBManager &dbManager = DBManager::getInstance();
+            bool success = dbManager.updateLibraryState(1 - orderObject["operation_type"].toInt(), orderObject["object_id"].toInt());
 
-        // dialog->accept();
+            widget->updateScene();
+
+            // Отображение уведомления с помощью QMessageBox
+            QMessageBox::information(dialog, "Успех", "Приказ успешно выполнен!");
+
+            // Обновление списка приказов
+            updateListWidgetFromJson();
+
+            // Закрытие основного диалогового окна приказа
+            dialog->accept();
+        });
+
+        // Обработка окончания времени ожидания ответа
+        QTimer::singleShot(10000, this, [=]() {
+            if (waitingForResponse) {
+                QMessageBox::warning(dialog, "Ошибка", "Приказ не выполнен: время ожидания истекло!");
+                dialog->reject();
+            }
+        });
+    };
+
+    // Функция обработки выполнения приказа
+    auto executeOrder = [&](const QString &command) {
+        executionCancelled = false; // Сбрасываем флаг отмены
+        executeButton->setEnabled(false);
+        executeViaRUButton->setEnabled(false);
+        cancelButton->setVisible(false);
+        cancelExecutionButton->setVisible(true);
+        timerLabel->setVisible(true);
+
+        int countdownTime = 10;
+        timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdownTime));
+
+        QTimer *countdownTimer = new QTimer(this);
+        countdownTimer->setInterval(1000);
+        connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
+            countdownTime--;
+            timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdownTime));
+            if (countdownTime <= 0) {
+                countdownTimer->stop();
+                countdownTimer->deleteLater();
+                cancelExecutionButton->setEnabled(false);
+                startOrderExecution(command);
+            }
+        });
+        countdownTimer->start();
+
+        // Обработка отмены выполнения
+        connect(cancelExecutionButton, &QPushButton::clicked, this, [&]() {
+            executionCancelled = true;
+            countdownTimer->stop();
+            countdownTimer->deleteLater();
+            timerLabel->setText("");
+            timerLabel->setVisible(true);
+            QMessageBox::information(dialog, "Отмена", "Выполнение приказа отменено.");
+            cancelExecutionButton->setVisible(false);
+            cancelButton->setVisible(true);
+            executeButton->setEnabled(true);
+            executeViaRUButton->setEnabled(true);
+        });
+    };
+
+    // Обработка кнопок
+    connect(executeButton, &QPushButton::clicked, this, [=]() {
+        executeOrder("execute_order");
     });
 
-    // connect(viaRUButton, &QPushButton::clicked, dialog, [=]() {
-    //     qDebug() << "Через РУ: " << orderInfo;
-    //     dialog->accept();
-    // });
+    connect(executeViaRUButton, &QPushButton::clicked, this, [=]() {
+        executeOrder("execute_order_ru");
+    });
 
+    connect(cancelButton, &QPushButton::clicked, dialog, &QDialog::reject);
 
-    // Показываем диалог
     dialog->exec();
+    dialog->deleteLater();
 }

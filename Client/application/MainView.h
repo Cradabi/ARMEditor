@@ -16,7 +16,7 @@
 
 #include "primitives_lib/SchemeClass.h"
 #include "socket_client/lib/arm_client.h"
-#include "db_lib/db_connection.h"
+#include "db_lib/DBManager.h"
 
 class MainWindow;
 
@@ -38,13 +38,13 @@ public:
     ~MainView()
     {
 
-        qDebug() << "myWiev удален";
+        // qDebug() << "myWiev удален";
 
         // Завершаем поток и освобождаем ресурсы
-        clientThread->quit();
-        clientThread->wait();
-        delete clientWorker;
-        delete clientThread;
+        // clientThread->quit();
+        // clientThread->wait();
+        // delete clientWorker;
+        // delete clientThread;
 
 
         scheme_params.deleteOBJS();
@@ -67,8 +67,6 @@ public:
     std::unordered_map<int, FiguresClasses::Primitive*> bd_objects;
 
     QGraphicsScene* scene;
-
-    arm_client *clientWorker;
 
 private:
 
@@ -112,24 +110,24 @@ private slots:
 
     void updateTablesign();
 
-public:
-
-    void startClient(const QString &host, quint16 port);
-    void sendMessageToServer(const QString &action, const QString &object);
-    void ReadMessageReceivedtest(const QString &message);
-
-    signals:
-        void sendCommannd(const QString &action, const QString &object);
-        void onMessageReceived(const QString &message);
-
-    private slots:
-
-    void onErrorOccurred(const QString &error);
+// public:
+//
+//     void startClient(const QString &host, quint16 port);
+//     void sendMessageToServer(const QString &action, const QString &object);
+//     void ReadMessageReceivedtest(const QString &message);
+//
+//     signals:
+//         void sendCommannd(const QString &action, const QString &object);
+//         void onMessageReceived(const QString &message);
+//
+//     private slots:
+//
+//     void onErrorOccurred(const QString &error);
 
 private:
 
     QString getUserLogin(const QString &filePath);
 
-    QThread *clientThread;
+    // QThread *clientThread;
 
 };

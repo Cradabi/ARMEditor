@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MainView.h"
+#include "db_lib/DBManager.h"
 
 #include <QSqlQuery>
 #include <parser_lib/src/SchemeFileNS.h>
@@ -24,7 +25,6 @@ public:
     MainView* view = nullptr;
     QGraphicsScene* scene;
 
-
     explicit MainWidget(MainWindow* _main_window);
 
     ~MainWidget()
@@ -37,127 +37,21 @@ public:
 
     void draw_new_scheme(const std::string& filepath);
 
+    void updateScene();
+
     QThread* m_thread = nullptr;
     QTimer* m_timer = nullptr;
 
     std::ofstream logs_file_; // Файл логов
 
-    void startThread()
-    {
-        emit updateDB();
-        if (m_thread)
-        {
-            stopThread();
-        }
-
-        // logs_file_.open("../logs/db.log");
-
-        // Создаем новый поток
-        m_thread = new QThread(this);
-
-        // Создаем таймер и перемещаем его в новый поток
-        m_timer = new QTimer();
-        m_timer->moveToThread(m_thread);
-
-        // Соединяем сигнал запуска потока с лямбда-функцией, которая запускает таймер
-        connect(m_thread, &QThread::started, m_timer, [=]()
-        {
-            m_timer->start(60000); // Запускаем таймер с интервалом в 1 секунду
-        });
-
-        // Соединяем сигнал таймера с нашим слотом updateDB
-        connect(m_timer, &QTimer::timeout, this, &MainWidget::updateDB);
-
-        // // Соединяем сигнал завершения потока с удалением таймера
-        // connect(m_thread, &QThread::finished, m_timer, &QTimer::deleteLater);
-        //
-        // // Соединяем сигнал завершения потока с удалением самого потока
-        // connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
-
-        // Запускаем поток
-        connect(this, &MainWidget::stopTimerSignal, this, &MainWidget::stopTimerAndDelete);
-
-        m_thread->start();
-    }
-
-    void stopThread()
-    {
-        emit stopTimerSignal();
-    }
-
+    void startThread();
+    void stopThread();
     void make_bd_objects();
 
-signals:
-    void stopTimerSignal();
+    signals:
+        void stopTimerSignal();
 
-
-public slots:
-    void stopTimerAndDelete() {
-        if (m_timer) {
-            m_timer->stop();
-            delete m_timer;
-            m_timer = nullptr;
-        }
-        if (m_thread) {
-            m_thread->quit();
-            m_thread->wait();
-            delete m_thread;
-            m_thread = nullptr;
-        }
-    }
-
-    void updateDB()
-    {
-        if (!view->scheme_params.objects_vector.size())
-            return;
-
-        db_request_result_previous = db_request_result_actual;
-        // db_request_result_cp_previous = db_request_result_cp_actual;
-
-        db_request_result_actual = connection_to_db();
-
-        std::string help_text;
-
-        FiguresClasses::Primitive* cur_prim;
-
-        while (db_request_result_actual.next())
-        {
-            if (view->bd_objects.find(db_request_result_actual.value(0).toInt()) != view->bd_objects.end())
-            {
-                cur_prim = view->bd_objects[db_request_result_actual.value(0).toInt()];
-                if (cur_prim->get_type_object() == "Библиотечный объект")
-                {
-                    if(db_request_result_actual.value(2).toInt() >= 0)
-                    {
-                        cur_prim->set_condition(db_request_result_actual.value(2).toInt());
-                    }else
-                    {
-                        update_table_lib_short(0, cur_prim->get_id());
-                        cur_prim->set_condition(0);
-                    }
-                }
-                else if (cur_prim->get_type_object() == "Телеизмерение")
-                {
-                    cur_prim->set_text(db_request_result_actual.value(3).toString().toStdString());
-                }
-            }
-        }
-
-        QPixmap pix(view->scheme_params.width, view->scheme_params.height);
-        QColor bgColor = {
-            view->scheme_params.bgColor.red, view->scheme_params.bgColor.green, view->scheme_params.bgColor.blue
-        };
-        pix.fill(bgColor);
-
-        QPainter* painter = new QPainter(&pix);
-
-        Scheme scheme(view->scheme_params);
-        scheme.draw_scheme(*painter);
-        delete painter;
-        scene->clear();
-        scene->addPixmap(pix);
-    }
-
-
-
+    public slots:
+        void stopTimerAndDelete();
+    void updateDB();
 };

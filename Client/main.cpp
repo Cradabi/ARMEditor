@@ -73,18 +73,23 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    // Show login dialog
-    LoginDialog loginDialog;
-    if (loginDialog.exec() != QDialog::Accepted) {
-        return 0; // User cancelled login
-    }
+    bool loginSuccessful = false;
+    while (!loginSuccessful) {
+        // Show login dialog
+        LoginDialog loginDialog;
+        if (loginDialog.exec() != QDialog::Accepted) {
+            return 0; // User cancelled login
+        }
 
-    QString username = loginDialog.getUsername();
-    QString password = loginDialog.getPassword();
+        QString username = loginDialog.getUsername();
+        QString password = loginDialog.getPassword();
 
-    if (!authenticate(username, password)) {
-        QMessageBox::critical(nullptr, "Ошибка", "Неправильные имя пользователя или пароль");
-        return 0;
+        if (!authenticate(username, password)) {
+            QMessageBox::critical(nullptr, "Ошибка", "Неправильные имя пользователя или пароль");
+            continue; // Продолжаем цикл для повторного ввода
+        }
+
+        loginSuccessful = true;
     }
 
     // If authentication is successful, open the main window

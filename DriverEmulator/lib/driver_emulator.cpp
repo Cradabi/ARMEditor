@@ -21,8 +21,8 @@ bool DriverEmulator::startServer(quint16 port) {
     }
 
     connect(server, &QTcpServer::newConnection, this, &DriverEmulator::onNewConnection);
-    QString successMsg = "Сервер запущен на порту " + QString::number(port);
-    emit logMessage(successMsg);
+//    QString successMsg = "Сервер запущен на порту " + QString::number(port);
+//    emit logMessage(successMsg);
     return true;
 }
 

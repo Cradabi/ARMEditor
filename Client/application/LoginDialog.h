@@ -14,6 +14,7 @@ public:
     LoginDialog(QWidget *parent = nullptr);
     QString getUsername() const;
     QString getPassword() const;
+    void clearPassword();
 
 private:
     void loadUsernamesFromJson(const QString &filename);

@@ -79,3 +79,8 @@ void LoginDialog::loadUsernamesFromJson(const QString &filename)
         }
     }
 }
+
+void LoginDialog::clearPassword()
+{
+    passwordEdit->clear();
+}
