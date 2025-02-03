@@ -12,7 +12,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+        : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     // Чтение версии программы из info.txt
@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent)
     QString windowTitle = QString("ARM Клиент %1 | Пользователь: %2").arg(QString::fromStdString(prog_name)).
             arg(username);
     this->setWindowTitle(windowTitle);
+
+    max_order_id = readMaxOrderId("../orders_lib/orders.json");
 
     // Настройка виджетов
     widget = new MainWidget(this);
@@ -177,9 +179,9 @@ void MainWindow::removeOrderFromJson(const nlohmann::json &orderToRemove) {
 
     // Удаление соответствующего объекта
     jsonOrders.erase(
-        std::remove_if(jsonOrders.begin(), jsonOrders.end(),
-                       [&](const nlohmann::json &order) { return order == orderToRemove; }),
-        jsonOrders.end());
+            std::remove_if(jsonOrders.begin(), jsonOrders.end(),
+                           [&](const nlohmann::json &order) { return order == orderToRemove; }),
+            jsonOrders.end());
 
     // Перезапись JSON-файла
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -439,7 +441,8 @@ void MainWindow::onItemClicked(QListWidgetItem *item) {
             removeOrderFromJson(orderJson);
 
             DBManager &dbManager = DBManager::getInstance();
-            bool success = dbManager.updateLibraryState(1 - orderObject["operation_type"].toInt(), orderObject["object_id"].toInt());
+            bool success = dbManager.updateLibraryState(1 - orderObject["operation_type"].toInt(),
+                                                        orderObject["object_id"].toInt());
 
             widget->updateScene();
 
@@ -517,3 +520,40 @@ void MainWindow::onItemClicked(QListWidgetItem *item) {
     dialog->exec();
     dialog->deleteLater();
 }
+
+
+quint16 MainWindow::readMaxOrderId(const QString &jsonFilePath) {
+    QFile file(jsonFilePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Не удалось открыть файл:" << jsonFilePath;
+        return 0;
+    }
+
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    if (!doc.isArray()) {
+        qWarning() << "Некорректный формат JSON: ожидается массив.";
+        return 0;
+    }
+
+    QJsonArray jsonArray = doc.array();
+    qint16 maxId = 0;
+
+    for (const QJsonValue &value: jsonArray) {
+        if (value.isObject()) {
+            QJsonObject obj = value.toObject();
+            if (obj.contains("id")) {
+                int id = obj["id"].toInt();
+                if (id > maxId) {
+                    maxId = id;
+                }
+            }
+        }
+    }
+
+    return maxId;
+
+}
+

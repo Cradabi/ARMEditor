@@ -70,6 +70,8 @@ private:
 
     void removeOrderFromJson(const nlohmann::json &orderToRemove);
 
+    quint16 readMaxOrderId(const QString &jsonFilePath);
+
 private slots:
     void slot_button_close();
 
