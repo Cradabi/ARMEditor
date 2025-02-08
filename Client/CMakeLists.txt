@@ -29,7 +29,7 @@ add_library(ArmClientLib STATIC socket_client/lib/arm_client.cpp)
 add_library(OrdersLib STATIC orders_lib/AutomaticOrder.cpp orders_lib/ManualOrder.cpp orders_lib/OrdersRepository.cpp)
 
 add_library(Application STATIC application/MainView.cpp application/MainWidget.cpp application/MainWindow.cpp
-        application/LoginDialog.cpp)
+        application/LoginDialog.cpp application/OrderWidget.cpp)
 
 add_executable(${PROJECT_NAME} main.cpp)
 

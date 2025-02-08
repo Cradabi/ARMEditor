@@ -48,7 +48,7 @@ MainWidget::MainWidget(MainWindow *_main_window)
     db_request_result_actual = DBManager::getInstance().getObjects();
     db_request_result_cp_actual = DBManager::getInstance().getCPObjects();
 
-    draw_new_scheme("../schemes_exp/emptyscheme.схема");
+    draw_new_scheme("../schemes_exp/srv/Мультищит_МоскваИвантеевка.схема");
 }
 
 void MainWidget::draw_new_scheme(const std::string& filepath)

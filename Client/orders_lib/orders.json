@@ -1,1 +1,12 @@
-[]
+[
+    {
+        "control_point": "142 Вязьма-II БРОСТ",
+        "control_type": 3,
+        "dispatcher": "Сергей Рашевский",
+        "id": 2,
+        "object": "U 25 2с.ш.",
+        "object_id": 319,
+        "operation_type": 0,
+        "timestamp": "2025-02-09 00:40:38"
+    }
+]

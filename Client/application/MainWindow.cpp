@@ -10,6 +10,8 @@
 #include <nlohmann/json.hpp>
 #include <sys/stat.h>
 
+#include "OrderWidget.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -38,28 +40,38 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // Устанавливаем заголовок окна
-    QString windowTitle = QString("ARM Клиент %1 | Пользователь: %2").arg(QString::fromStdString(prog_name)).
-            arg(username);
+    QString windowTitle = QString("ARM Клиент %1 | Диспетчер: %2")
+            .arg(QString::fromStdString(prog_name))
+            .arg(username);
     this->setWindowTitle(windowTitle);
 
+    // Чтение максимального ID приказа
     max_order_id = readMaxOrderId("../orders_lib/orders.json");
 
-    // Настройка виджетов
-    widget = new MainWidget(this);
-    ui->scrollArea->setWidget(widget);
-    // ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    // ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->listWidget->setVisible(this->panel_is_visible);
+    // Настройка основного виджета
+    widget = new MainWidget(this);  // Основной виджет для отображения чего-то другого
+    ui->scrollArea->setWidget(widget);  // Устанавливаем виджет в scrollArea
 
-    //TODO Удалить line_2 как сущность
+    // Настройка контейнера для приказов
+    listLayout = new QVBoxLayout();  // QVBoxLayout для хранения виджетов приказов
+    QWidget *listContainer = new QWidget();  // Контейнер для layout
+    listContainer->setLayout(listLayout);
+
+    // Устанавливаем контейнер в scrollArea
+    ui->ordersScrollArea->setWidget(listContainer);
+    ui->ordersScrollArea->setWidgetResizable(true);  // Делаем, чтобы контейнер автоматически подстраивался под размер списка
+
     ui->line_2->setVisible(this->panel_is_visible);
 
+    // Изначально скрываем панель с приказами
     slot_change_panel_visibility();
 
+    // Связываем сигналы с кнопками и действиями интерфейса
     connect(ui->pushButton_close, SIGNAL(clicked()), this, SLOT(slot_button_close()));
     connect(ui->action_inspector, SIGNAL(triggered()), this, SLOT(slot_button_close()));
     connect(ui->action_open, SIGNAL(triggered(bool)), this, SLOT(slot_open_file_manager()));
 
+    // Настройка клиента и потока для обработки сетевых операций
     clientThread = new QThread(this);
     client = new arm_client();
     client->moveToThread(clientThread);
@@ -79,9 +91,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     clientThread->start();
 
-    //connect(ui->menu_file, SIGNAL(hovered()), this, SLOT(slot_menu_hover()));
-
+    // Связываем сигнал от кнопки закрытия панели с функцией изменения видимости панели
     connect(this, &MainWindow::signal_from_close_button, this, &MainWindow::slot_change_panel_visibility);
+
+    // Обновляем список приказов
     updateListWidgetFromJson();
 }
 
@@ -105,7 +118,7 @@ void MainWindow::slot_button_close() {
 
 void MainWindow::slot_change_panel_visibility() {
     this->panel_is_visible = not this->panel_is_visible;
-    ui->listWidget->setVisible(this->panel_is_visible);
+    ui->ordersScrollArea->setVisible(this->panel_is_visible);
     ui->line_2->setVisible(this->panel_is_visible);
     if (this->panel_is_visible) {
         ui->pushButton_close->setText(">");
@@ -155,93 +168,48 @@ QString MainWindow::getUserLogin(const QString &filePath) {
     return username;
 }
 
-void MainWindow::removeOrderFromJson(const nlohmann::json &orderToRemove) {
-    // Открыть JSON-файл
-    QFile file("../orders_lib/orders.json");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning("Не удалось открыть файл для чтения: %s", qPrintable("../orders_lib/orders.json"));
-        return;
-    }
-
-    // Прочитать содержимое JSON
-    QTextStream in(&file);
-    QString jsonData = in.readAll();
-    file.close();
-
-    // Парсинг JSON
-    nlohmann::json jsonOrders;
-    try {
-        jsonOrders = nlohmann::json::parse(jsonData.toStdString());
-    } catch (const nlohmann::json::parse_error &e) {
-        qWarning("Ошибка парсинга JSON: %s", e.what());
-        return;
-    }
-
-    // Удаление соответствующего объекта
-    jsonOrders.erase(
-            std::remove_if(jsonOrders.begin(), jsonOrders.end(),
-                           [&](const nlohmann::json &order) { return order == orderToRemove; }),
-            jsonOrders.end());
-
-    // Перезапись JSON-файла
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qWarning("Не удалось открыть файл для записи: %s", qPrintable("../orders_lib/orders.json"));
-        return;
-    }
-
-    QTextStream out(&file);
-    out << QString::fromStdString(jsonOrders.dump(4)); // С форматированием (4 пробела на отступ)
-    file.close();
-}
-
 void MainWindow::updateListWidgetFromJson() {
-    // Открыть JSON-файл
     QFile file("../orders_lib/orders.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning("Не удалось открыть файл: %s", qPrintable("../orders_lib/orders.json"));
         return;
     }
 
-    // Прочитать содержимое JSON
-    QTextStream in(&file);
-    QString jsonData = in.readAll();
+    QByteArray jsonData = file.readAll();
     file.close();
 
-    // Парсинг JSON
-    nlohmann::json jsonOrders;
-    try {
-        jsonOrders = nlohmann::json::parse(jsonData.toStdString());
-    } catch (const nlohmann::json::parse_error &e) {
-        qWarning("Ошибка парсинга JSON: %s", e.what());
+    QJsonParseError parseError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        qWarning("Ошибка парсинга JSON: %s", qPrintable(parseError.errorString()));
         return;
     }
 
-    // Очистить listWidget перед добавлением новых данных
-    ui->listWidget->clear();
+    QJsonArray jsonOrders = jsonDoc.array();
 
-    // Обработка JSON
-    for (const auto &order: jsonOrders) {
-        // Извлечение данных из JSON
-        QString controlPoint = QString::fromStdString(order.value("control_point", ""));
-        QString dispatcher = QString::fromStdString(order.value("dispatcher", ""));
-        QString object = QString::fromStdString(order.value("object", ""));
-        int operationType = order.value("operation_type", 0);
-        QString timestamp = QString::fromStdString(order.value("timestamp", ""));
-        int id = order.value("id", 0);
-        int object_id = order.value("object_id", 0);
+    QLayoutItem *child;
+    while ((child = listLayout->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
 
-        // Создание виджета для отображения данных
-        QWidget *orderWidget = new QWidget(ui->listWidget);
+    for (const QJsonValue &orderValue: jsonOrders) {
+        QJsonObject order = orderValue.toObject();
+        QString controlPoint = order.value("control_point").toString();
+        QString dispatcher = order.value("dispatcher").toString();
+        QString object = order.value("object").toString();
+        int operationType = order.value("operation_type").toInt(0);
+        QString timestamp = order.value("timestamp").toString();
+        int id = order.value("id").toInt(0);
+        int object_id = order.value("object_id").toInt(0);
+
+        OrderWidget *orderWidget = new OrderWidget(id);
+        orderWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
         QVBoxLayout *layout = new QVBoxLayout(orderWidget);
         layout->setContentsMargins(5, 5, 5, 5);
 
-        QString _operationType;
-        if (operationType == 0) {
-            _operationType = "Включить";
-        } else {
-            _operationType = "Отключить";
-        }
-
+        QString _operationType = (operationType == 0) ? "Включить" : "Отключить";
         QString orderInfo = QString("Приказ №%6\nНа %1\n%4 %3\nВремя: %5")
                 .arg(controlPoint, object)
                 .arg(_operationType)
@@ -255,104 +223,109 @@ void MainWindow::updateListWidgetFromJson() {
         layout->addWidget(deleteButton);
         orderWidget->setLayout(layout);
 
-        // Добавить виджет в QListWidget
-        QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
-        item->setSizeHint(orderWidget->sizeHint());
-        ui->listWidget->addItem(item);
-        ui->listWidget->setItemWidget(item, orderWidget);
+        listLayout->addWidget(orderWidget);
 
-        // Связать кнопку удаления с функцией удаления
         connect(deleteButton, &QPushButton::clicked, this, [=]() {
-            // Удалить элемент из QListWidget
-            int row = ui->listWidget->row(item);
-            delete ui->listWidget->takeItem(row);
+            removeOrderFromJson(id);
+            updateListWidgetFromJson();
+        });
 
-            // Удалить элемент из JSON
-            removeOrderFromJson(order);
+        connect(orderWidget, &OrderWidget::clicked, this, [=](int orderId) {
+            QJsonObject selectedOrder;
+            for (const QJsonValue &orderValue : jsonOrders) {
+                if (orderValue.toObject().value("id").toInt() == orderId) {
+                    selectedOrder = orderValue.toObject();
+                    break;
+                }
+            }
+            onOrderWidgetClicked(selectedOrder);
         });
     }
-    setupConnections();
+
+    listLayout->setAlignment(Qt::AlignTop);
+    ui->ordersScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // Устанавливаем фиксированную ширину, если нет заказов, иначе обновляем
+    QTimer::singleShot(0, this, [this, jsonOrders]() {
+        int scrollBarWidth = ui->ordersScrollArea->verticalScrollBar()->sizeHint().width();
+        int frameWidth = ui->ordersScrollArea->frameWidth() * 2;
+        int contentWidth = listLayout->sizeHint().width();
+        int desiredWidth = (jsonOrders.isEmpty()) ? 200 : (contentWidth + scrollBarWidth + frameWidth);
+        ui->ordersScrollArea->setFixedWidth(desiredWidth);
+    });
 }
 
-void MainWindow::setupConnections() {
-    connect(ui->listWidget, &QListWidget::itemClicked, this, &MainWindow::onItemClicked);
-}
-
-// void MainWindow::ReadMessageReceivedtest(const QString &message) {
-//     messageStatus = message;
-// }
-
-void MainWindow::onItemClicked(QListWidgetItem *item) {
-    // Получить виджет элемента
-    QWidget *orderWidget = ui->listWidget->itemWidget(item);
-    QLabel *label = orderWidget ? orderWidget->findChild<QLabel *>() : nullptr;
-    QString orderInfo = label ? label->text() : "Нет данных";
-
-    // Извлечение id
-    int id = -1;
-    QRegularExpression idRegex("Приказ №(\\d+)");
-    QRegularExpressionMatch idMatch = idRegex.match(orderInfo);
-    if (idMatch.hasMatch()) {
-        id = idMatch.captured(1).toInt();
-    }
-
-    // Загрузка данных из JSON
+void MainWindow::removeOrderFromJson(int orderIdToRemove) {
     QFile file("../orders_lib/orders.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл JSON");
+        qWarning("Не удалось открыть файл для удаления");
         return;
     }
 
-    QByteArray jsonData = file.readAll();
+    QByteArray data = file.readAll();
     file.close();
 
-    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
-    QJsonArray ordersArray = doc.array();
+    QJsonParseError parseError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(data, &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        qWarning("Ошибка парсинга JSON: %s", qPrintable(parseError.errorString()));
+        return;
+    }
 
-    QJsonObject orderObject;
-    for (const auto &order: ordersArray) {
-        if (order.toObject()["id"].toInt() == id) {
-            orderObject = order.toObject();
+    QJsonArray jsonOrders = jsonDoc.array();  // Получаем массив приказов
+
+    // Ищем и удаляем приказ по id
+    for (int i = 0; i < jsonOrders.size(); ++i) {
+        QJsonObject order = jsonOrders[i].toObject();
+        if (order.value("id").toInt() == orderIdToRemove) {
+            jsonOrders.removeAt(i);
             break;
         }
     }
 
-    if (orderObject.isEmpty()) {
-        // Приказ не найден в JSON-файле, игнорируем клик
+    // Записываем обновленный JSON обратно в файл
+    QJsonDocument updatedDoc(jsonOrders);
+    QFile outFile("../orders_lib/orders.json");
+    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning("Не удалось открыть файл для записи");
         return;
     }
 
-    // Создаем диалоговое окно
-    QDialog *dialog = new QDialog(this);
-    dialog->setWindowTitle(QString("Приказ №%1").arg(id));
-    dialog->setFixedSize(400, 300);
+    outFile.write(updatedDoc.toJson(QJsonDocument::Indented));  // Записываем с отступами
+    outFile.close();
+}
 
-    // Создаем лейаут для диалогового окна
-    QVBoxLayout *dialogLayout = new QVBoxLayout(dialog);
+void MainWindow::onOrderWidgetClicked(const QJsonObject &order) {
+    // Создаём диалоговое окно
+    QDialog *detailsDialog = new QDialog(this);
+    detailsDialog->setWindowTitle(QString("Приказ №%1").arg(order.value("id").toInt()));
+    detailsDialog->setFixedSize(400, 300);
 
-    // Заголовок "Текст приказа" по центру
-    QLabel *headerLabel = new QLabel("Текст приказа", dialog);
+    QVBoxLayout *detailsLayout = new QVBoxLayout(detailsDialog);
+
+    // Заголовок
+    QLabel *headerLabel = new QLabel("Текст приказа", detailsDialog);
     headerLabel->setAlignment(Qt::AlignCenter);
     QFont headerFont;
     headerFont.setBold(true);
     headerFont.setPointSize(12);
     headerLabel->setFont(headerFont);
-    dialogLayout->addWidget(headerLabel);
+    detailsLayout->addWidget(headerLabel);
 
-    // Отображаем информацию о приказе
+    // Информация о приказе
     QString orderDetails = QString("%1 %2 на %3 в %4\nДиспетчер: %5\nИсполнитель:")
-            .arg(orderObject["operation_type"].toInt() == 0 ? "Включить" : "Выключить")
-            .arg(orderObject["object"].toString())
-            .arg(orderObject["control_point"].toString().trimmed())
-            .arg(orderObject["timestamp"].toString())
-            .arg(orderObject["dispatcher"].toString());
+            .arg(order.value("operation_type").toInt() == 0 ? "Включить" : "Выключить")
+            .arg(order.value("object").toString())
+            .arg(order.value("control_point").toString())
+            .arg(order.value("timestamp").toString())
+            .arg(order.value("dispatcher").toString());
 
-    QLabel *infoLabel = new QLabel(orderDetails, dialog);
-    dialogLayout->addWidget(infoLabel);
+    QLabel *infoLabel = new QLabel(orderDetails, detailsDialog);
+    detailsLayout->addWidget(infoLabel);
 
-    // Выпадающий список для выбора исполнителя
-    QComboBox *executorComboBox = new QComboBox(dialog);
-    if (orderObject["control_type"].toInt() == 0) {
+    // Выпадающий список исполнителей
+    QComboBox *executorComboBox = new QComboBox(detailsDialog);
+    if (order.value("control_type").toInt() == 0) {
         // Ручное управление
         QStringList personnelFIO = DBManager::getInstance().getPersonnelFIO();
         if (!personnelFIO.isEmpty()) {
@@ -363,163 +336,461 @@ void MainWindow::onItemClicked(QListWidgetItem *item) {
         }
     } else {
         // Автоматическое управление
-        executorComboBox->addItem(orderObject["dispatcher"].toString());
+        executorComboBox->addItem(order.value("dispatcher").toString());
         executorComboBox->setEnabled(false);
     }
-    dialogLayout->addWidget(executorComboBox);
-
-    // Таймер для отображения времени ожидания
-    QLabel *timerLabel = new QLabel(dialog);
-    dialogLayout->addWidget(timerLabel);
+    detailsLayout->addWidget(executorComboBox);
 
     // Кнопки
-    QPushButton *executeButton = new QPushButton("Выполнить", dialog);
-    QPushButton *executeViaRUButton = new QPushButton("Выполнить через РУ", dialog);
-    QPushButton *cancelButton = new QPushButton("Отменить", dialog);
+    QPushButton *executeButton = new QPushButton("Выполнить", detailsDialog);
+    QPushButton *executeViaRUButton = new QPushButton("Выполнить через РУ", detailsDialog);
+    QPushButton *cancelButton = new QPushButton("Отменить", detailsDialog);
 
-    if (orderObject["control_type"].toInt() == 0) {
-        executeButton->setEnabled(false);
+    // Доступность кнопки "Выполнить"
+    if (order.value("control_type").toInt() == 0) {
+        executeButton->setEnabled(false); // Деактивируем для ручного управления
     }
 
-    dialogLayout->addWidget(executeButton);
-    dialogLayout->addWidget(executeViaRUButton);
-    dialogLayout->addWidget(cancelButton);
-
-    // Кнопка отмены выполнения (изначально скрыта)
-    QPushButton *cancelExecutionButton = new QPushButton("Отмена выполнения", dialog);
-    cancelExecutionButton->setVisible(false);
-    dialogLayout->addWidget(cancelExecutionButton);
-
-    // Локальная переменная для отслеживания отмены
-    bool executionCancelled = false;
-
-    // Функция для начала выполнения приказа
-    auto startOrderExecution = [=](const QString &command) {
-        if (executionCancelled) {
-            return;
-        }
-
-        waitingForResponse = true;
-
-        QJsonObject commandObj;
-        commandObj["command"] = command;
-        commandObj["order_id"] = id;
-        commandObj["executor"] = executorComboBox->currentText();
-
-        emit sendCommannd(command, QJsonDocument(commandObj).toJson(QJsonDocument::Compact));
-
-        // Таймер обратного отсчета ожидания ответа
-        int remainingTime = 10;
-        timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(remainingTime));
-
-        QTimer *countdownTimer = new QTimer(this);
-        countdownTimer->setInterval(1000);
-        connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
-            remainingTime--;
-            timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(remainingTime));
-            if (remainingTime <= 0) {
-                countdownTimer->stop();
-                countdownTimer->deleteLater();
-            }
-        });
-        countdownTimer->start();
-
-        // Обработка получения ответа от сервера
-        connect(client, &arm_client::messageReceived, this, [=](const QString &message) {
-            if (executionCancelled || !message.startsWith("OK:")) {
-                return;
-            }
-
-            waitingForResponse = false;
-            countdownTimer->stop();
-            countdownTimer->deleteLater();
-
-            // Преобразование QJsonObject в nlohmann::json
-            nlohmann::json orderJson = nlohmann::json::parse(QJsonDocument(orderObject).toJson().toStdString());
-
-            // Удаление приказа из JSON
-            removeOrderFromJson(orderJson);
-
-            DBManager &dbManager = DBManager::getInstance();
-            bool success = dbManager.updateLibraryState(1 - orderObject["operation_type"].toInt(),
-                                                        orderObject["object_id"].toInt());
-
-            widget->updateScene();
-
-            // Отображение уведомления с помощью QMessageBox
-            QMessageBox::information(dialog, "Успех", "Приказ успешно выполнен!");
-
-            // Обновление списка приказов
-            updateListWidgetFromJson();
-
-            // Закрытие основного диалогового окна приказа
-            dialog->accept();
-        });
-
-        // Обработка окончания времени ожидания ответа
-        QTimer::singleShot(10000, this, [=]() {
-            if (waitingForResponse) {
-                QMessageBox::warning(dialog, "Ошибка", "Приказ не выполнен: время ожидания истекло!");
-                dialog->reject();
-            }
-        });
-    };
-
-    // Функция обработки выполнения приказа
-    auto executeOrder = [&](const QString &command) {
-        executionCancelled = false; // Сбрасываем флаг отмены
-        executeButton->setEnabled(false);
-        executeViaRUButton->setEnabled(false);
-        cancelButton->setVisible(false);
-        cancelExecutionButton->setVisible(true);
-        timerLabel->setVisible(true);
-
-        int countdownTime = 10;
-        timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdownTime));
-
-        QTimer *countdownTimer = new QTimer(this);
-        countdownTimer->setInterval(1000);
-        connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
-            countdownTime--;
-            timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdownTime));
-            if (countdownTime <= 0) {
-                countdownTimer->stop();
-                countdownTimer->deleteLater();
-                cancelExecutionButton->setEnabled(false);
-                startOrderExecution(command);
-            }
-        });
-        countdownTimer->start();
-
-        // Обработка отмены выполнения
-        connect(cancelExecutionButton, &QPushButton::clicked, this, [&]() {
-            executionCancelled = true;
-            countdownTimer->stop();
-            countdownTimer->deleteLater();
-            timerLabel->setText("");
-            timerLabel->setVisible(true);
-            QMessageBox::information(dialog, "Отмена", "Выполнение приказа отменено.");
-            cancelExecutionButton->setVisible(false);
-            cancelButton->setVisible(true);
-            executeButton->setEnabled(true);
-            executeViaRUButton->setEnabled(true);
-        });
-    };
+    detailsLayout->addWidget(executeButton);
+    detailsLayout->addWidget(executeViaRUButton);
+    detailsLayout->addWidget(cancelButton);
 
     // Обработка кнопок
+    connect(cancelButton, &QPushButton::clicked, detailsDialog, &QDialog::reject);
+
     connect(executeButton, &QPushButton::clicked, this, [=]() {
-        executeOrder("execute_order");
+        detailsDialog->accept(); // Закрываем первый диалог
+        openExecutionDialog(order, executorComboBox->currentText(), false); // Выполнение приказа
     });
 
     connect(executeViaRUButton, &QPushButton::clicked, this, [=]() {
-        executeOrder("execute_order_ru");
+        detailsDialog->accept(); // Закрываем первый диалог
+        openExecutionDialog(order, executorComboBox->currentText(), true); // Выполнение через РУ
     });
 
-    connect(cancelButton, &QPushButton::clicked, dialog, &QDialog::reject);
-
-    dialog->exec();
-    dialog->deleteLater();
+    detailsDialog->exec();
+    detailsDialog->deleteLater();
 }
+
+
+void MainWindow::openExecutionDialog(const QJsonObject &order, const QString &executor, bool viaRU) {
+    QDialog *executionDialog = new QDialog(this);
+    executionDialog->setWindowTitle(QString("Выполнение приказа №%1").arg(order.value("id").toInt()));
+    executionDialog->setFixedSize(400, 300);
+
+    QVBoxLayout *executionLayout = new QVBoxLayout(executionDialog);
+
+    // Добавляем информацию о приказе
+    QString orderDetails = QString("%1 %2 на %3 в %4\nДиспетчер: %5\nИсполнитель: %6")
+            .arg(order.value("operation_type").toInt() == 0 ? "Включить" : "Выключить")
+            .arg(order.value("object").toString())
+            .arg(order.value("control_point").toString())
+            .arg(order.value("timestamp").toString())
+            .arg(order.value("dispatcher").toString())
+            .arg(executor);
+
+    QLabel *infoLabel = new QLabel(orderDetails, executionDialog);
+    executionLayout->addWidget(infoLabel);
+
+    QLabel *timerLabel = new QLabel("До выполнения приказа: 10 секунд", executionDialog);
+    executionLayout->addWidget(timerLabel);
+
+    QPushButton *cancelButton = new QPushButton("Отменить", executionDialog);
+    executionLayout->addWidget(cancelButton);
+
+    QTimer *countdownTimer = new QTimer(executionDialog);
+    countdownTimer->setInterval(1000);
+    int countdown = 10;
+
+    connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
+        countdown--;
+        timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdown));
+        if (countdown <= 0) {
+            countdownTimer->stop();
+            executionDialog->accept();
+            openResponseDialog(order, executor, viaRU);
+        }
+    });
+
+    connect(cancelButton, &QPushButton::clicked, executionDialog, [=]() {
+        countdownTimer->stop();
+        executionDialog->reject();
+    });
+
+    countdownTimer->start();
+    executionDialog->exec();
+    executionDialog->deleteLater();
+}
+
+void MainWindow::openResponseDialog(const QJsonObject &order, const QString &executor, bool viaRU) {
+    QDialog *responseDialog = new QDialog(this);
+    responseDialog->setWindowTitle("Ожидание ответа");
+    responseDialog->setFixedSize(400, 300);
+
+    QVBoxLayout *responseLayout = new QVBoxLayout(responseDialog);
+
+    // Добавляем информацию о приказе
+    QString orderDetails = QString("%1 %2 на %3 в %4\nДиспетчер: %5\nИсполнитель: %6")
+            .arg(order.value("operation_type").toInt() == 0 ? "Включить" : "Выключить")
+            .arg(order.value("object").toString())
+            .arg(order.value("control_point").toString())
+            .arg(order.value("timestamp").toString())
+            .arg(order.value("dispatcher").toString())
+            .arg(executor);
+
+    QLabel *infoLabel = new QLabel(orderDetails, responseDialog);
+    responseLayout->addWidget(infoLabel);
+
+    QLabel *timerLabel = new QLabel("Ожидание ответа: 10 секунд", responseDialog);
+    responseLayout->addWidget(timerLabel);
+
+    // Отправляем команду на сервер
+    QJsonObject commandObj;
+    commandObj["command"] = viaRU ? "execute_order_ru" : "execute_order";
+    commandObj["order_id"] = order.value("id").toInt();
+    commandObj["executor"] = executor;
+
+    emit sendCommannd(commandObj["command"].toString(),
+                     QJsonDocument(commandObj).toJson(QJsonDocument::Compact));
+
+    waitingForResponse = true;
+
+    QTimer *responseTimer = new QTimer(responseDialog);
+    responseTimer->setInterval(1000);
+    int responseCountdown = 10;
+
+    connect(responseTimer, &QTimer::timeout, this, [=]() mutable {
+        responseCountdown--;
+        timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(responseCountdown));
+        if (responseCountdown <= 0) {
+            responseTimer->stop();
+            waitingForResponse = false;
+            QMessageBox::warning(responseDialog, "Ошибка", "Приказ не выполнен: время ожидания истекло!");
+            responseDialog->reject();
+        }
+    });
+
+    connect(client, &arm_client::messageReceived, this, [=](const QString &message) {
+        if (message.startsWith("OK:")) {
+            responseTimer->stop();
+            waitingForResponse = false;
+
+            // Обновляем состояние в БД
+            DBManager &dbManager = DBManager::getInstance();
+            dbManager.updateLibraryState(1 - order.value("operation_type").toInt(),
+                                       order.value("object_id").toInt());
+
+            // Удаляем выполненный приказ
+            removeOrderFromJson(order.value("id").toInt());
+
+            // Обновляем интерфейс
+            updateListWidgetFromJson();
+
+            QMessageBox::information(responseDialog, "Успех", "Приказ успешно выполнен!");
+            responseDialog->accept();
+
+            widget->view->updateScene();
+        }
+    });
+
+    responseTimer->start();
+    responseDialog->exec();
+    responseDialog->deleteLater();
+}
+
+// void MainWindow::onOrderWidgetClicked(const QJsonObject &order) {
+//     int id = order.value("id").toInt();
+//
+//     // Создаем диалоговое окно
+//     QDialog *dialog = new QDialog(this);
+//     dialog->setWindowTitle(QString("Приказ №%1").arg(id));
+//     dialog->setFixedSize(400, 300);
+//
+//     QVBoxLayout *dialogLayout = new QVBoxLayout(dialog);
+//
+//     // Заголовок "Текст приказа"
+//     QLabel *headerLabel = new QLabel("Текст приказа", dialog);
+//     headerLabel->setAlignment(Qt::AlignCenter);
+//     QFont headerFont;
+//     headerFont.setBold(true);
+//     headerFont.setPointSize(12);
+//     headerLabel->setFont(headerFont);
+//     dialogLayout->addWidget(headerLabel);
+//
+//     QString orderDetails = QString("%1 %2 на %3 в %4\nДиспетчер: %5\nИсполнитель:")
+//             .arg(order.value("operation_type").toInt() == 0 ? "Включить" : "Выключить")
+//             .arg(order.value("object").toString())
+//             .arg(order.value("control_point").toString())
+//             .arg(order.value("timestamp").toString())
+//             .arg(order.value("dispatcher").toString());
+//
+//     QLabel *infoLabel = new QLabel(orderDetails, dialog);
+//     dialogLayout->addWidget(infoLabel);
+//
+//     // Кнопки для выполнения приказа
+//     QPushButton *executeButton = new QPushButton("Выполнить", dialog);
+//     QPushButton *cancelButton = new QPushButton("Отменить", dialog);
+//     dialogLayout->addWidget(executeButton);
+//     dialogLayout->addWidget(cancelButton);
+//
+//     // Обработка кнопок
+//     connect(executeButton, &QPushButton::clicked, this, [=]() {
+//         // Логика выполнения приказа
+//         dialog->accept();
+//     });
+//
+//     connect(cancelButton, &QPushButton::clicked, dialog, &QDialog::reject);
+//
+//     dialog->exec();
+//     dialog->deleteLater();
+// }
+
+// void MainWindow::setupConnections() {
+//     connect(ui->listWidget, &QListWidget::itemClicked, this, &MainWindow::onItemClicked);
+// }
+
+// void MainWindow::ReadMessageReceivedtest(const QString &message) {
+//     messageStatus = message;
+// }
+
+// void MainWindow::onItemClicked(QListWidgetItem *item) {
+//     // Получить виджет элемента
+//     QWidget *orderWidget = ui->listWidget->itemWidget(item);
+//     QLabel *label = orderWidget ? orderWidget->findChild<QLabel *>() : nullptr;
+//     QString orderInfo = label ? label->text() : "Нет данных";
+//
+//     // Извлечение id
+//     int id = -1;
+//     QRegularExpression idRegex("Приказ №(\\d+)");
+//     QRegularExpressionMatch idMatch = idRegex.match(orderInfo);
+//     if (idMatch.hasMatch()) {
+//         id = idMatch.captured(1).toInt();
+//     }
+//
+//     // Загрузка данных из JSON
+//     QFile file("../orders_lib/orders.json");
+//     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+//         QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл JSON");
+//         return;
+//     }
+//
+//     QByteArray jsonData = file.readAll();
+//     file.close();
+//
+//     QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+//     QJsonArray ordersArray = doc.array();
+//
+//     QJsonObject orderObject;
+//     for (const auto &order: ordersArray) {
+//         if (order.toObject()["id"].toInt() == id) {
+//             orderObject = order.toObject();
+//             break;
+//         }
+//     }
+//
+//     if (orderObject.isEmpty()) {
+//         // Приказ не найден в JSON-файле, игнорируем клик
+//         return;
+//     }
+//
+//     // Создаем диалоговое окно
+//     QDialog *dialog = new QDialog(this);
+//     dialog->setWindowTitle(QString("Приказ №%1").arg(id));
+//     dialog->setFixedSize(400, 300);
+//
+//     // Создаем лейаут для диалогового окна
+//     QVBoxLayout *dialogLayout = new QVBoxLayout(dialog);
+//
+//     // Заголовок "Текст приказа" по центру
+//     QLabel *headerLabel = new QLabel("Текст приказа", dialog);
+//     headerLabel->setAlignment(Qt::AlignCenter);
+//     QFont headerFont;
+//     headerFont.setBold(true);
+//     headerFont.setPointSize(12);
+//     headerLabel->setFont(headerFont);
+//     dialogLayout->addWidget(headerLabel);
+//
+//     // Отображаем информацию о приказе
+//     QString orderDetails = QString("%1 %2 на %3 в %4\nДиспетчер: %5\nИсполнитель:")
+//             .arg(orderObject["operation_type"].toInt() == 0 ? "Включить" : "Выключить")
+//             .arg(orderObject["object"].toString())
+//             .arg(orderObject["control_point"].toString().trimmed())
+//             .arg(orderObject["timestamp"].toString())
+//             .arg(orderObject["dispatcher"].toString());
+//
+//     QLabel *infoLabel = new QLabel(orderDetails, dialog);
+//     dialogLayout->addWidget(infoLabel);
+//
+//     // Выпадающий список для выбора исполнителя
+//     QComboBox *executorComboBox = new QComboBox(dialog);
+//     if (orderObject["control_type"].toInt() == 0) {
+//         // Ручное управление
+//         QStringList personnelFIO = DBManager::getInstance().getPersonnelFIO();
+//         if (!personnelFIO.isEmpty()) {
+//             executorComboBox->addItems(personnelFIO);
+//         } else {
+//             executorComboBox->addItem("Нет доступных исполнителей");
+//             executorComboBox->setEnabled(false);
+//         }
+//     } else {
+//         // Автоматическое управление
+//         executorComboBox->addItem(orderObject["dispatcher"].toString());
+//         executorComboBox->setEnabled(false);
+//     }
+//     dialogLayout->addWidget(executorComboBox);
+//
+//     // Таймер для отображения времени ожидания
+//     QLabel *timerLabel = new QLabel(dialog);
+//     dialogLayout->addWidget(timerLabel);
+//
+//     // Кнопки
+//     QPushButton *executeButton = new QPushButton("Выполнить", dialog);
+//     QPushButton *executeViaRUButton = new QPushButton("Выполнить через РУ", dialog);
+//     QPushButton *cancelButton = new QPushButton("Отменить", dialog);
+//
+//     if (orderObject["control_type"].toInt() == 0) {
+//         executeButton->setEnabled(false);
+//     }
+//
+//     dialogLayout->addWidget(executeButton);
+//     dialogLayout->addWidget(executeViaRUButton);
+//     dialogLayout->addWidget(cancelButton);
+//
+//     // Кнопка отмены выполнения (изначально скрыта)
+//     QPushButton *cancelExecutionButton = new QPushButton("Отмена выполнения", dialog);
+//     cancelExecutionButton->setVisible(false);
+//     dialogLayout->addWidget(cancelExecutionButton);
+//
+//     // Локальная переменная для отслеживания отмены
+//     bool executionCancelled = false;
+//
+//     // Функция для начала выполнения приказа
+//     auto startOrderExecution = [=](const QString &command) {
+//         if (executionCancelled) {
+//             return;
+//         }
+//
+//         waitingForResponse = true;
+//
+//         QJsonObject commandObj;
+//         commandObj["command"] = command;
+//         commandObj["order_id"] = id;
+//         commandObj["executor"] = executorComboBox->currentText();
+//
+//         emit sendCommannd(command, QJsonDocument(commandObj).toJson(QJsonDocument::Compact));
+//
+//         // Таймер обратного отсчета ожидания ответа
+//         int remainingTime = 10;
+//         timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(remainingTime));
+//
+//         QTimer *countdownTimer = new QTimer(this);
+//         countdownTimer->setInterval(1000);
+//         connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
+//             remainingTime--;
+//             timerLabel->setText(QString("Ожидание ответа: %1 секунд").arg(remainingTime));
+//             if (remainingTime <= 0) {
+//                 countdownTimer->stop();
+//                 countdownTimer->deleteLater();
+//             }
+//         });
+//         countdownTimer->start();
+//
+//         // Обработка получения ответа от сервера
+//         connect(client, &arm_client::messageReceived, this, [=](const QString &message) {
+//             if (executionCancelled || !message.startsWith("OK:")) {
+//                 return;
+//             }
+//
+//             waitingForResponse = false;
+//             countdownTimer->stop();
+//             countdownTimer->deleteLater();
+//
+//             // Преобразование QJsonObject в nlohmann::json
+//             nlohmann::json orderJson = nlohmann::json::parse(QJsonDocument(orderObject).toJson().toStdString());
+//
+//             // Удаление приказа из JSON
+//             removeOrderFromJson(orderJson);
+//
+//             DBManager &dbManager = DBManager::getInstance();
+//             bool success = dbManager.updateLibraryState(1 - orderObject["operation_type"].toInt(),
+//                                                         orderObject["object_id"].toInt());
+//
+//             widget->updateScene();
+//
+//             // Отображение уведомления с помощью QMessageBox
+//             QMessageBox::information(dialog, "Успех", "Приказ успешно выполнен!");
+//
+//             // Обновление списка приказов
+//             updateListWidgetFromJson();
+//
+//             // Закрытие основного диалогового окна приказа
+//             dialog->accept();
+//         });
+//
+//         // Обработка окончания времени ожидания ответа
+//         QTimer::singleShot(10000, this, [=]() {
+//             if (waitingForResponse) {
+//                 QMessageBox::warning(dialog, "Ошибка", "Приказ не выполнен: время ожидания истекло!");
+//                 dialog->reject();
+//             }
+//         });
+//     };
+//
+//     // Функция обработки выполнения приказа
+//     auto executeOrder = [&](const QString &command) {
+//         executionCancelled = false; // Сбрасываем флаг отмены
+//         executeButton->setEnabled(false);
+//         executeViaRUButton->setEnabled(false);
+//         cancelButton->setVisible(false);
+//         cancelExecutionButton->setVisible(true);
+//         timerLabel->setVisible(true);
+//
+//         int countdownTime = 10;
+//         timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdownTime));
+//
+//         QTimer *countdownTimer = new QTimer(this);
+//         countdownTimer->setInterval(1000);
+//         connect(countdownTimer, &QTimer::timeout, this, [=]() mutable {
+//             countdownTime--;
+//             timerLabel->setText(QString("До выполнения приказа: %1 секунд").arg(countdownTime));
+//             if (countdownTime <= 0) {
+//                 countdownTimer->stop();
+//                 countdownTimer->deleteLater();
+//                 cancelExecutionButton->setEnabled(false);
+//                 startOrderExecution(command);
+//             }
+//         });
+//         countdownTimer->start();
+//
+//         // Обработка отмены выполнения
+//         connect(cancelExecutionButton, &QPushButton::clicked, this, [&]() {
+//             executionCancelled = true;
+//             countdownTimer->stop();
+//             countdownTimer->deleteLater();
+//             timerLabel->setText("");
+//             timerLabel->setVisible(true);
+//             QMessageBox::information(dialog, "Отмена", "Выполнение приказа отменено.");
+//             cancelExecutionButton->setVisible(false);
+//             cancelButton->setVisible(true);
+//             executeButton->setEnabled(true);
+//             executeViaRUButton->setEnabled(true);
+//         });
+//     };
+//
+//     // Обработка кнопок
+//     connect(executeButton, &QPushButton::clicked, this, [=]() {
+//         executeOrder("execute_order");
+//     });
+//
+//     connect(executeViaRUButton, &QPushButton::clicked, this, [=]() {
+//         executeOrder("execute_order_ru");
+//     });
+//
+//     connect(cancelButton, &QPushButton::clicked, dialog, &QDialog::reject);
+//
+//     dialog->exec();
+//     dialog->deleteLater();
+// }
 
 
 quint16 MainWindow::readMaxOrderId(const QString &jsonFilePath) {
