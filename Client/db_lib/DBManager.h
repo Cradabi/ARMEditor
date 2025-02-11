@@ -1,9 +1,11 @@
 #pragma once
 
 #include <QtSql>
-#include <QThread>
-#include <QTimer>
-#include <QDebug>
+// #include <QSqlDriver>
+#include <QSqlQuery>
+// #include <QThread>
+// #include <QTimer>
+// #include <QDebug>
 
 class DBManager {
 public:

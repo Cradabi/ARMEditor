@@ -61,7 +61,7 @@ QSqlQuery DBManager::getObjects() {
     }
 
     QSqlQuery query(db);
-    query.prepare("SELECT id, name, current_state, current_value FROM objects");
+    query.prepare("SELECT id, name, current_state, current_value, cp_name_id FROM objects");
 
     if (!query.exec()) {
         qDebug() << "Failed to execute objects query:" << query.lastError().text();
