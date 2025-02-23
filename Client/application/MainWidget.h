@@ -33,6 +33,7 @@ public:
         delete layout;
         delete view;
         delete scene;
+        delete main_window;
     };
 
     void draw_new_scheme(const std::string& filepath);
